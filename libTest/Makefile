@@ -26,7 +26,7 @@ INSTALL_BIN = install -m755
 SO_STRIP = strip -x
 OUT_STRIP = strip --strip-unneeded
 
-O_SO = Memory.o StringFuncs.o Logger.o Core.o
+O_SO = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
 O_OUT = Test.o
 
 VERMAJ = .0
@@ -94,4 +94,5 @@ Test.o: Test.c
 Logger.o: Logger.c
 StringFuncs.o: StringFuncs.c
 Memory.o: Memory.c
+ArgsParser.o: ArgsParser.c
 Core.o: Core.c
