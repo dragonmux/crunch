@@ -7,7 +7,7 @@ unitTest *currentTest;
 static const int error = 1;
 
 #define ASSERTION_ERROR(params, result, expected) \
-	log(LOG_FAILURE, "Assertion failure: expected " params ", got " params, expected, result);
+	logResult(RESULT_FAILURE, "Assertion failure: expected " params ", got " params, expected, result);
 
 void assertTrue(uint8_t value)
 {

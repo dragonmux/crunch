@@ -1,12 +1,12 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 
-typedef enum _logType
+typedef enum _resultType
 {
-	LOG_FAILURE,
-	LOG_SUCCESS
-} logType;
+	RESULT_FAILURE,
+	RESULT_SUCCESS
+} resultType;
 
-extern void log(logType type, char *message);
+extern void logResult(resultType type, char *message);
 
 #endif /* __LOGGER_H__ */

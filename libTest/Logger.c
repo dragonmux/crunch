@@ -1,5 +1,8 @@
 #include "Core.h"
 #include "Logger.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #define COLOUR(Code) "\x1B["Code"m"
 #define NORMAL COLOUR("0;39")
@@ -12,6 +15,16 @@
 
 #define NEWLINE NORMAL "\x1B[1A\x1B[s\x1B[1B\n"
 #define MOVE_END_PRINTED "\x1B[u"
+
+#define COL(val) val - 8
+#define WCOL(val) val - 2
+
+int getColumns()
+{
+	struct winsize win;
+	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
+	return (win.ws_col == 0 ? 80 : win.ws_col);
+}
 
 void echoOk()
 {
@@ -29,14 +42,14 @@ void echoAborted()
 	libDebugExit(0);
 }
 
-void log(logType type, char *message)
+void logResult(resultType type, char *message)
 {
 	printf(NORMAL "%s" NEWLINE, message);
 	switch (type)
 	{
-		case LOG_SUCCESS:
+		case RESULT_SUCCESS:
 			return echoOk();
-		case LOG_FAIURE:
+		case RESULT_FAILURE:
 			return echoFailure();
 		default:
 			echoAborted();

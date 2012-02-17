@@ -23,6 +23,19 @@
 #define TEST(name) \
 	void name()
 
+#ifdef TRUE
+#undef TRUE
+#endif
+#ifdef FALSE
+#undef FALSE
+#endif
+
+/* The following two definitions are exactly and precicely what we mean by "boolean" values */
+#define TRUE	1
+#define FALSE	0
+
+#include <inttypes.h>
+
 TEST_API void assertTrue(uint8_t value);
 TEST_API void assertFalse(uint8_t value);
 

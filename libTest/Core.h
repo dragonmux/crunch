@@ -7,6 +7,8 @@
 #define NORETURN __attribute((noreturn))
 #endif
 
+#include <pthread.h>
+
 extern void libDebugExit(int num) NORETURN;
 
 typedef struct _unitTest

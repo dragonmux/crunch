@@ -1,5 +1,6 @@
 #include "Memory.h"
-#include <malloc.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define die(...) \
 { \

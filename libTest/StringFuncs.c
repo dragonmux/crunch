@@ -1,5 +1,6 @@
+#include "libTest.h"
+#include "StringFuncs.h"
 #include <string.h>
-#include "StringFuncs"
 
 const char *boolToString(uint8_t value)
 {
