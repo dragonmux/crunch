@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <stdarg.h>
 
 #define COLOUR(Code) "\x1B["Code"m"
 #define NORMAL COLOUR("0;39")
@@ -42,9 +43,15 @@ void echoAborted()
 	libDebugExit(0);
 }
 
-void logResult(resultType type, char *message)
+void logResult(resultType type, char *message, ...)
 {
-	printf(NORMAL "%s" NEWLINE, message);
+	va_list args;
+
+	printf(NORMAL);
+	va_start(args, message);
+	vprintf(message, args);
+	va_end(args);
+	printf(NEWLINE);
 	switch (type)
 	{
 		case RESULT_SUCCESS:

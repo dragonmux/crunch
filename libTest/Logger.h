@@ -7,6 +7,6 @@ typedef enum _resultType
 	RESULT_SUCCESS
 } resultType;
 
-extern void logResult(resultType type, char *message);
+extern void logResult(resultType type, char *message, ...);
 
 #endif /* __LOGGER_H__ */
