@@ -9,6 +9,7 @@
 
 #include <pthread.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 extern void libDebugExit(int num) NORETURN;
 
@@ -16,7 +17,7 @@ extern uint32_t passes, failures;
 
 #define pthreadExit(val) \
 	pthread_exit((void *)val); \
-	exit(val)
+	exit(*val)
 
 typedef struct _unitTest
 {

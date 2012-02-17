@@ -2,7 +2,6 @@
 #include "Core.h"
 #include "Logger.h"
 #include "StringFuncs.h"
-#include <stdlib.h>
 
 unitTest *currentTest;
 static const int error = 1;

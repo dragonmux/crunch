@@ -38,10 +38,12 @@ int getColumns()
 
 size_t vaTestPrintf(const char *format, va_list args)
 {
+	if (realStdout == NULL)
+		realStdout = stdout;
 	return vfprintf(realStdout, format, args);
 }
 
-size_t testPrintf(char *format, ...)
+size_t testPrintf(const char *format, ...)
 {
 	size_t ret;
 	va_list args;
@@ -69,12 +71,10 @@ void echoAborted()
 	libDebugExit(0);
 }
 
-void logResult(resultType type, char *message, ...)
+void logResult(resultType type, const char *message, ...)
 {
 	va_list args;
 
-	if (realStdout == NULL)
-		realStdout = stdout;
 	testPrintf(NORMAL);
 	va_start(args, message);
 	vaTestPrintf(message, args);
@@ -92,7 +92,7 @@ void logResult(resultType type, char *message, ...)
 	}
 }
 
-log *startLogging(char *fileName)
+log *startLogging(const char *fileName)
 {
 	log *ret = testMalloc(sizeof(log));
 	ret->stdout = dup(STDOUT_FILENO);

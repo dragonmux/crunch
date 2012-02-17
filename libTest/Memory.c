@@ -1,6 +1,7 @@
 #include "Memory.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define die(...) \
 { \
