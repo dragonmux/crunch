@@ -8,10 +8,15 @@
 #endif
 
 #include <pthread.h>
+#include <stdint.h>
 
 extern void libDebugExit(int num) NORETURN;
 
-extern int passes, failures;
+extern uint32_t passes, failures;
+
+#define pthreadExit(val) \
+	pthread_exit((void *)val); \
+	return ((void *)val)
 
 typedef struct _unitTest
 {
