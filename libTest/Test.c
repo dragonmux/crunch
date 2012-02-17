@@ -2,8 +2,16 @@
 #include <stdio.h>
 #include "Core.h"
 #include "Logger.h"
+#include "ArgsParser.h"
 
-const static int ok;
+static const int ok;
+const arg args[] =
+{
+	{"--log", 1, ARG_REQUIRED},
+	{NULL}
+};
+
+parsedArg **parsedArgs;
 
 void *testRunner(void *_)
 {
@@ -21,13 +29,20 @@ void printStats()
 		testPrintf("%0.2f\n", ((double)passes) / ((double)total));
 }
 
-int main(int argc, char **argv)
+void runTests()
 {
 	log *logFile;
-	//parseArguments();
-	//runTests();
-	logFile = startLogging("test.log");
+	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
+	if (logging != NULL)
+		logFile = startLogging(logging->params[0]);
 	printStats();
-	stopLogging(logFile);
+	if (logging != NULL)
+		stopLogging(logFile);
+}
+
+int main(int argc, char **argv)
+{
+	parsedArgs = parseArguments(argc, argv);
+	runTests();
 	return 0;
 }
