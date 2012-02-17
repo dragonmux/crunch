@@ -13,15 +13,18 @@ EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O_SO) $(LIBS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $(O_OUT) -o $@
+OUT_LFLAGS = $(O_OUT) -lTest -o $@
 AR = ar cr
 RANLIB = ranlib
 LN = ln -sfT
 LIBDIR ?= /usr/lib
-PKGDIR = $(LIBDIR)/pkgconfig/
-INCDIR = /usr/include/
+PKGDIR = $(LIBDIR)/pkgconfig
+INCDIR = /usr/include
+BINDIR = /usr/bin
 INSTALL = install -m644
-STRIP = strip -x
+INSTALL_BIN = install -m755
+SO_STRIP = strip -x
+OUT_STRIP = strip --strip-unneeded
 
 O_SO = Memory.o StringFuncs.o Logger.o Core.o
 O_OUT = Test.o
@@ -37,18 +40,25 @@ A = libTest.a
 LA = libTest.la
 PC = libTest.pc
 IN = libTest.pc.in
+OUT = libTest.out
+EXE = libTest
 
 default: all
 
 all: $(SO) $(OUT)
 
 install: all
+	$(INSTALL_BIN) $(OUT) $(EXE)
+	$(INSTALL_BIN) $(OUT) $(BINDIR)/$(EXE)
+
+install-so:
 	$(INSTALL) $(SO) $(LIBDIR)
-	$(INSTALL) $(PC) $(PKGDIR)
+	#$(INSTALL) $(PC) $(PKGDIR)
 	#$(INSTALL) $(H) $(INCDIR)
 	$(LN) $(LIBDIR)/$(SO) $(LIBDIR)/$(SOREV)
 	$(LN) $(LIBDIR)/$(SOREV) $(LIBDIR)/$(SOMIN)
 	$(LN) $(LIBDIR)/$(SOMIN) $(LIBDIR)/$(SOMAJ)
+	ldconfig
 
 uninstall:
 	rm $(LIBDIR)/$(SOMAJ)*
@@ -61,7 +71,12 @@ $(SO): $(O_SO)
 	$(AR) $(A) $(O_SO)
 	$(RANLIB) $(A)
 	$(GCC) $(SO_LFLAGS)
-	$(STRIP) $(SO)
+	$(SO_STRIP) $(SO)
+	sudo $(MAKE) install-so
+
+$(OUT): $(O_OUT)
+	$(GCC) $(OUT_LFLAGS)
+	$(OUT_STRIP) $(OUT)
 
 $(PC): $(IN)
 	sed -e 's:@LIBDIR@:$(LIBDIR):g' $(IN) > $(PC)
