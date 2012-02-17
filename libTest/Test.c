@@ -14,17 +14,20 @@ void *testRunner(void *_)
 void printStats()
 {
 	uint64_t total = passes + failures;
-	printf("Total tests: %zu.  Failures: %u.  Pass rate (%%): ", total, failures);
+	testPrintf("Total tests: %zu.  Failures: %u.  Pass rate (%%): ", total, failures);
 	if (total == 0)
-		printf("--\n");
+		testPrintf("--\n");
 	else
-		printf("%0.2f\n", ((double)passes) / ((double)total));
+		testPrintf("%0.2f\n", ((double)passes) / ((double)total));
 }
 
 int main(int argc, char **argv)
 {
-	parseArguments();
-	runTests();
+	log *logFile;
+	//parseArguments();
+	//runTests();
+	logFile = startLogging("test.log");
 	printStats();
+	stopLogging(logFile);
 	return 0;
 }

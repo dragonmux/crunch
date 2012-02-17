@@ -1,9 +1,10 @@
 #include "Core.h"
 #include "Logger.h"
-#include <stdio.h>
+#include "Memory.h"
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <stdarg.h>
+#include <sys/file.h>
 
 #define COLOUR(Code) "\x1B["Code"m"
 #define NORMAL COLOUR("0;39")
@@ -20,6 +21,14 @@
 #define COL(val) val - 8
 #define WCOL(val) val - 2
 
+#ifdef _MSC_VER
+	#define TTY	"CON"
+#else
+	#define TTY	"/dev/tty"
+#endif
+
+FILE *realStdout = NULL;
+
 int getColumns()
 {
 	struct winsize win;
@@ -27,21 +36,36 @@ int getColumns()
 	return (win.ws_col == 0 ? 80 : win.ws_col);
 }
 
+size_t vaTestPrintf(const char *format, va_list args)
+{
+	return vfprintf(realStdout, format, args);
+}
+
+size_t testPrintf(char *format, ...)
+{
+	size_t ret;
+	va_list args;
+	va_start(args, format);
+	ret = vaTestPrintf(format, args);
+	va_end(args);
+	return ret;
+}
+
 void echoOk()
 {
-	printf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
+	testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
 	passes++;
 }
 
 void echoFailure()
 {
-	printf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+	testPrintf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
 	failures++;
 }
 
 void echoAborted()
 {
-	printf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
+	testPrintf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	libDebugExit(0);
 }
 
@@ -49,12 +73,14 @@ void logResult(resultType type, char *message, ...)
 {
 	va_list args;
 
-	printf(NORMAL);
+	if (realStdout == NULL)
+		realStdout = stdout;
+	testPrintf(NORMAL);
 	va_start(args, message);
-	vprintf(message, args);
+	vaTestPrintf(message, args);
 	va_end(args);
 	if (type != RESULT_SUCCESS)
-		printf(NEWLINE);
+		testPrintf(NEWLINE);
 	switch (type)
 	{
 		case RESULT_SUCCESS:
@@ -64,4 +90,24 @@ void logResult(resultType type, char *message, ...)
 		default:
 			echoAborted();
 	}
+}
+
+log *startLogging(char *fileName)
+{
+	log *ret = testMalloc(sizeof(log));
+	ret->stdout = dup(STDOUT_FILENO);
+	realStdout = fdopen(ret->stdout, "w");
+	ret->file = freopen(fileName, "w", stdout);
+	ret->fd = fileno(ret->file);
+	flock(ret->fd, LOCK_EX);
+	return ret;
+}
+
+void stopLogging(log *logFile)
+{
+	flock(logFile->fd, LOCK_UN);
+	fclose(logFile->file);
+	fclose(realStdout);
+	realStdout = freopen(TTY, "w", stdout);
+	free(logFile);
 }
