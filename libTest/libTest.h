@@ -39,4 +39,8 @@
 TEST_API void assertTrue(uint8_t value);
 TEST_API void assertFalse(uint8_t value);
 
+TEST_API void assertEqual(int result, int expected);
+
+TEST_API void assertNotEqual(int result, int expected);
+
 #endif /* __LIBTEST_H__ */

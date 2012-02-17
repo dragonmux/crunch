@@ -29,6 +29,24 @@ void assertFalse(uint8_t value)
 	}
 }
 
+void assertEqual(int result, int expected)
+{
+	if (result != expected)
+	{
+		ASSERTION_ERROR("%d", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertNotEqual(int result, int expected)
+{
+	if (result == expected)
+	{
+		ASSERTION_ERROR("%d", result, expected);
+		pthreadExit(&error);
+	}
+}
+
 void libDebugExit(int num)
 {
 	// This will change yet.
