@@ -16,7 +16,7 @@ extern uint32_t passes, failures;
 
 #define pthreadExit(val) \
 	pthread_exit((void *)val); \
-	return ((void *)val)
+	exit(val)
 
 typedef struct _unitTest
 {
