@@ -71,11 +71,11 @@ $(SO): $(O_SO)
 	$(AR) $(A) $(O_SO)
 	$(RANLIB) $(A)
 	$(GCC) $(SO_LFLAGS)
-	$(SO_STRIP) $(SO)
 	sudo $(MAKE) install-so
 
 $(OUT): $(O_OUT)
 	$(GCC) $(OUT_LFLAGS)
+	$(SO_STRIP) $(LIBDIR)/$(SO)
 	$(OUT_STRIP) $(OUT)
 
 $(PC): $(IN)

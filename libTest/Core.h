@@ -11,6 +11,8 @@
 
 extern void libDebugExit(int num) NORETURN;
 
+extern int passes, failures;
+
 typedef struct _unitTest
 {
 	pthread_t testThread;

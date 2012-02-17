@@ -30,11 +30,13 @@ int getColumns()
 void echoOk()
 {
 	printf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
+	passes++;
 }
 
 void echoFailure()
 {
 	printf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+	failures++;
 }
 
 void echoAborted()
@@ -51,7 +53,8 @@ void logResult(resultType type, char *message, ...)
 	va_start(args, message);
 	vprintf(message, args);
 	va_end(args);
-	printf(NEWLINE);
+	if (type != RESULT_SUCCESS)
+		printf(NEWLINE);
 	switch (type)
 	{
 		case RESULT_SUCCESS:

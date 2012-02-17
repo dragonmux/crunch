@@ -6,6 +6,7 @@
 
 unitTest *currentTest;
 static const int error = 1;
+int passes = 0, failures = 0;
 
 #define ASSERTION_ERROR(params, result, expected) \
 	logResult(RESULT_FAILURE, "Assertion failure: expected " params ", got " params, expected, result);
