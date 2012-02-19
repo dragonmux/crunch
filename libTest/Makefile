@@ -6,13 +6,20 @@ else
 GCC_FLAGS = 
 endif
 CC = $(GCC) $(GCC_FLAGS)
+ifeq ($(strip $(DEBUG)), 1)
+OPTIM_FLAGS = -ggdb
+DEBUG = 1
+else
+OPTIM_FLAGS = -O2
+DEBUG = 0
+endif
 EXTRA_CFLAGS = -pthread
 #$(shell pkg-config --cflags )
-CFLAGS = -c -O2 -Wall $(EXTRA_CFLAGS) -D__libTest__ -o $@
+CFLAGS = -c $(OPTIM_FLAGS) -Wall $(EXTRA_CFLAGS) -D__libTest__ -o $@
 EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
-SO_LFLAGS = -shared $(O_SO) $(LIBS) -Wl,-soname,$(SOMAJ) -o $(SO)
+SO_LFLAGS = -shared $(O_SO) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
 OUT_LFLAGS = $(O_OUT) -lTest -o $@
 AR = ar cr
 RANLIB = ranlib
@@ -71,12 +78,14 @@ $(SO): $(O_SO)
 	$(AR) $(A) $(O_SO)
 	$(RANLIB) $(A)
 	$(GCC) $(SO_LFLAGS)
-	sudo $(MAKE) install-so
+	sudo LIBDIR=$(LIBDIR) $(MAKE) install-so
 
 $(OUT): $(O_OUT)
 	$(GCC) $(OUT_LFLAGS)
-	$(SO_STRIP) $(LIBDIR)/$(SO)
-	$(OUT_STRIP) $(OUT)
+	if [ $(DEBUG) -eq 0 ]; then \
+		($(SO_STRIP) $(LIBDIR)/$(SO) && \
+		$(OUT_STRIP) $(OUT)) \
+	fi
 
 $(PC): $(IN)
 	sed -e 's:@LIBDIR@:$(LIBDIR):g' $(IN) > $(PC)
