@@ -7,11 +7,11 @@
 static const int ok;
 const arg args[] =
 {
-	{"--log", 1, ARG_REQUIRED},
-	{NULL}
+	{"--log", 1, 1},
+	{0}
 };
 
-parsedArg **parsedArgs;
+parsedArg **parsedArgs = NULL;
 
 void *testRunner(void *_)
 {
