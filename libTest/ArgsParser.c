@@ -1,3 +1,4 @@
+#include "libTest.h"
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "Logger.h"
@@ -18,10 +19,29 @@ parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 	return NULL;
 }
 
-uint32_t checkParams(int argc, char **argv, int argPos, arg *argument)
+uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args)
 {
-	// Figure out how to parse for parameters up until the minimum is parsed and then till the max is parsed or we exceed argc-argPos.
-	return 0;
+	int i, n, min = argument->numMinParams, max = argument->numMaxParams;
+	uint8_t eoa = FALSE;
+	for (i = argPos, n = 0; i < argc && n < max && eoa == FALSE; i++)
+	{
+		arg *currArg = args;
+		while (currArg->value != NULL && eoa == FALSE)
+		{
+			if (strcasecmp(currArg->value, argv[i]) == 0)
+				eoa = TRUE;
+			currArg++;
+		}
+		if (eoa == TRUE)
+			break;
+		n++;
+		if (n == max)
+			break;
+	}
+	if (n < min)
+		return -1;
+	else
+		return n;
 }
 
 parsedArg **parseArguments(int argc, char **argv)
@@ -29,7 +49,7 @@ parsedArg **parseArguments(int argc, char **argv)
 	parsedArg **ret;
 	int i, n;
 
-	if (argc <= 1)
+	if (argc < 1)
 		return NULL;
 
 	ret = testMalloc(sizeof(parsedArg *) * argc);
@@ -50,24 +70,28 @@ parsedArg **parseArguments(int argc, char **argv)
 					free(argRet);
 					break;
 				}
-				argRet->paramsFound = checkParams(argc, argv, i + 1, argument);
+				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg *)args);
 				argRet->params = testMalloc(sizeof(char *) * argRet->paramsFound);
 				for (j = 0; j < argRet->paramsFound; j++)
 					argRet->params[j] = strdup(argv[i + j + 1]);
 				i += argRet->paramsFound;
 				ret[n] = argRet;
 				n++;
+				break;
 			}
+			argument++;
 		}
 	}
 	// Shrink as appropriate
-	return realloc(ret, sizeof(parsedArg *) * (n + 1));
+	return testRealloc(ret, sizeof(parsedArg *) * (n + 1));
 }
 
 parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
 {
 	int n;
-	for (n = 0; args[n]->value != NULL; n++)
+	if (args == NULL)
+		return defaultVal;
+	for (n = 0; args[n] != NULL; n++)
 	{
 		if (strcasecmp(args[n]->value, value) == 0)
 			return args[n];

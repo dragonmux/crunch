@@ -6,8 +6,8 @@
 typedef struct _arg
 {
 	const char *value;
-	uint32_t numParams;
-	uint32_t flags;
+	uint32_t numMinParams;
+	uint32_t numMaxParams;
 } arg;
 
 typedef struct _parsedArg
@@ -16,8 +16,6 @@ typedef struct _parsedArg
 	uint32_t paramsFound;
 	const char **params;
 } parsedArg;
-
-#define ARG_REQUIRED		1
 
 extern parsedArg **parseArguments(int argc, char **argv);
 extern parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
