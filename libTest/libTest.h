@@ -43,4 +43,6 @@ TEST_API void assertEqual(int result, int expected);
 
 TEST_API void assertNotEqual(int result, int expected);
 
+TEST_API test *tests;
+
 #endif /* __LIBTEST_H__ */

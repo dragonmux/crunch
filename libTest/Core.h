@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "libTest.h"
 
 extern void libDebugExit(int num) NORETURN;
 
@@ -21,7 +22,8 @@ extern uint32_t passes, failures;
 
 typedef struct _unitTest
 {
-	pthread_t testThread;
+	pthread_t *testThread;
+	test *theTest;
 } unitTest;
 
 #endif /* __CORE_H__ */

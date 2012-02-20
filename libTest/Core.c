@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "StringFuncs.h"
 
+test *tests;
 unitTest *currentTest;
 static const int error = 1;
 uint32_t passes = 0, failures = 0;
