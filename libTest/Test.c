@@ -106,11 +106,14 @@ void runTests()
 		currTest = tests;
 		while (currTest->testFunc != NULL)
 		{
+			int *retVal;
 			unitTest *test = testMalloc(sizeof(unitTest));
 			test->theTest = currTest;
 			test->testThread = testMalloc(sizeof(pthread_t));
 			pthread_create(test->testThread, &threadAttrs, testRunner, test);
-			pthread_join(*test->testThread, NULL);
+			pthread_join(*test->testThread, &retVal);
+			if (*retVal == 2)
+				exit(2);
 			currTest++;
 		}
 	}
