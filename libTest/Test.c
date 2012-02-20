@@ -6,6 +6,7 @@
 #include "StringFuncs.h"
 #include "Memory.h"
 #include <dlfcn.h>
+#include <unistd.h>
 
 static const int ok = 0;
 const arg args[] =
@@ -17,6 +18,7 @@ const arg args[] =
 parsedArg **parsedArgs = NULL;
 parsedArg **namedTests = NULL;
 uint32_t numTests = 0;
+const char *cwd = NULL;
 
 void *testRunner(void *self)
 {
@@ -82,7 +84,7 @@ void runTests()
 	pthread_attr_t threadAttrs;
 	uint32_t i;
 	test *currTest;
-	log *logFile;
+	log *logFile = NULL;
 
 	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
 	if (logging != NULL)
@@ -93,7 +95,7 @@ void runTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		char *testLib = formatString("%s.so", namedTests[i]->value);
+		char *testLib = formatString("%s/%s.so", cwd, namedTests[i]->value);
 		void *testSuit = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
@@ -127,6 +129,8 @@ int main(int argc, char **argv)
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
 	}
+	cwd = getcwd(NULL, 0);
 	runTests();
+	free((void *)cwd);
 	return 0;
 }
