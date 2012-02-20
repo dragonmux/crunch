@@ -103,6 +103,7 @@ void runTests()
 			testPrintf("Test library %s was not a valid library, skipping\n", namedTests[i]->value);
 			continue;
 		}
+		testPrintf("Running test suit %s...\n", namedTests[i]->value);
 		currTest = tests;
 		while (currTest->testFunc != NULL)
 		{
@@ -111,7 +112,7 @@ void runTests()
 			test->theTest = currTest;
 			test->testThread = testMalloc(sizeof(pthread_t));
 			pthread_create(test->testThread, &threadAttrs, testRunner, test);
-			pthread_join(*test->testThread, &retVal);
+			pthread_join(*test->testThread, (void **)&retVal);
 			if (retVal == NULL || *retVal == 2)
 				exit(2);
 			currTest++;
