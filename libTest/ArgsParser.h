@@ -19,5 +19,6 @@ typedef struct _parsedArg
 
 extern parsedArg **parseArguments(int argc, char **argv);
 extern parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
+extern arg *findArgInArgs(const char *value);
 
 #endif /* __ARGSPARSER_H__ */

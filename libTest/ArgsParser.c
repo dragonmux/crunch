@@ -49,12 +49,13 @@ parsedArg **parseArguments(int argc, char **argv)
 	parsedArg **ret;
 	int i, n;
 
-	if (argc < 1)
+	if (argc <= 1)
 		return NULL;
 
 	ret = testMalloc(sizeof(parsedArg *) * argc);
 	for (i = 1, n = 0; i < argc; i++)
 	{
+		uint8_t found = FALSE;
 		arg *argument = (arg *)args;
 		parsedArg *argRet = testMalloc(sizeof(parsedArg));
 		while (argument->value != NULL)
@@ -62,6 +63,7 @@ parsedArg **parseArguments(int argc, char **argv)
 			if (strcasecmp(argument->value, argv[i]) == 0)
 			{
 				int j;
+				found = TRUE;
 				argRet->value = strdup(argv[i]);
 				if (checkAlreadyFound(ret, argRet) != NULL)
 				{
@@ -81,6 +83,13 @@ parsedArg **parseArguments(int argc, char **argv)
 			}
 			argument++;
 		}
+		if (found == FALSE)
+		{
+			argRet->value = strdup(argv[i]);
+			argRet->paramsFound = 0;
+			ret[n] = argRet;
+			n++;
+		}
 	}
 	// Shrink as appropriate
 	return testRealloc(ret, sizeof(parsedArg *) * (n + 1));
@@ -97,4 +106,16 @@ parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
 			return args[n];
 	}
 	return defaultVal;
+}
+
+arg *findArgInArgs(const char *value)
+{
+	arg *curr = (arg *)args;
+	while (curr->value != NULL)
+	{
+		if (strcasecmp(curr->value, value) == 0)
+			return curr;
+		curr++;
+	}
+	return NULL;
 }
