@@ -20,7 +20,7 @@ EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O_SO) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $(O_OUT) -lTest -o $@
+OUT_LFLAGS = $(O_OUT) -lTest -ldl -o $@
 AR = ar cr
 RANLIB = ranlib
 LN = ln -sfT
@@ -49,6 +49,7 @@ PC = libTest.pc
 IN = libTest.pc.in
 OUT = libTest.out
 EXE = libTest
+H = libTest.h
 
 default: all
 
@@ -61,7 +62,7 @@ install: all
 install-so:
 	$(INSTALL) $(SO) $(LIBDIR)
 	#$(INSTALL) $(PC) $(PKGDIR)
-	#$(INSTALL) $(H) $(INCDIR)
+	$(INSTALL) $(H) $(INCDIR)
 	$(LN) $(LIBDIR)/$(SO) $(LIBDIR)/$(SOREV)
 	$(LN) $(LIBDIR)/$(SOREV) $(LIBDIR)/$(SOMIN)
 	$(LN) $(LIBDIR)/$(SOMIN) $(LIBDIR)/$(SOMAJ)
