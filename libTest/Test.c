@@ -112,7 +112,7 @@ void runTests()
 			test->testThread = testMalloc(sizeof(pthread_t));
 			pthread_create(test->testThread, &threadAttrs, testRunner, test);
 			pthread_join(*test->testThread, &retVal);
-			if (*retVal == 2)
+			if (retVal == NULL || *retVal == 2)
 				exit(2);
 			currTest++;
 		}
