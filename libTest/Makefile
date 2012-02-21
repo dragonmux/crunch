@@ -19,8 +19,8 @@ CFLAGS = -c $(OPTIM_FLAGS) -Wall $(EXTRA_CFLAGS) -D__libTest__ -o $@
 EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
-SO_LFLAGS = -shared $(O_SO) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $(O_OUT) -lTest -ldl -o $@
+SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
+OUT_LFLAGS = $< -lTest -ldl -o lib$@
 AR = ar cr
 RANLIB = ranlib
 LN = ln -sfT
@@ -33,8 +33,7 @@ INSTALL_BIN = install -m755
 SO_STRIP = strip -x
 OUT_STRIP = strip --strip-unneeded
 
-O_SO = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
-O_OUT = Test.o
+O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
 
 VERMAJ = .0
 VERMIN = .0
@@ -47,13 +46,13 @@ A = libTest.a
 LA = libTest.la
 PC = libTest.pc
 IN = libTest.pc.in
-OUT = libTest.out
-EXE = libTest
+OUT = Test TestMake
+EXE = libTest libTestMake
 H = libTest.h
 
 default: all
 
-all: $(SO) $(OUT)
+all: $(SO) $(EXE)
 
 install: all
 	$(INSTALL_BIN) $(OUT) $(EXE)
@@ -74,31 +73,36 @@ uninstall:
 	rm $(LIBDIR)/$(LA)
 	rm $(PKGDIR)/$(PC)
 
-$(SO): $(O_SO)
+$(SO): $(O)
 	rm -f $(PC)
-	$(AR) $(A) $(O_SO)
+	$(AR) $(A) $(O)
 	$(RANLIB) $(A)
 	$(GCC) $(SO_LFLAGS)
+	if [ $(DEBUG) -eq 0 ]; then $(SO_STRIP) $(SO); fi
 	sudo LIBDIR=$(LIBDIR) $(MAKE) install-so
-
-$(OUT): $(O_OUT)
-	$(GCC) $(OUT_LFLAGS)
-	if [ $(DEBUG) -eq 0 ]; then \
-		($(SO_STRIP) $(LIBDIR)/$(SO) && \
-		$(OUT_STRIP) $(OUT)) \
-	fi
 
 $(PC): $(IN)
 	sed -e 's:@LIBDIR@:$(LIBDIR):g' $(IN) > $(PC)
 
 clean:
-	rm -f *.o *.so* *.a *.pc
+	rm -f *.o *.so* *.a *.pc $(EXE)
+
+.o:
+	$(GCC) $(OUT_LFLAGS)
+	if [ $(DEBUG) -eq 0 ]; then $(OUT_STRIP) lib$@; fi
 
 .c.o:
 	$(GCC) $(CFLAGS) $<
 
 .PHONY: clean install all uninstall default .cpp.o
 
+libTestMake: TestMake
+libTest: Test
+
+TestMake: TestMake.o
+Test: Test.o
+
+TestMake.o: TestMake.c
 Test.o: Test.c
 
 Logger.o: Logger.c
