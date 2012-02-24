@@ -60,12 +60,13 @@ parsedArg **parseArguments(int argc, char **argv)
 		parsedArg *argRet = testMalloc(sizeof(parsedArg));
 		while (argument->value != NULL)
 		{
-			if (strcmp(argument->value, argv[i]) == 0)
+			if (((argument->flags & ARG_INCOMPLETE) == 0 && strcmp(argument->value, argv[i]) == 0) ||
+				strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
 			{
 				int j;
 				found = TRUE;
 				argRet->value = strdup(argv[i]);
-				if (checkAlreadyFound(ret, argRet) != NULL)
+				if ((argument->flags & ARG_REPEATABLE) == 0 && checkAlreadyFound(ret, argRet) != NULL)
 				{
 					testPrintf("Duplicate argument found: %s\n", argRet->value);
 					free((void *)argRet->value);
@@ -77,6 +78,7 @@ parsedArg **parseArguments(int argc, char **argv)
 				for (j = 0; j < argRet->paramsFound; j++)
 					argRet->params[j] = strdup(argv[i + j + 1]);
 				i += argRet->paramsFound;
+				argRet->flags = argument->flags;
 				ret[n] = argRet;
 				n++;
 				break;
@@ -87,6 +89,7 @@ parsedArg **parseArguments(int argc, char **argv)
 		{
 			argRet->value = strdup(argv[i]);
 			argRet->paramsFound = 0;
+			argRet->flags = argument->flags;
 			ret[n] = argRet;
 			n++;
 		}
@@ -102,7 +105,8 @@ parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
 		return defaultVal;
 	for (n = 0; args[n] != NULL; n++)
 	{
-		if (strcmp(args[n]->value, value) == 0)
+		if (((args[n]->flags & ARG_INCOMPLETE) == 0 && strcmp(args[n]->value, value) == 0) ||
+			strncmp(args[n]->value, value, strlen(value)) == 0)
 			return args[n];
 	}
 	return defaultVal;
@@ -113,7 +117,8 @@ arg *findArgInArgs(const char *value)
 	arg *curr = (arg *)args;
 	while (curr->value != NULL)
 	{
-		if (strcmp(curr->value, value) == 0)
+		if (((curr->flags & ARG_INCOMPLETE) == 0 && strcmp(curr->value, value) == 0) ||
+			strncmp(curr->value, value, strlen(curr->value)) == 0)
 			return curr;
 		curr++;
 	}

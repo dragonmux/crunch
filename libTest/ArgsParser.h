@@ -16,6 +16,7 @@ typedef struct _parsedArg
 	const char *value;
 	uint32_t paramsFound;
 	const char **params;
+	uint8_t flags;
 } parsedArg;
 
 #define ARG_REPEATABLE	1
