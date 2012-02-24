@@ -28,8 +28,9 @@ LIBDIR ?= /usr/lib
 PKGDIR = $(LIBDIR)/pkgconfig
 INCDIR = /usr/include
 BINDIR = /usr/bin
-INSTALL = install -m644
-INSTALL_BIN = install -m755
+INSTALL = install -v
+INSTALL_FILE = $(INSTALL) -m644
+INSTALL_BIN = $(INSTALL) -m755
 SO_STRIP = strip -x
 OUT_STRIP = strip --strip-unneeded
 
@@ -55,13 +56,12 @@ default: all
 all: $(SO) $(EXE)
 
 install: all
-	$(INSTALL_BIN) $(OUT) $(EXE)
-	$(INSTALL_BIN) $(OUT) $(BINDIR)/$(EXE)
+	$(INSTALL_BIN) $(EXE) $(BINDIR)
 
 install-so:
-	$(INSTALL) $(SO) $(LIBDIR)
-	#$(INSTALL) $(PC) $(PKGDIR)
-	$(INSTALL) $(H) $(INCDIR)
+	$(INSTALL_FILE) $(SO) $(LIBDIR)
+	#$(INSTALL_FILE) $(PC) $(PKGDIR)
+	$(INSTALL_FILE) $(H) $(INCDIR)
 	$(LN) $(LIBDIR)/$(SO) $(LIBDIR)/$(SOREV)
 	$(LN) $(LIBDIR)/$(SOREV) $(LIBDIR)/$(SOMIN)
 	$(LN) $(LIBDIR)/$(SOMIN) $(LIBDIR)/$(SOMAJ)
