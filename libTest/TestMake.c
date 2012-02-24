@@ -29,6 +29,9 @@ arg args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"--log", 1, 1, 0},
+	{"--silent", 0, 0, 0},
+	{"-s", 0, 0, 0},
 	{0}
 };
 
