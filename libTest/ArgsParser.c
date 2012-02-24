@@ -13,7 +13,7 @@ parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 	for (i = 0; parsedArgs[i] != NULL; i++)
 	{
 		parsedArg *arg = parsedArgs[i];
-		if (strcasecmp(arg->value, toCheck->value) == 0)
+		if (strcmp(arg->value, toCheck->value) == 0)
 			return arg;
 	}
 	return NULL;
@@ -28,7 +28,7 @@ uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args
 		arg *currArg = args;
 		while (currArg->value != NULL && eoa == FALSE)
 		{
-			if (strcasecmp(currArg->value, argv[i]) == 0)
+			if (strcmp(currArg->value, argv[i]) == 0)
 				eoa = TRUE;
 			currArg++;
 		}
@@ -60,7 +60,7 @@ parsedArg **parseArguments(int argc, char **argv)
 		parsedArg *argRet = testMalloc(sizeof(parsedArg));
 		while (argument->value != NULL)
 		{
-			if (strcasecmp(argument->value, argv[i]) == 0)
+			if (strcmp(argument->value, argv[i]) == 0)
 			{
 				int j;
 				found = TRUE;
@@ -102,7 +102,7 @@ parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
 		return defaultVal;
 	for (n = 0; args[n] != NULL; n++)
 	{
-		if (strcasecmp(args[n]->value, value) == 0)
+		if (strcmp(args[n]->value, value) == 0)
 			return args[n];
 	}
 	return defaultVal;
@@ -113,7 +113,7 @@ arg *findArgInArgs(const char *value)
 	arg *curr = (arg *)args;
 	while (curr->value != NULL)
 	{
-		if (strcasecmp(curr->value, value) == 0)
+		if (strcmp(curr->value, value) == 0)
 			return curr;
 		curr++;
 	}
