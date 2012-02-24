@@ -86,15 +86,31 @@ getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l");
 getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o");
 #undef getLinkFunc
 
-const char *CToSO(const char *file)
+static const char *exts[] = {".c", ".i", ".s", ".S", ".sx"};
+static const int numExts = sizeof(exts) / sizeof(*exts);
+
+uint8_t validExt(const char *file)
 {
-	// TODO: make this not suck by checking file extensions, etc
-	int fileLen = strlen(file);
-	char *soFile = malloc(fileLen + 2);
-	strcpy(soFile, file);
-	soFile[fileLen - 1] = 's';
-	soFile[fileLen++] = 'o';
-	soFile[fileLen] = '\0';
+	int i;
+	const char *dot = strrchr(file, '.');
+	if (dot == NULL)
+		return FALSE;
+	for (i = 0; i < numExts; i++)
+	{
+		if (strcmp(dot, exts[i]) == 0)
+			return TRUE;
+	}
+	return FALSE;
+}
+
+const char *toSO(const char *file)
+{
+	char *soFile;
+	const char *dot = strrchr(file, '.');
+	size_t dotPos = dot - file;
+	soFile = malloc(dotPos + 4);
+	memcpy(soFile, file, dotPos);
+	memcpy(soFile + dotPos, ".so", 4);
 	return soFile;
 }
 
@@ -130,9 +146,9 @@ int compileTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		if (access(namedTests[i]->value, R_OK) == 0)
+		if (access(namedTests[i]->value, R_OK) == 0 && validExt(namedTests[i]->value) != FALSE)
 		{
-			const char *soFile = CToSO(namedTests[i]->value);
+			const char *soFile = toSO(namedTests[i]->value);
 			char *compileString = formatString(COMPILER " " OPTS "%s %s", objs, libs, soFile, namedTests[i]->value);
 			if (silent == NULL)
 				printf("%s\n", compileString);
