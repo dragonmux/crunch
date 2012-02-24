@@ -120,6 +120,13 @@ int compileTests()
 {
 	int i, ret = 0;
 	const char *objs = objsToString(), *libs = libsToString();
+	parsedArg *silent = findArg(parsedArgs, "--silent", NULL);
+	log *logFile = NULL;
+	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
+	if (logging != NULL)
+		logFile = startLogging(logging->params[0]);
+	if (silent == NULL)
+		silent = findArg(parsedArgs, "-s", NULL);
 
 	for (i = 0; i < numTests; i++)
 	{
@@ -127,7 +134,8 @@ int compileTests()
 		{
 			const char *soFile = CToSO(namedTests[i]->value);
 			char *compileString = formatString(COMPILER " " OPTS "%s %s", objs, libs, soFile, namedTests[i]->value);
-			printf("%s\n", compileString);
+			if (silent == NULL)
+				printf("%s\n", compileString);
 			ret = system(compileString);
 			free(compileString);
 			free((void *)soFile);
@@ -139,6 +147,8 @@ int compileTests()
 	}
 	free((void *)objs);
 	free((void *)libs);
+	if (logging != NULL)
+		stopLogging(logFile);
 	return ret;
 }
 
