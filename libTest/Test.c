@@ -23,7 +23,7 @@ const char *cwd = NULL;
 void *testRunner(void *self)
 {
 	unitTest *test = (unitTest *)self;
-	testPrintf("%s...\n", test->theTest->testName);
+	testPrintf(INFO "%s..." NEWLINE, test->theTest->testName);
 	test->theTest->testFunc();
 	logResult(RESULT_SUCCESS, "");
 	pthreadExit(&ok);
@@ -100,10 +100,10 @@ void runTests()
 		free(testLib);
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
 		{
-			testPrintf("Test library %s was not a valid library, skipping\n", namedTests[i]->value);
+			testPrintf(FAILURE "Test library %s was not a valid library, skipping" NEWLINE, namedTests[i]->value);
 			continue;
 		}
-		testPrintf("Running test suit %s...\n", namedTests[i]->value);
+		testPrintf(COLOUR("1;35") "Running test suit %s..." NEWLINE, namedTests[i]->value);
 		currTest = tests;
 		while (currTest->testFunc != NULL)
 		{
