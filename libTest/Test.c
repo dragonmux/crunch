@@ -21,6 +21,8 @@ uint32_t numTests = 0;
 const char *cwd = NULL;
 uint8_t loggingTests = 0;
 
+typedef void (__cdecl *registerFn)();
+
 void *testRunner(void *self)
 {
 	unitTest *test = (unitTest *)self;
@@ -73,7 +75,7 @@ uint8_t getTests()
 
 uint8_t tryRegistration(void *testSuit)
 {
-	void (__cdecl *registerTests)();
+	registerFn registerTests;
 	registerTests = dlsym(testSuit, "registerTests");
 	if (registerTests == NULL)
 	{
