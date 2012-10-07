@@ -32,6 +32,8 @@ arg args[] =
 	{"--log", 1, 1, 0},
 	{"--silent", 0, 0, 0},
 	{"-s", 0, 0, 0},
+	{"--quiet", 0, 0, 0},
+	{"-q", 0, 0, 0},
 	{0}
 };
 
@@ -139,19 +141,31 @@ int compileTests()
 	parsedArg *silent = findArg(parsedArgs, "--silent", NULL);
 	log *logFile = NULL;
 	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
+	parsedArg *quiet = findArg(parsedArgs, "--quiet", NULL);
 	if (logging != NULL)
 		logFile = startLogging(logging->params[0]);
 	if (silent == NULL)
 		silent = findArg(parsedArgs, "-s", NULL);
+	if (quiet == NULL)
+		quiet = findArg(parsedArgs, "-q", NULL);
 
 	for (i = 0; i < numTests; i++)
 	{
 		if (access(namedTests[i]->value, R_OK) == 0 && validExt(namedTests[i]->value) != FALSE)
 		{
+			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
 			char *compileString = formatString(COMPILER " " OPTS "%s %s", objs, libs, soFile, namedTests[i]->value);
+			if (quiet != NULL)
+				displayString = formatString(" CCLD   %s => %s", namedTests[i]->value, soFile);
+			else
+				displayString = compileString;
 			if (silent == NULL)
-				printf("%s\n", compileString);
+			{
+				printf("%s\n", displayString);
+				if (displayString != compileString)
+					free(displayString);
+			}
 			ret = system(compileString);
 			free(compileString);
 			free((void *)soFile);
