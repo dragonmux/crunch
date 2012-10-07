@@ -74,9 +74,11 @@ void logResult(resultType type, const char *message, ...)
 	switch (type)
 	{
 		case RESULT_SUCCESS:
-			return echoOk();
+			echoOk();
+			break;
 		case RESULT_FAILURE:
-			return echoFailure();
+			echoFailure();
+			break;
 		default:
 			echoAborted();
 	}
@@ -84,9 +86,10 @@ void logResult(resultType type, const char *message, ...)
 
 log *startLogging(const char *fileName)
 {
+	log *ret;
 	if (logging == 1)
 		return NULL;
-	log *ret = testMalloc(sizeof(log));
+	ret = testMalloc(sizeof(log));
 	logging = 1;
 	ret->stdout = dup(STDOUT_FILENO);
 	realStdout = fdopen(ret->stdout, "w");
