@@ -1,8 +1,8 @@
 include ../Makefile.inc
 
-EXTRA_CFLAGS = -pthread
+EXTRA_CFLAGS = -Wall -pedantic -pthread
 #$(shell pkg-config --cflags )
-CFLAGS = -c $(OPTIM_FLAGS) -Wall -pedantic $(EXTRA_CFLAGS) -D__libTest__ -o $@ $<
+CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__libTest__ -o $@ $<
 EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
