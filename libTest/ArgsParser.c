@@ -94,7 +94,7 @@ parsedArg **parseArguments(int argc, char **argv)
 			n++;
 		}
 	}
-	// Shrink as appropriate
+	/* Shrink as appropriate */
 	return testRealloc(ret, sizeof(parsedArg *) * (n + 1));
 }
 

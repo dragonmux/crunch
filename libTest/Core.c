@@ -112,6 +112,6 @@ void assertLessThan(long result, long expected)
 
 void libDebugExit(int num)
 {
-	// This will change yet.
+	/* This will change yet. */
 	exit(num);
 }
