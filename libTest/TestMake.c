@@ -84,8 +84,8 @@ void name() \
 		var = testRealloc(var, sizeof(parsedArg *) * (num + 1)); \
 }
 
-getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l");
-getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o");
+getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l")
+getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o")
 #undef getLinkFunc
 
 static const char *exts[] = {".c", ".i", ".s", ".S", ".sx"};
@@ -130,8 +130,8 @@ const char *name ## ToString() \
 	return ret; \
 }
 
-toStringFunc(objs, linkObjs, numObjs, + 2);
-toStringFunc(libs, linkLibs, numLibs, );
+toStringFunc(objs, linkObjs, numObjs, + 2)
+toStringFunc(libs, linkLibs, numLibs, )
 #undef toStringFunc
 
 int compileTests()
