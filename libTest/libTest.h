@@ -25,9 +25,16 @@
 #endif
 
 /* Give systems that don't have other calling conventions a dud definition of __cdecl */
-#ifndef __cdecl
+#ifndef _WINDOWS
 #define __cdecl
+#else
+#ifdef __GNUC__
+#define __cdecl __attribute__((cdecl))
 #endif
+#endif
+
+#include <inttypes.h>
+#include <stdio.h>
 
 typedef struct _test
 {
@@ -50,6 +57,12 @@ TEST_EXPORT void registerTests() \
 	tests = (test *)__tests; \
 }
 
+typedef struct _log
+{
+	FILE *file;
+	int fd, stdout;
+} log;
+
 #ifdef TRUE
 #undef TRUE
 #endif
@@ -61,8 +74,6 @@ TEST_EXPORT void registerTests() \
 #define TRUE	1
 #define FALSE	0
 
-#include <inttypes.h>
-
 TEST_API void fail(const char *reason);
 
 TEST_API void assertTrue(uint8_t value);
@@ -73,5 +84,8 @@ TEST_API void assertIntNotEqual(int result, int expected);
 
 
 TEST_API test *tests;
+
+TEST_API log *startLogging(const char *fileName);
+TEST_API void stopLogging(log *logFile);
 
 #endif /* __LIBTEST_H__ */
