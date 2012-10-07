@@ -68,7 +68,8 @@ $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
 
 clean:
-	$(call run-cmd,rm,libTest,$(O) $(SOMAJ)* $(A) $(PC) $(EXE))
+	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))
+	$(call run-cmd,rm,libTest,$(O) $(SOMAJ)* $(A) $(PC))
 
 .o:
 	$(call run-cmd,ccld,$(OUT_LFLAGS))
