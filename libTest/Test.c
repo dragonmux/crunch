@@ -19,12 +19,17 @@ parsedArg **parsedArgs = NULL;
 parsedArg **namedTests = NULL;
 uint32_t numTests = 0;
 const char *cwd = NULL;
+uint8_t loggingTests = 0;
 
 void *testRunner(void *self)
 {
 	unitTest *test = (unitTest *)self;
 	testPrintf(INFO "%s..." NEWLINE, test->theTest->testName);
 	test->theTest->testFunc();
+	// Did the test switch logging on?
+	if (loggingTests == 0 && logging == 1)
+		// Yes, switch it back off again
+		stopLogging(logger);
 	logResult(RESULT_SUCCESS, "");
 	pthreadExit(&ok);
 }
@@ -88,7 +93,10 @@ void runTests()
 
 	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
 	if (logging != NULL)
+	{
 		logFile = startLogging(logging->params[0]);
+		loggingTests = 1;
+	}
 	pthread_attr_init(&threadAttrs);
 	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
 	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);
