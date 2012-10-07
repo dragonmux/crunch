@@ -8,8 +8,17 @@ unitTest *currentTest;
 static const int error = 1;
 uint32_t passes = 0, failures = 0;
 
+#define ASSERTION_FAILURE(what, result, expected) \
+	logResult(RESULT_FAILURE, "Assertion failure: " what, expected, result);
+
 #define ASSERTION_ERROR(params, result, expected) \
-	logResult(RESULT_FAILURE, "Assertion failure: expected " params ", got " params, expected, result);
+	ASSERTION_FAILURE("expected " params ", got " params, result, expected);
+
+void fail(const char *reason)
+{
+	logResult(RESULT_FAILURE, "Failure: %s", reason);
+	pthreadExit(&error);
+}
 
 void assertTrue(uint8_t value)
 {
