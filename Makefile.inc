@@ -51,7 +51,7 @@ quiet_cmd_install_dir = " INSTALL $(2)"
 cmd_install_dir = $(INSTALL_DIR) $(2)
 quiet_cmd_install_file = " INSTALL $(2) => $(3)"
 cmd_install_file = $(INSTALL_FILE) $(2) $(3)
-quiet_cmd_install_bin = " INSTALL $(3) => $(3)"
+quiet_cmd_install_bin = " INSTALL $(2) => $(3)"
 cmd_install_bin = $(INSTALL_BIN) $(2) $(3)
 quiet_cmd_install_rename = " INSTALL $(2) => $(3)"
 cmd_install_rename = $(INSTALL_RENAME) $(2) $(3)
