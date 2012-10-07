@@ -63,6 +63,8 @@ TEST_EXPORT void registerTests() \
 
 #include <inttypes.h>
 
+TEST_API void fail(const char *reason);
+
 TEST_API void assertTrue(uint8_t value);
 TEST_API void assertFalse(uint8_t value);
 
