@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-EXTRA_CFLAGS = -Wall -pedantic -pthread
+EXTRA_CFLAGS = -Wall -pedantic -pthread -std=gnu99
 #$(shell pkg-config --cflags )
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__libTest__ -o $@ $<
 EXTRA_LIBS = -pthread
@@ -44,7 +44,7 @@ install: all
 
 install-so:
 	$(call run-cmd,install_file,$(SO),$(LIBDIR))
-	#(call run-cmd,install_file,$(PC),$(PKGDIR))
+	@#(call run-cmd,install_file,$(PC),$(PKGDIR))
 	$(call run-cmd,install_file,$(H),$(INCDIR))
 	$(call run-cmd,ln,$(LIBDIR)/$(SO),$(LIBDIR)/$(SOREV))
 	$(call run-cmd,ln,$(LIBDIR)/$(SOREV),$(LIBDIR)/$(SOMIN))
@@ -58,7 +58,6 @@ uninstall:
 	rm $(PKGDIR)/$(PC)
 
 $(SO): $(O)
-	$(call run-cmd,rm,$(PC),$(PC))
 	$(call run-cmd,ar,$(A),$(O))
 	$(call run-cmd,ranlib,$(A))
 	$(call run-cmd,ccld,$(SO_LFLAGS))
