@@ -80,8 +80,15 @@ TEST_API void assertTrue(uint8_t value);
 TEST_API void assertFalse(uint8_t value);
 
 TEST_API void assertIntEqual(int result, int expected);
+TEST_API void assertPtrEqual(void *result, void *expected);
 TEST_API void assertIntNotEqual(int result, int expected);
+TEST_API void assertPtrNotEqual(void *result, void *expected);
 
+TEST_API void assertNull(void *result);
+TEST_API void assertNotNull(void *result);
+
+TEST_API void assertGreaterThan(long result, long expected);
+TEST_API void assertLessThan(long result, long expected);
 
 TEST_API test *tests;
 

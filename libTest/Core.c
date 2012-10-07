@@ -56,6 +56,60 @@ void assertIntNotEqual(int result, int expected)
 	}
 }
 
+void assertPtrEqual(void *result, void* expected)
+{
+	if (result != expected)
+	{
+		ASSERTION_ERROR("%p", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertPtrNotEqual(void *result, void *expected)
+{
+	if (result == expected)
+	{
+		ASSERTION_ERROR("%p", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertNull(void *result)
+{
+	if (result != NULL)
+	{
+		ASSERTION_ERROR("%p", result, NULL);
+		pthreadExit(&error);
+	}
+}
+
+void assertNotNull(void *result)
+{
+	if (result == NULL)
+	{
+		ASSERTION_ERROR("%p", result, NULL);
+		pthreadExit(&error);
+	}
+}
+
+void assertGreaterThan(long result, long expected)
+{
+	if (result <= expected)
+	{
+		ASSERTION_FAILURE("%ld was not greater than %ld", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertLessThan(long result, long expected)
+{
+	if (result >= expected)
+	{
+		ASSERTION_FAILURE("%ld was not less than %ld", result, expected);
+		pthreadExit(&error);
+	}
+}
+
 void libDebugExit(int num)
 {
 	// This will change yet.
