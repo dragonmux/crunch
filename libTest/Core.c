@@ -38,7 +38,7 @@ void assertFalse(uint8_t value)
 	}
 }
 
-void assertEqual(int result, int expected)
+void assertIntEqual(int result, int expected)
 {
 	if (result != expected)
 	{
@@ -47,7 +47,7 @@ void assertEqual(int result, int expected)
 	}
 }
 
-void assertNotEqual(int result, int expected)
+void assertIntNotEqual(int result, int expected)
 {
 	if (result == expected)
 	{

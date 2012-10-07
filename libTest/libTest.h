@@ -68,9 +68,9 @@ TEST_API void fail(const char *reason);
 TEST_API void assertTrue(uint8_t value);
 TEST_API void assertFalse(uint8_t value);
 
-TEST_API void assertEqual(int result, int expected);
+TEST_API void assertIntEqual(int result, int expected);
+TEST_API void assertIntNotEqual(int result, int expected);
 
-TEST_API void assertNotEqual(int result, int expected);
 
 TEST_API test *tests;
 
