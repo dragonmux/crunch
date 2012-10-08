@@ -110,6 +110,8 @@ void runTests()
 		free(testLib);
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
 		{
+			if (testSuit == NULL)
+				testPrintf(FAILURE "Could not open test library: %s" NEWLINE, dlerror());
 			testPrintf(FAILURE "Test library %s was not a valid library, skipping" NEWLINE, namedTests[i]->value);
 			continue;
 		}
