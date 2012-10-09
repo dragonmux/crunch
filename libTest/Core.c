@@ -129,6 +129,24 @@ void assertNotNull(void *result)
 	}
 }
 
+void assertConstNull(const void *result)
+{
+	if (result != NULL)
+	{
+		ASSERTION_ERROR("%p", result, NULL);
+		pthreadExit(&error);
+	}
+}
+
+void assertConstNotNull(const void *result)
+{
+	if (result == NULL)
+	{
+		ASSERTION_ERROR("%p", result, NULL);
+		pthreadExit(&error);
+	}
+}
+
 void assertGreaterThan(long result, long expected)
 {
 	if (result <= expected)

@@ -91,6 +91,8 @@ TEST_API void assertStringNotEqual(const char *result, const char *expected);
 
 TEST_API void assertNull(void *result);
 TEST_API void assertNotNull(void *result);
+TEST_API void assertConstNull(const void *result);
+TEST_API void assertConstNotNull(const void *result);
 
 TEST_API void assertGreaterThan(long result, long expected);
 TEST_API void assertLessThan(long result, long expected);
