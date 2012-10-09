@@ -74,6 +74,24 @@ void assertPtrNotEqual(void *result, void *expected)
 	}
 }
 
+void assertDoubleEqual(double result, double expected)
+{
+	if (result != expected)
+	{
+		ASSERTION_ERROR("%f", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertDoubleNotEqual(double result, double expected)
+{
+	if (result == expected)
+	{
+		ASSERTION_ERROR("%f", result, expected);
+		pthreadExit(&error);
+	}
+}
+
 void assertNull(void *result)
 {
 	if (result != NULL)
