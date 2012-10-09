@@ -82,9 +82,12 @@ TEST_API void assertFalse(uint8_t value);
 TEST_API void assertIntEqual(int result, int expected);
 TEST_API void assertPtrEqual(void *result, void *expected);
 TEST_API void assertDoubleEqual(double result, double expected);
+TEST_API void assertStringEqual(const char *result, const char *expected);
+
 TEST_API void assertIntNotEqual(int result, int expected);
 TEST_API void assertPtrNotEqual(void *result, void *expected);
 TEST_API void assertDoubleNotEqual(double result, double expected);
+TEST_API void assertStringNotEqual(const char *result, const char *expected);
 
 TEST_API void assertNull(void *result);
 TEST_API void assertNotNull(void *result);

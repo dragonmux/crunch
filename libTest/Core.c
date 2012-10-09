@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "Logger.h"
 #include "StringFuncs.h"
+#include <string.h>
 
 test *tests;
 unitTest *currentTest;
@@ -88,6 +89,24 @@ void assertDoubleNotEqual(double result, double expected)
 	if (result == expected)
 	{
 		ASSERTION_ERROR("%f", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertStringEqual(const char *result, const char *expected)
+{
+	if (strcmp(result, expected) != 0)
+	{
+		ASSERTION_ERROR("%s", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertStringNotEqual(const char *result, const char *expected)
+{
+	if (strcmp(result, expected) == 0)
+	{
+		ASSERTION_ERROR("%s", result, expected);
 		pthreadExit(&error);
 	}
 }
