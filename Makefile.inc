@@ -1,4 +1,4 @@
-# Makefile include for libAudio. Set V to something other than 0 for more detailed build output.
+# Makefile include for libTest. Set V to something other than 0 for more detailed build output.
 
 ifeq ($(MAKELEVEL), 0)
 
