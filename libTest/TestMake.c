@@ -7,10 +7,11 @@
 #include <unistd.h>
 
 parsedArg **parsedArgs = NULL;
+parsedArg **inclDirs = NULL;
 parsedArg **linkLibs = NULL;
 parsedArg **linkObjs = NULL;
 parsedArg **namedTests = NULL;
-uint32_t numTests = 0, numLibs = 0, numObjs = 0;
+uint32_t numTests = 0, numInclDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef __MSC_VER
 #ifdef __x86_64__
@@ -18,7 +19,7 @@ uint32_t numTests = 0, numLibs = 0, numObjs = 0;
 #else
 #define COMPILER	"gcc -m32"
 #endif
-#define OPTS	"-shared %s%s-lTest -O2 -o "
+#define OPTS	"-shared %s%s%s-lTest -O2 %s -o "
 #else
 // _M_64
 // TODO: Figure out the trickery needed to get this working!
@@ -29,11 +30,13 @@ arg args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-I", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"--log", 1, 1, 0},
 	{"--silent", 0, 0, 0},
 	{"-s", 0, 0, 0},
 	{"--quiet", 0, 0, 0},
 	{"-q", 0, 0, 0},
+	{"-pthread", 0, 0, 0},
 	{0}
 };
 
@@ -86,6 +89,7 @@ void name() \
 
 getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l")
 getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o")
+getLinkFunc(getInclDirs, inclDirs, numInclDirs, "-I")
 #undef getLinkFunc
 
 static const char *exts[] = {".c", ".i", ".s", ".S", ".sx"};
@@ -110,7 +114,7 @@ const char *toSO(const char *file)
 	char *soFile;
 	const char *dot = strrchr(file, '.');
 	size_t dotPos = dot - file;
-	soFile = malloc(dotPos + 4);
+	soFile = testMalloc(dotPos + 4);
 	memcpy(soFile, file, dotPos);
 	memcpy(soFile + dotPos, ".so", 4);
 	return soFile;
@@ -130,6 +134,7 @@ const char *name ## ToString() \
 	return ret; \
 }
 
+toStringFunc(inclDirFlags, inclDirs, numInclDirs, )
 toStringFunc(objs, linkObjs, numObjs, + 2)
 toStringFunc(libs, linkLibs, numLibs, )
 #undef toStringFunc
@@ -137,11 +142,14 @@ toStringFunc(libs, linkLibs, numLibs, )
 int compileTests()
 {
 	int i, ret = 0;
-	const char *objs = objsToString(), *libs = libsToString();
+	const char *inclDirFlags = inclDirFlagsToString();
+	const char *objs = objsToString();
+	const char *libs = libsToString();
 	parsedArg *silent = findArg(parsedArgs, "--silent", NULL);
 	log *logFile = NULL;
 	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
 	parsedArg *quiet = findArg(parsedArgs, "--quiet", NULL);
+	parsedArg *pthread = findArg(parsedArgs, "-pthread", NULL);
 	if (logging != NULL)
 		logFile = startLogging(logging->params[0]);
 	if (silent == NULL)
@@ -155,9 +163,9 @@ int compileTests()
 		{
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
-			char *compileString = formatString(COMPILER " " OPTS "%s %s", objs, libs, soFile, namedTests[i]->value);
+			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, objs, libs, (pthread == NULL ? "" : pthread->value), soFile);
 			if (quiet != NULL)
-				displayString = formatString(" CCLD   %s => %s", namedTests[i]->value, soFile);
+				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
 				displayString = compileString;
 			if (silent == NULL)
@@ -190,6 +198,7 @@ int main(int argc, char **argv)
 		testPrintf("Fatal error: There are no source files to build given on the command line!\n");
 		return 2;
 	}
+	getInclDirs();
 	getLinkLibs();
 	getLinkObjs();
 	return compileTests();
