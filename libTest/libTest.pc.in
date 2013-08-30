@@ -10,5 +10,5 @@ Description: libTest is a unit testing framework for C
 Version: 0.0.1
 Requires:
 Conflicts:
-Libs: -L${libdir} -lTest
+Libs: -L${libdir} -lTest -Wl,-rpath,@LIBDIR@
 Cflags: -I${includedir}
