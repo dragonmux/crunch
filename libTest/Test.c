@@ -39,11 +39,11 @@ void *testRunner(void *self)
 void printStats()
 {
 	uint64_t total = passes + failures;
-	testPrintf("Total tests: %zu.  Failures: %u.  Pass rate (%%): ", total, failures);
+	testPrintf("Total tests: %zu,  Failures: %u,  Pass rate: ", total, failures);
 	if (total == 0)
 		testPrintf("--\n");
 	else
-		testPrintf("%0.2f\n", ((double)passes) / ((double)total) * 100.0);
+		testPrintf("%0.2f%%\n", ((double)passes) / ((double)total) * 100.0);
 }
 
 uint8_t getTests()
