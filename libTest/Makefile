@@ -7,7 +7,7 @@ EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< -lTest -ldl -pthread -o lib$@
+OUT_LFLAGS = $< $(shell pkg-config --libs libTest) -ldl -pthread -o lib$@
 
 LIBDIR ?= $(PREFIX)/lib
 PKGDIR = $(LIBDIR)/pkgconfig
@@ -37,7 +37,7 @@ H = libTest.h
 
 default: all
 
-all: $(SO) $(EXE)
+all: $(PC) $(SO) $(EXE)
 
 $(BINDIR):
 	$(call run-cmd,install_dir,$(BINDIR))
@@ -66,7 +66,7 @@ uninstall:
 	rm $(LIBDIR)/$(LA)
 	rm $(PKGDIR)/$(PC)
 
-$(SO): $(O) $(PC)
+$(SO): $(O)
 	$(call run-cmd,ar,$(A),$(O))
 	$(call run-cmd,ranlib,$(A))
 	$(call run-cmd,ccld,$(SO_LFLAGS))
