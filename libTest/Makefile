@@ -71,7 +71,11 @@ $(SO): $(O)
 	$(call run-cmd,ranlib,$(A))
 	$(call run-cmd,ccld,$(SO_LFLAGS))
 	$(call debug-strip,$(SO_STRIP) $(SO))
-	@sudo LIBDIR=$(LIBDIR) $(MAKE) install-so
+	$(Q)if [[ $(UID) -ne 0 && "$(PREFIX)" =~ ^/usr\.*\$$ ]]; then \
+		sudo PREFIX=$(PREFIX) LIBDIR=$(LIBDIR) $(MAKE) install-so; \
+	else \
+		$(MAKE) install-so; \
+	fi
 
 $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
