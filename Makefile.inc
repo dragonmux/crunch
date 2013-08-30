@@ -72,6 +72,13 @@ define debug-strip
 	fi
 endef
 
+define ldconfig
+	$(Q)if [ $(UID) -eq 0 ]; then \
+		echo $($(quiet)cmd_ldconfig); \
+		$(cmd_ldconfig); \
+	fi
+endef
+
 # Set up build engine variables
 GCC ?= gcc
 ifeq ($(strip $(DEBUG)), 1)
@@ -98,6 +105,7 @@ INSTALL = install
 INSTALL_FILE = $(INSTALL) -m644
 INSTALL_BIN = $(INSTALL) -m755
 INSTALL_DIR = $(INSTALL) -m755 -d
+UID = $(shell id -u)
 PREFIX ?= /usr
 
-export GCC DEBUG PREFIX
+export GCC DEBUG UID PREFIX
