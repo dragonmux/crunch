@@ -9,10 +9,10 @@ LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
 OUT_LFLAGS = $< -lTest -ldl -pthread -o lib$@
 
-LIBDIR ?= /usr/lib
+LIBDIR ?= $(PREFIX)/lib
 PKGDIR = $(LIBDIR)/pkgconfig
-INCDIR = /usr/include
-BINDIR = /usr/bin
+INCDIR = $(PREFIX)/include
+BINDIR = $(PREFIX)/bin
 
 SO_STRIP = -x
 OUT_STRIP = -s
@@ -39,10 +39,19 @@ default: all
 
 all: $(SO) $(EXE)
 
-install: all
+$(BINDIR):
+	$(call run-cmd,install_dir,$(BINDIR))
+
+$(LIBDIR):
+	$(call run-cmd,install_dir,$(LIBDIR))
+
+$(INCDIR):
+	$(call run-cmd,install_dir,$(INCDIR))
+
+install: all $(BINDIR)
 	$(call run-cmd,install_bin,$(EXE),$(BINDIR))
 
-install-so:
+install-so: $(LIBDIR) $(INCDIR)
 	$(call run-cmd,install_file,$(SO),$(LIBDIR))
 	@#(call run-cmd,install_file,$(PC),$(PKGDIR))
 	$(call run-cmd,install_file,$(H),$(INCDIR))

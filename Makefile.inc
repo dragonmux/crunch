@@ -97,5 +97,7 @@ LN = ln -sfT
 INSTALL = install
 INSTALL_FILE = $(INSTALL) -m644
 INSTALL_BIN = $(INSTALL) -m755
+INSTALL_DIR = $(INSTALL) -m755 -d
+PREFIX ?= /usr
 
-export GCC DEBUG
+export GCC DEBUG PREFIX
