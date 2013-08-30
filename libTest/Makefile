@@ -7,7 +7,7 @@ EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< -lTest -ldl -o lib$@
+OUT_LFLAGS = $< -lTest -ldl -pthread -o lib$@
 
 LIBDIR ?= /usr/lib
 PKGDIR = $(LIBDIR)/pkgconfig
