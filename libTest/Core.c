@@ -9,6 +9,8 @@ unitTest *currentTest;
 static const int error = 1;
 uint32_t passes = 0, failures = 0;
 
+#define DOUBLE_DELTA	0.0000001
+
 #define ASSERTION_FAILURE(what, result, expected) \
 	logResult(RESULT_FAILURE, "Assertion failure: " what, expected, result);
 
@@ -93,9 +95,11 @@ void assertPtrNotEqual(void *result, void *expected)
 	}
 }
 
+#define DELTA(result, expected) (result >= (expected - DOUBLE_DELTA) && result <= (expected + DOUBLE_DELTA))
+
 void assertDoubleEqual(double result, double expected)
 {
-	if (result != expected)
+	if (!DELTA(result, expected))
 	{
 		ASSERTION_ERROR("%f", result, expected);
 		pthreadExit(&error);
@@ -104,7 +108,7 @@ void assertDoubleEqual(double result, double expected)
 
 void assertDoubleNotEqual(double result, double expected)
 {
-	if (result == expected)
+	if (DELTA(result, expected))
 	{
 		ASSERTION_ERROR("%f", result, expected);
 		pthreadExit(&error);
