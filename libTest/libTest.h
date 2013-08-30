@@ -80,14 +80,18 @@ TEST_API void assertTrue(uint8_t value);
 TEST_API void assertFalse(uint8_t value);
 
 TEST_API void assertIntEqual(int result, int expected);
+TEST_API void assertInt64Equal(int64_t result, int64_t expected);
 TEST_API void assertPtrEqual(void *result, void *expected);
 TEST_API void assertDoubleEqual(double result, double expected);
 TEST_API void assertStringEqual(const char *result, const char *expected);
+TEST_API void assertMemEqual(const void *result, const void *expected, const size_t expectedLength);
 
 TEST_API void assertIntNotEqual(int result, int expected);
+TEST_API void assertInt64NotEqual(int64_t result, int64_t expected);
 TEST_API void assertPtrNotEqual(void *result, void *expected);
 TEST_API void assertDoubleNotEqual(double result, double expected);
 TEST_API void assertStringNotEqual(const char *result, const char *expected);
+TEST_API void assertMemNotEqual(const void *result, const void *expected, const size_t expectedLength);
 
 TEST_API void assertNull(void *result);
 TEST_API void assertNotNull(void *result);

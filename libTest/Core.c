@@ -57,6 +57,24 @@ void assertIntNotEqual(int result, int expected)
 	}
 }
 
+void assertInt64Equal(int64_t result, int64_t expected)
+{
+	if (result != expected)
+	{
+		ASSERTION_ERROR("%lld", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertInt64NotEqual(int64_t result, int64_t expected)
+{
+	if (result == expected)
+	{
+		ASSERTION_ERROR("%lld", result, expected);
+		pthreadExit(&error);
+	}
+}
+
 void assertPtrEqual(void *result, void* expected)
 {
 	if (result != expected)
@@ -107,6 +125,24 @@ void assertStringNotEqual(const char *result, const char *expected)
 	if (strcmp(result, expected) == 0)
 	{
 		ASSERTION_ERROR("%s", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertMemEqual(const void *result, const void *expected, const size_t expectedLength)
+{
+	if (memcmp(result, expected, expectedLength) != 0)
+	{
+		ASSERTION_FAILURE("buffers %p and %p do not match", result, expected);
+		pthreadExit(&error);
+	}
+}
+
+void assertMemNotEqual(const void *result, const void *expected, const size_t expectedLength)
+{
+	if (memcmp(result, expected, expectedLength) == 0)
+	{
+		ASSERTION_FAILURE("buffers %p and %p match", result, expected);
 		pthreadExit(&error);
 	}
 }
