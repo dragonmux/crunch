@@ -16,7 +16,7 @@ BINDIR = $(PREFIX)/bin
 
 SO_STRIP = -x
 OUT_STRIP = -s
-SED = sed -e 's:@LIBDIR@:$(LIBDIR):g'
+SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
 
@@ -53,7 +53,7 @@ install: all $(BINDIR)
 
 install-so: $(LIBDIR) $(INCDIR)
 	$(call run-cmd,install_file,$(SO),$(LIBDIR))
-	@#(call run-cmd,install_file,$(PC),$(PKGDIR))
+	$(call run-cmd,install_file,$(PC),$(PKGDIR))
 	$(call run-cmd,install_file,$(H),$(INCDIR))
 	$(call run-cmd,ln,$(LIBDIR)/$(SO),$(LIBDIR)/$(SOREV))
 	$(call run-cmd,ln,$(LIBDIR)/$(SOREV),$(LIBDIR)/$(SOMIN))
@@ -66,7 +66,7 @@ uninstall:
 	rm $(LIBDIR)/$(LA)
 	rm $(PKGDIR)/$(PC)
 
-$(SO): $(O)
+$(SO): $(O) $(PC)
 	$(call run-cmd,ar,$(A),$(O))
 	$(call run-cmd,ranlib,$(A))
 	$(call run-cmd,ccld,$(SO_LFLAGS))
@@ -91,7 +91,7 @@ clean:
 .c.o:
 	$(call run-cmd,cc,$(CFLAGS))
 
-.PHONY: clean install all uninstall default .cpp.o
+.PHONY: clean install all uninstall default .cpp.o $(PC)
 
 libTestMake: TestMake
 libTest: Test
