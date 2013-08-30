@@ -9,7 +9,7 @@ extern const arg args[];
 
 parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 {
-	int i;
+	uint32_t i;
 	for (i = 0; parsedArgs[i] != NULL; i++)
 	{
 		parsedArg *arg = parsedArgs[i];
@@ -21,7 +21,7 @@ parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 
 uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args)
 {
-	int i, n, min = argument->numMinParams, max = argument->numMaxParams;
+	uint32_t i, n, min = argument->numMinParams, max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
 	for (i = argPos, n = 0; i < argc && n < max && eoa == FALSE; i++)
 	{
