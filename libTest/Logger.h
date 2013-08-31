@@ -7,6 +7,7 @@ typedef enum _resultType
 	RESULT_SUCCESS
 } resultType;
 
+extern uint8_t isTTY;
 extern uint8_t logging;
 extern log *logger;
 

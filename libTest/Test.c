@@ -26,7 +26,13 @@ typedef void (__cdecl *registerFn)();
 void *testRunner(void *self)
 {
 	unitTest *test = (unitTest *)self;
-	testPrintf(INFO "%s..." NEWLINE, test->theTest->testName);
+	if (isTTY != 0)
+		testPrintf(INFO);
+	testPrintf("%s...", test->theTest->testName);
+	if (isTTY != 0)
+		testPrintf(NEWLINE);
+	else
+		testPrintf(" ");
 	test->theTest->testFunc();
 	// Did the test switch logging on?
 	if (loggingTests == 0 && logging == 1)
@@ -111,11 +117,31 @@ void runTests()
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
 		{
 			if (testSuit == NULL)
-				testPrintf(FAILURE "Could not open test library: %s" NEWLINE, dlerror());
-			testPrintf(FAILURE "Test library %s was not a valid library, skipping" NEWLINE, namedTests[i]->value);
+			{
+				if (isTTY != 0)
+					testPrintf(FAILURE);
+				printf("Could not open test library: %s", dlerror());
+				if (isTTY != 0)
+					printf(NEWLINE);
+				else
+					printf("\n");
+			}
+			if (isTTY != 0)
+				testPrintf(FAILURE);
+			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
+			if (isTTY != 0)
+				testPrintf(NEWLINE);
+			else
+				testPrintf("\n");
 			continue;
 		}
-		testPrintf(COLOUR("1;35") "Running test suit %s..." NEWLINE, namedTests[i]->value);
+		if (isTTY != 0)
+			testPrintf(COLOUR("1;35"));
+		testPrintf("Running test suit %s...", namedTests[i]->value);
+		if (isTTY != 0)
+			testPrintf(NEWLINE);
+		else
+			testPrintf("\n");
 		currTest = tests;
 		while (currTest->testFunc != NULL)
 		{
@@ -146,6 +172,7 @@ int main(int argc, char **argv)
 		return 2;
 	}
 	cwd = getcwd(NULL, 0);
+	isTTY = isatty(STDOUT_FILENO);
 	runTests();
 	free((void *)cwd);
 	return 0;

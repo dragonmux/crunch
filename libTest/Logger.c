@@ -18,6 +18,7 @@
 FILE *realStdout = NULL;
 uint8_t logging = 0;
 log *logger = NULL;
+uint8_t isTTY = 1;
 
 int getColumns()
 {
@@ -45,19 +46,28 @@ size_t testPrintf(const char *format, ...)
 
 void echoOk()
 {
-	testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
+	if (isTTY != 0)
+		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
+	else
+		testPrintf("[  OK  ]\n");
 	passes++;
 }
 
 void echoFailure()
 {
-	testPrintf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+	if (isTTY != 0)
+		testPrintf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+	else
+		testPrintf("[ FAIL ]\n");
 	failures++;
 }
 
 void echoAborted()
 {
-	testPrintf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
+	if (isTTY != 0)
+		testPrintf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
+	else
+		testPrintf("[ **** ABORTED **** ]\n");
 	libDebugExit(0);
 }
 
@@ -65,11 +75,12 @@ void logResult(resultType type, const char *message, ...)
 {
 	va_list args;
 
-	testPrintf(NORMAL);
+	if (isTTY != 0)
+		testPrintf(NORMAL);
 	va_start(args, message);
 	vaTestPrintf(message, args);
 	va_end(args);
-	if (type != RESULT_SUCCESS)
+	if (type != RESULT_SUCCESS && isTTY != 0)
 		testPrintf(NEWLINE);
 	switch (type)
 	{
