@@ -92,7 +92,7 @@ getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o")
 getLinkFunc(getInclDirs, inclDirs, numInclDirs, "-I")
 #undef getLinkFunc
 
-static const char *exts[] = {".c", ".i", ".s", ".S", ".sx"};
+static const char *exts[] = {".c", ".cpp", ".i", ".s", ".S", ".sx"};
 static const int numExts = sizeof(exts) / sizeof(*exts);
 
 uint8_t validExt(const char *file)
