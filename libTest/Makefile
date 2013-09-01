@@ -100,4 +100,5 @@ TestMake: TestMake.o
 Test: Test.o
 
 TestMake.o: TestMake.c
+TestMake.o: CFLAGS += -DlibTest_GCC="\"$(GCC)\""
 Test.o: Test.c
