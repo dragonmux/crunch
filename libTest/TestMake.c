@@ -8,10 +8,11 @@
 
 parsedArg **parsedArgs = NULL;
 parsedArg **inclDirs = NULL;
+parsedArg **libDirs = NULL;
 parsedArg **linkLibs = NULL;
 parsedArg **linkObjs = NULL;
 parsedArg **namedTests = NULL;
-uint32_t numTests = 0, numInclDirs = 0, numLibs = 0, numObjs = 0;
+uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef __MSC_VER
 #ifdef __x86_64__
@@ -19,7 +20,7 @@ uint32_t numTests = 0, numInclDirs = 0, numLibs = 0, numObjs = 0;
 #else
 #define COMPILER	"gcc -m32"
 #endif
-#define OPTS	"-shared %s%s%s-lTest -O2 %s -o "
+#define OPTS	"-shared %s%s%s%s-lTest -O2 %s -o "
 #else
 // _M_64
 // TODO: Figure out the trickery needed to get this working!
@@ -31,6 +32,7 @@ arg args[] =
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-I", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-L", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"--log", 1, 1, 0},
 	{"--silent", 0, 0, 0},
 	{"-s", 0, 0, 0},
@@ -90,6 +92,7 @@ void name() \
 getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l")
 getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o")
 getLinkFunc(getInclDirs, inclDirs, numInclDirs, "-I")
+getLinkFunc(getLibDirs, libDirs, numLibDirs, "-L")
 #undef getLinkFunc
 
 static const char *exts[] = {".c", ".cpp", ".i", ".s", ".S", ".sx"};
@@ -135,6 +138,7 @@ const char *name ## ToString() \
 }
 
 toStringFunc(inclDirFlags, inclDirs, numInclDirs, )
+toStringFunc(libDirFlags, libDirs, numLibDirs, )
 toStringFunc(objs, linkObjs, numObjs, + 2)
 toStringFunc(libs, linkLibs, numLibs, )
 #undef toStringFunc
@@ -143,6 +147,7 @@ int compileTests()
 {
 	int i, ret = 0;
 	const char *inclDirFlags = inclDirFlagsToString();
+	const char *libDirFlags = libDirFlagsToString();
 	const char *objs = objsToString();
 	const char *libs = libsToString();
 	parsedArg *silent = findArg(parsedArgs, "--silent", NULL);
@@ -163,7 +168,7 @@ int compileTests()
 		{
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
-			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, objs, libs, (pthread == NULL ? "" : pthread->value), soFile);
+			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread == NULL ? "" : pthread->value), soFile);
 			if (quiet != NULL)
 				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
@@ -199,6 +204,7 @@ int main(int argc, char **argv)
 		return 2;
 	}
 	getInclDirs();
+	getLibDirs();
 	getLinkLibs();
 	getLinkObjs();
 	return compileTests();
