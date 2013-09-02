@@ -9,6 +9,11 @@ LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
 OUT_LFLAGS = $< $(shell pkg-config --libs libTest) -ldl -pthread -o lib$@
 
+quiet_cmd_testMake = -n
+cmd_testMake = $(LIBTESTMAKE) $(2)
+quiet_cmd_test = -n
+cmd_test = $(LIBTEST) $(2)
+
 LIBDIR ?= $(PREFIX)/lib
 PKGDIR = $(LIBDIR)/pkgconfig
 INCDIR = $(PREFIX)/include
@@ -19,6 +24,7 @@ OUT_STRIP = -s
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
+TESTS = testLibTest.so
 
 VERMAJ = .0
 VERMIN = .0
@@ -80,9 +86,13 @@ $(SO): $(O)
 $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
 
+check: $(TESTS)
+	$(call run-cmd,test,$(subst .so,,$(TESTS)))
+
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))
 	$(call run-cmd,rm,libTest,$(O) $(SOMAJ)* $(A) $(PC))
+	$(call run-cmd,rm,tests,$(TESTS))
 
 .o:
 	$(call run-cmd,ccld,$(OUT_LFLAGS))
@@ -90,6 +100,9 @@ clean:
 
 .c.o:
 	$(call run-cmd,cc,$(CFLAGS))
+
+%.so: %.c
+	$(call run-cmd,testMake,$<)
 
 .PHONY: clean install all uninstall default .cpp.o $(PC)
 

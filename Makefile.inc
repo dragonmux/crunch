@@ -105,6 +105,8 @@ INSTALL = install
 INSTALL_FILE = $(INSTALL) -m644
 INSTALL_BIN = $(INSTALL) -m755
 INSTALL_DIR = $(INSTALL) -m755 -d
+LIBTESTMAKE = libTestMake $(shell pkg-config --cflags --libs libTest)
+LIBTEST = libTest
 UID = $(shell id -u)
 PREFIX ?= /usr
 
