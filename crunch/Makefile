@@ -103,7 +103,7 @@ $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
 
 check: $(TESTS)
-	$(call run-cmd,check,$(subst .so,,$(TESTS)))
+	$(call run-cmd,crunch,$(subst .so,,$(TESTS)))
 
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))

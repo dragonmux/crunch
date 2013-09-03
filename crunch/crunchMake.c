@@ -42,7 +42,7 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #else
 #define COMPILER crunch_GCC
 #endif
-#define OPTS	"-shared %s%s%s%s-lTest -O2 %s -o "
+#define OPTS	"-shared %s%s%s%s-lcrunch -O2 %s -o "
 #else
 // _M_64
 // TODO: Figure out the trickery needed to get this working!
