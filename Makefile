@@ -3,13 +3,13 @@ include Makefile.inc
 default: all
 
 all:
-	@cd libTest && $(MAKE)
+	@cd crunch && $(MAKE)
 
 install:
-	@cd libTest && $(MAKE) install
+	@cd crunch && $(MAKE) install
 
 check:
-	@cd libTest && $(MAKE) check
+	@cd crunch && $(MAKE) check
 
 clean:
-	@cd libTest && $(MAKE) clean
+	@cd crunch && $(MAKE) clean

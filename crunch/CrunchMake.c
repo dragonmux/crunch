@@ -15,14 +15,14 @@ parsedArg **namedTests = NULL;
 uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef __MSC_VER
-#ifdef libTest_GUESSCOMPILER
+#ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
 #define COMPILER	"gcc -m64 -fPIC -DPIC"
 #else
 #define COMPILER	"gcc -m32"
 #endif
 #else
-#define COMPILER libTest_GCC
+#define COMPILER crunch_GCC
 #endif
 #define OPTS	"-shared %s%s%s%s-lTest -O2 %s -o "
 #else

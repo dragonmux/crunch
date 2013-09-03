@@ -10,7 +10,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "libTest.h"
+#include "crunch.h"
 
 extern void libDebugExit(int num) NORETURN;
 

@@ -2,12 +2,12 @@ include ../Makefile.inc
 
 EXTRA_CFLAGS = -Wall -pedantic -pthread -std=gnu99
 #$(shell pkg-config --cflags )
-CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__libTest__ -o $@ $<
+CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< $(shell pkg-config --libs libTest) -ldl -pthread -o lib$@
+OUT_LFLAGS = $< $(shell pkg-config --libs crunch) -ldl -pthread -o lib$@
 
 quiet_cmd_testMake = -n
 cmd_testMake = $(LIBTESTMAKE) $(2)
@@ -24,22 +24,22 @@ OUT_STRIP = -s
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
-TESTS = testLibTest.so
+TESTS = testCrunch.so
 
 VERMAJ = .0
 VERMIN = .0
 VERREV = .1
-SOMAJ = libTest.so
+SOMAJ = libcrunch.so
 SOMIN = $(SOMAJ)$(VERMAJ)
 SOREV = $(SOMIN)$(VERMIN)
 SO = $(SOREV)$(VERREV)
-A = libTest.a
-LA = libTest.la
-PC = libTest.pc
-IN = libTest.pc.in
+A = libcrunch.a
+LA = libcrunch.la
+PC = crunch.pc
+IN = crunch.pc.in
 OUT = Test TestMake
-EXE = libTest libTestMake
-H = libTest.h
+EXE = crunch crunchMake
+H = crunch.h
 
 default: all
 
@@ -91,7 +91,7 @@ check: $(TESTS)
 
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))
-	$(call run-cmd,rm,libTest,$(O) $(SOMAJ)* $(A) $(PC))
+	$(call run-cmd,rm,crunch,$(O) $(SOMAJ)* $(A) $(PC))
 	$(call run-cmd,rm,tests,$(TESTS))
 
 .o:
@@ -106,12 +106,9 @@ clean:
 
 .PHONY: clean install all uninstall default .cpp.o $(PC)
 
-libTestMake: TestMake
-libTest: Test
+crunchMake: crunchMake.o
+crunch: crunch.o
 
-TestMake: TestMake.o
-Test: Test.o
-
-TestMake.o: TestMake.c
-TestMake.o: CFLAGS += -DlibTest_GCC="\"$(GCC)\""
-Test.o: Test.c
+crunchMake.o: CrunchMake.c
+crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
+crunch.o: Crunch.c
