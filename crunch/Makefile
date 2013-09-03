@@ -25,10 +25,10 @@ LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
 OUT_LFLAGS = $< $(shell pkg-config --libs crunch) -ldl -pthread -o lib$@
 
-quiet_cmd_testMake = -n
-cmd_testMake = $(LIBTESTMAKE) $(2)
-quiet_cmd_test = -n
-cmd_test = $(LIBTEST) $(2)
+quiet_cmd_crunchMake = -n
+cmd_crunchMake = $(CRUNCHMAKE) $(2)
+quiet_cmd_crunch = -n
+cmd_crunch = $(CRUNCH) $(2)
 
 LIBDIR ?= $(PREFIX)/lib
 PKGDIR = $(LIBDIR)/pkgconfig
@@ -103,7 +103,7 @@ $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
 
 check: $(TESTS)
-	$(call run-cmd,test,$(subst .so,,$(TESTS)))
+	$(call run-cmd,check,$(subst .so,,$(TESTS)))
 
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))
@@ -118,7 +118,7 @@ clean:
 	$(call run-cmd,cc,$(CFLAGS))
 
 %.so: %.c
-	$(call run-cmd,testMake,$<)
+	$(call run-cmd,crunchMake,$<)
 
 .PHONY: clean install all uninstall default .cpp.o $(PC)
 
