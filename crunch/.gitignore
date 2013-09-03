@@ -1,3 +1,6 @@
-libTest
-libTestMake
-testLibTest.so
+crunch
+crunchMake
+testCrunch.so
+
+crunch.pc
+libcrunch.so*
