@@ -109,6 +109,6 @@ clean:
 crunchMake: crunchMake.o
 crunch: crunch.o
 
-crunchMake.o: CrunchMake.c
+crunchMake.o: crunchMake.c
 crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
-crunch.o: Crunch.c
+crunch.o: crunch.c
