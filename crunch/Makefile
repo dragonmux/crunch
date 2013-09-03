@@ -23,7 +23,7 @@ EXTRA_LIBS = -pthread
 #$(shell pkg-config --libs )
 LIBS = -lstdc++ $(EXTRA_LIBS)
 SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< $(shell pkg-config --libs crunch) -ldl -pthread -o lib$@
+OUT_LFLAGS = $< $(shell pkg-config --libs crunch) -ldl -pthread -o $@
 
 quiet_cmd_crunchMake = -n
 cmd_crunchMake = $(CRUNCHMAKE) $(2)
@@ -112,7 +112,7 @@ clean:
 
 .o:
 	$(call run-cmd,ccld,$(OUT_LFLAGS))
-	$(call debug-strip, $(OUT_STRIP) lib$@)
+	$(call debug-strip,$(OUT_STRIP) $@)
 
 .c.o:
 	$(call run-cmd,cc,$(CFLAGS))
