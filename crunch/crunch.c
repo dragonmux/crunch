@@ -24,7 +24,12 @@
 #include "StringFuncs.h"
 #include "Memory.h"
 #include <dlfcn.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#else
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
 
 static const int ok = 0;
 const arg args[] =
@@ -193,7 +198,7 @@ int main(int argc, char **argv)
 	isTTY = isatty(STDOUT_FILENO);
 #ifdef _MSC_VER
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (Console == NULL)
+	if (console == NULL)
 	{
 		printf("Error: could not grab console!");
 		exit(1);

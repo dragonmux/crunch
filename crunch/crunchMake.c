@@ -22,7 +22,9 @@
 #include "StringFuncs.h"
 #include "Memory.h"
 #include <string.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 parsedArg **parsedArgs = NULL;
 parsedArg **inclDirs = NULL;
