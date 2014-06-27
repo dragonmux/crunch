@@ -19,16 +19,19 @@
 #include "Core.h"
 #include "Logger.h"
 #include "Memory.h"
+#ifndef _MSC_VER
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <stdarg.h>
 #include <sys/file.h>
+#endif
+#include <stdarg.h>
 
 #define COL(val) val - 8
 #define WCOL(val) val - 2
 
 #ifdef _MSC_VER
 	#define TTY	"CON"
+HANDLE console;
 #else
 	#define TTY	"/dev/tty"
 #endif
@@ -38,12 +41,21 @@ uint8_t logging = 0;
 log *logger = NULL;
 uint8_t isTTY = 1;
 
+#ifndef _MSC_VER
 int getColumns()
 {
 	struct winsize win;
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
 	return (win.ws_col == 0 ? 80 : win.ws_col);
 }
+#else
+int getColumns()
+{
+	CONSOLE_SCREEN_BUFFER_INFO window;
+	GetConsoleScreenBufferInfo(console, window);
+	return window.dwSize.X;
+}
+#endif
 
 size_t vaTestPrintf(const char *format, va_list args)
 {

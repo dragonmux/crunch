@@ -53,6 +53,9 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+#ifdef stdout
+#undef stdout
+#endif
 
 typedef struct _test
 {

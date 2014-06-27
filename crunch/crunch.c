@@ -191,6 +191,14 @@ int main(int argc, char **argv)
 	}
 	cwd = getcwd(NULL, 0);
 	isTTY = isatty(STDOUT_FILENO);
+#ifdef _MSC_VER
+	console = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (Console == NULL)
+	{
+		printf("Error: could not grab console!");
+		exit(1);
+	}
+#endif
 	runTests();
 	free((void *)cwd);
 	return 0;

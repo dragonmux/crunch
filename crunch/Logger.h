@@ -19,6 +19,11 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 
+#ifdef _MSC_VER
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 typedef enum _resultType
 {
 	RESULT_FAILURE,
@@ -26,6 +31,9 @@ typedef enum _resultType
 } resultType;
 
 extern uint8_t isTTY;
+#ifdef _MSC_VER
+extern HANDLE console;
+#endif
 extern uint8_t logging;
 extern log *logger;
 
