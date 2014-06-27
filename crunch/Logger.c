@@ -52,7 +52,7 @@ int getColumns()
 int getColumns()
 {
 	CONSOLE_SCREEN_BUFFER_INFO window;
-	GetConsoleScreenBufferInfo(console, window);
+	GetConsoleScreenBufferInfo(console, &window);
 	return window.dwSize.X;
 }
 #endif
@@ -74,6 +74,7 @@ size_t testPrintf(const char *format, ...)
 	return ret;
 }
 
+#ifndef _MSC_VER
 void echoOk()
 {
 	if (isTTY != 0)
@@ -100,6 +101,22 @@ void echoAborted()
 		testPrintf("[ **** ABORTED **** ]\n");
 	libDebugExit(0);
 }
+#else
+void echoOk()
+{
+	passes++;
+}
+
+void echoFailure()
+{
+	failures++;
+}
+
+void echoAborted()
+{
+	libDebugExit(0);
+}
+#endif
 
 void logResult(resultType type, const char *message, ...)
 {
