@@ -29,6 +29,8 @@
 #else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <direct.h>
+#include <io.h>
 #endif
 
 static const int ok = 0;
@@ -195,14 +197,17 @@ int main(int argc, char **argv)
 		return 2;
 	}
 	cwd = getcwd(NULL, 0);
+#ifndef _MSC_VER
 	isTTY = isatty(STDOUT_FILENO);
-#ifdef _MSC_VER
+#else
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (console == NULL)
 	{
 		printf("Error: could not grab console!");
 		exit(1);
 	}
+	stdout = &__iob_func()[1];
+	isTTY = isatty(fileno(stdout));
 #endif
 	runTests();
 	free((void *)cwd);

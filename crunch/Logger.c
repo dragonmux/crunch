@@ -23,6 +23,9 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/file.h>
+#else
+#include <io.h>
+#include <sys/locking.h>
 #endif
 #include <stdarg.h>
 
@@ -32,6 +35,7 @@
 #ifdef _MSC_VER
 	#define TTY	"CON"
 HANDLE console;
+FILE *stdout;
 #else
 	#define TTY	"/dev/tty"
 #endif
@@ -104,6 +108,19 @@ void echoAborted()
 #else
 void echoOk()
 {
+	CONSOLE_SCREEN_BUFFER_INFO cursor;
+	GetConsoleScreenBufferInfo(console, &cursor);
+	cursor.dwCursorPosition.Y--;
+	cursor.dwCursorPosition.X = getColumns() - 6;
+	SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+	SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	WriteConsole(console, "[", 1, NULL, NULL);
+	SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	WriteConsole(console, " OK ", 4, NULL, NULL);
+	SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	WriteConsole(console, "]", 1, NULL, NULL);
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	WriteConsole(console, "\n", 1, NULL, NULL);
 	passes++;
 }
 
@@ -149,11 +166,19 @@ log *startLogging(const char *fileName)
 		return NULL;
 	ret = testMalloc(sizeof(log));
 	logging = 1;
+#ifndef _MSC_VER
 	ret->stdout = dup(STDOUT_FILENO);
+#else
+	ret->stdout = dup(fileno(stdout));
+#endif
 	realStdout = fdopen(ret->stdout, "w");
 	ret->file = freopen(fileName, "w", stdout);
 	ret->fd = fileno(ret->file);
+#ifndef _MSC_VER
 	flock(ret->fd, LOCK_EX);
+#else
+	locking(ret->fd, LK_LOCK, -1);
+#endif
 	logger = ret;
 	return ret;
 }
@@ -162,7 +187,11 @@ void stopLogging(log *logFile)
 {
 	if (logFile == NULL)
 		return;
+#ifndef _MSC_VER
 	flock(logFile->fd, LOCK_UN);
+#else
+	locking(logFile->fd, LK_UNLCK, -1);
+#endif
 	fclose(logFile->file);
 	fclose(realStdout);
 	realStdout = freopen(TTY, "w", stdout);
