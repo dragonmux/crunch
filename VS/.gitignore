@@ -1,0 +1,10 @@
+*.v11.suo
+*.vcxproj.user
+*.idb
+*.pdb
+*.dll
+*.exe
+*.obj
+*.log
+*.lastbuildstate
+*.tlog
