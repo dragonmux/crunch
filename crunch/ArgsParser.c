@@ -23,7 +23,16 @@
 #include "Memory.h"
 #include <string.h>
 
+#ifndef _MSC_VER
 extern const arg args[];
+#else
+arg *args = NULL;
+
+void registerArgs(arg *allowedArgs)
+{
+	args = allowedArgs;
+}
+#endif
 
 parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 {

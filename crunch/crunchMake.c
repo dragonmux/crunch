@@ -221,6 +221,9 @@ int compileTests()
 
 int main(int argc, char **argv)
 {
+#ifdef _MSC_VER
+	registerArgs(args);
+#endif
 	parsedArgs = parseArguments(argc, argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
 	{

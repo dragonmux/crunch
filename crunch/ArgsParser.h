@@ -40,6 +40,9 @@ typedef struct _parsedArg
 #define ARG_REPEATABLE	1
 #define ARG_INCOMPLETE	2
 
+#ifdef _MSC_VER
+extern void registerArgs(arg *allowedargs);
+#endif
 extern parsedArg **parseArguments(int argc, char **argv);
 extern parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
 extern arg *findArgInArgs(const char *value);
