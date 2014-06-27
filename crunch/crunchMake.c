@@ -24,6 +24,9 @@
 #include <string.h>
 #ifndef _MSC_VER
 #include <unistd.h>
+#else
+#include <io.h>
+#define R_OK 6
 #endif
 
 parsedArg **parsedArgs = NULL;
@@ -34,7 +37,7 @@ parsedArg **linkObjs = NULL;
 parsedArg **namedTests = NULL;
 uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
-#ifndef __MSC_VER
+#ifndef _MSC_VER
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
 #define COMPILER	"gcc -m64 -fPIC -DPIC"
@@ -49,6 +52,7 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 // _M_64
 // TODO: Figure out the trickery needed to get this working!
 #define COMPILER	"cl"
+#define OPTS	""
 #endif
 
 arg args[] =
@@ -150,7 +154,7 @@ const char *toSO(const char *file)
 #define toStringFunc(name, var, num, offset) \
 const char *name ## ToString() \
 { \
-	int i; \
+	uint32_t i; \
 	const char *ret = strdup(""); \
 	for (i = 0; i < num; i++) \
 	{ \
@@ -169,7 +173,7 @@ toStringFunc(libs, linkLibs, numLibs, )
 
 int compileTests()
 {
-	int i, ret = 0;
+	uint32_t i, ret = 0;
 	const char *inclDirFlags = inclDirFlagsToString();
 	const char *libDirFlags = libDirFlagsToString();
 	const char *objs = objsToString();
