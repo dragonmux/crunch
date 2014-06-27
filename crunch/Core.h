@@ -20,9 +20,9 @@
 #define __CORE_H__
 
 #ifdef _MSC_VER
-#define NORETURN __declspec(noreturn)
+#define NORETURN(def) __declspec(noreturn) def
 #else
-#define NORETURN __attribute((noreturn))
+#define NORETURN(def) def __attribute((noreturn))
 #endif
 
 #include <pthread.h>
@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include "crunch.h"
 
-extern void libDebugExit(int num) NORETURN;
+extern NORETURN(void libDebugExit(int num));
 
 extern uint32_t passes, failures;
 
