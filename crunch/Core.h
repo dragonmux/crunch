@@ -30,9 +30,9 @@
 #include <stdlib.h>
 #include "crunch.h"
 
-extern NORETURN(void libDebugExit(int num));
+CRUNCH_API NORETURN(void libDebugExit(int num));
 
-extern uint32_t passes, failures;
+CRUNCH_API uint32_t passes, failures;
 
 #define pthreadExit(val) \
 	pthread_exit((void *)val); \

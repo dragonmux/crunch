@@ -23,6 +23,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
+#include "crunch.h"
 
 typedef enum _resultType
 {
@@ -30,16 +31,16 @@ typedef enum _resultType
 	RESULT_SUCCESS
 } resultType;
 
-extern uint8_t isTTY;
+CRUNCH_API uint8_t isTTY;
 #ifdef _MSC_VER
-extern HANDLE console;
+CRUNCH_API HANDLE console;
 #endif
-extern uint8_t logging;
-extern log *logger;
+CRUNCH_API uint8_t logging;
+CRUNCH_API log *logger;
 
-extern size_t vaTestPrintf(const char *format, va_list args);
-extern size_t testPrintf(const char *format, ...);
-extern void logResult(resultType type, const char *message, ...);
+CRUNCH_API size_t vaTestPrintf(const char *format, va_list args);
+CRUNCH_API size_t testPrintf(const char *format, ...);
+CRUNCH_API void logResult(resultType type, const char *message, ...);
 
 #define COLOUR(Code) "\x1B["Code"m"
 #define NORMAL COLOUR("0;39")

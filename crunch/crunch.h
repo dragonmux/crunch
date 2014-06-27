@@ -55,7 +55,7 @@
 #include <stdio.h>
 #ifdef stdout
 #undef stdout
-extern FILE *stdout;
+CRUNCH_API FILE *stdout;
 #endif
 
 typedef struct _test

@@ -24,7 +24,7 @@
 #include <string.h>
 
 #ifndef _MSC_VER
-extern const arg args[];
+CRUNCH_API const arg args[];
 #else
 arg *args = NULL;
 
