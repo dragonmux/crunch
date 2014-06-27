@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\crunch\ArgsParser.c" />
     <ClCompile Include="..\..\crunch\Core.c" />
-    <ClCompile Include="..\..\crunch\crunchMake.c" />
     <ClCompile Include="..\..\crunch\Logger.c" />
     <ClCompile Include="..\..\crunch\Memory.c" />
     <ClCompile Include="..\..\crunch\StringFuncs.c" />
@@ -30,6 +29,7 @@
     <ProjectGuid>{90C03692-49FF-4B02-9884-36670C0671F5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>crunch</RootNamespace>
+    <ProjectName>libcrunch</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -76,6 +76,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
+      <ImportLibrary>
+      </ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

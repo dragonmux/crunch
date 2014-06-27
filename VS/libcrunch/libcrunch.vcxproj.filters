@@ -41,9 +41,6 @@
     <ClCompile Include="..\..\crunch\Core.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\crunch\crunchMake.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\crunch\Logger.c">
       <Filter>Source Files</Filter>
     </ClCompile>
