@@ -23,21 +23,26 @@
 
 #ifdef _MSC_VER
 	#ifdef __crunch_lib__
-		#define CRUNCH_API	__declspec(dllexport)
+		#define CRUNCH_VIS	__declspec(dllexport)
 	#else
-		#define CRUNCH_API	__declspec(dllimport)
+		#define CRUNCH_VIS	__declspec(dllimport)
+	#endif
+	#ifdef __cplusplus
+		#define CRUNCH_API	extern "C" CRUNCH_VIS
+	#else
+		#define CRUNCH_API	CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 #else
 	#if __GNUC__ >= 4
-		#define DEFAULT_VISIBILITY __attribute__ ((visibility("default")))
+		#define CRUNCH_VIS __attribute__ ((visibility("default")))
 	#else
-		#define DEFAULT_VISIBILITY
+		#define CRUNCH_VIS
 	#endif
 	#ifdef __cplusplus
-		#define CRUNCH_API	extern "C" DEFAULT_VISIBILITY
+		#define CRUNCH_API	extern "C" CRUNCH_VIS
 	#else
-		#define CRUNCH_API	extern DEFAULT_VISIBILITY
+		#define CRUNCH_API	extern CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		CRUNCH_API
 #endif
