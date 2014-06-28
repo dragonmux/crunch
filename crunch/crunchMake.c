@@ -52,7 +52,7 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 // _M_64
 // TODO: Figure out the trickery needed to get this working!
 #define COMPILER	"cl"
-#define OPTS	""
+#define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%s%s /Fe:"
 #endif
 
 const arg args[] =

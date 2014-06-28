@@ -142,16 +142,16 @@ void echoOk()
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
 		cursor.dwCursorPosition.Y--;
-		cursor.dwCursorPosition.X = getColumns() - 8;
+		cursor.dwCursorPosition.X = COL(getColumns());
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		WriteConsole(console, "[", 1, NULL, NULL);
+		testPrintf("[");
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-		WriteConsole(console, "  OK  ", 6, NULL, NULL);
+		testPrintf("  OK  ");
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		WriteConsole(console, "]", 1, NULL, NULL);
+		testPrintf("]");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		WriteConsole(console, "\n", 1, NULL, NULL);
+		testPrintf("\n");
 	}
 	else
 		printOk();
@@ -165,16 +165,16 @@ void echoFailure()
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
 		cursor.dwCursorPosition.Y--;
-		cursor.dwCursorPosition.X = getColumns() - 8;
+		cursor.dwCursorPosition.X = COL(getColumns());
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		WriteConsole(console, "[", 1, NULL, NULL);
+		testPrintf("[");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-		WriteConsole(console, " FAIL ", 6, NULL, NULL);
+		testPrintf(" FAIL ");
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		WriteConsole(console, "]", 1, NULL, NULL);
+		testPrintf("]");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		WriteConsole(console, "\n", 1, NULL, NULL);
+		testPrintf("\n");
 	}
 	else
 		printFailure();
@@ -191,13 +191,13 @@ void echoAborted()
 		cursor.dwCursorPosition.X = getColumns() - 21;
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		WriteConsole(console, "[", 1, NULL, NULL);
+		testPrintf("[");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-		WriteConsole(console, " **** ABORTED **** ", 19, NULL, NULL);
+		testPrintf(" **** ABORTED **** ");
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		WriteConsole(console, "]", 1, NULL, NULL);
+		testPrintf("]");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		WriteConsole(console, "\n", 1, NULL, NULL);
+		testPrintf("\n");
 	}
 	else
 		printAborted();

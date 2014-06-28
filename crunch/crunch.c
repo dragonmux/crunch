@@ -117,6 +117,14 @@ uint8_t tryRegistration(void *testSuit)
 	return TRUE;
 }
 
+#ifdef _MSC_VER
+void newline()
+{
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	testPrintf("\n");
+}
+#endif
+
 void runTests()
 {
 	pthread_attr_t threadAttrs;
@@ -144,27 +152,51 @@ void runTests()
 			if (testSuit == NULL)
 			{
 				if (isTTY != 0)
+#ifndef _MSC_VER
 					testPrintf(FAILURE);
-				printf("Could not open test library: %s", dlerror());
+#else
+					SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
+				testPrintf("Could not open test library: %s", dlerror());
 				if (isTTY != 0)
-					printf(NEWLINE);
+#ifndef _MSC_VER
+					testPrintf(NEWLINE);
+#else
+					newline();
+#endif
 				else
-					printf("\n");
+					testPrintf("\n");
 			}
 			if (isTTY != 0)
+#ifndef _MSC_VER
 				testPrintf(FAILURE);
+#else
+				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
 			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
 			if (isTTY != 0)
+#ifndef _MSC_VER
 				testPrintf(NEWLINE);
+#else
+				newline();
+#endif
 			else
 				testPrintf("\n");
 			continue;
 		}
 		if (isTTY != 0)
+#ifndef _MSC_VER
 			testPrintf(COLOUR("1;35"));
+#else
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#endif
 		testPrintf("Running test suit %s...", namedTests[i]->value);
 		if (isTTY != 0)
+#ifndef _MSC_VER
 			testPrintf(NEWLINE);
+#else
+			newline();
+#endif
 		else
 			testPrintf("\n");
 		currTest = tests;
