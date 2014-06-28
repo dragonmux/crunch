@@ -26,9 +26,9 @@
 #ifndef _MSC_VER
 CRUNCH_API const arg args[];
 #else
-arg *args = NULL;
+const arg *args = NULL;
 
-void registerArgs(arg *allowedArgs)
+void registerArgs(const arg *allowedArgs)
 {
 	args = allowedArgs;
 	stdout = &__iob_func()[1];

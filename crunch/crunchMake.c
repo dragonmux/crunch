@@ -55,7 +55,7 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #define OPTS	""
 #endif
 
-arg args[] =
+const arg args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
