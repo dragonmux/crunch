@@ -29,7 +29,11 @@
 #endif
 #include <stdarg.h>
 
+#ifndef _MSC_VER
 #define COL(val) val - 8
+#else
+#define COL(val) val - 9
+#endif
 #define WCOL(val) val - 2
 
 #ifdef _MSC_VER
@@ -174,7 +178,7 @@ void echoAborted()
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
 		cursor.dwCursorPosition.Y--;
-		cursor.dwCursorPosition.X = getColumns() - 21;
+		cursor.dwCursorPosition.X = COL(getColumns()) - 13;
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");

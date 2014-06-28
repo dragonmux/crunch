@@ -92,7 +92,7 @@ void *testRunner(void *self)
 void printStats()
 {
 	uint64_t total = passes + failures;
-	testPrintf("Total tests: %zu,  Failures: %u,  Pass rate: ", total, failures);
+	testPrintf("Total tests: %u,  Failures: %u,  Pass rate: ", total, failures);
 	if (total == 0)
 		testPrintf("--\n");
 	else
