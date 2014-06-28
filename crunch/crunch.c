@@ -209,7 +209,6 @@ int main(int argc, char **argv)
 		printf("Error: could not grab console!");
 		exit(1);
 	}
-	stdout = &__iob_func()[1];
 	isTTY = isatty(fileno(stdout));
 #endif
 	runTests();

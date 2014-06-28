@@ -31,6 +31,7 @@ arg *args = NULL;
 void registerArgs(arg *allowedArgs)
 {
 	args = allowedArgs;
+	stdout = &__iob_func()[1];
 }
 #endif
 
