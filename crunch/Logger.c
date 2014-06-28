@@ -210,12 +210,23 @@ void logResult(resultType type, const char *message, ...)
 	va_list args;
 
 	if (isTTY != 0)
+#if _MSC_VER
 		testPrintf(NORMAL);
+#else
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#endif
 	va_start(args, message);
 	vaTestPrintf(message, args);
 	va_end(args);
 	if (type != RESULT_SUCCESS && isTTY != 0)
+#if _MSC_VER
 		testPrintf(NEWLINE);
+#else
+	{
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		testPrintf("\n");
+	}
+#endif
 	switch (type)
 	{
 		case RESULT_SUCCESS:
