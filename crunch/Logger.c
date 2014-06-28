@@ -248,7 +248,7 @@ testLog *startLogging(const char *fileName)
 #ifndef _MSC_VER
 	flock(ret->fd, LOCK_EX);
 #else
-	locking(ret->fd, LK_LOCK, -1);
+//	locking(ret->fd, LK_LOCK, -1);
 #endif
 	logger = ret;
 	return ret;
@@ -261,7 +261,7 @@ void stopLogging(testLog *logFile)
 #ifndef _MSC_VER
 	flock(logFile->fd, LOCK_UN);
 #else
-	locking(logFile->fd, LK_UNLCK, -1);
+//	locking(logFile->fd, LK_UNLCK, -1);
 #endif
 	fclose(logFile->file);
 	fclose(realStdout);
