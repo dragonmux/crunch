@@ -48,14 +48,30 @@ uint8_t loggingTests = 0;
 
 typedef void (__cdecl *registerFn)();
 
+#ifdef _MSC_VER
+void newline()
+{
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	testPrintf("\n");
+}
+#endif
+
 void *testRunner(void *self)
 {
 	unitTest *test = (unitTest *)self;
 	if (isTTY != 0)
+#ifndef _MSC_VER
 		testPrintf(INFO);
+#else
+		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#endif
 	testPrintf("%s...", test->theTest->testName);
 	if (isTTY != 0)
+#ifndef _MSC_VER
 		testPrintf(NEWLINE);
+#else
+		newline();
+#endif
 	else
 		testPrintf(" ");
 	test->theTest->testFunc();
@@ -116,14 +132,6 @@ uint8_t tryRegistration(void *testSuit)
 	registerTests();
 	return TRUE;
 }
-
-#ifdef _MSC_VER
-void newline()
-{
-	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	testPrintf("\n");
-}
-#endif
 
 void runTests()
 {
