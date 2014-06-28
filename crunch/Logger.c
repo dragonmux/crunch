@@ -42,7 +42,7 @@ FILE *stdout;
 
 FILE *realStdout = NULL;
 uint8_t logging = 0;
-log *logger = NULL;
+testLog *logger = NULL;
 uint8_t isTTY = 1;
 
 #ifndef _MSC_VER
@@ -229,12 +229,12 @@ void logResult(resultType type, const char *message, ...)
 	}
 }
 
-log *startLogging(const char *fileName)
+testLog *startLogging(const char *fileName)
 {
-	log *ret;
+	testLog *ret;
 	if (logging == 1)
 		return NULL;
-	ret = testMalloc(sizeof(log));
+	ret = testMalloc(sizeof(testLog));
 	logging = 1;
 #ifndef _MSC_VER
 	ret->stdout = dup(STDOUT_FILENO);
@@ -253,7 +253,7 @@ log *startLogging(const char *fileName)
 	return ret;
 }
 
-void stopLogging(log *logFile)
+void stopLogging(testLog *logFile)
 {
 	if (logFile == NULL)
 		return;

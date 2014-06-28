@@ -130,7 +130,7 @@ void runTests()
 	pthread_attr_t threadAttrs;
 	uint32_t i;
 	test *currTest;
-	log *logFile = NULL;
+	testLog *logFile = NULL;
 
 	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
 	if (logging != NULL)

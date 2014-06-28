@@ -79,11 +79,11 @@ CRUNCH_EXPORT void registerTests() \
 	tests = (test *)__tests; \
 }
 
-typedef struct _log
+typedef struct testLog
 {
 	FILE *file;
 	int fd, stdout;
-} log;
+} testLog;
 
 #ifdef TRUE
 #undef TRUE
@@ -125,7 +125,7 @@ CRUNCH_API void assertLessThan(long result, long expected);
 
 CRUNCH_API test *tests;
 
-CRUNCH_API log *startLogging(const char *fileName);
-CRUNCH_API void stopLogging(log *logFile);
+CRUNCH_API testLog *startLogging(const char *fileName);
+CRUNCH_API void stopLogging(testLog *logFile);
 
 #endif /* __CRUNCH_H__ */

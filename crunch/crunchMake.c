@@ -179,7 +179,7 @@ int compileTests()
 	const char *objs = objsToString();
 	const char *libs = libsToString();
 	parsedArg *silent = findArg(parsedArgs, "--silent", NULL);
-	log *logFile = NULL;
+	testLog *logFile = NULL;
 	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
 	parsedArg *quiet = findArg(parsedArgs, "--quiet", NULL);
 	parsedArg *pthread = findArg(parsedArgs, "-pthread", NULL);

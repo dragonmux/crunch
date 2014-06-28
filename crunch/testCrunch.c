@@ -120,7 +120,7 @@ void testAssertLessThan()
 
 void testLogging()
 {
-	log *logFile;
+	testLog *logFile;
 	assertGreaterThan(printf("Print to console test\n"), 0);
 	logFile = startLogging("test.log");
 	assertNotNull(logFile);
