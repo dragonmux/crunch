@@ -40,6 +40,12 @@ const arg args[] =
 	{0}
 };
 
+#ifdef _MSC_VER
+#define LIBEXT "tlib"
+#else
+#define LIBEXT "so"
+#endif
+
 parsedArg **parsedArgs = NULL;
 parsedArg **namedTests = NULL;
 uint32_t numTests = 0;
@@ -152,7 +158,7 @@ void runTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		char *testLib = formatString("%s/%s.so", cwd, namedTests[i]->value);
+		char *testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value);
 		void *testSuit = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
