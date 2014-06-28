@@ -78,13 +78,28 @@ size_t testPrintf(const char *format, ...)
 	return ret;
 }
 
+void printOk()
+{
+	testPrintf("[  OK  ]\n");
+}
+
+void printFailure()
+{
+	testPrintf("[ FAIL ]\n");
+}
+
+void printAborted()
+{
+	testPrintf("[ **** ABORTED **** ]\n");
+}
+
 #ifndef _MSC_VER
 void echoOk()
 {
 	if (isTTY != 0)
 		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
-		testPrintf("[  OK  ]\n");
+		printOk();
 	passes++;
 }
 
@@ -93,7 +108,7 @@ void echoFailure()
 	if (isTTY != 0)
 		testPrintf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
-		testPrintf("[ FAIL ]\n");
+		printFailure();
 	failures++;
 }
 
@@ -102,35 +117,90 @@ void echoAborted()
 	if (isTTY != 0)
 		testPrintf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
-		testPrintf("[ **** ABORTED **** ]\n");
+		printAborted();
 	libDebugExit(0);
 }
 #else
+#if 0
+#define COLOUR(Code) "\x1B["Code"m"
+#define NORMAL COLOUR("0;39")
+#define SUCCESS COLOUR("1;32")
+#define FAILURE COLOUR("1;31")
+#define BRACKET COLOUR("1;34")
+#define INFO COLOUR("1;36")
+
+#define CURS_UP "\x1B[1A\x1B[0G"
+#define SET_COL "\x1B[%dG"
+
+#define NEWLINE NORMAL "\x1B[1A\x1B[s\x1B[1B\n"
+#define MOVE_END_PRINTED "\x1B[u"
+#endif
 void echoOk()
 {
-	CONSOLE_SCREEN_BUFFER_INFO cursor;
-	GetConsoleScreenBufferInfo(console, &cursor);
-	cursor.dwCursorPosition.Y--;
-	cursor.dwCursorPosition.X = getColumns() - 6;
-	SetConsoleCursorPosition(console, cursor.dwCursorPosition);
-	SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	WriteConsole(console, "[", 1, NULL, NULL);
-	SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-	WriteConsole(console, " OK ", 4, NULL, NULL);
-	SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	WriteConsole(console, "]", 1, NULL, NULL);
-	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	WriteConsole(console, "\n", 1, NULL, NULL);
+	if (isTTY != 0)
+	{
+		CONSOLE_SCREEN_BUFFER_INFO cursor;
+		GetConsoleScreenBufferInfo(console, &cursor);
+		cursor.dwCursorPosition.Y--;
+		cursor.dwCursorPosition.X = getColumns() - 8;
+		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		WriteConsole(console, "[", 1, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		WriteConsole(console, "  OK  ", 6, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		WriteConsole(console, "]", 1, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		WriteConsole(console, "\n", 1, NULL, NULL);
+	}
+	else
+		printOk();
 	passes++;
 }
 
 void echoFailure()
 {
+	if (isTTY != 0)
+	{
+		CONSOLE_SCREEN_BUFFER_INFO cursor;
+		GetConsoleScreenBufferInfo(console, &cursor);
+		cursor.dwCursorPosition.Y--;
+		cursor.dwCursorPosition.X = getColumns() - 8;
+		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		WriteConsole(console, "[", 1, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+		WriteConsole(console, " FAIL ", 6, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		WriteConsole(console, "]", 1, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		WriteConsole(console, "\n", 1, NULL, NULL);
+	}
+	else
+		printFailure();
 	failures++;
 }
 
 void echoAborted()
 {
+	if (isTTY != 0)
+	{
+		CONSOLE_SCREEN_BUFFER_INFO cursor;
+		GetConsoleScreenBufferInfo(console, &cursor);
+		cursor.dwCursorPosition.Y--;
+		cursor.dwCursorPosition.X = getColumns() - 21;
+		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		WriteConsole(console, "[", 1, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+		WriteConsole(console, " **** ABORTED **** ", 19, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		WriteConsole(console, "]", 1, NULL, NULL);
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		WriteConsole(console, "\n", 1, NULL, NULL);
+	}
+	else
+		printAborted();
 	libDebugExit(0);
 }
 #endif
