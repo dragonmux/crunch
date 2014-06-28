@@ -8,3 +8,8 @@
 *.log
 *.lastbuildstate
 *.tlog
+*.bsc
+*.ilk
+*.exp
+*.sbr
+*.lib
