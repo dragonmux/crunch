@@ -1,0 +1,14 @@
+# crunch++ pkg-config file
+
+prefix=@PREFIX@
+exec_prefix=${prefix}
+libdir=@LIBDIR@
+includedir=${prefix}/include
+
+Name: crunch++
+Description: crunch++ is a unit testing framework for C++
+Version: 0.0.1
+Requires:
+Conflicts:
+Libs: -L${libdir} -lcrunch++ -Wl,-rpath,@LIBDIR@
+Cflags: -I${includedir}
