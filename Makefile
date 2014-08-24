@@ -20,12 +20,16 @@ default: all
 
 all:
 	@cd crunch && $(MAKE)
+	@cd crunch++ && $(MAKE)
 
 install:
 	@cd crunch && $(MAKE) install
+	@cd crunch++ && $(MAKE) install
 
 check:
 	@cd crunch && $(MAKE) check
+	@cd crunch++ && $(MAKE) check
 
 clean:
 	@cd crunch && $(MAKE) clean
+	@cd crunch++ && $(MAKE) clean
