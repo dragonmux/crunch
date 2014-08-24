@@ -16,7 +16,7 @@
 
 include ../Makefile.inc
 
-EXTRA_CFLAGS = -Wall -pedantic -pthread -std=gnu99
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -pthread -std=gnu99
 #$(shell pkg-config --cflags )
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 EXTRA_LIBS = -pthread
@@ -50,7 +50,6 @@ SOMIN = $(SOMAJ)$(VERMAJ)
 SOREV = $(SOMIN)$(VERMIN)
 SO = $(SOREV)$(VERREV)
 A = libcrunch.a
-LA = libcrunch.la
 PC = crunch.pc
 IN = crunch.pc.in
 OUT = Test TestMake
@@ -120,7 +119,7 @@ clean:
 %.so: %.c
 	$(call run-cmd,crunchMake,$<)
 
-.PHONY: clean install all uninstall default .cpp.o $(PC)
+.PHONY: clean install all uninstall default .c.o $(PC)
 
 crunchMake: crunchMake.o
 crunch: crunch.o
