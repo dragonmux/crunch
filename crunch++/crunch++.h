@@ -29,7 +29,6 @@ class testsuit;
 
 struct cxxTest
 {
-	testsuit *unitClass;
 	void (testsuit::* testFunc)();
 	const char *testName;
 };
@@ -76,7 +75,7 @@ protected:
 	virtual ~testsuit();
 
 private:
-	static int testRunner(cxxUnitTest &test);
+	static int testRunner(testsuit &unitClass, cxxUnitTest &test);
 
 public:
 	virtual void registerTests() = 0;

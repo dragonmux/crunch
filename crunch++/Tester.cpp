@@ -6,7 +6,7 @@ using namespace std;
 
 bool loggingTests = 0;
 
-int testsuit::testRunner(cxxUnitTest &test)
+int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 {
 	if (isTTY != 0)
 #ifndef _MSC_VER
@@ -26,7 +26,7 @@ int testsuit::testRunner(cxxUnitTest &test)
 	try
 	{
 		cxxTest &unitTest = test.theTest;
-		(unitTest.unitClass->*unitTest.testFunc)();
+		(unitClass.*unitTest.testFunc)();
 	}
 	catch (threadExit_t &val)
 	{
@@ -43,7 +43,7 @@ int testsuit::testRunner(cxxUnitTest &test)
 		if (loggingTests == 0 && logging == 1)
 			// Yes, switch it back off again
 			stopLogging(logger);
-		test.theTest.unitClass->fail("Exception caught by crunch++");
+		unitClass.fail("Exception caught by crunch++");
 	}
 	// Did the test switch logging on?
 	if (loggingTests == 0 && logging == 1)
@@ -60,7 +60,7 @@ void testsuit::test()
 		cxxUnitTest test;
 		int retVal = 2;
 		test.theTest = unitTest;
-		test.testThread = thread([&]{ retVal = testRunner(test); });
+		test.testThread = thread([&, this]{ retVal = testRunner(*this, test); });
 		test.testThread.join();
 		if (retVal == 2)
 			exit(2);
