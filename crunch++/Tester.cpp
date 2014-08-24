@@ -27,7 +27,7 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	try
 	{
 		cxxTest &unitTest = test.theTest;
-		(unitClass.*unitTest.testFunc)();
+		unitTest.testFunc();
 	}
 	catch (threadExit_t &val)
 	{

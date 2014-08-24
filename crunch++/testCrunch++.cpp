@@ -140,22 +140,17 @@ public:
 
 	void registerTests()
 	{
-		static const test __tests[] =
-		{
-			TEST(testAssertTrue)
-			TEST(testAssertFalse)
-			TEST(testAssertIntEqual)
-			TEST(testAssertIntNotEqual)
-			TEST(testAssertPtrEqual)
-			TEST(testAssertPtrNotEqual)
-			TEST(testAssertNull)
-			TEST(testAssertNotNull)
-			TEST(testAssertGreaterThan)
-			TEST(testAssertLessThan)
-			TEST(testLogging)
-			{ NULL }
-		};
-		tests = (test *)__tests;
+		CXX_TEST(testAssertTrue)
+		CXX_TEST(testAssertFalse)
+		CXX_TEST(testAssertIntEqual)
+		CXX_TEST(testAssertIntNotEqual)
+		CXX_TEST(testAssertPtrEqual)
+		CXX_TEST(testAssertPtrNotEqual)
+		CXX_TEST(testAssertNull)
+		CXX_TEST(testAssertNotNull)
+		CXX_TEST(testAssertGreaterThan)
+		CXX_TEST(testAssertLessThan)
+		CXX_TEST(testLogging)
 	}
 };
 

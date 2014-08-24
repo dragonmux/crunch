@@ -24,6 +24,7 @@
 #include <vector>
 #include <type_traits>
 #include <typeinfo>
+#include <functional>
 
 #define CRUNCHpp_API	CRUNCH_VIS
 
@@ -31,7 +32,7 @@ class testsuit;
 
 struct cxxTest
 {
-	void (testsuit::* testFunc)();
+	std::function<void()> testFunc;
 	const char *testName;
 };
 
@@ -119,21 +120,11 @@ typename std::enable_if<sizeof...(TestClasses), void>::type registerTestClasses(
 	registerTestClasses<TestClasses...>();
 }
 
-#if 0
-#define BEGIN_REGISTER_TESTS() \
-CRUNCH_EXPORT void registerCXXTests() \
+#define CXX_TEST(name) \
 { \
-	static const test __tests[] = \
-	{ \
-
-#define TEST(name) \
-	{ name, #name },
-
-#define END_REGISTER_TESTS() \
-		{ NULL } \
-	}; \
-	tests = (test *)__tests; \
+	cxxTest test = {nullptr, #name}; \
+	test.testFunc = [this](){ this->name(); }; \
+	tests.push_back(test); \
 }
-#endif
 
 #endif /*__CRUNCHpp_H__*/
