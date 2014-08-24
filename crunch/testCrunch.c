@@ -17,6 +17,9 @@
  */
 
 #include <crunch.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <time.h>
 
 void *genPtr()
 {
