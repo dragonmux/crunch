@@ -42,7 +42,7 @@ CRUNCH_API size_t vaTestPrintf(const char *format, va_list args);
 CRUNCH_API size_t testPrintf(const char *format, ...);
 CRUNCH_API void logResult(resultType type, const char *message, ...);
 
-#define COLOUR(Code) "\x1B["Code"m"
+#define COLOUR(Code) "\x1B[" Code "m"
 #define NORMAL COLOUR("0;39")
 #define SUCCESS COLOUR("1;32")
 #define FAILURE COLOUR("1;31")
