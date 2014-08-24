@@ -222,6 +222,7 @@ void runTests()
 			test->testThread = testMalloc(sizeof(pthread_t));
 			pthread_create(test->testThread, &threadAttrs, testRunner, test);
 			pthread_join(*test->testThread, (void **)&retVal);
+			free(test);
 			if (retVal == NULL || *retVal == 2)
 				exit(2);
 			currTest++;
@@ -258,6 +259,7 @@ int main(int argc, char **argv)
 	isTTY = isatty(fileno(stdout));
 #endif
 	runTests();
+	free(namedTests);
 	free((void *)cwd);
 	return 0;
 }
