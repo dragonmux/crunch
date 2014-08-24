@@ -5,6 +5,7 @@
 using namespace std;
 
 bool loggingTests = 0;
+std::vector<cxxTestClass> cxxTests;
 
 int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 {

@@ -22,6 +22,8 @@
 #include "crunch.h"
 #include <thread>
 #include <vector>
+#include <type_traits>
+#include <typeinfo>
 
 #define CRUNCHpp_API	CRUNCH_VIS
 
@@ -31,6 +33,12 @@ struct cxxTest
 {
 	void (testsuit::* testFunc)();
 	const char *testName;
+};
+
+struct cxxTestClass
+{
+	testsuit *testClass;
+	const char *testClassName;
 };
 
 struct cxxUnitTest
@@ -95,6 +103,21 @@ public:
 		return value;
 	}
 };
+
+extern std::vector<cxxTestClass> cxxTests;
+
+template<typename TestClass> void registerTestClasses()
+{
+	cxxTestClass testClass = {new TestClass(), typeid(TestClass).name()};
+	cxxTests.push_back(testClass);
+}
+
+template<typename TestClass, typename ...TestClasses>
+typename std::enable_if<sizeof...(TestClasses), void>::type registerTestClasses()
+{
+	registerTestClasses<TestClass>();
+	registerTestClasses<TestClasses...>();
+}
 
 #if 0
 #define BEGIN_REGISTER_TESTS() \

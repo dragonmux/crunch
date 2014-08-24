@@ -158,3 +158,8 @@ public:
 		tests = (test *)__tests;
 	}
 };
+
+CRUNCH_VIS void registerCXXTests()
+{
+	registerTestClasses<crunchTests>();
+}
