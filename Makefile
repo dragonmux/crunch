@@ -21,10 +21,12 @@ default: all
 all:
 	@cd crunch && $(MAKE)
 	@cd crunch++ && $(MAKE)
+	@cd crunchMake && $(MAKE)
 
 install:
 	@cd crunch && $(MAKE) install
 	@cd crunch++ && $(MAKE) install
+	@cd crunchMake && $(MAKE) install
 
 check:
 	@cd crunch && $(MAKE) check
@@ -33,3 +35,4 @@ check:
 clean:
 	@cd crunch && $(MAKE) clean
 	@cd crunch++ && $(MAKE) clean
+	@cd crunchMake && $(MAKE) clean
