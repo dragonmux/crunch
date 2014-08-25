@@ -1,10 +1,11 @@
 #include "crunch++.h"
+#include "Core.h"
 #include "Logger.h"
 #include <exception>
 
 using namespace std;
 
-bool loggingTests = 0;
+bool loggingTests = false;
 std::vector<cxxTestClass> cxxTests;
 
 int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
@@ -32,7 +33,7 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	catch (threadExit_t &val)
 	{
 		// Did the test switch logging on?
-		if (loggingTests == 0 && logging == 1)
+		if (!loggingTests && logging)
 			// Yes, switch it back off again
 			stopLogging(logger);
 		return val;
@@ -41,13 +42,13 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	{
 		exception_ptr e = current_exception();
 		// Did the test switch logging on?
-		if (loggingTests == 0 && logging == 1)
+		if (!loggingTests && logging)
 			// Yes, switch it back off again
 			stopLogging(logger);
 		unitClass.fail("Exception caught by crunch++");
 	}
 	// Did the test switch logging on?
-	if (loggingTests == 0 && logging == 1)
+	if (!loggingTests && logging)
 		// Yes, switch it back off again
 		stopLogging(logger);
 	logResult(RESULT_SUCCESS, "");

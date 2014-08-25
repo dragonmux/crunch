@@ -44,7 +44,7 @@ FILE *stdout;
 #endif
 
 FILE *realStdout = NULL;
-uint8_t logging = 0;
+bool logging = false;
 testLog *logger = NULL;
 uint8_t isTTY = 1;
 
@@ -232,10 +232,10 @@ void logResult(resultType type, const char *message, ...)
 testLog *startLogging(const char *fileName)
 {
 	testLog *ret;
-	if (logging == 1)
+	if (logging)
 		return NULL;
 	ret = new testLog;
-	logging = 1;
+	logging = true;
 #ifndef _MSC_VER
 	ret->stdout = dup(STDOUT_FILENO);
 #else
@@ -267,5 +267,5 @@ void stopLogging(testLog *logFile)
 	realStdout = freopen(TTY, "w", stdout);
 	delete logFile;
 	logger = NULL;
-	logging = 0;
+	logging = false;
 }

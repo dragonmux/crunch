@@ -37,7 +37,6 @@
 
 using namespace std;
 
-static const int ok = 0;
 CRUNCH_API const arg args[] =
 {
 	{"--log", 1, 1, 0},
