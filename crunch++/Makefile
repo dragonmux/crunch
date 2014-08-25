@@ -51,7 +51,6 @@ SO = $(SOREV)$(VERREV)
 A = libcrunch++.a
 PC = crunch++.pc
 IN = crunch++.pc.in
-OUT = Test
 EXE = crunch++
 H = crunch++.h
 
@@ -80,6 +79,11 @@ install-so: $(LIBDIR) $(INCDIR)
 	$(call run-cmd,ln,$(LIBDIR)/$(SOMIN),$(LIBDIR)/$(SOMAJ))
 	$(call ldconfig)
 
+uninstall:
+	rm $(LIBDIR)/$(SOMAJ)*
+	rm $(LIBDIR)/$(A)
+	rm $(PKGDIR)/$(PC)
+
 $(SO): $(O)
 	$(call run-cmd,ar,$(A),$(O))
 	$(call run-cmd,ranlib,$(A))
@@ -98,7 +102,7 @@ check: $(TESTS)
 	$(call run-cmd,crunch,$(subst .so,,$(TESTS)))
 
 clean:
-	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))
+	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(EXE)))
 	$(call run-cmd,rm,crunch,$(O) $(SOMAJ)* $(A) $(PC))
 	$(call run-cmd,rm,tests,$(TESTS))
 

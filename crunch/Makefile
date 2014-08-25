@@ -52,8 +52,7 @@ SO = $(SOREV)$(VERREV)
 A = libcrunch.a
 PC = crunch.pc
 IN = crunch.pc.in
-OUT = Test TestMake
-EXE = crunch crunchMake
+EXE = crunch
 H = crunch.h
 
 default: all
@@ -84,7 +83,6 @@ install-so: $(LIBDIR) $(INCDIR)
 uninstall:
 	rm $(LIBDIR)/$(SOMAJ)*
 	rm $(LIBDIR)/$(A)
-	rm $(LIBDIR)/$(LA)
 	rm $(PKGDIR)/$(PC)
 
 $(SO): $(O)
@@ -105,7 +103,7 @@ check: $(TESTS)
 	$(call run-cmd,crunch,$(subst .so,,$(TESTS)))
 
 clean:
-	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(OUT)))
+	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(EXE)))
 	$(call run-cmd,rm,crunch,$(O) $(SOMAJ)* $(A) $(PC))
 	$(call run-cmd,rm,tests,$(TESTS))
 
@@ -121,9 +119,5 @@ clean:
 
 .PHONY: clean install all uninstall default .c.o $(PC)
 
-crunchMake: crunchMake.o
 crunch: crunch.o
-
-crunchMake.o: crunchMake.c
-crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
 crunch.o: crunch.c

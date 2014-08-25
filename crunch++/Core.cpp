@@ -38,7 +38,6 @@ void assertionError(const char *params, T result)
 }
 
 testsuit::testsuit() { }
-
 testsuit::~testsuit() { }
 
 void testsuit::fail(const char *reason)
