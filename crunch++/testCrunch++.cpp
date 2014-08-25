@@ -34,6 +34,9 @@ private:
 #endif
 	}
 
+	const char *testStr1 = "abcdefghijklmnopqrstuvwxyz";
+	const char *testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 public:
 	void testAssertTrue()
 	{
@@ -87,6 +90,28 @@ public:
 			ptr = genPtr();
 		while (ptr == nullptr);
 		assertNotEqual(ptr, 0);
+	}
+
+	void testAssertStrEqual()
+	{
+		assertEqual(testStr1, testStr1);
+		assertEqual(testStr2, testStr2);
+	}
+
+	void testAssertStrNotEqual()
+	{
+		assertNotEqual(testStr1, testStr2);
+	}
+
+	void testAssertMemEqual()
+	{
+		assertEqual(testStr1, testStr1, 27);
+		assertEqual(testStr2, testStr2, 27);
+	}
+
+	void testAssertMemNotEqual()
+	{
+		assertNotEqual(testStr1, testStr2, 27);
 	}
 
 	void testAssertNull()
@@ -147,6 +172,10 @@ public:
 		CXX_TEST(testAssertIntNotEqual)
 		CXX_TEST(testAssertPtrEqual)
 		CXX_TEST(testAssertPtrNotEqual)
+		CXX_TEST(testAssertStrEqual)
+		CXX_TEST(testAssertStrNotEqual)
+		CXX_TEST(testAssertMemEqual)
+		CXX_TEST(testAssertMemNotEqual)
 		CXX_TEST(testAssertNull)
 		CXX_TEST(testAssertNotNull)
 		CXX_TEST(testAssertGreaterThan)
