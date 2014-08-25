@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "Logger.h"
 #include "StringFuncs.h"
+#include <string.h>
 
 uint32_t passes = 0, failures = 0;
 const double doubleDelta = 0.0000001;
@@ -136,29 +137,45 @@ void testsuit::assertNotEqual(double result, double expected)
 {
 	if (delta(result, expected))
 	{
-		assertionError("%f", result, expected);
+		assertionError("%f", result);
 		throw threadExit_t(1);
 	}
 }
 
 void testsuit::assertEqual(const char *result, const char *expected)
 {
-	assertStringEqual(result, expected);
+	if (strcmp(result, expected) != 0)
+	{
+		assertionError("%s", result, expected);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertNotEqual(const char *result, const char *expected)
 {
-	assertStringNotEqual(result, expected);
+	if (strcmp(result, expected) == 0)
+	{
+		assertionError("%s", result);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertEqual(const void *result, const void *expected, const size_t expectedLength)
 {
-	assertMemEqual(result, expected, expectedLength);
+	if (memcmp(result, expected, expectedLength) != 0)
+	{
+		assertionFailure("buffers %p and %p do not match", result, expected);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertNotEqual(const void *result, const void *expected, const size_t expectedLength)
 {
-	assertMemNotEqual(result, expected, expectedLength);
+	if (memcmp(result, expected, expectedLength) == 0)
+	{
+		assertionFailure("buffers %p and %p match", result, expected);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertNull(void *result)
