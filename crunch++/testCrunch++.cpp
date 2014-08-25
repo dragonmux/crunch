@@ -47,22 +47,28 @@ public:
 
 	void testAssertIntEqual()
 	{
-		int num;
+		int32_t num32;
+		int64_t num64;
 		srand(time(NULL));
-		num = rand();
-		assertEqual(num, num);
+		num32 = rand();
+		assertEqual(num32, num32);
+		num64 = (long(rand()) << 32) | long(rand());
+		assertEqual(num64, num64);
 	}
 
 	void testAssertIntNotEqual()
 	{
-		int num;
+		int32_t num32;
+		int64_t num64;
 		srand(time(NULL));
 		do
-		{
-			num = rand();
-		}
-		while (num == 0);
-		assertNotEqual(num, 0);
+			num32 = rand();
+		while (num32 == 0);
+		do
+			num64 = (long(rand()) << 32) | long(rand());
+		while (num64 == 0);
+		assertNotEqual(num32, 0);
+		assertNotEqual(num64, 0LL);
 	}
 
 	void testAssertPtrEqual()
@@ -70,7 +76,7 @@ public:
 		void *ptr;
 		srand(time(NULL));
 		ptr = genPtr();
-		assertPtrEqual(ptr, ptr);
+		assertEqual(ptr, ptr);
 	}
 
 	void testAssertPtrNotEqual()
@@ -78,9 +84,7 @@ public:
 		void *ptr;
 		srand(time(NULL));
 		do
-		{
 			ptr = genPtr();
-		}
 		while (ptr == NULL);
 		assertNotEqual(ptr, 0);
 	}
