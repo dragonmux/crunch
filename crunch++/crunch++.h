@@ -105,7 +105,7 @@ public:
 	}
 };
 
-extern std::vector<cxxTestClass> cxxTests;
+CRUNCH_API std::vector<cxxTestClass> cxxTests;
 
 template<typename TestClass> void registerTestClasses()
 {
