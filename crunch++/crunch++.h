@@ -81,12 +81,12 @@ protected:
 	void assertLessThan(long result, long expected);
 
 	testsuit();
-	virtual ~testsuit();
 
 private:
 	static int testRunner(testsuit &unitClass, cxxUnitTest &test);
 
 public:
+	virtual ~testsuit();
 	virtual void registerTests() = 0;
 	void test();
 };

@@ -117,6 +117,104 @@ bool tryRegistration(void *testSuit)
 	return true;
 }
 
+void runTests()
+{
+	uint32_t i;
+	testLog *logFile = NULL;
+
+	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
+	if (logging != NULL)
+	{
+		logFile = startLogging(logging->params[0]);
+		loggingTests = true;
+	}
+
+	for (i = 0; i < numTests; i++)
+	{
+		char *testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value);
+		void *testSuit = dlopen(testLib, RTLD_LAZY);
+		free(testLib);
+		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
+		{
+			if (testSuit == NULL)
+			{
+				if (isTTY != 0)
+#ifndef _MSC_VER
+					testPrintf(FAILURE);
+#else
+					SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
+				testPrintf("Could not open test library: %s", dlerror());
+				if (isTTY != 0)
+#ifndef _MSC_VER
+					testPrintf(NEWLINE);
+#else
+					newline();
+#endif
+				else
+					testPrintf("\n");
+			}
+			if (isTTY != 0)
+#ifndef _MSC_VER
+				testPrintf(FAILURE);
+#else
+				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
+			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
+			if (isTTY != 0)
+#ifndef _MSC_VER
+				testPrintf(NEWLINE);
+#else
+				newline();
+#endif
+			else
+				testPrintf("\n");
+			continue;
+		}
+		if (isTTY != 0)
+#ifndef _MSC_VER
+			testPrintf(COLOUR("1;35"));
+#else
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#endif
+		testPrintf("Running test suit %s...", namedTests[i]->value);
+		if (isTTY != 0)
+#ifndef _MSC_VER
+			testPrintf(NEWLINE);
+#else
+			newline();
+#endif
+		else
+			testPrintf("\n");
+
+		for (auto &test : cxxTests)
+		{
+			if (isTTY != 0)
+#ifndef _MSC_VER
+				testPrintf(COLOUR("1;35"));
+#else
+				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#endif
+			testPrintf("Running tests in class %s...", test.testClassName);
+			if (isTTY != 0)
+#ifndef _MSC_VER
+				testPrintf(NEWLINE);
+#else
+				newline();
+#endif
+			else
+				testPrintf("\n");
+			test.testClass->test();
+			delete test.testClass;
+		}
+		cxxTests.clear();
+	}
+
+	printStats();
+	if (logging != NULL)
+		stopLogging(logFile);
+}
+
 int main(int argc, char **argv)
 {
 #ifdef _MSC_VER
@@ -140,7 +238,7 @@ int main(int argc, char **argv)
 	}
 	isTTY = isatty(fileno(stdout));
 #endif
-	//runTests();
+	runTests();
 	delete [] namedTests;
 	free((void *)cwd);
 	return 0;
