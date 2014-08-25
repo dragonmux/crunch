@@ -58,14 +58,14 @@ protected:
 	void assertTrue(bool value);
 	void assertFalse(bool value);
 
-	void assertEqual(int result, int expected);
+	void assertEqual(int32_t result, int32_t expected);
 	void assertEqual(int64_t result, int64_t expected);
 	void assertEqual(void *result, void *expected);
 	void assertEqual(double result, double expected);
 	void assertEqual(const char *result, const char *expected);
 	void assertEqual(const void *result, const void *expected, const size_t expectedLength);
 
-	void assertNotEqual(int result, int expected);
+	void assertNotEqual(int32_t result, int32_t expected);
 	void assertNotEqual(int64_t result, int64_t expected);
 	void assertNotEqual(void *result, void *expected);
 	void assertNotEqual(double result, double expected);
