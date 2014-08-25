@@ -49,7 +49,7 @@ public:
 	{
 		int32_t num32;
 		int64_t num64;
-		srand(time(NULL));
+		srand(time(nullptr));
 		num32 = rand();
 		assertEqual(num32, num32);
 		num64 = (long(rand()) << 32) | long(rand());
@@ -60,7 +60,7 @@ public:
 	{
 		int32_t num32;
 		int64_t num64;
-		srand(time(NULL));
+		srand(time(nullptr));
 		do
 			num32 = rand();
 		while (num32 == 0);
@@ -74,7 +74,7 @@ public:
 	void testAssertPtrEqual()
 	{
 		void *ptr;
-		srand(time(NULL));
+		srand(time(nullptr));
 		ptr = genPtr();
 		assertEqual(ptr, ptr);
 	}
@@ -82,10 +82,10 @@ public:
 	void testAssertPtrNotEqual()
 	{
 		void *ptr;
-		srand(time(NULL));
+		srand(time(nullptr));
 		do
 			ptr = genPtr();
-		while (ptr == NULL);
+		while (ptr == nullptr);
 		assertNotEqual(ptr, 0);
 	}
 
@@ -98,7 +98,7 @@ public:
 	void testAssertNotNull()
 	{
 		void *ptr;
-		srand(time(NULL));
+		srand(time(nullptr));
 		do
 			ptr = genPtr();
 		while (ptr == nullptr);
@@ -109,7 +109,7 @@ public:
 	void testAssertGreaterThan()
 	{
 		void *ptr;
-		srand(time(NULL));
+		srand(time(nullptr));
 		do
 			ptr = genPtr();
 		while (ptr == nullptr);
@@ -119,12 +119,12 @@ public:
 	void testAssertLessThan()
 	{
 		void *ptr;
-		srand(time(NULL));
+		srand(time(nullptr));
 		do
 		{
 			ptr = genPtr();
 		}
-		while (ptr == NULL);
+		while (ptr == nullptr);
 		assertLessThan(0, (long)ptr);
 	}
 
