@@ -154,7 +154,7 @@ public:
 	}
 };
 
-CRUNCH_VIS void registerCXXTests()
+CRUNCH_API void registerCXXTests()
 {
 	registerTestClasses<crunchTests>();
 }

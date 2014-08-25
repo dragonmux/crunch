@@ -204,6 +204,7 @@ void runTests()
 #endif
 			else
 				testPrintf("\n");
+			test.testClass->registerTests();
 			test.testClass->test();
 			delete test.testClass;
 		}
