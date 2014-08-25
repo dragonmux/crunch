@@ -37,8 +37,8 @@ SO_STRIP = -x
 OUT_STRIP = -s
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
-O = Logger.o Tester.o Core.o
-O_EXT = Memory.o Core.o ArgsParser.o StringFuncs.o
+O = StringFuncs.o Logger.o Tester.o Core.o
+O_EXT = Memory.o ArgsParser.o
 TESTS = testCrunch++.so
 
 VERMAJ = .0
