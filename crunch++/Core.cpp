@@ -11,7 +11,7 @@ void assertionFailure(const char *what, T result, T expected)
 {
 	char *mesg = formatString("Assertion failure: %s", what);
 	logResult(RESULT_FAILURE, mesg, expected, result);
-	free(mesg);
+	delete [] mesg;
 }
 
 template<typename T>
@@ -19,7 +19,21 @@ void assertionError(const char *params, T result, T expected)
 {
 	char *what = formatString("expected %s, got %s", params, params);
 	assertionFailure(what, result, expected);
-	free(what);
+	delete [] what;
+}
+
+template<typename T>
+void assertionError(const char *params, T result, nullptr_t)
+{
+	return assertionError(params, result, T(nullptr));
+}
+
+template<typename T>
+void assertionError(const char *params, T result)
+{
+	char *what = formatString("did not expect %s", params);
+	assertionFailure(what, result, result);
+	delete [] what;
 }
 
 testsuit::testsuit() { }
@@ -43,22 +57,70 @@ void testsuit::assertTrue(bool value)
 
 void testsuit::assertFalse(bool value)
 {
-	::assertFalse(value);
+	if (value)
+	{
+		assertionError("%s", boolToString(value), "false");
+		throw threadExit_t(1);
+	}
 }
 
-void testsuit::assertEqual(int result, int expected)
+void testsuit::assertEqual(int32_t result, int32_t expected)
 {
-	assertIntEqual(result, expected);
+	if (result != expected)
+	{
+		assertionError("%d", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(int32_t result, int32_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%d", result);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertEqual(int64_t result, int64_t expected)
 {
-	assertInt64Equal(result, expected);
+	if (result != expected)
+	{
+		assertionError("%lld", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(int64_t result, int64_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%lld", result);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertEqual(void *result, void *expected)
 {
-	assertPtrEqual(result, expected);
+	if (result != expected)
+	{
+		assertionError("%p", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(void *result, void *expected)
+{
+	if (result == expected)
+	{
+		assertionError("%p", result);
+		throw threadExit_t(1);
+	}
+}
+
+inline bool delta(const double result, const double expected)
+{
+	return (result >= (expected - doubleDelta) && result <= (expected + doubleDelta));
 }
 
 void testsuit::assertEqual(double result, double expected)
@@ -74,21 +136,6 @@ void testsuit::assertEqual(const char *result, const char *expected)
 void testsuit::assertEqual(const void *result, const void *expected, const size_t expectedLength)
 {
 	assertMemEqual(result, expected, expectedLength);
-}
-
-void testsuit::assertNotEqual(int result, int expected)
-{
-	assertIntNotEqual(result, expected);
-}
-
-void testsuit::assertNotEqual(int64_t result, int64_t expected)
-{
-	assertInt64NotEqual(result, expected);
-}
-
-void testsuit::assertNotEqual(void *result, void *expected)
-{
-	assertPtrNotEqual(result, expected);
 }
 
 void testsuit::assertNotEqual(double result, double expected)
@@ -108,22 +155,38 @@ void testsuit::assertNotEqual(const void *result, const void *expected, const si
 
 void testsuit::assertNull(void *result)
 {
-	::assertNull(result);
+	if (result != nullptr)
+	{
+		assertionError("%p", result, nullptr);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertNotNull(void *result)
 {
-	::assertNotNull(result);
+	if (result == nullptr)
+	{
+		assertionError("%p", result);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertNull(const void *result)
 {
-	assertConstNull(result);
+	if (result != nullptr)
+	{
+		assertionError("%p", result, nullptr);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertNotNull(const void *result)
 {
-	assertConstNotNull(result);
+	if (result == nullptr)
+	{
+		assertionError("%p", result);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertGreaterThan(long result, long expected)
