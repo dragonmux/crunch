@@ -7,7 +7,8 @@ testsuit::~testsuit() { }
 
 void testsuit::fail(const char *reason)
 {
-	::fail(reason);
+	logResult(RESULT_FAILURE, "Failure: %s", reason);
+	throw threadExit_t(1);
 }
 
 void testsuit::assertTrue(bool value)
