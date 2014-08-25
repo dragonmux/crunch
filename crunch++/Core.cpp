@@ -1,5 +1,26 @@
 #include "crunch++.h"
+#include "Core.h"
 #include "Logger.h"
+#include "StringFuncs.h"
+
+uint32_t passes = 0, failures = 0;
+const double doubleDelta = 0.0000001;
+
+template<typename T>
+void assertionFailure(const char *what, T result, T expected)
+{
+	char *mesg = formatString("Assertion failure: %s", what);
+	logResult(RESULT_FAILURE, mesg, expected, result);
+	free(mesg);
+}
+
+template<typename T>
+void assertionError(const char *params, T result, T expected)
+{
+	char *what = formatString("expected %s, got %s", params, params);
+	assertionFailure(what, result, expected);
+	free(what);
+}
 
 testsuit::testsuit() { }
 
@@ -13,7 +34,11 @@ void testsuit::fail(const char *reason)
 
 void testsuit::assertTrue(bool value)
 {
-	::assertTrue(value);
+	if (!value)
+	{
+		assertionError("%s", boolToString(value), "true");
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertFalse(bool value)
