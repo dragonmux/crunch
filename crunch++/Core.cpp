@@ -125,7 +125,20 @@ inline bool delta(const double result, const double expected)
 
 void testsuit::assertEqual(double result, double expected)
 {
-	assertDoubleEqual(result, expected);
+	if (!delta(result, expected))
+	{
+		assertionError("%f", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(double result, double expected)
+{
+	if (delta(result, expected))
+	{
+		assertionError("%f", result, expected);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertEqual(const char *result, const char *expected)
@@ -133,19 +146,14 @@ void testsuit::assertEqual(const char *result, const char *expected)
 	assertStringEqual(result, expected);
 }
 
-void testsuit::assertEqual(const void *result, const void *expected, const size_t expectedLength)
-{
-	assertMemEqual(result, expected, expectedLength);
-}
-
-void testsuit::assertNotEqual(double result, double expected)
-{
-	assertDoubleNotEqual(result, expected);
-}
-
 void testsuit::assertNotEqual(const char *result, const char *expected)
 {
 	assertStringNotEqual(result, expected);
+}
+
+void testsuit::assertEqual(const void *result, const void *expected, const size_t expectedLength)
+{
+	assertMemEqual(result, expected, expectedLength);
 }
 
 void testsuit::assertNotEqual(const void *result, const void *expected, const size_t expectedLength)
