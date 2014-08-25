@@ -91,8 +91,8 @@ public:
 
 	void testAssertNull()
 	{
-		assertNull((void *)NULL);
-		assertNull((const void *)NULL);
+		assertNull((void *)nullptr);
+		assertNull((const void *)nullptr);
 	}
 
 	void testAssertNotNull()
@@ -100,11 +100,10 @@ public:
 		void *ptr;
 		srand(time(NULL));
 		do
-		{
 			ptr = genPtr();
-		}
-		while (ptr == NULL);
+		while (ptr == nullptr);
 		assertNotNull(ptr);
+		assertNotNull((const void *)ptr);
 	}
 
 	void testAssertGreaterThan()
@@ -112,10 +111,8 @@ public:
 		void *ptr;
 		srand(time(NULL));
 		do
-		{
 			ptr = genPtr();
-		}
-		while (ptr == NULL);
+		while (ptr == nullptr);
 		assertGreaterThan((long)ptr, 0);
 	}
 
