@@ -115,11 +115,14 @@ inline void getLinkFunc(parsedArg **var, uint32_t &num, const char *find)
 		}
 	}
 	if (num == 0)
+	{
 		delete [] var;
+		var = nullptr;
+	}
 	else
 	{
-		parsedArg **vars = new parsedArg *[num + 1]();
-		memcpy(vars, var, sizeof(parsedArg *) * (num + 1));
+		parsedArg **vars = new parsedArg *[num]();
+		memcpy(vars, var, sizeof(parsedArg *) * num);
 		delete [] var;
 		var = vars;
 	}
