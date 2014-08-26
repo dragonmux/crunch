@@ -98,33 +98,51 @@ bool getTests()
 	}
 }
 
-#define getLinkFunc(name, var, num, find) \
-void name() \
-{ \
-	uint32_t i, n; \
-	for (n = 0; parsedArgs[n] != nullptr; n++); \
-	var = (parsedArg **)(parsedArg **)testMalloc(sizeof(parsedArg *) * (n + 1)); \
-	for (num = 0, i = 0; i < n; i++) \
-	{ \
-		if (strncmp(parsedArgs[i]->value, find, 2) == 0) \
-		{ \
-			var[num] = parsedArgs[i]; \
-			num++; \
-		} \
-	} \
-	if (num == 0) \
-		free(var); \
-	else \
-		var = (parsedArg **)testRealloc(var, sizeof(parsedArg *) * (num + 1)); \
+inline void getLinkFunc(parsedArg **var, uint32_t &num, const char *find)
+{
+	uint32_t n;
+	for (n = 0; parsedArgs[n] != nullptr; n++);
+	var = new parsedArg *[n + 1]();
+	for (num = 0, uint32_t i = 0; i < n; i++)
+	{
+		if (strncmp(parsedArgs[i]->value, find, 2) == 0)
+		{
+			var[num] = parsedArgs[i];
+			num++;
+		}
+	}
+	if (num == 0)
+		delete [] var;
+	else
+	{
+		parsedArg **vars = new parsedArg *[num + 1]();
+		memcpy(vars, var, sizeof(parsedArg *) * (num + 1));
+		delete [] var;
+		var = vars;
+	}
 }
 
-getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l")
-getLinkFunc(getLinkObjs, linkObjs, numObjs, "-o")
-getLinkFunc(getInclDirs, inclDirs, numInclDirs, "-I")
-getLinkFunc(getLibDirs, libDirs, numLibDirs, "-L")
-#undef getLinkFunc
+void getLinkLibs()
+{
+	getLinkFunc(linkLibs, numLibs, "-l");
+}
 
-static const char *exts[] = {".c", ".cpp", ".i", ".s", ".S", ".sx"};
+void getLinkObjs()
+{
+	getLinkFunc(linkObjs, numObjs, "-o");
+}
+
+void getInclDirs()
+{
+	getLinkFunc(inclDirs, numInclDirs, "-I");
+}
+
+void getLibDirs()
+{
+	getLinkFunc(libDirs, numLibDirs, "-L");
+}
+
+static const char *exts[] = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
 static const int numExts = sizeof(exts) / sizeof(*exts);
 
 uint8_t validExt(const char *file)
