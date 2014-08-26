@@ -235,7 +235,7 @@ int compileTests()
 		{
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
-			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread == NULL ? "" : pthread->value), soFile);
+			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread == nullptr ? "" : pthread->value), soFile);
 			if (quiet != NULL)
 				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
@@ -255,9 +255,11 @@ int compileTests()
 		else
 			testPrintf("Error, %s does not exist, skipping..\n", namedTests[i]->value);
 	}
+	free((void *)inclDirFlags);
+	free((void *)libDirFlags);
 	free((void *)objs);
-	free((void *)libs);
-	if (logging != NULL)
+	delete [] libs;
+	if (logging != nullptr)
 		stopLogging(logFile);
 	return ret;
 }
@@ -268,7 +270,7 @@ int main(int argc, char **argv)
 	registerArgs(args);
 #endif
 	parsedArgs = parseArguments(argc, argv);
-	if (parsedArgs == NULL || !getTests())
+	if (parsedArgs == nullptr || !getTests())
 	{
 		testPrintf("Fatal error: There are no source files to build given on the command line!\n");
 		return 2;
