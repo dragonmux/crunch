@@ -173,6 +173,19 @@ const char *toSO(const char *file)
 	return soFile;
 }
 
+inline const char *argsToString(parsedArg **var, const uint32_t num, const  uint32_t offset)
+{
+	const char *ret = strNewDup("");
+	for (uint32_t i = 0; i < num; i++)
+	{
+		const char *name = formatString("%s%s ", ret, var[i]->value + offset);
+		delete [] ret;
+		ret = name;
+	}
+	delete [] var;
+	return ret;
+}
+
 #define toStringFunc(name, var, num, offset) \
 const char *name ## ToString() \
 { \
@@ -190,8 +203,12 @@ const char *name ## ToString() \
 toStringFunc(inclDirFlags, inclDirs, numInclDirs, )
 toStringFunc(libDirFlags, libDirs, numLibDirs, )
 toStringFunc(objs, linkObjs, numObjs, + 2)
-toStringFunc(libs, linkLibs, numLibs, )
 #undef toStringFunc
+
+const char *libsToString()
+{
+	return argsToString(linkLibs, numLibs, 0);
+}
 
 int compileTests()
 {
