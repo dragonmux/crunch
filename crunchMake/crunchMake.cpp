@@ -103,10 +103,10 @@ bool getTests()
 
 inline void getLinkFunc(parsedArg **var, uint32_t &num, const char *find)
 {
-	uint32_t n;
+	uint32_t i, n;
 	for (n = 0; parsedArgs[n] != nullptr; n++);
 	var = new parsedArg *[n + 1]();
-	for (uint32_t i = 0, num = 0; i < n; i++)
+	for (num = 0, i = 0; i < n; i++)
 	{
 		if (strncmp(parsedArgs[i]->value, find, 2) == 0)
 		{
