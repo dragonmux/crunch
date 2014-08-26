@@ -24,5 +24,6 @@
 
 CRUNCH_API const char *boolToString(uint8_t value);
 CRUNCH_API char *formatString(const char *format, ...);
+CRUNCH_API char *strNewDup(const char *str);
 
 #endif /* __STRINGFUNCS_H__ */
