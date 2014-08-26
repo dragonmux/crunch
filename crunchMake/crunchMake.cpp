@@ -68,18 +68,18 @@ CRUNCH_API const arg args[] =
 	{"--quiet", 0, 0, 0},
 	{"-q", 0, 0, 0},
 	{"-pthread", 0, 0, 0},
-	{NULL, 0, 0, 0}
+	{nullptr, 0, 0, 0}
 };
 
-uint8_t getTests()
+bool getTests()
 {
 	uint32_t i, j, n;
-	for (n = 0; parsedArgs[n] != NULL; n++);
+	for (n = 0; parsedArgs[n] != nullptr; n++);
 	namedTests = (parsedArg **)testMalloc(sizeof(parsedArg *) * (n + 1));
 
 	for (j = 0, i = 0; i < n; i++)
 	{
-		if (findArgInArgs(parsedArgs[i]->value) == NULL)
+		if (findArgInArgs(parsedArgs[i]->value) == nullptr)
 		{
 			namedTests[j] = parsedArgs[i];
 			j++;
@@ -88,13 +88,13 @@ uint8_t getTests()
 	if (j == 0)
 	{
 		free(namedTests);
-		return FALSE;
+		return false;
 	}
 	else
 	{
 		namedTests = (parsedArg **)testRealloc(namedTests, sizeof(parsedArg *) * (j + 1));
 		numTests = j;
-		return TRUE;
+		return true;
 	}
 }
 
@@ -102,7 +102,7 @@ uint8_t getTests()
 void name() \
 { \
 	uint32_t i, n; \
-	for (n = 0; parsedArgs[n] != NULL; n++); \
+	for (n = 0; parsedArgs[n] != nullptr; n++); \
 	var = (parsedArg **)(parsedArg **)testMalloc(sizeof(parsedArg *) * (n + 1)); \
 	for (num = 0, i = 0; i < n; i++) \
 	{ \
@@ -146,7 +146,7 @@ const char *toSO(const char *file)
 	char *soFile;
 	const char *dot = strrchr(file, '.');
 	size_t dotPos = dot - file;
-	soFile = (char *)testMalloc(dotPos + strlen(LIBEXT) + 1);
+	soFile = new char[dotPos + strlen(LIBEXT) + 1]();
 	memcpy(soFile, file, dotPos);
 	memcpy(soFile + dotPos, LIBEXT, strlen(LIBEXT) + 1);
 	return soFile;
@@ -210,7 +210,7 @@ int compileTests()
 			}
 			ret = system(compileString);
 			free(compileString);
-			free((void *)soFile);
+			delete [] soFile;
 			if (ret != 0)
 				break;
 		}
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
 	registerArgs(args);
 #endif
 	parsedArgs = parseArguments(argc, argv);
-	if (parsedArgs == NULL || getTests() == FALSE)
+	if (parsedArgs == NULL || !getTests())
 	{
 		testPrintf("Fatal error: There are no source files to build given on the command line!\n");
 		return 2;
