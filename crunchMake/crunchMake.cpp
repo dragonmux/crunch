@@ -151,18 +151,18 @@ void getLibDirs()
 static const char *exts[] = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
 static const int numExts = sizeof(exts) / sizeof(*exts);
 
-uint8_t validExt(const char *file)
+bool validExt(const char *file)
 {
 	int i;
 	const char *dot = strrchr(file, '.');
-	if (dot == NULL)
-		return FALSE;
+	if (dot == nullptr)
+		return false;
 	for (i = 0; i < numExts; i++)
 	{
 		if (strcmp(dot, exts[i]) == 0)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 const char *toSO(const char *file)
@@ -234,7 +234,7 @@ int compileTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		if (access(namedTests[i]->value, R_OK) == 0 && validExt(namedTests[i]->value) != FALSE)
+		if (access(namedTests[i]->value, R_OK) == 0 && validExt(namedTests[i]->value))
 		{
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
