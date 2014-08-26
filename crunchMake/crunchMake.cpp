@@ -56,7 +56,7 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #define LIBEXT ".tlib"
 #endif
 
-const arg args[] =
+CRUNCH_API const arg args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
@@ -68,14 +68,14 @@ const arg args[] =
 	{"--quiet", 0, 0, 0},
 	{"-q", 0, 0, 0},
 	{"-pthread", 0, 0, 0},
-	{0}
+	{NULL, 0, 0, 0}
 };
 
 uint8_t getTests()
 {
 	uint32_t i, j, n;
 	for (n = 0; parsedArgs[n] != NULL; n++);
-	namedTests = testMalloc(sizeof(parsedArg *) * (n + 1));
+	namedTests = (parsedArg **)testMalloc(sizeof(parsedArg *) * (n + 1));
 
 	for (j = 0, i = 0; i < n; i++)
 	{
@@ -92,7 +92,7 @@ uint8_t getTests()
 	}
 	else
 	{
-		namedTests = testRealloc(namedTests, sizeof(parsedArg *) * (j + 1));
+		namedTests = (parsedArg **)testRealloc(namedTests, sizeof(parsedArg *) * (j + 1));
 		numTests = j;
 		return TRUE;
 	}
@@ -103,7 +103,7 @@ void name() \
 { \
 	uint32_t i, n; \
 	for (n = 0; parsedArgs[n] != NULL; n++); \
-	var = testMalloc(sizeof(parsedArg *) * (n + 1)); \
+	var = (parsedArg **)(parsedArg **)testMalloc(sizeof(parsedArg *) * (n + 1)); \
 	for (num = 0, i = 0; i < n; i++) \
 	{ \
 		if (strncmp(parsedArgs[i]->value, find, 2) == 0) \
@@ -115,7 +115,7 @@ void name() \
 	if (num == 0) \
 		free(var); \
 	else \
-		var = testRealloc(var, sizeof(parsedArg *) * (num + 1)); \
+		var = (parsedArg **)testRealloc(var, sizeof(parsedArg *) * (num + 1)); \
 }
 
 getLinkFunc(getLinkLibs, linkLibs, numLibs, "-l")
@@ -146,7 +146,7 @@ const char *toSO(const char *file)
 	char *soFile;
 	const char *dot = strrchr(file, '.');
 	size_t dotPos = dot - file;
-	soFile = testMalloc(dotPos + strlen(LIBEXT) + 1);
+	soFile = (char *)testMalloc(dotPos + strlen(LIBEXT) + 1);
 	memcpy(soFile, file, dotPos);
 	memcpy(soFile + dotPos, LIBEXT, strlen(LIBEXT) + 1);
 	return soFile;
