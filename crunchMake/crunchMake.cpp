@@ -101,7 +101,7 @@ bool getTests()
 	}
 }
 
-inline void getLinkFunc(parsedArg **var, uint32_t &num, const char *find)
+inline void getLinkFunc(parsedArg **&var, uint32_t &num, const char *find)
 {
 	uint32_t i, n;
 	for (n = 0; parsedArgs[n] != nullptr; n++);
