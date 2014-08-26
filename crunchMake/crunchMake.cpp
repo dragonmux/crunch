@@ -73,11 +73,11 @@ CRUNCH_API const arg args[] =
 
 bool getTests()
 {
-	uint32_t i, j, n;
+	uint32_t n, j = 0;
 	for (n = 0; parsedArgs[n] != nullptr; n++);
-	namedTests = (parsedArg **)testMalloc(sizeof(parsedArg *) * (n + 1));
+	namedTests = new parsedArg *[n + 1]();
 
-	for (j = 0, i = 0; i < n; i++)
+	for (uint32_t i = 0; i < n; i++)
 	{
 		if (findArgInArgs(parsedArgs[i]->value) == nullptr)
 		{
@@ -87,12 +87,15 @@ bool getTests()
 	}
 	if (j == 0)
 	{
-		free(namedTests);
+		delete [] namedTests;
 		return false;
 	}
 	else
 	{
-		namedTests = (parsedArg **)testRealloc(namedTests, sizeof(parsedArg *) * (j + 1));
+		parsedArg **tests = new parsedArg *[j + 1];
+		memcpy(tests, namedTests, sizeof(parsedArg *) * (j + 1));
+		delete [] namedTests;
+		namedTests = tests;
 		numTests = j;
 		return true;
 	}
@@ -103,7 +106,7 @@ inline void getLinkFunc(parsedArg **var, uint32_t &num, const char *find)
 	uint32_t n;
 	for (n = 0; parsedArgs[n] != nullptr; n++);
 	var = new parsedArg *[n + 1]();
-	for (num = 0, uint32_t i = 0; i < n; i++)
+	for (uint32_t i = 0, num = 0; i < n; i++)
 	{
 		if (strncmp(parsedArgs[i]->value, find, 2) == 0)
 		{
