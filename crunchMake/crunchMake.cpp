@@ -228,11 +228,12 @@ int compileTests()
 	const char *libs = libsToString();
 	bool silent = findArg(parsedArgs, "--silent", nullptr) != nullptr;
 	testLog *logFile = nullptr;
-	parsedArg *logging = findArg(parsedArgs, "--log", nullptr);
+	parsedArg *logParam = findArg(parsedArgs, "--log", nullptr);
+	bool logging = logParam != nullptr;
 	bool quiet = findArg(parsedArgs, "--quiet", nullptr) != nullptr;
 	bool pthread = findArg(parsedArgs, "-pthread", nullptr) != nullptr;
-	if (logging != nullptr)
-		logFile = startLogging(logging->params[0]);
+	if (logging)
+		logFile = startLogging(logParam->params[0]);
 	if (!silent)
 		silent = findArg(parsedArgs, "-s", nullptr) != nullptr;
 	if (!quiet)
@@ -268,7 +269,7 @@ int compileTests()
 	delete [] libDirFlags;
 	delete [] objs;
 	delete [] libs;
-	if (logging != nullptr)
+	if (logging)
 		stopLogging(logFile);
 	return ret;
 }
