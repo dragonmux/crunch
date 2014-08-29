@@ -44,18 +44,22 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #ifndef _MSC_VER
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
-#define COMPILER	"gcc -m64 -fPIC -DPIC"
+const char *cc = "gcc -m64 -fPIC -DPIC";
+const char *cxx = "g++ -m64 -fPIC -DPIC -std=c++11";
 #else
-#define COMPILER	"gcc -m32"
+const char *cc = "gcc -m32";
+const char *cxx = "g++ -m32 -std=c++11";
 #endif
 #else
-#define COMPILER crunch_GCC
+const char *cc = crunch_GCC;
+const char *cxx = crunch_GXX " -std=c++11";
 #endif
 #define OPTS	"-shared %s%s%s%s-lcrunch -O2 %s -o "
 const string libExt = ".so";
 #else
 // _M_64
-#define COMPILER	"cl"
+const char *cc = "cl";
+const char *cxx = "cl";
 #define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch.lib %s /Fe"
 const string libExt = ".tlib";
 #endif
@@ -245,7 +249,8 @@ int compileTests()
 		{
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
-			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread ? "" : "-pthread"), soFile);
+			const char *compiler = isCXX(namedTests[i]->value) ? cxx : cc;
+			char *compileString = formatString("%s %s " OPTS "%s", compiler, namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread ? "" : "-pthread"), soFile);
 			if (quiet)
 				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
