@@ -160,11 +160,9 @@ bool validExt(const char *file)
 	const char *dot = strrchr(file, '.');
 	if (dot == nullptr)
 		return false;
-	for (uint32_t i = 0; i < exts.size(); i++)
-	{
-		if (strcmp(dot, exts[i]) == 0)
+	for (auto &ext : exts)
+		if (strcmp(dot, ext) == 0)
 			return true;
-	}
 	return false;
 }
 
