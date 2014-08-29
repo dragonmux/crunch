@@ -92,8 +92,8 @@ bool getTests()
 	}
 	else
 	{
-		parsedArg **tests = new parsedArg *[j + 1];
-		memcpy(tests, namedTests, sizeof(parsedArg *) * (j + 1));
+		parsedArg **tests = new parsedArg *[j];
+		memcpy(tests, namedTests, sizeof(parsedArg *) * j);
 		delete [] namedTests;
 		namedTests = tests;
 		numTests = j;
