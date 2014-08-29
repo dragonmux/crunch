@@ -189,24 +189,20 @@ inline const char *argsToString(parsedArg **var, const uint32_t num, const  uint
 	return ret;
 }
 
-#define toStringFunc(name, var, num, offset) \
-const char *name ## ToString() \
-{ \
-	uint32_t i; \
-	const char *ret = strdup(""); \
-	for (i = 0; i < num; i++) \
-	{ \
-		const char *name = formatString("%s%s ", ret, var[i]->value offset); \
-		free((void *)ret); \
-		ret = name; \
-	} \
-	return ret; \
+const char *inclDirFlagsToString()
+{
+	return argsToString(inclDirs, numInclDirs, 0);
 }
 
-toStringFunc(inclDirFlags, inclDirs, numInclDirs, )
-toStringFunc(libDirFlags, libDirs, numLibDirs, )
-toStringFunc(objs, linkObjs, numObjs, + 2)
-#undef toStringFunc
+const char *libDirFlagsToString()
+{
+	return argsToString(libDirs, numLibDirs, 0);
+}
+
+const char *objsToString()
+{
+	return argsToString(linkObjs, numObjs, 2);
+}
 
 const char *libsToString()
 {
@@ -258,9 +254,9 @@ int compileTests()
 		else
 			testPrintf("Error, %s does not exist, skipping..\n", namedTests[i]->value);
 	}
-	free((void *)inclDirFlags);
-	free((void *)libDirFlags);
-	free((void *)objs);
+	delete [] inclDirFlags;
+	delete [] libDirFlags;
+	delete [] objs;
 	delete [] libs;
 	if (logging != nullptr)
 		stopLogging(logFile);
