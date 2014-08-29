@@ -29,6 +29,7 @@
 #define R_OK 6
 #endif
 #include <array>
+#include <string>
 
 using namespace std;
 
@@ -51,12 +52,12 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #define COMPILER crunch_GCC
 #endif
 #define OPTS	"-shared %s%s%s%s-lcrunch -O2 %s -o "
-#define LIBEXT ".so"
+const string libExt = ".so";
 #else
 // _M_64
 #define COMPILER	"cl"
 #define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch.lib %s /Fe"
-#define LIBEXT ".tlib"
+const string libExt = ".tlib";
 #endif
 
 CRUNCH_API const arg args[] =
@@ -172,9 +173,9 @@ const char *toSO(const char *file)
 	char *soFile;
 	const char *dot = strrchr(file, '.');
 	size_t dotPos = dot - file;
-	soFile = new char[dotPos + strlen(LIBEXT) + 1]();
+	soFile = new char[dotPos + libExt.size() + 1]();
 	memcpy(soFile, file, dotPos);
-	memcpy(soFile + dotPos, LIBEXT, strlen(LIBEXT) + 1);
+	memcpy(soFile + dotPos, libExt.data(), libExt.size() + 1);
 	return soFile;
 }
 
