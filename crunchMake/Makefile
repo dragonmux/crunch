@@ -51,3 +51,4 @@ clean:
 crunchMake: crunchMake.o
 crunchMake.o: crunchMake.cpp
 crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
+crunchMake.o: CFLAGS += -Dcrunch_GXX="\"$(GXX)\""

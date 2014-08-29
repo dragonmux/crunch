@@ -16,4 +16,4 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-GCC="gcc -m32" LIBDIR=/usr/lib make "$@"
+GCC="gcc -m32" GXX="g++ -m32" LIBDIR=/usr/lib make "$@"

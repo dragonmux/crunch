@@ -97,6 +97,7 @@ endef
 
 # Set up build engine variables
 GCC ?= gcc
+GXX ?= g++
 ifeq ($(strip $(DEBUG)), 1)
 	OPTIM_FLAGS = -ggdb
 	GCC_FLAGS = 
@@ -111,6 +112,7 @@ else
 	DEBUG = 0
 endif
 CC = $(GCC) $(GCC_FLAGS)
+CXX = $(GXX) $(GCC_FLAGS)
 CHMOD = chmod 0755
 STRIP = strip
 RM = rm -f
@@ -126,4 +128,4 @@ CRUNCH = crunch
 UID = $(shell id -u)
 PREFIX ?= /usr
 
-export GCC DEBUG UID PREFIX
+export GCC GXX DEBUG UID PREFIX
