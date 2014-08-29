@@ -60,6 +60,9 @@ const string libExt = ".so";
 const string libExt = ".tlib";
 #endif
 
+const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
+const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
+
 CRUNCH_API const arg args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
@@ -152,15 +155,21 @@ void getLibDirs()
 	getLinkFunc(libDirs, numLibDirs, "-L");
 }
 
-const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
-const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
-
 bool validExt(const char *file)
 {
 	const char *dot = strrchr(file, '.');
 	if (dot == nullptr)
 		return false;
 	for (auto &ext : exts)
+		if (strcmp(dot, ext) == 0)
+			return true;
+	return false;
+}
+
+bool isCXX(const char *file)
+{
+	const char *dot = strrchr(file, '.');
+	for (auto &ext : cxxExts)
 		if (strcmp(dot, ext) == 0)
 			return true;
 	return false;
