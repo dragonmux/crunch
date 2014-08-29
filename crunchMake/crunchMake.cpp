@@ -216,15 +216,15 @@ int compileTests()
 	const char *libDirFlags = libDirFlagsToString();
 	const char *objs = objsToString();
 	const char *libs = libsToString();
-	parsedArg *silent = findArg(parsedArgs, "--silent", nullptr);
+	bool silent = findArg(parsedArgs, "--silent", nullptr) != nullptr;
 	testLog *logFile = nullptr;
 	parsedArg *logging = findArg(parsedArgs, "--log", nullptr);
 	bool quiet = findArg(parsedArgs, "--quiet", nullptr) != nullptr;
 	parsedArg *pthread = findArg(parsedArgs, "-pthread", nullptr);
 	if (logging != nullptr)
 		logFile = startLogging(logging->params[0]);
-	if (silent == NULL)
-		silent = findArg(parsedArgs, "-s", NULL);
+	if (!silent)
+		silent = findArg(parsedArgs, "-s", nullptr) != nullptr;
 	if (!quiet)
 		quiet = findArg(parsedArgs, "-q", nullptr) != nullptr;
 
@@ -239,7 +239,7 @@ int compileTests()
 				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
 				displayString = compileString;
-			if (silent == NULL)
+			if (!silent)
 			{
 				printf("%s\n", displayString);
 				if (displayString != compileString)
