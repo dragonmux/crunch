@@ -219,14 +219,14 @@ int compileTests()
 	parsedArg *silent = findArg(parsedArgs, "--silent", nullptr);
 	testLog *logFile = nullptr;
 	parsedArg *logging = findArg(parsedArgs, "--log", nullptr);
-	parsedArg *quiet = findArg(parsedArgs, "--quiet", nullptr);
+	bool quiet = findArg(parsedArgs, "--quiet", nullptr) != nullptr;
 	parsedArg *pthread = findArg(parsedArgs, "-pthread", nullptr);
 	if (logging != nullptr)
 		logFile = startLogging(logging->params[0]);
 	if (silent == NULL)
 		silent = findArg(parsedArgs, "-s", NULL);
-	if (quiet == NULL)
-		quiet = findArg(parsedArgs, "-q", NULL);
+	if (!quiet)
+		quiet = findArg(parsedArgs, "-q", nullptr) != nullptr;
 
 	for (i = 0; i < numTests; i++)
 	{
@@ -235,7 +235,7 @@ int compileTests()
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
 			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread == nullptr ? "" : pthread->value), soFile);
-			if (quiet != NULL)
+			if (quiet)
 				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
 				displayString = compileString;
