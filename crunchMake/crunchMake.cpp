@@ -216,12 +216,12 @@ int compileTests()
 	const char *libDirFlags = libDirFlagsToString();
 	const char *objs = objsToString();
 	const char *libs = libsToString();
-	parsedArg *silent = findArg(parsedArgs, "--silent", NULL);
-	testLog *logFile = NULL;
-	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
-	parsedArg *quiet = findArg(parsedArgs, "--quiet", NULL);
-	parsedArg *pthread = findArg(parsedArgs, "-pthread", NULL);
-	if (logging != NULL)
+	parsedArg *silent = findArg(parsedArgs, "--silent", nullptr);
+	testLog *logFile = nullptr;
+	parsedArg *logging = findArg(parsedArgs, "--log", nullptr);
+	parsedArg *quiet = findArg(parsedArgs, "--quiet", nullptr);
+	parsedArg *pthread = findArg(parsedArgs, "-pthread", nullptr);
+	if (logging != nullptr)
 		logFile = startLogging(logging->params[0]);
 	if (silent == NULL)
 		silent = findArg(parsedArgs, "-s", NULL);
