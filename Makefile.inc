@@ -104,15 +104,17 @@ ifeq ($(strip $(DEBUG)), 1)
 else
 	GCC_VER = $(shell gcc -dumpversion | cut -d . -f 1)
 	ifeq ($(shell if [ $(GCC_VER) -ge 4 ]; then echo 1; else echo 0; fi), 1)
-		GCC_FLAGS = -fvisibility=hidden -fvisibility-inlines-hidden
+		GCC_FLAGS = -fvisibility=hidden
+		GXX_FLAGS = $(GCC_FLAGS) -fvisibility-inlines-hidden
 	else
 		GCC_FLAGS = 
+		GXX_FLAGS =
 	endif
 	OPTIM_FLAGS = -O2
 	DEBUG = 0
 endif
 CC = $(GCC) $(GCC_FLAGS)
-CXX = $(GXX) $(GCC_FLAGS)
+CXX = $(GXX) $(GXX_FLAGS)
 CHMOD = chmod 0755
 STRIP = strip
 RM = rm -f
