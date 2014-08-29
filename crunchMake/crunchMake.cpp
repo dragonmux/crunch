@@ -28,6 +28,9 @@
 #include <io.h>
 #define R_OK 6
 #endif
+#include <array>
+
+using namespace std;
 
 parsedArg **parsedArgs = NULL;
 parsedArg **inclDirs = NULL;
@@ -148,16 +151,15 @@ void getLibDirs()
 	getLinkFunc(libDirs, numLibDirs, "-L");
 }
 
-static const char *exts[] = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
-static const int numExts = sizeof(exts) / sizeof(*exts);
+const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
+const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
 
 bool validExt(const char *file)
 {
-	int i;
 	const char *dot = strrchr(file, '.');
 	if (dot == nullptr)
 		return false;
-	for (i = 0; i < numExts; i++)
+	for (uint32_t i = 0; i < exts.size(); i++)
 	{
 		if (strcmp(dot, exts[i]) == 0)
 			return true;
