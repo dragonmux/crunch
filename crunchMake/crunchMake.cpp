@@ -235,7 +235,7 @@ int compileTests()
 		{
 			char *displayString;
 			const char *soFile = toSO(namedTests[i]->value);
-			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread ? "" : pthread->value), soFile);
+			char *compileString = formatString(COMPILER " %s " OPTS "%s", namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread ? "" : "-pthread"), soFile);
 			if (quiet)
 				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
 			else
