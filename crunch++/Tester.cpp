@@ -65,6 +65,6 @@ void testsuit::test()
 		test.testThread = thread([&, this]{ retVal = testRunner(*this, test); });
 		test.testThread.join();
 		if (retVal == 2)
-			exit(2);
+			throw threadExit_t(2);
 	}
 }

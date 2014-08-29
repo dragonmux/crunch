@@ -127,6 +127,7 @@ INSTALL_BIN = $(INSTALL) -m755
 INSTALL_DIR = $(INSTALL) -m755 -d
 CRUNCHMAKE = crunchMake $(shell pkg-config --cflags --libs crunch)
 CRUNCH = crunch
+CRUNCHpp = crunch++
 UID = $(shell id -u)
 PREFIX ?= /usr
 

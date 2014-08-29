@@ -24,9 +24,9 @@ SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
 OUT_LFLAGS = $< $(shell pkg-config --libs crunch++) $(patsubst %,../crunch/%, $(O_EXT)) -ldl -lstdc++ -pthread -o $@
 
 quiet_cmd_crunchMake = -n
-cmd_crunchMake = $(CRUNCHMAKE) $(2)
+cmd_crunchMake = $(CRUNCHMAKE) -lcrunch++ $(2)
 quiet_cmd_crunch = -n
-cmd_crunch = $(CRUNCH) $(2)
+cmd_crunch = $(CRUNCHpp) $(2)
 
 LIBDIR ?= $(PREFIX)/lib
 PKGDIR = $(LIBDIR)/pkgconfig
