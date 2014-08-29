@@ -34,7 +34,7 @@
 #endif
 
 static const int ok = 0;
-const arg args[] =
+CRUNCH_API const arg args[] =
 {
 	{"--log", 1, 1, 0},
 	{0}
