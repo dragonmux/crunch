@@ -215,10 +215,18 @@ void testsuit::assertNotNull(const void *result)
 
 void testsuit::assertGreaterThan(long result, long expected)
 {
-	::assertGreaterThan(result, expected);
+	if (result <= expected)
+	{
+		assertionFailure("%ld was not greater than %ld", result, expected);
+		throw threadExit_t(1);
+	}
 }
 
 void testsuit::assertLessThan(long result, long expected)
 {
-	::assertLessThan(result, expected);
+	if (result >= expected)
+	{
+		assertionFailure("%ld was not less than %ld", result, expected);
+		throw threadExit_t(1);
+	}
 }
