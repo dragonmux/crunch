@@ -162,4 +162,13 @@ typedef struct testLog
 CRUNCH_API testLog *startLogging(const char *fileName);
 CRUNCH_API void stopLogging(testLog *logFile);
 
+/* Give systems that don't have other calling conventions a dud definition of __cdecl */
+#ifndef _WINDOWS
+#define __cdecl
+#else
+#ifdef __GNUC__
+#define __cdecl __attribute__((cdecl))
+#endif
+#endif
+
 #endif /*__CRUNCHpp_H__*/
