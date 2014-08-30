@@ -119,10 +119,10 @@ bool tryRegistration(void *testSuit)
 void runTests()
 {
 	uint32_t i;
-	testLog *logFile = NULL;
+	testLog *logFile = nullptr;
 
-	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
-	if (logging != NULL)
+	parsedArg *logging = findArg(parsedArgs, "--log", nullptr);
+	if (logging != nullptr)
 	{
 		logFile = startLogging(logging->params[0]);
 		loggingTests = true;
@@ -133,9 +133,9 @@ void runTests()
 		char *testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value);
 		void *testSuit = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
-		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
+		if (testSuit == nullptr || tryRegistration(testSuit) == false)
 		{
-			if (testSuit == NULL)
+			if (testSuit == nullptr)
 			{
 				if (isTTY != 0)
 #ifndef _MSC_VER
@@ -211,7 +211,7 @@ void runTests()
 	}
 
 	printStats();
-	if (logging != NULL)
+	if (logging != nullptr)
 		stopLogging(logFile);
 }
 
