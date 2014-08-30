@@ -19,13 +19,39 @@
 #ifndef __CRUNCHpp_H__
 #define __CRUNCHpp_H__
 
-#include "crunch.h"
+#include <stddef.h>
+#include <inttypes.h>
 #include <thread>
 #include <vector>
 #include <type_traits>
 #include <typeinfo>
 #include <functional>
 
+#ifdef _MSC_VER
+	#ifdef __crunch_lib__
+		#define CRUNCH_VIS	__declspec(dllexport)
+	#else
+		#define CRUNCH_VIS	__declspec(dllimport)
+	#endif
+	#ifdef __cplusplus
+		#define CRUNCH_API	extern "C" CRUNCH_VIS
+	#else
+		#define CRUNCH_API	CRUNCH_VIS
+	#endif
+	#define CRUNCH_EXPORT		__declspec(dllexport)
+#else
+	#if __GNUC__ >= 4
+		#define CRUNCH_VIS __attribute__ ((visibility("default")))
+	#else
+		#define CRUNCH_VIS
+	#endif
+	#ifdef __cplusplus
+		#define CRUNCH_API	extern "C" CRUNCH_VIS
+	#else
+		#define CRUNCH_API	extern CRUNCH_VIS
+	#endif
+	#define CRUNCH_EXPORT		CRUNCH_API
+#endif
 #define CRUNCHpp_API	CRUNCH_VIS
 
 class testsuit;
@@ -126,5 +152,14 @@ typename std::enable_if<sizeof...(TestClasses), void>::type registerTestClasses(
 	test.testFunc = [this](){ this->name(); }; \
 	tests.push_back(test); \
 }
+
+typedef struct testLog
+{
+	FILE *file;
+	int fd, stdout;
+} testLog;
+
+CRUNCH_API testLog *startLogging(const char *fileName);
+CRUNCH_API void stopLogging(testLog *logFile);
 
 #endif /*__CRUNCHpp_H__*/

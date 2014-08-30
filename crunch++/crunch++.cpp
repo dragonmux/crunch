@@ -22,7 +22,6 @@
 #include "Logger.h"
 #include "ArgsParser.h"
 #include "StringFuncs.h"
-#include "Memory.h"
 #include "crunch++.h"
 #include <dlfcn.h>
 #ifndef _MSC_VER
