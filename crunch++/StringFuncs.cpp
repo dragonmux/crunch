@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "crunch.h"
+#include "crunch++.h"
 #include "StringFuncs.h"
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
 
-const char *boolToString(uint8_t value)
+const char *boolToString(bool value)
 {
-	if (value == FALSE)
+	if (value == false)
 		return "false";
 	else
 		return "true";

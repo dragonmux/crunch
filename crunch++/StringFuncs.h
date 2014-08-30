@@ -19,10 +19,9 @@
 #ifndef __STRINGFUNCS_H__
 #define __STRINGFUNCS_H__
 
-#include <inttypes.h>
-#include "crunch.h"
+#include "crunch++.h"
 
-CRUNCH_API const char *boolToString(uint8_t value);
+CRUNCH_API const char *boolToString(bool value);
 CRUNCH_API char *formatString(const char *format, ...);
 CRUNCH_API char *strNewDup(const char *str);
 
