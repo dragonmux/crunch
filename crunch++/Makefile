@@ -20,8 +20,8 @@ PKG_CONFIG_PKGS = crunch
 EXTRA_CFLAGS = -Wall -Wextra -pedantic -std=c++11
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch++)
-SO_LFLAGS = -shared $(O) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< $(LIBS) $(patsubst %,../crunch/%, $(O_EXT)) -ldl -lstdc++ -pthread -o $@
+SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
+OUT_LFLAGS = $< $(LIBS) $(patsubst %,../crunch/%, $(O_EXT)) -ldl -lstdc++ -o $@
 
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q
