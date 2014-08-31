@@ -24,7 +24,7 @@ void assertionError(const char *params, T result, T expected)
 }
 
 template<typename T>
-void assertionError(const char *params, T result, nullptr_t)
+void assertionError(const char *params, T result, std::nullptr_t)
 {
 	return assertionError(params, result, T(nullptr));
 }
