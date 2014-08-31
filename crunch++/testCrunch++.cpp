@@ -89,7 +89,6 @@ public:
 	void testAssertDoubleEqual()
 	{
 		double num = (*rng)(rngGen);
-		printf("%f\n", num);
 		assertEqual(num, num);
 	}
 
@@ -97,7 +96,6 @@ public:
 	{
 		double numA = (*rng)(rngGen);
 		double numB = (*rng)(rngGen);
-		printf("%f %f\n", numA, numB);
 		assertNotEqual(numA, numB);
 	}
 
