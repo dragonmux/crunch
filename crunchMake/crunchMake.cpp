@@ -79,6 +79,7 @@ CRUNCH_API const arg args[] =
 	{"--quiet", 0, 0, 0},
 	{"-q", 0, 0, 0},
 	{"-pthread", 0, 0, 0},
+	{"-Wl", 0, 0, ARG_INCOMPLETE},
 	{nullptr, 0, 0, 0}
 };
 
