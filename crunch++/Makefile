@@ -18,10 +18,10 @@ include ../Makefile.inc
 
 PKG_CONFIG_PKGS = crunch
 EXTRA_CFLAGS = -Wall -Wextra -pedantic -std=c++11
-CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
+CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -pthread -I../crunch -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch++)
-SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< $(LIBS) -ldl -lstdc++ -o $@
+SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -pthread -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
+OUT_LFLAGS = $< $(LIBS) -pthread -ldl -lstdc++ -o $@
 
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q
