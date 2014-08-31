@@ -17,12 +17,15 @@
 include ../Makefile.inc
 
 PKG_CONFIG_PKGS = crunch
-EXTRA_CFLAGS = -Wall -Wextra -pedantic -pthread -std=c++11
-CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) $(shell pkg-config --cflags $(PKG_CONFIG_PKGS)) -I../crunch -D__crunch_lib__ -o $@ $<
-LIBS = -lstdc++ -pthread $(shell pkg-config --libs $(PKG_CONFIG_PKGS))
-SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< $(shell pkg-config --libs crunch++) $(patsubst %,../crunch/%, $(O_EXT)) -ldl -lstdc++ -pthread -o $@
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -std=c++11
+CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
+LIBS = $(shell pkg-config --libs crunch++)
+SO_LFLAGS = -shared $(O) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
+OUT_LFLAGS = $< $(LIBS) $(patsubst %,../crunch/%, $(O_EXT)) -ldl -lstdc++ -pthread -o $@
 
+ifeq ($(BUILD_VERBOSE), 0)
+	CRUNCHMAKE += -q
+endif
 quiet_cmd_crunchMake = -n
 cmd_crunchMake = $(CRUNCHMAKE) -lcrunch++ $(2)
 quiet_cmd_crunch = -n
