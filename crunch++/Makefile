@@ -21,7 +21,7 @@ EXTRA_CFLAGS = -Wall -Wextra -pedantic -std=c++11
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch++)
 SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
-OUT_LFLAGS = $< $(LIBS) $(patsubst %,../crunch/%, $(O_EXT)) -ldl -lstdc++ -o $@
+OUT_LFLAGS = $< $(LIBS) -ldl -lstdc++ -o $@
 
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q
@@ -40,8 +40,7 @@ SO_STRIP = -x
 OUT_STRIP = -s
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
-O = StringFuncs.o Logger.o Tester.o Core.o
-O_EXT = Memory.o ArgsParser.o
+O = ArgsParser.o StringFuncs.o Logger.o Tester.o Core.o
 TESTS = testCrunch++.so
 
 VERMAJ = .0
