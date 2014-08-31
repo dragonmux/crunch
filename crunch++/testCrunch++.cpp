@@ -21,6 +21,10 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+#include <memory>
+#include <random>
+
+using namespace std;
 
 class crunchTests : public testsuit
 {
@@ -37,7 +41,15 @@ private:
 	const char *testStr1 = "abcdefghijklmnopqrstuvwxyz";
 	const char *testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+	default_random_engine rngGen;
+	unique_ptr<uniform_real_distribution<double>> rng;
+
 public:
+	crunchTests() : rng(new uniform_real_distribution<double>(-1.0, 1.0))
+	{
+		rngGen.seed(time(nullptr));
+	}
+
 	void testAssertTrue()
 	{
 		assertTrue(true);
@@ -72,6 +84,21 @@ public:
 		while (num64 == 0);
 		assertNotEqual(num32, 0);
 		assertNotEqual(num64, 0LL);
+	}
+
+	void testAssertDoubleEqual()
+	{
+		double num = (*rng)(rngGen);
+		printf("%f\n", num);
+		assertEqual(num, num);
+	}
+
+	void testAssertDoubleNotEqual()
+	{
+		double numA = (*rng)(rngGen);
+		double numB = (*rng)(rngGen);
+		printf("%f %f\n", numA, numB);
+		assertNotEqual(numA, numB);
 	}
 
 	void testAssertPtrEqual()
@@ -170,6 +197,8 @@ public:
 		CXX_TEST(testAssertFalse)
 		CXX_TEST(testAssertIntEqual)
 		CXX_TEST(testAssertIntNotEqual)
+		CXX_TEST(testAssertDoubleEqual)
+		CXX_TEST(testAssertDoubleNotEqual)
 		CXX_TEST(testAssertPtrEqual)
 		CXX_TEST(testAssertPtrNotEqual)
 		CXX_TEST(testAssertStrEqual)
