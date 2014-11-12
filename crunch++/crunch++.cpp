@@ -33,6 +33,7 @@
 #include <io.h>
 #endif
 #include <exception>
+#include <stdlib.h>
 
 using namespace std;
 
