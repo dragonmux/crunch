@@ -26,7 +26,7 @@
 #include <io.h>
 #include <sys/locking.h>
 #endif
-#include <stdarg.h>
+#include <stdio.h>
 
 #ifndef _MSC_VER
 #define COL(val) val - 8
