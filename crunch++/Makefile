@@ -23,6 +23,7 @@ LIBS = $(shell pkg-config --libs crunch++)
 SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -pthread -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
 OUT_LFLAGS = $< $(LIBS) -pthread -ldl -lstdc++ -o $@
 
+CRUNCHMAKE = crunchMake $(shell pkg-config --cflags --libs crunch++)
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q
 endif
