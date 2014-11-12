@@ -20,6 +20,7 @@
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "Logger.h"
+#include <stdlib.h>
 #include <string.h>
 
 #ifndef _MSC_VER
