@@ -8,6 +8,14 @@ using namespace std;
 bool loggingTests = false;
 std::vector<cxxTestClass> cxxTests;
 
+#ifdef _MSC_VER
+void newline()
+{
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	testPrintf("\n");
+}
+#endif
+
 int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 {
 	if (isTTY != 0)
