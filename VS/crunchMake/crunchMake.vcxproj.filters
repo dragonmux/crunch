@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\crunch\crunchMake.c">
+    <ClCompile Include="..\..\crunchMake\crunchMake.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
