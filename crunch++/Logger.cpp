@@ -190,7 +190,7 @@ void echoAborted()
 	}
 	else
 		printAborted();
-	libDebugExit(0);
+	throw threadExit_t(0);
 }
 #endif
 

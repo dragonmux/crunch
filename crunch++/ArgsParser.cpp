@@ -31,7 +31,7 @@ CRUNCH_API const arg *args = nullptr;
 void registerArgs(const arg *allowedArgs)
 {
 	args = allowedArgs;
-	stdout = &__iob_func()[1];
+	stdout = __acrt_iob_func(1);
 }
 #endif
 
