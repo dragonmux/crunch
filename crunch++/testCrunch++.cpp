@@ -69,7 +69,7 @@ public:
 		srand(time(nullptr));
 		num32 = rand();
 		assertEqual(num32, num32);
-		num64 = (long(rand()) << 32) | long(rand());
+		num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		assertEqual(num64, num64);
 	}
 
@@ -82,7 +82,7 @@ public:
 			num32 = rand();
 		while (num32 == 0);
 		do
-			num64 = (long(rand()) << 32) | long(rand());
+			num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		while (num64 == 0);
 		assertNotEqual(num32, 0);
 		assertNotEqual(num64, 0LL);
