@@ -91,6 +91,8 @@ class CRUNCHpp_API testsuit
 protected:
 	std::vector<cxxTest> tests;
 
+	// XXX: Fixme.. this had to be added for some tests chained from a main test class
+public:
 	void fail(const char *reason);
 
 	void assertTrue(bool value);
