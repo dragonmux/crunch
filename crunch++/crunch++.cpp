@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <pthread.h>
 #include <string.h>
 #include "Core.h"
 #include "Logger.h"
@@ -37,7 +36,8 @@
 
 using namespace std;
 
-CRUNCH_API const arg args[] =
+CRUNCH_API const arg args[];
+extern "C" const arg args[] =
 {
 	{"--log", 1, 1, 0},
 	{nullptr, 0, 0, 0}

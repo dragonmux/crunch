@@ -60,14 +60,15 @@ const string libExt = ".so";
 // _M_64
 const char *cc = "cl";
 const char *cxx = "cl";
-#define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch.lib %s /Fe"
+#define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch++.lib %s /Fe"
 const string libExt = ".tlib";
 #endif
 
 const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
 const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
 
-CRUNCH_API const arg args[] =
+CRUNCH_API const arg args[];
+const arg args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},

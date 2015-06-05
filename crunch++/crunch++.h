@@ -29,8 +29,10 @@
 
 #ifdef _MSC_VER
 	#ifdef __crunch_lib__
+		#define CRUNCH_IMP
 		#define CRUNCH_VIS	__declspec(dllexport)
 	#else
+		#define CRUNCH_IMP	extern
 		#define CRUNCH_VIS	__declspec(dllimport)
 	#endif
 	#ifdef __cplusplus
@@ -39,6 +41,11 @@
 		#define CRUNCH_API	CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		__declspec(dllexport)
+
+	#ifdef stdout
+	#undef stdout
+	CRUNCH_API FILE *stdout;
+	#endif
 #else
 	#if __GNUC__ >= 4
 		#define CRUNCH_VIS __attribute__ ((visibility("default")))
@@ -73,6 +80,11 @@ struct cxxUnitTest
 	std::thread testThread;
 	cxxTest theTest;
 };
+
+#ifdef _MSC_VER
+CRUNCH_IMP template class CRUNCH_VIS std::vector<cxxTest>;
+CRUNCH_IMP template class CRUNCH_VIS std::allocator<cxxTest>;
+#endif
 
 class CRUNCHpp_API testsuit
 {
