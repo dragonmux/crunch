@@ -16,13 +16,17 @@
 
 include ../Makefile.inc
 
-EXTRA_CFLAGS = -Wall -Wextra -pedantic -std=c++11 -I../crunch++
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -pipe -std=c++11 -I../crunch++
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch++) -lstdc++ -ldl -pthread
 LFLAGS = $(O) $(LIBS) -o $@
 
 BINDIR = $(PREFIX)/bin
-STRIP += -s
+ifneq ($(MAC), 1)
+	STRIP += -s
+else
+	STRIP += -Sx
+endif
 O = crunchMake.o
 EXE = crunchMake
 

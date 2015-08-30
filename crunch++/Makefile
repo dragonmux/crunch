@@ -17,10 +17,16 @@
 include ../Makefile.inc
 
 PKG_CONFIG_PKGS = crunch
-EXTRA_CFLAGS = -Wall -Wextra -pedantic -std=c++11
-CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -pthread -I../crunch -D__crunch_lib__ -o $@ $<
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -pipe -std=c++11
+CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_FLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch++)
-SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -pthread -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
+ifneq ($(MAC), 1)
+	EXTRA_FLAGS = -pthread
+	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -pthread -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
+else
+	EXTRA_FLAGS =
+	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -o $(SO) -Wl,-U,_args
+endif
 OUT_LFLAGS = $< $(LIBS) -pthread -ldl -lstdc++ -o $@
 
 CRUNCHMAKE = crunchMake $(shell pkg-config --cflags --libs crunch++)
@@ -38,7 +44,11 @@ INCDIR = $(PREFIX)/include
 BINDIR = $(PREFIX)/bin
 
 SO_STRIP = -x
-OUT_STRIP = -s
+ifneq ($(MAC), 1)
+	OUT_STRIP = -s
+else
+	OUT_STRIP = -Sx
+endif
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o StringFuncs.o Logger.o Tester.o Core.o
@@ -47,7 +57,11 @@ TESTS = testCrunch++.so
 VERMAJ = .0
 VERMIN = .0
 VERREV = .1
-SOMAJ = libcrunch++.so
+ifneq ($(MAC), 1)
+	SOMAJ = libcrunch++.so
+else
+	SOMAJ = libcrunch++.dylib
+endif
 SOMIN = $(SOMAJ)$(VERMAJ)
 SOREV = $(SOMIN)$(VERMIN)
 SO = $(SOREV)$(VERREV)

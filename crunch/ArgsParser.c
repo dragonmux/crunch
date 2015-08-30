@@ -22,6 +22,7 @@
 #include "Logger.h"
 #include "Memory.h"
 #include <string.h>
+#include <stdlib.h>
 
 #ifndef _MSC_VER
 CRUNCH_API const arg args[];

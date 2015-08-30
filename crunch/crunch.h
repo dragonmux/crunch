@@ -56,9 +56,13 @@
 #endif
 #endif
 
+#if defined(__APPLE__) && defined(__MACH__)
+#define __MACOS__
+#endif
+
 #include <inttypes.h>
 #include <stdio.h>
-#ifdef stdout
+#if defined(stdout) && !defined(__MACOS__)
 #undef stdout
 CRUNCH_API FILE *stdout;
 #endif
