@@ -136,7 +136,7 @@ clean:
 %.so: %.c
 	$(call run-cmd,crunchMake,$<)
 
-.PHONY: clean install priv-install-so install-so all uninstall default .c.o $(PC)
+.PHONY: test clean install priv-install-so install-so all uninstall default .c.o $(PC)
 
 crunch: crunch.o
 crunch.o: crunch.c

@@ -139,7 +139,7 @@ clean:
 %.so: %.cpp
 	$(call run-cmd,crunchMake,$<)
 
-.PHONY: clean install priv-install-so install-so all uninstall default .cpp.o $(PC)
+.PHONY: test clean install priv-install-so install-so all uninstall default .cpp.o $(PC)
 
 crunch++: crunch++.o
 

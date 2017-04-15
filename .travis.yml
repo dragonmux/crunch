@@ -1,6 +1,5 @@
 language: cpp
 sudo: required
-#dist: trusty
 
 before_install:
   - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
@@ -15,7 +14,9 @@ install:
   - sudo make install
 
 script:
+  - make -C crunch test
   - make -C crunch++ test
+  - make -C crunch check
   - make -C crunch++ check
 
 matrix:
