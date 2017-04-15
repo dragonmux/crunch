@@ -1,9 +1,9 @@
 language: cpp
 sudo: required
-dist: trusty
+#dist: trusty
 
 before_install:
-  - export GCC=$CC GXX=$CXX
+  - export GCC=$CC -m64 -fPIC -DPIC GXX=$CXX -m64 -fPIC -DPIC
   - (cd crunch++ && make lib && sudo make install-so)
   - (cd crunch && make lib && sudo make install-so)
 install:
@@ -15,4 +15,21 @@ script:
 
 compiler:
   - clang
-  - gcc
+  - gcc-4.9
+  - gcc-5
+  - gcc-6
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+      - gcc-5
+      - g++-5
+      - gcc-6
+      - g++-6
+
+#sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+#sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.4 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.4
