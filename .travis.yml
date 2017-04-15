@@ -32,6 +32,17 @@ matrix:
             - gcc-4.9
             - g++-4.9
             - clang-3.8
+    - compiler: clang-3.9
+      env: GCC=clang GXX=clang++
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-3.9 main'
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+            - g++-4.9
+            - clang-3.9
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9
       addons:
