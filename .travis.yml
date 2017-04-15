@@ -10,7 +10,7 @@ before_install:
   - sudo make -C crunch++ install-so
 install:
   - make -C crunch crunch
-  - make -C crunch crunch++
+  - make -C crunch++ crunch++
   - make -C crunchMake
   - sudo make install
 
