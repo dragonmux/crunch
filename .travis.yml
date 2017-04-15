@@ -31,6 +31,8 @@ matrix:
             - gcc-4.9
             - g++-4.9
         apt:
+          sources:
+            - sourceline: 'deb http://us-central1.gce.archive.ubuntu.com/ubuntu/ trusty-updates universe'
           packages:
             - clang-3.8
     - compiler: gcc-4.9
