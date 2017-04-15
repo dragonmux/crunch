@@ -22,7 +22,7 @@ script:
 matrix:
   include:
     - compiler: clang-3.8
-      env: GCC=clang-3.8 GXX=clang++-3.8
+      env: GCC=clang GXX=clang++
       addons:
         apt:
           sources:
