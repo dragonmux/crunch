@@ -35,7 +35,7 @@ matrix:
             - g++-4.9
             - clang-3.8
     - compiler: clang-3.9
-      env: GCC=clang GXX=clang++
+      env: GCC=clang-3.9 GXX=clang++-3.9
       addons:
         apt:
           sources:
