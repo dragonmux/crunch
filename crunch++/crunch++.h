@@ -26,6 +26,7 @@
 #include <type_traits>
 #include <typeinfo>
 #include <functional>
+#include <memory>
 
 #ifdef _MSC_VER
 	#ifdef __crunch_lib__
@@ -116,6 +117,8 @@ public:
 	void assertNotNull(void *result);
 	void assertNull(const void *result);
 	void assertNotNull(const void *result);
+	template<typename T> void assertNull(const std::unique_ptr<T> &result) { assertNull(result.get()); }
+	template<typename T> void assertNotNull(const std::unique_ptr<T> &result) { assertNotNull(result.get()); }
 
 	void assertGreaterThan(long result, long expected);
 	void assertLessThan(long result, long expected);
