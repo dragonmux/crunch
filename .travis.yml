@@ -1,6 +1,9 @@
 language: cpp
+sudo: required
+dist: trusty
 
 before_install:
+  - export GCC=$CC GXX=$CXX
   - (cd crunch++ && make lib && sudo make install-so)
   - (cd crunch && make lib && sudo make install-so)
 install:
@@ -13,8 +16,3 @@ script:
 compiler:
   - clang
   - gcc
-
-env:
-  global:
-    - GCC=$CC
-    - GXX=$CXX
