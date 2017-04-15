@@ -1,7 +1,9 @@
 # crunch
 
-Having looked at and messed a bit with testing systems such as Deja GNU and deciding I did not like them nor how they would force me to work, I went about building my own - one which coped with threads nicely and ensured a fresh 
+Having looked at and messed a bit with testing systems such as Deja GNU and deciding I did not like them nor how they would force me to work, I went about building my own - one which coped with threads nicely and ensured a fresh
 environment for each and every test in a test suit.
+
+[![Build Status](https://travis-ci.org/DX-MON/crunch.svg?branch=master)](https://travis-ci.org/DX-MON/crunch)
 
 ## Building crunch
 
