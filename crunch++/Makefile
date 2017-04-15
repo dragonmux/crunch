@@ -27,7 +27,7 @@ else
 	EXTRA_FLAGS =
 	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -o $(SO) -Wl,-U,_args
 endif
-OUT_LFLAGS = $< $(LIBS) -pthread -ldl -lstdc++ -o $@
+OUT_LFLAGS = $< $(LIBS) -pthread -ldl -lstdc++ -lm -o $@
 
 CRUNCHMAKE = crunchMake $(shell pkg-config --cflags --libs crunch++)
 ifeq ($(BUILD_VERBOSE), 0)
@@ -73,7 +73,7 @@ H = crunch++.h
 
 default: all
 
-all: $(PC) $(SO) $(EXE)
+all: lib priv-install-so $(EXE)
 
 $(BINDIR):
 	$(call run-cmd,install_dir,$(BINDIR))
@@ -96,6 +96,13 @@ install-so: $(PC) $(LIBDIR) $(INCDIR)
 	$(call run-cmd,ln,$(LIBDIR)/$(SOMIN),$(LIBDIR)/$(SOMAJ))
 	$(call ldconfig)
 
+priv-install-so:
+	$(Q)if [[ $(UID) -ne 0 && "$(PREFIX)" =~ ^/usr\.*\$$ ]]; then \
+		sudo PREFIX=$(PREFIX) LIBDIR=$(LIBDIR) $(MAKE) install-so; \
+	else \
+		$(MAKE) install-so; \
+	fi
+
 uninstall:
 	rm $(LIBDIR)/$(SOMAJ)*
 	rm $(LIBDIR)/$(A)
@@ -108,11 +115,6 @@ $(SO): $(O)
 	$(call run-cmd,ranlib,$(A))
 	$(call run-cmd,ccld,$(SO_LFLAGS))
 	$(call debug-strip,$(SO_STRIP) $(SO))
-	$(Q)if [[ $(UID) -ne 0 && "$(PREFIX)" =~ ^/usr\.*\$$ ]]; then \
-		sudo PREFIX=$(PREFIX) LIBDIR=$(LIBDIR) $(MAKE) install-so; \
-	else \
-		$(MAKE) install-so; \
-	fi
 
 $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
@@ -137,7 +139,7 @@ clean:
 %.so: %.cpp
 	$(call run-cmd,crunchMake,$<)
 
-.PHONY: clean install all uninstall default .cpp.o $(PC)
+.PHONY: clean install priv-install-so install-so all uninstall default .cpp.o $(PC)
 
 crunch++: crunch++.o
 

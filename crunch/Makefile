@@ -20,7 +20,7 @@ EXTRA_CFLAGS = -Wall -Wextra -pedantic -pthread -std=gnu99
 #$(shell pkg-config --cflags )
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 #$(shell pkg-config --libs )
-LIBS = -lstdc++ $(EXTRA_LIBS)
+LIBS = $(EXTRA_LIBS)
 ifneq ($(MAC), 1)
 	EXTRA_LIBS = -pthread
 	SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
@@ -70,7 +70,7 @@ H = crunch.h
 
 default: all
 
-all: $(PC) $(SO) $(EXE)
+all: lib priv-install-so $(EXE)
 
 $(BINDIR):
 	$(call run-cmd,install_dir,$(BINDIR))
@@ -93,6 +93,13 @@ install-so: $(PC) $(LIBDIR) $(INCDIR)
 	$(call run-cmd,ln,$(LIBDIR)/$(SOMIN),$(LIBDIR)/$(SOMAJ))
 	$(call ldconfig)
 
+priv-install-so:
+	$(Q)if [[ $(UID) -ne 0 && "$(PREFIX)" =~ ^/usr\.*\$$ ]]; then \
+		sudo PREFIX=$(PREFIX) LIBDIR=$(LIBDIR) $(MAKE) install-so; \
+	else \
+		$(MAKE) install-so; \
+	fi
+
 uninstall:
 	rm $(LIBDIR)/$(SOMAJ)*
 	rm $(LIBDIR)/$(A)
@@ -105,11 +112,6 @@ $(SO): $(O)
 	$(call run-cmd,ranlib,$(A))
 	$(call run-cmd,ccld,$(SO_LFLAGS))
 	$(call debug-strip,$(SO_STRIP) $(SO))
-	$(Q)if [[ $(UID) -ne 0 && "$(PREFIX)" =~ ^/usr\.*\$$ ]]; then \
-		sudo PREFIX=$(PREFIX) LIBDIR=$(LIBDIR) $(MAKE) install-so; \
-	else \
-		$(MAKE) install-so; \
-	fi
 
 $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
@@ -134,7 +136,7 @@ clean:
 %.so: %.c
 	$(call run-cmd,crunchMake,$<)
 
-.PHONY: clean install all uninstall default .c.o $(PC)
+.PHONY: clean install priv-install-so install-so all uninstall default .c.o $(PC)
 
 crunch: crunch.o
 crunch.o: crunch.c
