@@ -3,7 +3,7 @@ sudo: required
 #dist: trusty
 
 before_install:
-  - export GCC="$CC -m64 -fPIC -DPIC" GXX="$CXX -m64 -fPIC -DPIC"
+  - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
   - (cd crunch++ && make lib && sudo make install-so)
   - (cd crunch && make lib && sudo make install-so)
 install:
@@ -16,21 +16,25 @@ script:
 matrix:
   include:
     - compiler: clang
-    - env: CC=gcc-4.9 CXX=g++-4.9
+      env: GCC=clang GXX=clang++
+    - compiler: gcc-4.9
+      env: GCC=gcc-4.9 GXX=g++-4.9
       addons:
         sources:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
           - g++-4.9
-    - env: CC=gcc-5 CXX=g++-5
+    - compiler: gcc-5
+      env: GCC=gcc-5 GXX=g++-5
       addons:
         sources:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
           - g++-5
-    - env: CC=gcc-6 CXX=g++-6
+    - compiler: gcc-6
+      env: GCC=gcc-6 GXX=g++-6
       addons:
         apt:
           sources:
