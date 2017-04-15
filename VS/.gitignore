@@ -1,4 +1,4 @@
-*.v11.suo
+*.suo
 *.vcxproj.user
 *.idb
 *.pdb
@@ -13,3 +13,8 @@
 *.exp
 *.sbr
 *.lib
+*.iobj
+*.ipdb
+
+*.filters
+*.unsuccessfulbuild
