@@ -1,5 +1,6 @@
 language: cpp
 sudo: required
+cache: ccache
 
 before_install:
   - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
@@ -27,6 +28,7 @@ matrix:
         apt:
           sources:
             - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - ubuntu-toolchain-r-test
           packages:
             - gcc-4.9
@@ -38,6 +40,7 @@ matrix:
         apt:
           sources:
             - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-3.9 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - ubuntu-toolchain-r-test
           packages:
             - gcc-4.9
