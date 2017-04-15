@@ -3,7 +3,7 @@ sudo: required
 #dist: trusty
 
 before_install:
-  - export GCC=$CC -m64 -fPIC -DPIC GXX=$CXX -m64 -fPIC -DPIC
+  - export GCC="$CC -m64 -fPIC -DPIC" GXX="$CXX -m64 -fPIC -DPIC"
   - (cd crunch++ && make lib && sudo make install-so)
   - (cd crunch && make lib && sudo make install-so)
 install:
