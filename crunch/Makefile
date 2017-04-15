@@ -84,7 +84,7 @@ $(INCDIR):
 install: all $(BINDIR)
 	$(call run-cmd,install_bin,$(EXE),$(BINDIR))
 
-install-so: $(LIBDIR) $(INCDIR)
+install-so: $(PC) $(LIBDIR) $(INCDIR)
 	$(call run-cmd,install_file,$(SO),$(LIBDIR))
 	$(call run-cmd,install_file,$(PC),$(PKGDIR))
 	$(call run-cmd,install_file,$(H),$(INCDIR))
@@ -97,6 +97,8 @@ uninstall:
 	rm $(LIBDIR)/$(SOMAJ)*
 	rm $(LIBDIR)/$(A)
 	rm $(PKGDIR)/$(PC)
+
+lib: $(SO)
 
 $(SO): $(O)
 	$(call run-cmd,ar,$(A),$(O))
@@ -112,7 +114,9 @@ $(SO): $(O)
 $(PC): $(IN)
 	$(call run-cmd,sed,$(IN),$(PC))
 
-check: $(TESTS)
+test: $(TESTS)
+
+check: test
 	$(call run-cmd,crunch,$(subst .so,,$(TESTS)))
 
 clean:
