@@ -19,7 +19,7 @@
 #ifndef __ARGSPARSER_H__
 #define __ARGSPARSER_H__
 
-#include <inttypes.h>
+#include <stdint.h>
 #include "crunch++.h"
 
 typedef struct _arg
@@ -44,7 +44,7 @@ typedef struct _parsedArg
 #ifdef _MSC_VER
 CRUNCH_API void registerArgs(const arg *allowedargs);
 #endif
-CRUNCH_API parsedArg **parseArguments(int argc, char **argv);
+CRUNCH_API parsedArg **parseArguments(uint32_t argc, char **argv);
 CRUNCH_API parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
 CRUNCH_API arg *findArgInArgs(const char *value);
 

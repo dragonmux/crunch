@@ -22,6 +22,10 @@
 #include "Logger.h"
 #include <stdlib.h>
 #include <string.h>
+#include <new>
+
+using parsedArgPtr_t = parsedArg *;
+using strPtr_t = const char *;
 
 #ifndef _MSC_VER
 CRUNCH_API const arg args[];
@@ -72,24 +76,32 @@ uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args
 		return n;
 }
 
-parsedArg **parseArguments(int argc, char **argv)
+parsedArg **parseArguments(uint32_t argc, char **argv)
 {
 	parsedArg **ret;
-	int i, n;
+	uint32_t i, n;
 
-	if (argc <= 1)
+	if (argc <= 1 || (argc >> 31) != 0)
 		return nullptr;
+#ifdef _MSC_VER
+	else if (!args)
+		return nullptr;
+#endif
 
-	ret = new parsedArg *[argc]();
+	ret = new (std::nothrow) parsedArgPtr_t[argc];
+	if (!ret)
+		return nullptr;
 	for (i = 1, n = 0; i < argc; i++)
 	{
 		bool found = false;
 		arg *argument = (arg *)args;
-		parsedArg *argRet = new parsedArg();
+		parsedArg *argRet = new (std::nothrow) parsedArg();
+		if (!argRet)
+			return nullptr;
 		while (argument->value != nullptr)
 		{
-			if (((argument->flags & ARG_INCOMPLETE) == 0 && strcmp(argument->value, argv[i]) == 0) ||
-				strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
+			if (strcmp(argument->value, argv[i]) == 0 || ((argument->flags & ARG_INCOMPLETE) &&
+				strncmp(argument->value, argv[i], strlen(argument->value)) == 0))
 			{
 				found = true;
 				argRet->value = strdup(argv[i]);
@@ -101,24 +113,24 @@ parsedArg **parseArguments(int argc, char **argv)
 					break;
 				}
 				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg *)args);
-				argRet->params = new const char *[argRet->paramsFound];
+				argRet->params = new (std::nothrow) strPtr_t[argRet->paramsFound];
+				if (!argRet->params)
+					return nullptr;
 				for (uint32_t j = 0; j < argRet->paramsFound; j++)
 					argRet->params[j] = strNewDup(argv[i + j + 1]);
 				i += argRet->paramsFound;
 				argRet->flags = argument->flags;
-				ret[n] = argRet;
-				n++;
+				ret[n++] = argRet;
 				break;
 			}
-			argument++;
+			++argument;
 		}
 		if (!found)
 		{
 			argRet->value = strdup(argv[i]);
 			argRet->paramsFound = 0;
 			argRet->flags = argument->flags;
-			ret[n] = argRet;
-			n++;
+			ret[n++] = argRet;
 		}
 	}
 	/* Shrink as appropriate */
