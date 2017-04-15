@@ -1,13 +1,20 @@
 language: cpp
+
 before_install:
-  - export GCC=$CC GXX=$CXX
   - (cd crunch++ && make lib && sudo make install-so)
   - (cd crunch && make lib && sudo make install-so)
 install:
   - make
   - sudo make install
+
 script:
   - (cd crunch++ && make test && make check)
+
 compiler:
   - clang
   - gcc
+
+env:
+  global:
+    - GCC=$CC
+    - GXX=$CXX
