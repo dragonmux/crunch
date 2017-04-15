@@ -4,14 +4,19 @@ sudo: required
 
 before_install:
   - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
-  - (cd crunch++ && make lib && sudo make install-so)
-  - (cd crunch && make lib && sudo make install-so)
+  - make -C crunch lib
+  - sudo make -C crunch install-so
+  - make -C crunch++ lib
+  - sudo make -C crunch++ install-so
 install:
-  - make
+  - make -C crunch crunch
+  - make -C crunch crunch++
+  - make -C crunchMake
   - sudo make install
 
 script:
-  - (cd crunch++ && make test && make check)
+  - make -C crunch++ test
+  - make -C crunch++ check
 
 matrix:
   include:
