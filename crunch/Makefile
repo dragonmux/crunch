@@ -1,5 +1,5 @@
 # This file is part of crunch
-# Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+# Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
 #
 # crunch is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -52,8 +52,8 @@ O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
 TESTS = testCrunch.so
 
 VERMAJ = .0
-VERMIN = .0
-VERREV = .1
+VERMIN = .1
+VERREV = .0
 ifneq ($(MAC), 1)
 	SOMAJ = libcrunch.so
 else
