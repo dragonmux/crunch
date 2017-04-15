@@ -21,8 +21,18 @@ script:
 
 matrix:
   include:
-    #- compiler: clang
-    #  env: GCC=clang GXX=clang++
+    - compiler: clang-3.8
+      env: GCC=clang-3.8 GXX=clang++-3.8
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+            - g++-4.9
+        apt:
+          packages:
+            - clang-3.8
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9
       addons:
