@@ -26,14 +26,11 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise main'
             - ubuntu-toolchain-r-test
           packages:
             - gcc-4.9
             - g++-4.9
-        apt:
-          sources:
-            - sourceline: 'deb http://us-central1.gce.archive.ubuntu.com/ubuntu/ trusty-updates universe'
-          packages:
             - clang-3.8
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9
