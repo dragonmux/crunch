@@ -157,7 +157,7 @@ template<typename TestClass> void registerTestClasses()
 }
 
 template<typename TestClass, typename ...TestClasses>
-typename std::enable_if<sizeof...(TestClasses), void>::type registerTestClasses()
+typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()
 {
 	registerTestClasses<TestClass>();
 	registerTestClasses<TestClasses...>();
