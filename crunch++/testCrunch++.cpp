@@ -17,7 +17,6 @@
  */
 
 #include <crunch++.h>
-#include "StringFuncs.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
@@ -27,6 +26,8 @@
 #include <memory>
 #include <random>
 #include <functional>
+#include "Core.h"
+#include "StringFuncs.h"
 
 using namespace std;
 
@@ -48,12 +49,15 @@ private:
 	default_random_engine rngGen;
 	unique_ptr<uniform_real_distribution<double>> rng;
 
-	void tryShouldFail(const std::function<void()> &tests)
+	void tryShouldFail(const std::function<void()> &test)
 	{
 		try
-			{ tests(); }
+			{ test(); }
 		catch (threadExit_t &)
-			{ return; }
+		{
+			--failures;
+			return;
+		}
 		fail("Expected threadExit_t exception not thrown");
 	}
 
