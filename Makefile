@@ -19,9 +19,9 @@ include Makefile.inc
 default: all
 
 all:
-	@cd crunch && $(MAKE)
-	@cd crunch++ && $(MAKE)
-	@cd crunchMake && $(MAKE)
+	@$(MAKE) -C crunch
+	@$(MAKE) -C crunch++
+	@$(MAKE) -C crunchMake
 
 install:
 	@cd crunch && $(MAKE) install
