@@ -14,10 +14,8 @@ install:
   - sudo make install
 
 script:
-  - make -C crunch test
-  - make -C crunch++ test
-  - make -C crunch check
-  - make -C crunch++ check
+  - make test
+  - make check
 after_success:
   - if [ "$COVERAGE" == "1" ]; then
       bash <(curl -s https://codecov.io/bash) -x $GCOV;

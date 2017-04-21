@@ -28,9 +28,13 @@ install:
 	@cd crunch++ && $(MAKE) install
 	@cd crunchMake && $(MAKE) install
 
+test:
+	@$(MAKE) -C crunch test
+	@$(MAKE) -C crunch++ test
+
 check:
-	@cd crunch && $(MAKE) check
-	@cd crunch++ && $(MAKE) check
+	@$(MAKE) -C crunch check
+	@$(MAKE) -C crunch++ check
 
 clean:
 	@cd crunch && $(MAKE) clean
