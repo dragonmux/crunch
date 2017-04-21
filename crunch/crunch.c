@@ -254,12 +254,12 @@ int main(int argc, char **argv)
 	if (console == NULL)
 	{
 		printf("Error: could not grab console!");
-		exit(1);
+		return 1;
 	}
 	isTTY = isatty(fileno(stdout));
 #endif
 	runTests();
 	free(namedTests);
 	free((void *)cwd);
-	return 0;
+	return failures == 0 ? 0 : 1;
 }
