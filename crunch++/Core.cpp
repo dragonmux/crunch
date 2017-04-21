@@ -46,7 +46,7 @@ void testsuit::fail(const char *reason)
 	throw threadExit_t(1);
 }
 
-void testsuit::assertTrue(bool value)
+void testsuit::assertTrue(const bool value)
 {
 	if (!value)
 	{
@@ -55,7 +55,7 @@ void testsuit::assertTrue(bool value)
 	}
 }
 
-void testsuit::assertFalse(bool value)
+void testsuit::assertFalse(const bool value)
 {
 	if (value)
 	{
@@ -64,7 +64,7 @@ void testsuit::assertFalse(bool value)
 	}
 }
 
-void testsuit::assertEqual(int32_t result, int32_t expected)
+void testsuit::assertEqual(const int32_t result, const int32_t expected)
 {
 	if (result != expected)
 	{
@@ -73,7 +73,7 @@ void testsuit::assertEqual(int32_t result, int32_t expected)
 	}
 }
 
-void testsuit::assertNotEqual(int32_t result, int32_t expected)
+void testsuit::assertNotEqual(const int32_t result, const int32_t expected)
 {
 	if (result == expected)
 	{
@@ -82,7 +82,7 @@ void testsuit::assertNotEqual(int32_t result, int32_t expected)
 	}
 }
 
-void testsuit::assertEqual(int64_t result, int64_t expected)
+void testsuit::assertEqual(const int64_t result, const int64_t expected)
 {
 	if (result != expected)
 	{
@@ -91,7 +91,7 @@ void testsuit::assertEqual(int64_t result, int64_t expected)
 	}
 }
 
-void testsuit::assertNotEqual(int64_t result, int64_t expected)
+void testsuit::assertNotEqual(const int64_t result, const int64_t expected)
 {
 	if (result == expected)
 	{
@@ -123,7 +123,7 @@ inline bool delta(const double result, const double expected)
 	return (result >= (expected - doubleDelta) && result <= (expected + doubleDelta));
 }
 
-void testsuit::assertEqual(double result, double expected)
+void testsuit::assertEqual(const double result, const double expected)
 {
 	if (!delta(result, expected))
 	{
@@ -132,7 +132,7 @@ void testsuit::assertEqual(double result, double expected)
 	}
 }
 
-void testsuit::assertNotEqual(double result, double expected)
+void testsuit::assertNotEqual(const double result, const double expected)
 {
 	if (delta(result, expected))
 	{
@@ -141,7 +141,7 @@ void testsuit::assertNotEqual(double result, double expected)
 	}
 }
 
-void testsuit::assertEqual(const char *result, const char *expected)
+void testsuit::assertEqual(const char *const result, const char *const expected)
 {
 	if (strcmp(result, expected) != 0)
 	{
@@ -150,7 +150,7 @@ void testsuit::assertEqual(const char *result, const char *expected)
 	}
 }
 
-void testsuit::assertNotEqual(const char *result, const char *expected)
+void testsuit::assertNotEqual(const char *const result, const char *const expected)
 {
 	if (strcmp(result, expected) == 0)
 	{
@@ -195,7 +195,7 @@ void testsuit::assertNotNull(void *result)
 	}
 }
 
-void testsuit::assertNull(const void *result)
+void testsuit::assertNull(const void *const result)
 {
 	if (result != nullptr)
 	{
@@ -204,7 +204,7 @@ void testsuit::assertNull(const void *result)
 	}
 }
 
-void testsuit::assertNotNull(const void *result)
+void testsuit::assertNotNull(const void *const result)
 {
 	if (result == nullptr)
 	{
@@ -213,7 +213,7 @@ void testsuit::assertNotNull(const void *result)
 	}
 }
 
-void testsuit::assertGreaterThan(long result, long expected)
+void testsuit::assertGreaterThan(const long result, const long expected)
 {
 	if (result <= expected)
 	{
@@ -222,7 +222,7 @@ void testsuit::assertGreaterThan(long result, long expected)
 	}
 }
 
-void testsuit::assertLessThan(long result, long expected)
+void testsuit::assertLessThan(const long result, const long expected)
 {
 	if (result >= expected)
 	{

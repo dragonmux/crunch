@@ -96,32 +96,34 @@ protected:
 public:
 	void fail(const char *reason);
 
-	void assertTrue(bool value);
-	void assertFalse(bool value);
+	void assertTrue(const bool value);
+	void assertFalse(const bool value);
 
-	void assertEqual(int32_t result, int32_t expected);
-	void assertEqual(int64_t result, int64_t expected);
+	void assertEqual(const int32_t result, const int32_t expected);
+	void assertEqual(const int64_t result, const int64_t expected);
 	void assertEqual(void *result, void *expected);
 	void assertEqual(double result, double expected);
-	void assertEqual(const char *result, const char *expected);
-	void assertEqual(const void *result, const void *expected, const size_t expectedLength);
+	void assertEqual(const char *const result, const char *const expected);
+	void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
 
-	void assertNotEqual(int32_t result, int32_t expected);
-	void assertNotEqual(int64_t result, int64_t expected);
+	void assertNotEqual(const int32_t result, const int32_t expected);
+	void assertNotEqual(const int64_t result, const int64_t expected);
 	void assertNotEqual(void *result, void *expected);
 	void assertNotEqual(double result, double expected);
-	void assertNotEqual(const char *result, const char *expected);
-	void assertNotEqual(const void *result, const void *expected, const size_t expectedLength);
+	void assertNotEqual(const char *const result, const char *const expected);
+	void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
 
 	void assertNull(void *result);
 	void assertNotNull(void *result);
-	void assertNull(const void *result);
-	void assertNotNull(const void *result);
+	void assertNull(const void *const result);
+	void assertNotNull(const void *const result);
+	template<typename T> void assertNull(std::unique_ptr<T> &result) { assertNull(result.get()); }
+	template<typename T> void assertNotNull(std::unique_ptr<T> &result) { assertNotNull(result.get()); }
 	template<typename T> void assertNull(const std::unique_ptr<T> &result) { assertNull(result.get()); }
 	template<typename T> void assertNotNull(const std::unique_ptr<T> &result) { assertNotNull(result.get()); }
 
-	void assertGreaterThan(long result, long expected);
-	void assertLessThan(long result, long expected);
+	void assertGreaterThan(const long result, const long expected);
+	void assertLessThan(const long result, const long expected);
 
 	testsuit();
 
