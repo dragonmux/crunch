@@ -18,6 +18,10 @@ script:
   - make -C crunch++ test
   - make -C crunch check
   - make -C crunch++ check
+after_success:
+  - if [ "$COVERAGE" == "1" ]; then
+      bash <(curl -s https://codecov.io/bash) -x $GCOV;
+    fi
 
 matrix:
   include:
