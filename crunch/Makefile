@@ -28,7 +28,7 @@ else
 	EXTRA_LIBS =
 	SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -o $(SO) -Wl,-U,_args
 endif
-OUT_LFLAGS = $< $(shell pkg-config --libs crunch) -ldl $(EXTRA_LIBS) -o $@
+OUT_LFLAGS = $(OPTIM_FLAGS) $< $(shell pkg-config --libs crunch) -ldl $(EXTRA_LIBS) -o $@
 
 quiet_cmd_crunchMake = -n
 cmd_crunchMake = $(CRUNCHMAKE) $(2)

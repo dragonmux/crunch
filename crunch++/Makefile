@@ -27,7 +27,7 @@ else
 	EXTRA_FLAGS =
 	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -o $(SO) -Wl,-U,_args
 endif
-OUT_LFLAGS = $< $(LIBS) -pthread -ldl -lstdc++ -lm -o $@
+OUT_LFLAGS = $(OPTIM_FLAGS) $< $(LIBS) -pthread -ldl -lstdc++ -lm -o $@
 
 CRUNCHMAKE = crunchMake $(shell pkg-config --cflags --libs crunch++)
 ifeq ($(BUILD_VERBOSE), 0)

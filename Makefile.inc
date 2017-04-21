@@ -25,6 +25,9 @@ endif
 ifndef BUILD_VERBOSE
 	BUILD_VERBOSE = 0
 endif
+ifeq ($(strip $(COVERAGE)), 1)
+	DEBUG = 1
+endif
 
 MAKEFLAGS += -w
 
@@ -105,6 +108,9 @@ GCC ?= gcc
 GXX ?= g++
 ifeq ($(strip $(DEBUG)), 1)
 	OPTIM_FLAGS = -ggdb
+	ifeq ($(strip $(COVERAGE)), 1)
+		OPTIM_FLAGS += -O0 -g --coverage
+	endif
 	GCC_FLAGS = 
 else
 	GCC_VER = $(shell gcc -dumpversion | cut -d . -f 1)
@@ -135,5 +141,9 @@ CRUNCH = crunch
 CRUNCHpp = crunch++
 UID = $(shell id -u)
 PREFIX ?= /usr
+
+ifeq ($(strip $(COVERAGE)), 1)
+	CRUNCHMAKE += -lgcov
+endif
 
 export GCC GXX DEBUG UID PREFIX
