@@ -26,6 +26,7 @@
 #endif
 #include <memory>
 #include <random>
+#include <functional>
 
 using namespace std;
 
@@ -47,6 +48,15 @@ private:
 	default_random_engine rngGen;
 	unique_ptr<uniform_real_distribution<double>> rng;
 
+	void tryShouldFail(const std::function<void()> &tests)
+	{
+		try
+			{ tests(); }
+		catch (threadExit_t &)
+			{ return; }
+		fail("Expected threadExit_t exception not thrown");
+	}
+
 public:
 	crunchTests() : rng(new uniform_real_distribution<double>(-1.0, 1.0))
 	{
@@ -56,11 +66,13 @@ public:
 	void testAssertTrue()
 	{
 		assertTrue(true);
+		tryShouldFail([this]() { assertTrue(false); });
 	}
 
 	void testAssertFalse()
 	{
 		assertFalse(false);
+		tryShouldFail([this]() { assertFalse(true); });
 	}
 
 	void testAssertIntEqual()
