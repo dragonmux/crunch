@@ -87,8 +87,19 @@ CRUNCH_IMP template class CRUNCH_VIS std::vector<cxxTest>;
 CRUNCH_IMP template class CRUNCH_VIS std::allocator<cxxTest>;
 #endif
 
+namespace crunch
+{
+	template<typename T> struct isBoolean : std::false_type { };
+	template<> struct isBoolean<bool> : std::true_type { };
+
+	template<typename T> struct isNumeric : std::integral_constant<bool, std::is_integral<T>::value && !isBoolean<T>::value> { };
+}
+
 class CRUNCHpp_API testsuit
 {
+private:
+	template<typename T> using isNumeric = crunch::isNumeric<T>;
+
 protected:
 	std::vector<cxxTest> tests;
 
@@ -107,6 +118,8 @@ public:
 	void assertEqual(double result, double expected);
 	void assertEqual(const char *const result, const char *const expected);
 	void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
+	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
+		void assertEqual(const T a, const U b) { assertEqual(a, T(b)); }
 
 	void assertNotEqual(const int32_t result, const int32_t expected);
 	void assertNotEqual(const uint32_t result, const uint32_t expected);
@@ -116,6 +129,8 @@ public:
 	void assertNotEqual(double result, double expected);
 	void assertNotEqual(const char *const result, const char *const expected);
 	void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
+	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
+		void assertNotEqual(const T a, const U b) { assertNotEqual(a, T(b)); }
 
 	void assertNull(void *result);
 	void assertNotNull(void *result);
