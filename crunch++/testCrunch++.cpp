@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 #include <crunch++.h>
+#include "StringFuncs.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
@@ -191,6 +192,12 @@ public:
 		assertEqual(unlink("test.log"), 0);
 	}
 
+	void testBoolConv()
+	{
+		assertEqual(boolToString(true), "true");
+		assertEqual(boolToString(false), "false");
+	}
+
 	void registerTests()
 	{
 		CXX_TEST(testAssertTrue)
@@ -210,6 +217,7 @@ public:
 		CXX_TEST(testAssertGreaterThan)
 		CXX_TEST(testAssertLessThan)
 		CXX_TEST(testLogging)
+		CXX_TEST(testBoolConv)
 	}
 };
 

@@ -1,7 +1,7 @@
 # Makefile include for crunch. Set V to something other than 0 for more detailed build output.
 
 # This file is part of crunch
-# Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+# Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
 #
 # crunch is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
