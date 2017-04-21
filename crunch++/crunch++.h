@@ -20,7 +20,7 @@
 #define __CRUNCHpp_H__
 
 #include <stddef.h>
-#include <inttypes.h>
+#include <stdint.h>
 #include <thread>
 #include <vector>
 #include <type_traits>
@@ -100,14 +100,18 @@ public:
 	void assertFalse(const bool value);
 
 	void assertEqual(const int32_t result, const int32_t expected);
+	void assertEqual(const uint32_t result, const uint32_t expected);
 	void assertEqual(const int64_t result, const int64_t expected);
+	void assertEqual(const uint64_t result, const uint64_t expected);
 	void assertEqual(void *result, void *expected);
 	void assertEqual(double result, double expected);
 	void assertEqual(const char *const result, const char *const expected);
 	void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
 
 	void assertNotEqual(const int32_t result, const int32_t expected);
+	void assertNotEqual(const uint32_t result, const uint32_t expected);
 	void assertNotEqual(const int64_t result, const int64_t expected);
+	void assertNotEqual(const uint64_t result, const uint64_t expected);
 	void assertNotEqual(void *result, void *expected);
 	void assertNotEqual(double result, double expected);
 	void assertNotEqual(const char *const result, const char *const expected);

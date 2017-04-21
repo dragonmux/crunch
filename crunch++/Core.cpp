@@ -82,6 +82,24 @@ void testsuit::assertNotEqual(const int32_t result, const int32_t expected)
 	}
 }
 
+void testsuit::assertEqual(const uint32_t result, const uint32_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%u", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(const uint32_t result, const uint32_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%u", result);
+		throw threadExit_t(1);
+	}
+}
+
 void testsuit::assertEqual(const int64_t result, const int64_t expected)
 {
 	if (result != expected)
@@ -96,6 +114,24 @@ void testsuit::assertNotEqual(const int64_t result, const int64_t expected)
 	if (result == expected)
 	{
 		assertionError("%lld", result);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertEqual(const uint64_t result, const uint64_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%llu", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(const uint64_t result, const uint64_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%llu", result);
 		throw threadExit_t(1);
 	}
 }
