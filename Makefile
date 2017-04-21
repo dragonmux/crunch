@@ -24,9 +24,9 @@ all:
 	@$(MAKE) -C crunchMake
 
 install:
-	@cd crunch && $(MAKE) install
-	@cd crunch++ && $(MAKE) install
-	@cd crunchMake && $(MAKE) install
+	@$(MAKE) -C crunch install
+	@$(MAKE) -C crunch++ install
+	@$(MAKE) -C crunchMake install
 
 test:
 	@$(MAKE) -C crunch test
