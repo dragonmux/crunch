@@ -71,7 +71,7 @@ void printStats()
 	if (total == 0)
 		testPrintf("--\n");
 	else
-		testPrintf("%0.2f%%\n", ((double)passes) / ((double)total) * 100.0);
+		testPrintf("%0.2f%%\n", double(passes) / double(total) * 100.0);
 }
 
 bool getTests()
@@ -235,12 +235,12 @@ int main(int argc, char **argv)
 	if (console == nullptr)
 	{
 		printf("Error: could not grab console!");
-		exit(1);
+		return 1;
 	}
 	isTTY = isatty(fileno(stdout));
 #endif
 	runTests();
 	delete [] namedTests;
 	free((void *)cwd);
-	return 0;
+	return failures ? 1 : 0;
 }
