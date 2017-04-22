@@ -28,7 +28,8 @@
 typedef enum _resultType
 {
 	RESULT_FAILURE,
-	RESULT_SUCCESS
+	RESULT_SUCCESS,
+	RESULT_ABORT
 } resultType;
 
 CRUNCH_API uint8_t isTTY;
