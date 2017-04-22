@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include "Core.h"
+#include "Logger.h"
 
 typedef void (*failFn_t)();
 
@@ -170,6 +171,8 @@ void testAssertGreaterThan()
 		value = (long)genPtr();
 	while (ptr == NULL);
 	assertGreaterThan(value, 0);
+	tryShouldFail(testAssertGreaterThan1);
+	tryShouldFail(testAssertGreaterThan2);
 }
 
 void testAssertLessThan1() { assertLessThan(value, value); }
