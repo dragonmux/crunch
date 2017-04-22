@@ -187,7 +187,7 @@ void assertNotNull(void *result)
 	}
 }
 
-void assertConstNull(const void *result)
+void assertConstNull(const void *const result)
 {
 	if (result != NULL)
 	{
@@ -196,7 +196,7 @@ void assertConstNull(const void *result)
 	}
 }
 
-void assertConstNotNull(const void *result)
+void assertConstNotNull(const void *const result)
 {
 	if (result == NULL)
 	{

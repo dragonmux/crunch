@@ -130,8 +130,8 @@ CRUNCH_API void assertMemNotEqual(const void *result, const void *expected, cons
 
 CRUNCH_API void assertNull(void *result);
 CRUNCH_API void assertNotNull(void *result);
-CRUNCH_API void assertConstNull(const void *result);
-CRUNCH_API void assertConstNotNull(const void *result);
+CRUNCH_API void assertConstNull(const void *const result);
+CRUNCH_API void assertConstNotNull(const void *const result);
 
 CRUNCH_API void assertGreaterThan(long result, long expected);
 CRUNCH_API void assertLessThan(long result, long expected);

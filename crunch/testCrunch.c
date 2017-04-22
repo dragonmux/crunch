@@ -198,6 +198,7 @@ void testAssertMemNotEqual()
 }
 
 void testAssertNull1() { assertNull(ptr); }
+void testAssertNull2() { assertConstNull(ptr); }
 void testAssertNull()
 {
 	srand(time(NULL));
@@ -205,10 +206,13 @@ void testAssertNull()
 		ptr = genPtr();
 	while (ptr == NULL);
 	assertNull(NULL);
+	assertConstNull(NULL);
 	tryShouldFail(testAssertNull1);
+	tryShouldFail(testAssertNull2);
 }
 
 void testAssertNotNull1() { assertNotNull(NULL); }
+void testAssertNotNull2() { assertConstNotNull(NULL); }
 void testAssertNotNull()
 {
 	void *ptr;
@@ -217,7 +221,9 @@ void testAssertNotNull()
 		ptr = genPtr();
 	while (ptr == NULL);
 	assertNotNull(ptr);
+	assertConstNotNull(ptr);
 	tryShouldFail(testAssertNotNull1);
+	tryShouldFail(testAssertNotNull2);
 }
 
 void testAssertGreaterThan1() { assertGreaterThan(value, value); }
