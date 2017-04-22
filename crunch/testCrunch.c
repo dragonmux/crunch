@@ -78,12 +78,16 @@ void testAssertFalse()
 }
 
 void testAssertIntEqual1() { assertIntEqual(0, 1); }
+void testAssertIntEqual2() { assertInt64Equal(0, 1); }
 void testAssertIntEqual()
 {
-	int num;
 	srand(time(NULL));
-	num = rand();
-	assertIntEqual(num, num);
+	num32 = rand();
+	assertIntEqual(num32, num32);
+	num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
+	assertIntEqual(num64, num64);
+	tryShouldFail(testAssertIntEqual1);
+	tryShouldFail(testAssertIntEqual2);
 }
 
 void testAssertIntNotEqual1() { assertIntNotEqual(0, 0); }
