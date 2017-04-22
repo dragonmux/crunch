@@ -27,10 +27,12 @@ typedef void (*failFn_t)();
 
 void *ptr;
 long value;
-int32_t snum32;
+/*int32_t snum32;
 int64_t snum64;
 uint32_t unum32;
-uint64_t unum64;
+uint64_t unum64;*/
+int32_t num32;
+int64_t num64;
 
 void *genPtr()
 {
@@ -85,22 +87,27 @@ void testAssertIntEqual()
 }
 
 void testAssertIntNotEqual1() { assertIntNotEqual(0, 0); }
+void testAssertIntNotEqual2() { assertIntNotEqual(num32, num32); }
 void testAssertIntNotEqual()
 {
-	int num;
 	srand(time(NULL));
 	do
-		num = rand();
-	while (num == 0);
-	assertIntNotEqual(num, 0);
+		num32 = rand();
+	while (num32 == 0);
+	assertIntNotEqual(num32, 0);
+	tryShouldFail(testAssertIntNotEqual1);
+	tryShouldFail(testAssertIntNotEqual2);
 }
 
+void testAssertPtrEqual1() { assertPtrEqual(ptr, NULL); }
 void testAssertPtrEqual()
 {
-	void *ptr;
 	srand(time(NULL));
 	ptr = genPtr();
 	assertPtrEqual(ptr, ptr);
+	while (ptr == NULL)
+		ptr = genPtr();
+	tryShouldFail(testAssertPtrEqual1);
 }
 
 void testAssertPtrNotEqual1() { assertPtrNotEqual(ptr, ptr); }
@@ -116,10 +123,15 @@ void testAssertPtrNotEqual()
 	tryShouldFail(testAssertPtrNotEqual2);
 }
 
-//void testAssertNull1() { assertNull(); }
+void testAssertNull1() { assertNull(ptr); }
 void testAssertNull()
 {
+	srand(time(NULL));
+	do
+		ptr = genPtr();
+	while (ptr == NULL);
 	assertNull(NULL);
+	tryShouldFail(testAssertNull1);
 }
 
 void testAssertNotNull1() { assertNotNull(NULL); }
