@@ -99,10 +99,40 @@ public:
 		srand(time(nullptr));
 		do
 			num32 = rand();
-		while (num32 == 0);
+		while (!num32);
 		do
 			num64 = (int64_t(rand()) << 32) | int64_t(rand());
-		while (num64 == 0);
+		while (!num64);
+		assertNotEqual(num32, 0);
+		assertNotEqual(num64, 0);
+		tryShouldFail([=]() { assertNotEqual(num32, num32); });
+		tryShouldFail([=]() { assertNotEqual(num64, num64); });
+	}
+
+	void testAssertUintEqual()
+	{
+		uint32_t num32;
+		uint64_t num64;
+		srand(time(nullptr));
+		num32 = rand();
+		assertEqual(num32, num32);
+		num64 = (uint64_t(rand()) << 32) | uint64_t(rand());
+		assertEqual(num64, num64);
+		tryShouldFail([this]() { assertEqual(uint32_t(0), uint32_t(1)); });
+		tryShouldFail([this]() { assertEqual(uint64_t(0), uint64_t(1)); });
+	}
+
+	void testAssertUintNotEqual()
+	{
+		uint32_t num32;
+		uint64_t num64;
+		srand(time(nullptr));
+		do
+			num32 = rand();
+		while (!num32);
+		do
+			num64 = (uint64_t(rand()) << 32) | uint64_t(rand());
+		while (!num64);
 		assertNotEqual(num32, 0);
 		assertNotEqual(num64, 0);
 		tryShouldFail([=]() { assertNotEqual(num32, num32); });
@@ -243,6 +273,8 @@ public:
 		CXX_TEST(testAssertFalse)
 		CXX_TEST(testAssertIntEqual)
 		CXX_TEST(testAssertIntNotEqual)
+		CXX_TEST(testAssertUintEqual)
+		CXX_TEST(testAssertUintNotEqual)
 		CXX_TEST(testAssertDoubleEqual)
 		CXX_TEST(testAssertDoubleNotEqual)
 		CXX_TEST(testAssertPtrEqual)
