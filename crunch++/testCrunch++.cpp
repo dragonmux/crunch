@@ -88,6 +88,8 @@ public:
 		assertEqual(num32, num32);
 		num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		assertEqual(num64, num64);
+		tryShouldFail([this]() { assertEqual(int32_t(0), int32_t(1)); });
+		tryShouldFail([this]() { assertEqual(int64_t(0), int64_t(1)); });
 	}
 
 	void testAssertIntNotEqual()
@@ -102,7 +104,9 @@ public:
 			num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		while (num64 == 0);
 		assertNotEqual(num32, 0);
-		assertNotEqual(num64, 0LL);
+		assertNotEqual(num64, 0);
+		tryShouldFail([=]() { assertNotEqual(num32, num32); });
+		tryShouldFail([=]() { assertNotEqual(num64, num64); });
 	}
 
 	void testAssertDoubleEqual()
@@ -116,6 +120,8 @@ public:
 		double numA = (*rng)(rngGen);
 		double numB = (*rng)(rngGen);
 		assertNotEqual(numA, numB);
+		tryShouldFail([=]() { assertNotEqual(numA, numA); });
+		tryShouldFail([=]() { assertNotEqual(numB, numB); });
 	}
 
 	void testAssertPtrEqual()
