@@ -89,8 +89,12 @@ public:
 		assertEqual(num32, num32);
 		num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		assertEqual(num64, num64);
-		tryShouldFail([this]() { assertEqual(int32_t(0), int32_t(1)); });
-		tryShouldFail([this]() { assertEqual(int64_t(0), int64_t(1)); });
+		while (!num32)
+			num32 = rand();
+		tryShouldFail([this]() { assertEqual(int32_t(0), num32); });
+		while (!num32)
+			num64 = (int64_t(rand()) << 32) | int64_t(rand());
+		tryShouldFail([this]() { assertEqual(int64_t(0), num64); });
 	}
 
 	void testAssertIntNotEqual()
@@ -107,7 +111,9 @@ public:
 		assertNotEqual(num32, 0);
 		assertNotEqual(num64, 0);
 		tryShouldFail([=]() { assertNotEqual(num32, num32); });
+		tryShouldFail([=]() { assertNotEqual(int32_t(0), int32_t(0)); });
 		tryShouldFail([=]() { assertNotEqual(num64, num64); });
+		tryShouldFail([=]() { assertNotEqual(int64_t(0), int64_t(0)); });
 	}
 
 	void testAssertUintEqual()
