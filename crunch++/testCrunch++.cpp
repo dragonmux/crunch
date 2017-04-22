@@ -113,6 +113,7 @@ public:
 	{
 		double num = (*rng)(rngGen);
 		assertEqual(num, num);
+		tryShouldFail([=]() { assertEqual(0.0, 0.1); });
 	}
 
 	void testAssertDoubleNotEqual()
@@ -130,6 +131,7 @@ public:
 		srand(time(nullptr));
 		ptr = genPtr();
 		assertEqual(ptr, ptr);
+		//tryShouldFail([=]() { assertEqual(nullptr, ((char *)nullptr) + 1); });
 	}
 
 	void testAssertPtrNotEqual()
@@ -139,35 +141,44 @@ public:
 		do
 			ptr = genPtr();
 		while (ptr == nullptr);
-		assertNotEqual(ptr, 0);
+		assertNotEqual(ptr, nullptr);
+		tryShouldFail([=]() { assertNotEqual(ptr, ptr); });
 	}
 
 	void testAssertStrEqual()
 	{
 		assertEqual(testStr1, testStr1);
 		assertEqual(testStr2, testStr2);
+		tryShouldFail([=]() { assertEqual(testStr1, testStr2); });
 	}
 
 	void testAssertStrNotEqual()
 	{
 		assertNotEqual(testStr1, testStr2);
+		tryShouldFail([=]() { assertNotEqual(testStr1, testStr1); });
+		tryShouldFail([=]() { assertNotEqual(testStr2, testStr2); });
 	}
 
 	void testAssertMemEqual()
 	{
 		assertEqual(testStr1, testStr1, 27);
 		assertEqual(testStr2, testStr2, 27);
+		tryShouldFail([=]() { assertEqual(testStr1, testStr2, 27); });
 	}
 
 	void testAssertMemNotEqual()
 	{
 		assertNotEqual(testStr1, testStr2, 27);
+		tryShouldFail([=]() { assertNotEqual(testStr1, testStr1, 27); });
+		tryShouldFail([=]() { assertNotEqual(testStr2, testStr2, 27); });
 	}
 
 	void testAssertNull()
 	{
 		assertNull((void *)nullptr);
 		assertNull((const void *)nullptr);
+		tryShouldFail([=]() { assertNull(testStr1); });
+		tryShouldFail([=]() { assertNull(testStr2); });
 	}
 
 	void testAssertNotNull()
@@ -179,6 +190,8 @@ public:
 		while (ptr == nullptr);
 		assertNotNull(ptr);
 		assertNotNull((const void *)ptr);
+		tryShouldFail([=]() { assertNotNull(static_cast<void *>(nullptr)); });
+		tryShouldFail([=]() { assertNotNull(static_cast<const void *const>(nullptr)); });
 	}
 
 	void testAssertGreaterThan()
