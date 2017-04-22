@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
+#include "Core.h"
 
 typedef void (*failFn_t)();
 
@@ -50,6 +51,7 @@ void tryShouldFail(const failFn_t test)
 	pthread_join(testThread, (void **)&retVal);
 	assertNotNull(retVal);
 	assertIntEqual(*retVal, 1);
+	--failures;
 }
 
 void testAssertTrue1() { assertTrue(FALSE); }
