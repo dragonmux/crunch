@@ -267,6 +267,11 @@ public:
 		assertEqual(boolToString(false), "false");
 	}
 
+	void testFail()
+	{
+		tryShouldFail([=]() { fail("This is only a test"); });
+	}
+
 	void registerTests()
 	{
 		CXX_TEST(testAssertTrue)
@@ -289,6 +294,7 @@ public:
 		CXX_TEST(testAssertLessThan)
 		CXX_TEST(testLogging)
 		CXX_TEST(testBoolConv)
+		CXX_TEST(testFail)
 	}
 };
 
