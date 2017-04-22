@@ -161,7 +161,9 @@ public:
 		srand(time(nullptr));
 		ptr = genPtr();
 		assertEqual(ptr, ptr);
-		//tryShouldFail([=]() { assertEqual(nullptr, ((char *)nullptr) + 1); });
+		while (!ptr)
+			ptr = genPtr();
+		tryShouldFail([=]() { assertEqual(static_cast<void *>(nullptr), ptr); });
 	}
 
 	void testAssertPtrNotEqual()
