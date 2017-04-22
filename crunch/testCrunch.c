@@ -25,6 +25,13 @@
 
 typedef void (*failFn_t)();
 
+void *ptr;
+long value;
+int32_t snum32;
+int64_t snum64;
+uint32_t unum32;
+uint64_t unum64;
+
 void *genPtr()
 {
 #if defined(_M_X64) || defined(__X86_64__)
@@ -96,16 +103,17 @@ void testAssertPtrEqual()
 	assertPtrEqual(ptr, ptr);
 }
 
+void testAssertPtrNotEqual1() { assertPtrNotEqual(ptr, ptr); }
+void testAssertPtrNotEqual2() { assertPtrNotEqual(NULL, NULL); }
 void testAssertPtrNotEqual()
 {
-	void *ptr;
 	srand(time(NULL));
 	do
-	{
 		ptr = genPtr();
-	}
 	while (ptr == NULL);
-	assertPtrNotEqual(ptr, 0);
+	assertPtrNotEqual(ptr, NULL);
+	tryShouldFail(testAssertPtrNotEqual1);
+	tryShouldFail(testAssertPtrNotEqual2);
 }
 
 //void testAssertNull1() { assertNull(); }
@@ -126,28 +134,28 @@ void testAssertNotNull()
 	tryShouldFail(testAssertNotNull1);
 }
 
+void testAssertGreaterThan1() { assertGreaterThan(value, value); }
+void testAssertGreaterThan2() { assertGreaterThan(0, value); }
 void testAssertGreaterThan()
 {
-	void *ptr;
 	srand(time(NULL));
 	do
-	{
-		ptr = genPtr();
-	}
+		value = (long)genPtr();
 	while (ptr == NULL);
-	assertGreaterThan((long)ptr, 0);
+	assertGreaterThan(value, 0);
 }
 
+void testAssertLessThan1() { assertLessThan(value, value); }
+void testAssertLessThan2() { assertLessThan(value, 0); }
 void testAssertLessThan()
 {
-	void *ptr;
 	srand(time(NULL));
 	do
-	{
-		ptr = genPtr();
-	}
+		value = (long)genPtr();
 	while (ptr == NULL);
-	assertLessThan(0, (long)ptr);
+	assertLessThan(0, value);
+	tryShouldFail(testAssertLessThan1);
+	tryShouldFail(testAssertLessThan2);
 }
 
 void testLogging()
