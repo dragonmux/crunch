@@ -28,6 +28,7 @@
 #include <functional>
 #include "Core.h"
 #include "StringFuncs.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -258,6 +259,8 @@ public:
 		assertGreaterThan(printf("Print to console test\n"), 0);
 		logFile = startLogging("test.log");
 		assertNotNull(logFile);
+		// Checks that trying to begin logging while already logging causes the framework to ignore the second request
+		assertNull(startLogging("test.log"));
 		assertGreaterThan(printf("Print to file test\n"), 0);
 		stopLogging(logFile);
 		assertEqual(unlink("test.log"), 0);
@@ -272,6 +275,13 @@ public:
 	void testFail()
 	{
 		tryShouldFail([=]() { fail("This is only a test"); });
+		// This next line tests that the rest of the test is skipped but intentionally makes it so the runner sees success.
+		throw threadExit_t(0);
+	}
+
+	void testAbort()
+	{
+		logResult(RESULT_ABORT, "This message is only a test");
 	}
 
 	void registerTests()
@@ -297,6 +307,7 @@ public:
 		CXX_TEST(testLogging)
 		CXX_TEST(testBoolConv)
 		CXX_TEST(testFail)
+		CXX_TEST(testAbort)
 	}
 };
 
