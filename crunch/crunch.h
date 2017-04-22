@@ -110,15 +110,19 @@ CRUNCH_API void fail(const char *reason);
 CRUNCH_API void assertTrue(uint8_t value);
 CRUNCH_API void assertFalse(uint8_t value);
 
-CRUNCH_API void assertIntEqual(int result, int expected);
+CRUNCH_API void assertIntEqual(int32_t result, int32_t expected);
+CRUNCH_API void assertUintEqual(uint32_t result, uint32_t expected);
 CRUNCH_API void assertInt64Equal(int64_t result, int64_t expected);
+CRUNCH_API void assertUint64Equal(uint64_t result, uint64_t expected);
 CRUNCH_API void assertPtrEqual(void *result, void *expected);
 CRUNCH_API void assertDoubleEqual(double result, double expected);
 CRUNCH_API void assertStringEqual(const char *result, const char *expected);
 CRUNCH_API void assertMemEqual(const void *result, const void *expected, const size_t expectedLength);
 
-CRUNCH_API void assertIntNotEqual(int result, int expected);
+CRUNCH_API void assertIntNotEqual(int32_t result, int32_t expected);
+CRUNCH_API void assertUintNotEqual(uint32_t result, uint32_t expected);
 CRUNCH_API void assertInt64NotEqual(int64_t result, int64_t expected);
+CRUNCH_API void assertUint64NotEqual(uint64_t result, uint64_t expected);
 CRUNCH_API void assertPtrNotEqual(void *result, void *expected);
 CRUNCH_API void assertDoubleNotEqual(double result, double expected);
 CRUNCH_API void assertStringNotEqual(const char *result, const char *expected);
