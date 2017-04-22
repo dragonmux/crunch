@@ -34,6 +34,8 @@ uint32_t unum32;
 uint64_t unum64;*/
 int32_t num32;
 int64_t num64;
+const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
+const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 void *genPtr()
 {
@@ -131,7 +133,7 @@ void testAssertDoubleNotEqual()
 {
 	//double numA = (*rng)(rngGen);
 	//double numB = (*rng)(rngGen);
-	//assertNotEqual(numA, numB);
+	//assertDoubleNotEqual(numA, numB);
 	tryShouldFail(testAssertDoubleNotEqual1);
 	//tryShouldFail(testAssertDoubleNotEqual2);
 	//tryShouldFail(testAssertDoubleNotEqual3);
@@ -159,6 +161,40 @@ void testAssertPtrNotEqual()
 	assertPtrNotEqual(ptr, NULL);
 	tryShouldFail(testAssertPtrNotEqual1);
 	tryShouldFail(testAssertPtrNotEqual2);
+}
+
+void testAssertStrEqual1() { assertStringEqual(testStr1, testStr2); }
+void testAssertStrEqual()
+{
+	assertStringEqual(testStr1, testStr1);
+	assertStringEqual(testStr2, testStr2);
+	tryShouldFail(testAssertStrEqual1);
+}
+
+void testAssertStrNotEqual1() { assertStringNotEqual(testStr1, testStr1); }
+void testAssertStrNotEqual2() { assertStringNotEqual(testStr2, testStr2); }
+void testAssertStrNotEqual()
+{
+	assertStringNotEqual(testStr1, testStr2);
+	tryShouldFail(testAssertStrNotEqual1);
+	tryShouldFail(testAssertStrNotEqual2);
+}
+
+void testAssertMemEqual1() { assertMemEqual(testStr1, testStr2, 27); }
+void testAssertMemEqual()
+{
+	assertMemEqual(testStr1, testStr1, 27);
+	assertMemEqual(testStr2, testStr2, 27);
+	tryShouldFail(testAssertMemEqual1);
+}
+
+void testAssertMemNotEqual1() { assertMemNotEqual(testStr1, testStr1, 27); }
+void testAssertMemNotEqual2() { assertMemNotEqual(testStr2, testStr2, 27); }
+void testAssertMemNotEqual()
+{
+	assertMemNotEqual(testStr1, testStr2, 27);
+	tryShouldFail(testAssertMemNotEqual1);
+	tryShouldFail(testAssertMemNotEqual2);
 }
 
 void testAssertNull1() { assertNull(ptr); }
@@ -241,6 +277,10 @@ BEGIN_REGISTER_TESTS()
 	TEST(testAssertDoubleNotEqual)
 	TEST(testAssertPtrEqual)
 	TEST(testAssertPtrNotEqual)
+	TEST(testAssertStrEqual)
+	TEST(testAssertStrNotEqual)
+	TEST(testAssertMemEqual)
+	TEST(testAssertMemNotEqual)
 	TEST(testAssertNull)
 	TEST(testAssertNotNull)
 	TEST(testAssertGreaterThan)
