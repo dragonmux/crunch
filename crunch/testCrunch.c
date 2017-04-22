@@ -115,6 +115,28 @@ void testAssertIntNotEqual()
 	tryShouldFail(testAssertIntNotEqual4);
 }
 
+void testAssertDoubleEqual1() { assertDoubleEqual(0.0, 0.1); }
+void testAssertDoubleEqual()
+{
+	//double num = (*rng)(rngGen);
+	assertDoubleEqual(0.0, 0.0);
+	//assertDoubleEqual(num, num);
+	tryShouldFail(testAssertDoubleEqual1);
+}
+
+void testAssertDoubleNotEqual1() { assertDoubleNotEqual(0.0, 0.0); }
+//void testAssertDoubleNotEqual2() { assertDoubleNotEqual(numA, numA); }
+//void testAssertDoubleNotEqual3() { assertDoubleNotEqual(numB, numB); }
+void testAssertDoubleNotEqual()
+{
+	//double numA = (*rng)(rngGen);
+	//double numB = (*rng)(rngGen);
+	//assertNotEqual(numA, numB);
+	tryShouldFail(testAssertDoubleNotEqual1);
+	//tryShouldFail(testAssertDoubleNotEqual2);
+	//tryShouldFail(testAssertDoubleNotEqual3);
+}
+
 void testAssertPtrEqual1() { assertPtrEqual(ptr, NULL); }
 void testAssertPtrEqual()
 {
@@ -215,6 +237,8 @@ BEGIN_REGISTER_TESTS()
 	TEST(testAssertFalse)
 	TEST(testAssertIntEqual)
 	TEST(testAssertIntNotEqual)
+	TEST(testAssertDoubleEqual)
+	TEST(testAssertDoubleNotEqual)
 	TEST(testAssertPtrEqual)
 	TEST(testAssertPtrNotEqual)
 	TEST(testAssertNull)
