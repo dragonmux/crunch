@@ -77,8 +77,8 @@ void testAssertFalse()
 	tryShouldFail(testAssertFalse1);
 }
 
-void testAssertIntEqual1() { assertIntEqual(0, 1); }
-void testAssertIntEqual2() { assertInt64Equal(0, 1); }
+void testAssertIntEqual1() { assertIntEqual(0, num32); }
+void testAssertIntEqual2() { assertInt64Equal(0, num64); }
 void testAssertIntEqual()
 {
 	srand(time(NULL));
@@ -86,7 +86,11 @@ void testAssertIntEqual()
 	assertIntEqual(num32, num32);
 	num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
 	assertIntEqual(num64, num64);
+	while (num32 == 0)
+		num32 = rand();
 	tryShouldFail(testAssertIntEqual1);
+	while (num64 == 0)
+		num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
 	tryShouldFail(testAssertIntEqual2);
 }
 
