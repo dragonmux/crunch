@@ -44,8 +44,8 @@ private:
 #endif
 	}
 
-	const char *testStr1 = "abcdefghijklmnopqrstuvwxyz";
-	const char *testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
+	const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	default_random_engine rngGen;
 	unique_ptr<uniform_real_distribution<double>> rng;
