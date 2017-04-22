@@ -263,6 +263,8 @@ void testLogging()
 	assertGreaterThan(printf("Print to console test\n"), 0);
 	logFile = startLogging("test.log");
 	assertNotNull(logFile);
+	// Assert that double-logging is not allowed
+	assertNull(startLogging("test.log"));
 	assertGreaterThan(printf("Print to file test\n"), 0);
 	stopLogging(logFile);
 	assertIntEqual(unlink("test.log"), 0);
