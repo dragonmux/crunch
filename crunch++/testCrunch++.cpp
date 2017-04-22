@@ -91,10 +91,10 @@ public:
 		assertEqual(num64, num64);
 		while (!num32)
 			num32 = rand();
-		tryShouldFail([this]() { assertEqual(int32_t(0), num32); });
+		tryShouldFail([=]() { assertEqual(int32_t(0), num32); });
 		while (!num32)
 			num64 = (int64_t(rand()) << 32) | int64_t(rand());
-		tryShouldFail([this]() { assertEqual(int64_t(0), num64); });
+		tryShouldFail([=]() { assertEqual(int64_t(0), num64); });
 	}
 
 	void testAssertIntNotEqual()
