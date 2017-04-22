@@ -61,9 +61,14 @@ void tryShouldFail(const failFn_t test)
 	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);
 	pthread_create(&testThread, &threadAttrs, goatThread, test);
 	pthread_join(testThread, (void **)&retVal);
-	assertNotNull(retVal);
-	assertIntEqual(*retVal, 1);
-	--failures;
+	if (retVal == &errAbort)
+		assertIntEqual(*retVal, 2);
+	else
+	{
+		assertNotNull(retVal);
+		assertIntEqual(*retVal, 1);
+		--failures;
+	}
 }
 
 void testAssertTrue1() { assertTrue(FALSE); }
@@ -269,10 +274,11 @@ void testFail()
 	tryShouldFail(testFail1);
 }
 
-/*void testAbort()
+void testAbort1() { logResult(RESULT_ABORT, "This message is only a test"); }
+void testAbort()
 {
-	logResult(RESULT_ABORT, "This message is only a test");
-}*/
+	tryShouldFail(testAbort1);
+}
 
 BEGIN_REGISTER_TESTS()
 	TEST(testAssertTrue)
@@ -293,5 +299,5 @@ BEGIN_REGISTER_TESTS()
 	TEST(testAssertLessThan)
 	TEST(testLogging)
 	TEST(testFail)
-	//TEST(testAbort)
+	TEST(testAbort)
 END_REGISTER_TESTS()

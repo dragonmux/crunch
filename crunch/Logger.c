@@ -123,7 +123,7 @@ void echoAborted()
 		testPrintf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
 		printAborted();
-	libDebugExit(0);
+	pthreadExit(&errAbort);
 }
 #else
 void echoOk()
