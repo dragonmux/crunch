@@ -90,17 +90,24 @@ void testAssertIntEqual()
 	tryShouldFail(testAssertIntEqual2);
 }
 
-void testAssertIntNotEqual1() { assertIntNotEqual(0, 0); }
-void testAssertIntNotEqual2() { assertIntNotEqual(num32, num32); }
+void testAssertIntNotEqual1() { assertIntNotEqual(num32, num32); }
+void testAssertIntNotEqual2() { assertIntNotEqual(0, 0); }
+void testAssertIntNotEqual3() { assertInt64NotEqual(num64, num64); }
+void testAssertIntNotEqual4() { assertInt64NotEqual(0, 0); }
 void testAssertIntNotEqual()
 {
 	srand(time(NULL));
 	do
 		num32 = rand();
 	while (num32 == 0);
+	do
+		num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
+	while (num64 == 0);
 	assertIntNotEqual(num32, 0);
 	tryShouldFail(testAssertIntNotEqual1);
 	tryShouldFail(testAssertIntNotEqual2);
+	tryShouldFail(testAssertIntNotEqual3);
+	tryShouldFail(testAssertIntNotEqual4);
 }
 
 void testAssertPtrEqual1() { assertPtrEqual(ptr, NULL); }
