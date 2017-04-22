@@ -68,6 +68,7 @@ void testAssertFalse()
 	tryShouldFail(testAssertFalse1);
 }
 
+void testAssertIntEqual1() { assertIntEqual(0, 1); }
 void testAssertIntEqual()
 {
 	int num;
@@ -76,14 +77,13 @@ void testAssertIntEqual()
 	assertIntEqual(num, num);
 }
 
+void testAssertIntNotEqual1() { assertIntNotEqual(0, 0); }
 void testAssertIntNotEqual()
 {
 	int num;
 	srand(time(NULL));
 	do
-	{
 		num = rand();
-	}
 	while (num == 0);
 	assertIntNotEqual(num, 0);
 }
@@ -108,21 +108,22 @@ void testAssertPtrNotEqual()
 	assertPtrNotEqual(ptr, 0);
 }
 
+//void testAssertNull1() { assertNull(); }
 void testAssertNull()
 {
 	assertNull(NULL);
 }
 
+void testAssertNotNull1() { assertNotNull(NULL); }
 void testAssertNotNull()
 {
 	void *ptr;
 	srand(time(NULL));
 	do
-	{
 		ptr = genPtr();
-	}
 	while (ptr == NULL);
 	assertNotNull(ptr);
+	tryShouldFail(testAssertNotNull1);
 }
 
 void testAssertGreaterThan()
@@ -160,6 +161,17 @@ void testLogging()
 	assertIntEqual(unlink("test.log"), 0);
 }
 
+void testFail1() { fail("This is only a test"); }
+void testFail()
+{
+	tryShouldFail(testFail1);
+}
+
+/*void testAbort()
+{
+	logResult(RESULT_ABORT, "This message is only a test");
+}*/
+
 BEGIN_REGISTER_TESTS()
 	TEST(testAssertTrue)
 	TEST(testAssertFalse)
@@ -172,4 +184,6 @@ BEGIN_REGISTER_TESTS()
 	TEST(testAssertGreaterThan)
 	TEST(testAssertLessThan)
 	TEST(testLogging)
+	TEST(testFail)
+	//TEST(testAbort)
 END_REGISTER_TESTS()
