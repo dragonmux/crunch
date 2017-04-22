@@ -175,10 +175,12 @@ public:
 
 	void testAssertNull()
 	{
-		assertNull((void *)nullptr);
-		assertNull((const void *)nullptr);
-		tryShouldFail([=]() { assertNull(testStr1); });
-		tryShouldFail([=]() { assertNull(testStr2); });
+		assertNull(static_cast<void *>(nullptr));
+		assertNull(static_cast<const void *>(nullptr));
+		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr1)); });
+		tryShouldFail([=]() { assertNull(const_cast<const char *const>(testStr1)); });
+		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr2)); });
+		tryShouldFail([=]() { assertNull(const_cast<const char *const>(testStr2)); });
 	}
 
 	void testAssertNotNull()
