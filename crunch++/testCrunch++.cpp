@@ -196,24 +196,26 @@ public:
 
 	void testAssertGreaterThan()
 	{
-		void *ptr;
+		long value;
 		srand(time(nullptr));
 		do
-			ptr = genPtr();
-		while (ptr == nullptr);
-		assertGreaterThan((long)ptr, 0);
+			value = long(genPtr());
+		while (!value);
+		assertGreaterThan(value, 0);
+		tryShouldFail([=]() { assertGreaterThan(value, value); });
+		tryShouldFail([=]() { assertGreaterThan(0, value); });
 	}
 
 	void testAssertLessThan()
 	{
-		void *ptr;
+		long value;
 		srand(time(nullptr));
 		do
-		{
-			ptr = genPtr();
-		}
-		while (ptr == nullptr);
-		assertLessThan(0, (long)ptr);
+			value = long(genPtr());
+		while (!value);
+		assertLessThan(0, value);
+		tryShouldFail([=]() { assertLessThan(value, value); });
+		tryShouldFail([=]() { assertLessThan(value, 0); });
 	}
 
 	void testLogging()
