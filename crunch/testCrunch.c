@@ -34,6 +34,7 @@ uint32_t unum32;
 uint64_t unum64;*/
 int32_t num32;
 int64_t num64;
+double dblA, dblB;
 const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
 const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -44,6 +45,11 @@ void *genPtr()
 #else
 	return (void *)(long)rand();
 #endif
+}
+
+double genDbl()
+{
+	return ((double)rand()) / ((double)RAND_MAX);
 }
 
 /* Internal sacrificial thread for testing when assertions fail. */
@@ -125,23 +131,25 @@ void testAssertIntNotEqual()
 void testAssertDoubleEqual1() { assertDoubleEqual(0.0, 0.1); }
 void testAssertDoubleEqual()
 {
-	//double num = (*rng)(rngGen);
+	srand(time(NULL));
+	double num = genDbl();
 	assertDoubleEqual(0.0, 0.0);
-	//assertDoubleEqual(num, num);
+	assertDoubleEqual(num, num);
 	tryShouldFail(testAssertDoubleEqual1);
 }
 
 void testAssertDoubleNotEqual1() { assertDoubleNotEqual(0.0, 0.0); }
-//void testAssertDoubleNotEqual2() { assertDoubleNotEqual(numA, numA); }
-//void testAssertDoubleNotEqual3() { assertDoubleNotEqual(numB, numB); }
+void testAssertDoubleNotEqual2() { assertDoubleNotEqual(dblA, dblA); }
+void testAssertDoubleNotEqual3() { assertDoubleNotEqual(dblB, dblB); }
 void testAssertDoubleNotEqual()
 {
-	//double numA = (*rng)(rngGen);
-	//double numB = (*rng)(rngGen);
-	//assertDoubleNotEqual(numA, numB);
+	srand(time(NULL));
+	dblA = genDbl();
+	dblB = genDbl();
+	assertDoubleNotEqual(dblA, dblB);
 	tryShouldFail(testAssertDoubleNotEqual1);
-	//tryShouldFail(testAssertDoubleNotEqual2);
-	//tryShouldFail(testAssertDoubleNotEqual3);
+	tryShouldFail(testAssertDoubleNotEqual2);
+	tryShouldFail(testAssertDoubleNotEqual3);
 }
 
 void testAssertPtrEqual1() { assertPtrEqual(ptr, NULL); }
