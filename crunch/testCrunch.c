@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <pthread.h>
 #include <crunch.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
+
+typedef void (*failFn_t)();
 
 void *genPtr()
 {
@@ -30,14 +33,37 @@ void *genPtr()
 #endif
 }
 
+/* Internal sacrificial thread for testing when assertions fail. */
+void *goatThread(void *test)
+	{ ((failFn_t)test)(); }
+
+void tryShouldFail(const failFn_t test)
+{
+	int *retVal;
+	pthread_t testThread;
+	pthread_attr_t threadAttrs;
+
+	pthread_attr_init(&threadAttrs);
+	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
+	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);
+	pthread_create(&testThread, &threadAttrs, goatThread, test);
+	pthread_join(testThread, (void **)&retVal);
+	assertNotNull(retVal);
+	assertIntEqual(*retVal, 1);
+}
+
+void testAssertTrue1() { assertTrue(FALSE); }
 void testAssertTrue()
 {
 	assertTrue(TRUE);
+	tryShouldFail(testAssertTrue1);
 }
 
+void testAssertFalse1() { assertFalse(TRUE); }
 void testAssertFalse()
 {
 	assertFalse(FALSE);
+	tryShouldFail(testAssertFalse1);
 }
 
 void testAssertIntEqual()
