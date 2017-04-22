@@ -223,7 +223,9 @@ void runTests()
 			pthread_create(test->testThread, &threadAttrs, testRunner, test);
 			pthread_join(*test->testThread, (void **)&retVal);
 			free(test);
-			if (retVal == NULL || *retVal == 2)
+			if (retVal == &errAbort)
+				exit(0);
+			else if (retVal == NULL || *retVal == 2)
 				exit(2);
 			currTest++;
 		}

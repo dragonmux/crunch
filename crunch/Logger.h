@@ -32,6 +32,7 @@ typedef enum _resultType
 	RESULT_ABORT
 } resultType;
 
+CRUNCH_API const int errAbort;
 CRUNCH_API uint8_t isTTY;
 #ifdef _MSC_VER
 CRUNCH_API HANDLE console;

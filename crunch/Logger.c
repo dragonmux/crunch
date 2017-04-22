@@ -44,6 +44,7 @@ FILE *stdout;
 	#define TTY	"/dev/tty"
 #endif
 
+const int errAbort = 2;
 FILE *realStdout = NULL;
 uint8_t logging = 0;
 testLog *logger = NULL;
@@ -191,7 +192,7 @@ void echoAborted()
 	}
 	else
 		printAborted();
-	libDebugExit(0);
+	pthreadExit(&errAbort);
 }
 #endif
 
