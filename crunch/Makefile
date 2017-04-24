@@ -23,10 +23,10 @@ CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 LIBS = $(EXTRA_LIBS)
 ifneq ($(MAC), 1)
 	EXTRA_LIBS = -pthread
-	SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
+	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) $(LIBS) $(OPTIM_FLAGS) -Wl,-soname,$(SOMAJ) -o $(SO)
 else
 	EXTRA_LIBS =
-	SO_LFLAGS = -shared $(O) $(LIBS) $(OPTIM_FLAGS) -o $(SO) -Wl,-U,_args
+	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) $(LIBS) $(OPTIM_FLAGS) -o $(SO) -Wl,-U,_args
 endif
 OUT_LFLAGS = $(OPTIM_FLAGS) $< $(shell pkg-config --libs crunch) -ldl $(EXTRA_LIBS) -o $@
 

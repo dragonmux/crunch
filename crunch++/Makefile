@@ -33,11 +33,8 @@ CRUNCHMAKE = crunchMake
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q
 endif
-ifeq ($(strip $(COVERAGE)), 1)
-	CRUNCHMAKE += -lgcov
-endif
 quiet_cmd_crunchMake = -n
-cmd_crunchMake = $(CRUNCHMAKE) -lcrunch++ $(2)
+cmd_crunchMake = $(CRUNCHMAKE) $(2)
 quiet_cmd_crunch = -n
 cmd_crunch = $(CRUNCHpp) $(2)
 
