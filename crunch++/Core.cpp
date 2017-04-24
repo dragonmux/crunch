@@ -10,31 +10,26 @@ const double doubleDelta = 0.0000001;
 template<typename T>
 void assertionFailure(const char *what, T result, T expected)
 {
-	char *mesg = formatString("Assertion failure: %s", what);
-	logResult(RESULT_FAILURE, mesg, expected, result);
-	delete [] mesg;
+	auto mesg = formatString("Assertion failure: %s", what);
+	logResult(RESULT_FAILURE, mesg.get(), expected, result);
 }
 
 template<typename T>
 void assertionError(const char *params, T result, T expected)
 {
-	char *what = formatString("expected %s, got %s", params, params);
-	assertionFailure(what, result, expected);
-	delete [] what;
+	auto what = formatString("expected %s, got %s", params, params);
+	assertionFailure(what.get(), result, expected);
 }
 
 template<typename T>
 void assertionError(const char *params, T result, std::nullptr_t)
-{
-	return assertionError(params, result, T(nullptr));
-}
+	{ return assertionError(params, result, T(nullptr)); }
 
 template<typename T>
 void assertionError(const char *params, T result)
 {
-	char *what = formatString("did not expect %s", params);
-	assertionFailure(what, result, result);
-	delete [] what;
+	auto what = formatString("did not expect %s", params);
+	assertionFailure(what.get(), result, result);
 }
 
 testsuit::testsuit() { }

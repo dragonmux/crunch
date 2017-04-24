@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,7 +23,7 @@
 #include "memory.hxx"
 
 CRUNCH_API const char *boolToString(bool value);
-CRUNCH_API char *formatString(const char *format, ...);
+CRUNCH_API std::unique_ptr<char []> formatString(const char *format, ...) noexcept;
 CRUNCH_API std::unique_ptr<char []> stringDup(const char *const str) noexcept;
 CRUNCH_API std::unique_ptr<const char []> strNewDup(const char *const str) noexcept;
 

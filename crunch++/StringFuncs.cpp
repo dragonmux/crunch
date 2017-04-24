@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,17 +30,24 @@ const char *boolToString(bool value)
 		return "true";
 }
 
-char *formatString(const char *format, ...)
+std::unique_ptr<char []> vaFormatString(const char *format, va_list args) noexcept
 {
-	int len;
-	char *ret;
+	va_list lenArgs;
+	va_copy(lenArgs, args);
+	const size_t len = vsnprintf(NULL, 0, format, lenArgs) + 1;
+	va_end(lenArgs);
+	auto ret = makeUnique<char []>(len);
+	if (!ret)
+		return nullptr;
+	vsprintf(ret.get(), format, args);
+	return ret;
+}
+
+std::unique_ptr<char []> formatString(const char *format, ...) noexcept
+{
 	va_list args;
 	va_start(args, format);
-	len = vsnprintf(NULL, 0, format, args);
-	va_end(args);
-	ret = new char[len + 1]();
-	va_start(args, format);
-	vsprintf(ret, format, args);
+	auto ret = vaFormatString(format, args);
 	va_end(args);
 	return ret;
 }
@@ -48,6 +55,8 @@ char *formatString(const char *format, ...)
 std::unique_ptr<char []> stringDup(const char *const str) noexcept
 {
 	auto ret = makeUnique<char []>(strlen(str) + 1);
+	if (!ret)
+		return nullptr;
 	strcpy(ret.get(), str);
 	return ret;
 }
