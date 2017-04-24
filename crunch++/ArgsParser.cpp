@@ -166,6 +166,7 @@ const arg_t *findArgInArgs(const char *const value)
 	{
 		if (((curr->flags & ARG_INCOMPLETE) == 0 && strcmp(curr->value, value) == 0) ||
 			strncmp(curr->value, value, strlen(curr->value)) == 0)
+			return curr;
 		++curr;
 	}
 	return nullptr;
