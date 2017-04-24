@@ -33,12 +33,10 @@
 
 using namespace std;
 
-parsedArgs_t parsedArgs = NULL;
-parsedArgs_t inclDirs = NULL;
-parsedArgs_t libDirs = NULL;
-parsedArgs_t linkLibs = NULL;
-parsedArgs_t linkObjs = NULL;
-parsedArgs_t namedTests = NULL;
+parsedArgs_t parsedArgs;
+parsedArgs_t inclDirs, libDirs;
+parsedArgs_t linkLibs, linkObjs;
+parsedArgs_t namedTests;
 uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef _MSC_VER
