@@ -36,8 +36,7 @@
 
 using namespace std;
 
-CRUNCH_API const arg args[];
-extern "C" const arg args[] =
+const arg_t args[] =
 {
 	{"--log", 1, 1, 0},
 	{nullptr, 0, 0, 0}
@@ -49,8 +48,8 @@ extern "C" const arg args[] =
 #define LIBEXT "so"
 #endif
 
-parsedArg **parsedArgs = nullptr;
-parsedArg **namedTests = nullptr;
+parsedArgs_t parsedArgs;
+parsedArgs_t namedTests;
 uint32_t numTests = 0;
 const char *cwd = nullptr;
 
@@ -77,38 +76,37 @@ void printStats()
 bool getTests()
 {
 	uint32_t i, j, n;
-	for (n = 0; parsedArgs[n] != nullptr; n++);
-	namedTests = new parsedArg *[n + 1];
+	for (n = 0; parsedArgs[n] != nullptr; n++)
+		continue;
+	namedTests = makeUnique<constParsedArg_t []>(n + 1);
+	if (!namedTests)
+		return false;
 
 	for (j = 0, i = 0; i < n; i++)
 	{
-		if (findArgInArgs(parsedArgs[i]->value) == nullptr)
+		if (!findArgInArgs(parsedArgs[i]->value.get()))
 		{
 			namedTests[j] = parsedArgs[i];
 			j++;
 		}
 	}
 	if (j == 0)
-	{
-		delete [] namedTests;
 		return false;
-	}
-	else
-	{
-		parsedArg **tests = new parsedArg *[j + 1];
-		memcpy(tests, namedTests, sizeof(parsedArg *) * (j + 1));
-		delete [] namedTests;
-		namedTests = tests;
-		numTests = j;
-		return true;
-	}
+	parsedArgs_t tests = makeUnique<constParsedArg_t []>(j + 1);
+	if (!tests)
+		return false;
+	std::copy(namedTests.get(), namedTests.get() + j, tests.get());
+	namedTests = std::move(tests);
+	namedTests[j] = nullptr;
+	numTests = j;
+	return true;
 }
 
 bool tryRegistration(void *testSuit)
 {
 	registerFn registerTests;
 	registerTests = (registerFn)dlsym(testSuit, "registerCXXTests");
-	if (registerTests == nullptr)
+	if (!registerTests)
 	{
 		dlclose(testSuit);
 		return false;
@@ -122,21 +120,20 @@ void runTests()
 	uint32_t i;
 	testLog *logFile = nullptr;
 
-	parsedArg *logging = findArg(parsedArgs, "--log", nullptr);
-	if (logging != nullptr)
+	constParsedArg_t logging = findArg(parsedArgs, "--log", nullptr);
+	if (bool(logging))
 	{
-		logFile = startLogging(logging->params[0]);
+		logFile = startLogging(logging->params[0].get());
 		loggingTests = true;
 	}
 
 	for (i = 0; i < numTests; i++)
 	{
-		char *testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value);
-		void *testSuit = dlopen(testLib, RTLD_LAZY);
-		free(testLib);
-		if (testSuit == nullptr || tryRegistration(testSuit) == false)
+		auto testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value.get());
+		void *testSuit = dlopen(testLib.get(), RTLD_LAZY);
+		if (!testSuit || !tryRegistration(testSuit))
 		{
-			if (testSuit == nullptr)
+			if (!testSuit)
 			{
 				if (isTTY != 0)
 #ifndef _MSC_VER
@@ -160,7 +157,7 @@ void runTests()
 #else
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 #endif
-			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
+			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value.get());
 			if (isTTY != 0)
 #ifndef _MSC_VER
 				testPrintf(NEWLINE);
@@ -177,7 +174,7 @@ void runTests()
 #else
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
-		testPrintf("Running test suit %s...", namedTests[i]->value);
+		testPrintf("Running test suit %s...", namedTests[i]->value.get());
 		if (isTTY != 0)
 #ifndef _MSC_VER
 			testPrintf(NEWLINE);
@@ -218,11 +215,9 @@ void runTests()
 
 int main(int argc, char **argv)
 {
-#ifdef _MSC_VER
 	registerArgs(args);
-#endif
 	parsedArgs = parseArguments(argc, argv);
-	if (parsedArgs == nullptr || !getTests())
+	if (!parsedArgs || !getTests())
 	{
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
@@ -232,7 +227,7 @@ int main(int argc, char **argv)
 	isTTY = isatty(STDOUT_FILENO);
 #else
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (console == nullptr)
+	if (!console)
 	{
 		printf("Error: could not grab console!");
 		return 1;
@@ -240,7 +235,6 @@ int main(int argc, char **argv)
 	isTTY = isatty(fileno(stdout));
 #endif
 	runTests();
-	delete [] namedTests;
 	free((void *)cwd);
 	return failures ? 1 : 0;
 }
