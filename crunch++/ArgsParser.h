@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,36 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ARGSPARSER_H__
-#define __ARGSPARSER_H__
+#ifndef ARGS_PARSER_H
+#define ARGS_PARSER_H
 
 #include <stdint.h>
+#include <memory>
 #include "crunch++.h"
 
-typedef struct _arg
+struct arg_t final
 {
 	const char *value;
-	uint32_t numMinParams;
-	uint32_t numMaxParams;
-	uint8_t flags;
-} arg;
+	const uint32_t numMinParams;
+	const uint32_t numMaxParams;
+	const uint8_t flags;
+};
 
-typedef struct _parsedArg
+struct parsedArg_t
 {
-	const char *value;
+	using strPtr_t = std::unique_ptr<const char []>;
+
+	strPtr_t value;
 	uint32_t paramsFound;
-	const char **params;
+	std::unique_ptr<strPtr_t []> params;
 	uint8_t flags;
-} parsedArg;
+};
+
+using constParsedArg_t = const parsedArg_t *;
+using parsedArgs_t = std::unique_ptr<constParsedArg_t []>;
 
 #define ARG_REPEATABLE	1
 #define ARG_INCOMPLETE	2
 
-#ifdef _MSC_VER
-CRUNCH_API void registerArgs(const arg *allowedargs);
-#endif
-CRUNCH_API parsedArg **parseArguments(uint32_t argc, char **argv);
-CRUNCH_API parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
-CRUNCH_API arg *findArgInArgs(const char *value);
+CRUNCH_API void registerArgs(const arg_t *allowedArgs) noexcept;
+CRUNCH_API parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) noexcept;
+CRUNCH_API constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal);
+inline constParsedArg_t findArg(const parsedArgs_t &args, const char *const value, const constParsedArg_t defaultVal)
+	{ return findArg(args.get(), value, defaultVal); }
+CRUNCH_API const arg_t *findArgInArgs(const char *const value);
 
-#endif /* __ARGSPARSER_H__ */
+#endif /* ARGS_PARSER_H */

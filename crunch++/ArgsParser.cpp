@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,149 +24,149 @@
 #include <string.h>
 #include <new>
 
-using parsedArgPtr_t = parsedArg *;
-using strPtr_t = const char *;
+const arg_t *args = nullptr;
 
-#ifndef _MSC_VER
-CRUNCH_API const arg args[];
-#else
-CRUNCH_API const arg *args = nullptr;
-
-void registerArgs(const arg *allowedArgs)
+void registerArgs(const arg_t *allowedArgs) noexcept
 {
 	args = allowedArgs;
+#ifdef _MSC_VER
 	stdout = __acrt_iob_func(1);
-}
 #endif
-
-parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
-{
-	uint32_t i;
-	for (i = 0; parsedArgs[i] != nullptr; i++)
-	{
-		parsedArg *arg = parsedArgs[i];
-		if (strcmp(arg->value, toCheck->value) == 0)
-			return arg;
-	}
-	return nullptr;
 }
 
-uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args)
+bool checkAlreadyFound(const parsedArg_t *const *const parsedArgs, const parsedArg_t &toCheck) noexcept
 {
-	uint32_t i, n, min = argument->numMinParams, max = argument->numMaxParams;
-	bool eoa = false;
-	for (i = argPos, n = 0; i < argc && n < max && !eoa; i++)
+	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
-		arg *currArg = args;
-		while (currArg->value != nullptr && eoa == false)
+		if (strcmp(parsedArgs[i]->value.get(), toCheck.value.get()) == 0)
+			return true;
+	}
+	return false;
+}
+
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t &argument, const arg_t *const args)
+{
+	uint32_t n = 0;
+	const uint32_t min = argument.numMinParams, max = argument.numMaxParams;
+	bool eoa = false;
+	for (uint32_t i = argPos; i < argc && n < max && !eoa; ++i)
+	{
+		const arg_t *currArg = args;
+		while (currArg->value != nullptr && !eoa)
 		{
 			if (strcmp(currArg->value, argv[i]) == 0)
 				eoa = true;
-			currArg++;
+			++currArg;
 		}
-		if (eoa)
-			break;
-		n++;
-		if (n == max)
+		if (eoa || ++n == max)
 			break;
 	}
 	if (n < min)
 		return -1;
-	else
-		return n;
+	return n;
 }
 
-parsedArg **parseArguments(uint32_t argc, char **argv)
+parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) noexcept
 {
-	parsedArg **ret;
-	uint32_t i, n;
-
-	if (argc <= 1 || (argc >> 31) != 0)
+	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
 		return nullptr;
-#ifdef _MSC_VER
-	else if (!args)
-		return nullptr;
-#endif
 
-	ret = new (std::nothrow) parsedArgPtr_t[argc];
+	auto ret(makeUnique<constParsedArg_t []>(argc));
 	if (!ret)
 		return nullptr;
-	for (i = 1, n = 0; i < argc; i++)
+	uint32_t n = 0;
+	for (uint32_t i = 1; i < argc; ++i)
 	{
-		bool found = false;
-		arg *argument = (arg *)args;
-		parsedArg *argRet = new (std::nothrow) parsedArg();
+		bool found = false, skip = false;
+		const arg_t *argument = args;
+		auto argRet(makeUnique<parsedArg_t>());
 		if (!argRet)
 			return nullptr;
 		while (argument->value != nullptr)
 		{
-			if (strcmp(argument->value, argv[i]) == 0 || ((argument->flags & ARG_INCOMPLETE) &&
-				strncmp(argument->value, argv[i], strlen(argument->value)) == 0))
+			found = strcmp(argument->value, argv[i]) == 0 || ((argument->flags & ARG_INCOMPLETE) &&
+				strncmp(argument->value, argv[i], strlen(argument->value)) == 0);
+			if (found)
 			{
-				found = true;
-				argRet->value = strdup(argv[i]);
-				if ((argument->flags & ARG_REPEATABLE) == 0 && checkAlreadyFound(ret, argRet) != nullptr)
+				argRet->value = strNewDup(argv[i]);
+				if (!(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret.get(), *argRet))
 				{
-					testPrintf("Duplicate argument found: %s\n", argRet->value);
-					free((void *)argRet->value);
-					free(argRet);
+					printf("Duplicate argument found: %s\n", argRet->value.get());
+					skip = true;
 					break;
 				}
-				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg *)args);
-				argRet->params = new (std::nothrow) strPtr_t[argRet->paramsFound];
-				if (!argRet->params)
+				argRet->paramsFound = checkParams(argc, argv, i + 1, *argument, args);
+				if (argRet->paramsFound == uint32_t(-1))
+				{
+					printf("Not enough parameters given for argument %s\n", argv[i]);
 					return nullptr;
-				for (uint32_t j = 0; j < argRet->paramsFound; j++)
-					argRet->params[j] = strNewDup(argv[i + j + 1]);
+				}
+				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
+				if (argRet->paramsFound)
+				{
+					argRet->params = makeUnique<parsedArg_t::strPtr_t []>(argRet->paramsFound);
+					if (!argRet->params)
+						return nullptr;
+					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
+					{
+						argRet->params[j] = strNewDup(argv[i + j + 1]);
+						if (!argRet->params[j])
+							return nullptr;
+					}
+				}
 				i += argRet->paramsFound;
 				argRet->flags = argument->flags;
-				ret[n++] = argRet;
 				break;
+			}
+			else if (!(argument->flags & ARG_INCOMPLETE) && strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
+			{
+				printf("Badly formatted argument (%s)\n", argv[i]);
+				return nullptr;
 			}
 			++argument;
 		}
-		if (!found)
+		if (skip)
+			continue;
+		else if (!found)
 		{
-			argRet->value = strdup(argv[i]);
+			argRet->value = strNewDup(argv[i]);
+			if (!argRet->value)
+				return nullptr;
 			argRet->paramsFound = 0;
 			argRet->flags = argument->flags;
-			ret[n++] = argRet;
 		}
+		ret[n++] = argRet.release();
 	}
 	/* Shrink as appropriate */
-	{
-		parsedArg **temp = ret;
-		ret = new parsedArg *[n + 1]();
-		memcpy(ret, temp, sizeof(parsedArg *) * n);
-		ret[n] = nullptr;
-		delete [] temp;
-		return ret;
-	}
+	auto result(makeUnique<constParsedArg_t []>(n + 1));
+	if (!result)
+		return nullptr;
+	std::copy(ret.get(), ret.get() + n, result.get());
+	result[n] = nullptr;
+	return result;
 }
 
-parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
+constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultValue)
 {
-	int n;
-	if (args == nullptr)
-		return defaultVal;
-	for (n = 0; args[n] != nullptr; n++)
+	if (!args || !value)
+		return defaultValue;
+	for (uint32_t n = 0; args[n] != nullptr; ++n)
 	{
-		if (((args[n]->flags & ARG_INCOMPLETE) == 0 && strcmp(args[n]->value, value) == 0) ||
-			strncmp(args[n]->value, value, strlen(value)) == 0)
+		if (strcmp(args[n]->value.get(), value) == 0 || ((args[n]->flags & ARG_INCOMPLETE) &&
+			strncmp(args[n]->value.get(), value, strlen(value)) == 0))
 			return args[n];
 	}
-	return defaultVal;
+	return defaultValue;
 }
 
-arg *findArgInArgs(const char *value)
+const arg_t *findArgInArgs(const char *const value)
 {
-	arg *curr = (arg *)args;
+	const arg_t *curr = args;
 	while (curr->value != nullptr)
 	{
 		if (((curr->flags & ARG_INCOMPLETE) == 0 && strcmp(curr->value, value) == 0) ||
 			strncmp(curr->value, value, strlen(curr->value)) == 0)
-			return curr;
-		curr++;
+		++curr;
 	}
 	return nullptr;
 }
