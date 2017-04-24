@@ -20,9 +20,11 @@
 #define __STRINGFUNCS_H__
 
 #include "crunch++.h"
+#include "memory.hxx"
 
 CRUNCH_API const char *boolToString(bool value);
 CRUNCH_API char *formatString(const char *format, ...);
-CRUNCH_API char *strNewDup(const char *str);
+CRUNCH_API std::unique_ptr<char []> stringDup(const char *const str) noexcept;
+CRUNCH_API std::unique_ptr<const char []> strNewDup(const char *const str) noexcept;
 
 #endif /* __STRINGFUNCS_H__ */
