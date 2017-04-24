@@ -1,5 +1,5 @@
 crunch++
-testCrunch++.so
+test*.so
 
 crunch++.pc
 libcrunch++.so*
