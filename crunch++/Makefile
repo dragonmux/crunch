@@ -29,7 +29,7 @@ else
 endif
 OUT_LFLAGS = $(OPTIM_FLAGS) $< $(LIBS) -pthread -ldl -lstdc++ -lm -o $@
 
-CRUNCHMAKE = crunchMake $(shell pkg-config --cflags --libs crunch++)
+CRUNCHMAKE = crunchMake
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q
 endif
@@ -126,7 +126,7 @@ check: test
 
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(EXE)))
-	$(call run-cmd,rm,crunch,$(O) $(SOMAJ)* $(A) $(PC))
+	$(call run-cmd,rm,libcrunch++,$(O) $(SOMAJ)* $(A) $(PC))
 	$(call run-cmd,rm,tests,$(TESTS))
 
 .o:
