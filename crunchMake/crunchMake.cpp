@@ -33,12 +33,12 @@
 
 using namespace std;
 
-parsedArg **parsedArgs = NULL;
-parsedArg **inclDirs = NULL;
-parsedArg **libDirs = NULL;
-parsedArg **linkLibs = NULL;
-parsedArg **linkObjs = NULL;
-parsedArg **namedTests = NULL;
+parsedArgs_t parsedArgs = NULL;
+parsedArgs_t inclDirs = NULL;
+parsedArgs_t libDirs = NULL;
+parsedArgs_t linkLibs = NULL;
+parsedArgs_t linkObjs = NULL;
+parsedArgs_t namedTests = NULL;
 uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef _MSC_VER
@@ -67,8 +67,7 @@ const string libExt = ".tlib";
 const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
 const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
 
-CRUNCH_API const arg args[];
-const arg args[] =
+const arg_t args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
@@ -88,78 +87,55 @@ bool getTests()
 {
 	uint32_t n, j = 0;
 	for (n = 0; parsedArgs[n] != nullptr; n++);
-	namedTests = new parsedArg *[n + 1]();
+	namedTests = makeUnique<constParsedArg_t []>(n + 1);
+	if (!namedTests)
+		return false;
 
 	for (uint32_t i = 0; i < n; i++)
 	{
-		if (findArgInArgs(parsedArgs[i]->value) == nullptr)
+		if (!findArgInArgs(parsedArgs[i]->value.get()))
 		{
 			namedTests[j] = parsedArgs[i];
 			j++;
 		}
 	}
 	if (j == 0)
-	{
-		delete [] namedTests;
 		return false;
-	}
-	else
-	{
-		parsedArg **tests = new parsedArg *[j];
-		memcpy(tests, namedTests, sizeof(parsedArg *) * j);
-		delete [] namedTests;
-		namedTests = tests;
-		numTests = j;
-		return true;
-	}
+	parsedArgs_t tests = makeUnique<constParsedArg_t []>(j);
+	if (!tests)
+		return false;
+	std::copy(namedTests.get(), namedTests.get() + j, tests.get());
+	namedTests = std::move(tests);
+	numTests = j;
+	return true;
 }
 
-inline void getLinkFunc(parsedArg **&var, uint32_t &num, const char *find)
+inline void getLinkFunc(parsedArgs_t &var, uint32_t &num, const char *find)
 {
 	uint32_t i, n;
-	for (n = 0; parsedArgs[n] != nullptr; n++);
-	var = new parsedArg *[n + 1]();
+	for (n = 0; parsedArgs[n] != nullptr; n++)
+		continue;
+	var = makeUnique<constParsedArg_t []>(n + 1);
 	for (num = 0, i = 0; i < n; i++)
 	{
-		if (strncmp(parsedArgs[i]->value, find, 2) == 0)
+		if (strncmp(parsedArgs[i]->value.get(), find, 2) == 0)
 		{
 			var[num] = parsedArgs[i];
 			num++;
 		}
 	}
 	if (num == 0)
-	{
-		delete [] var;
 		var = nullptr;
-	}
-	else
-	{
-		parsedArg **vars = new parsedArg *[num]();
-		memcpy(vars, var, sizeof(parsedArg *) * num);
-		delete [] var;
-		var = vars;
-	}
+
+	parsedArgs_t vars = makeUnique<constParsedArg_t []>(num);
+	std::copy(var.get(), var.get() + num, vars.get());
+	var = std::move(vars);
 }
 
-void getLinkLibs()
-{
-	getLinkFunc(linkLibs, numLibs, "-l");
-}
-
-void getLinkObjs()
-{
-	getLinkFunc(linkObjs, numObjs, "-o");
-}
-
-void getInclDirs()
-{
-	getLinkFunc(inclDirs, numInclDirs, "-I");
-}
-
-void getLibDirs()
-{
-	getLinkFunc(libDirs, numLibDirs, "-L");
-}
+void getLinkLibs() { getLinkFunc(linkLibs, numLibs, "-l"); }
+void getLinkObjs() { getLinkFunc(linkObjs, numObjs, "-o"); }
+void getInclDirs() { getLinkFunc(inclDirs, numInclDirs, "-I"); }
+void getLibDirs() { getLinkFunc(libDirs, numLibDirs, "-L"); }
 
 bool validExt(const char *file)
 {
@@ -181,101 +157,73 @@ bool isCXX(const char *file)
 	return false;
 }
 
-const char *toSO(const char *file)
+std::unique_ptr<char []> toSO(const char *const file)
 {
-	char *soFile;
-	const char *dot = strrchr(file, '.');
-	size_t dotPos = dot - file;
-	soFile = new char[dotPos + libExt.size() + 1]();
-	memcpy(soFile, file, dotPos);
-	memcpy(soFile + dotPos, libExt.data(), libExt.size() + 1);
+	const char *const dot = strrchr(file, '.');
+	const size_t dotPos = dot - file;
+	auto soFile = makeUnique<char []>(dotPos + libExt.size() + 1);
+	memcpy(soFile.get(), file, dotPos);
+	memcpy(soFile.get() + dotPos, libExt.data(), libExt.size() + 1);
 	return soFile;
 }
 
-inline const char *argsToString(parsedArg **var, const uint32_t num, const  uint32_t offset)
+inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
 {
-	const char *ret = strNewDup("");
+	std::unique_ptr<char []> ret = stringDup("");
 	for (uint32_t i = 0; i < num; i++)
-	{
-		const char *name = formatString("%s%s ", ret, var[i]->value + offset);
-		delete [] ret;
-		ret = name;
-	}
-	delete [] var;
+		ret = std::move(formatString("%s%s ", ret.get(), var[i]->value.get() + offset));
+	var = nullptr;
 	return ret;
 }
 
-const char *inclDirFlagsToString()
-{
-	return argsToString(inclDirs, numInclDirs, 0);
-}
-
-const char *libDirFlagsToString()
-{
-	return argsToString(libDirs, numLibDirs, 0);
-}
-
-const char *objsToString()
-{
-	return argsToString(linkObjs, numObjs, 2);
-}
-
-const char *libsToString()
-{
-	return argsToString(linkLibs, numLibs, 0);
-}
+std::unique_ptr<char []> inclDirFlagsToString() { return argsToString(inclDirs, numInclDirs, 0); }
+std::unique_ptr<char []> libDirFlagsToString() { return argsToString(libDirs, numLibDirs, 0); }
+std::unique_ptr<char []> objsToString() { return argsToString(linkObjs, numObjs, 2); }
+std::unique_ptr<char []> libsToString() { return argsToString(linkLibs, numLibs, 0); }
 
 int compileTests()
 {
 	uint32_t i, ret = 0;
-	const char *inclDirFlags = inclDirFlagsToString();
-	const char *libDirFlags = libDirFlagsToString();
-	const char *objs = objsToString();
-	const char *libs = libsToString();
-	bool silent = findArg(parsedArgs, "--silent", nullptr) != nullptr;
+	auto inclDirFlags = inclDirFlagsToString();
+	auto libDirFlags = libDirFlagsToString();
+	auto objs = objsToString();
+	auto libs = libsToString();
+	bool silent = bool(findArg(parsedArgs, "--silent", nullptr));
 	testLog *logFile = nullptr;
-	parsedArg *logParam = findArg(parsedArgs, "--log", nullptr);
-	bool logging = logParam != nullptr;
-	bool quiet = findArg(parsedArgs, "--quiet", nullptr) != nullptr;
-	bool pthread = findArg(parsedArgs, "-pthread", nullptr) != nullptr;
+	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
+	const bool logging = bool(logParam);
+	bool quiet = bool(findArg(parsedArgs, "--quiet", nullptr));
+	const bool pthread = bool(findArg(parsedArgs, "-pthread", nullptr));
 	if (logging)
-		logFile = startLogging(logParam->params[0]);
+		logFile = startLogging(logParam->params[0].get());
 	if (!silent)
-		silent = findArg(parsedArgs, "-s", nullptr) != nullptr;
+		silent = bool(findArg(parsedArgs, "-s", nullptr));
 	if (!quiet)
-		quiet = findArg(parsedArgs, "-q", nullptr) != nullptr;
+		quiet = bool(findArg(parsedArgs, "-q", nullptr));
 
 	for (i = 0; i < numTests; i++)
 	{
-		if (access(namedTests[i]->value, R_OK) == 0 && validExt(namedTests[i]->value))
+		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value.get()))
 		{
-			char *displayString;
-			const char *soFile = toSO(namedTests[i]->value);
-			const char *compiler = isCXX(namedTests[i]->value) ? cxx : cc;
-			char *compileString = formatString("%s %s " OPTS "%s", compiler, namedTests[i]->value, inclDirFlags, libDirFlags, objs, libs, (pthread ? "" : "-pthread"), soFile);
-			if (quiet)
-				displayString = formatString(" CCLD  %s => %s", namedTests[i]->value, soFile);
-			else
-				displayString = compileString;
+			const char *const compiler = isCXX(namedTests[i]->value.get()) ? cxx : cc;
+			std::unique_ptr<char []> soFile = toSO(namedTests[i]->value.get());
+			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler, namedTests[i]->value.get(), inclDirFlags.get(), libDirFlags.get(), objs.get(), libs.get(), (pthread ? "" : "-pthread"), soFile.get());
 			if (!silent)
 			{
-				printf("%s\n", displayString);
-				if (displayString != compileString)
-					free(displayString);
+				std::unique_ptr<char []> displayString;
+				if (quiet)
+					displayString = formatString(" CCLD  %s => %s", namedTests[i]->value.get(), soFile.get());
+				else
+					displayString = stringDup(compileString.get());
+				printf("%s\n", displayString.get());
 			}
-			ret = system(compileString);
-			free(compileString);
-			delete [] soFile;
+			ret = system(compileString.get());
 			if (ret != 0)
 				break;
 		}
 		else
-			testPrintf("Error, %s does not exist, skipping..\n", namedTests[i]->value);
+			testPrintf("Error, %s does not exist, skipping..\n", namedTests[i]->value.get());
 	}
-	delete [] inclDirFlags;
-	delete [] libDirFlags;
-	delete [] objs;
-	delete [] libs;
 	if (logging)
 		stopLogging(logFile);
 	return ret;
@@ -283,11 +231,9 @@ int compileTests()
 
 int main(int argc, char **argv)
 {
-#ifdef _MSC_VER
 	registerArgs(args);
-#endif
 	parsedArgs = parseArguments(argc, argv);
-	if (parsedArgs == nullptr || !getTests())
+	if (!parsedArgs || !getTests())
 	{
 		testPrintf("Fatal error: There are no source files to build given on the command line!\n");
 		return 2;
