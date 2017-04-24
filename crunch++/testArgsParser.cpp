@@ -46,7 +46,7 @@ public:
 			{"--arg=", 0, 0, ARG_INCOMPLETE},
 			{nullptr, 0, 0, 0}
 		};
-		const arg_t args_1[2] =
+		const arg_t args_2[2] =
 		{
 			{"--arg", 0, 0, 0},
 			{nullptr, 0, 0, 0}
