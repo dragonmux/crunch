@@ -54,6 +54,6 @@ inline constParsedArg_t findArg(const parsedArgs_t &args, const char *const valu
 	{ return findArg(args.get(), value, defaultVal); }
 CRUNCH_API const arg_t *findArgInArgs(const char *const value);
 
-bool checkAlreadyFound(const parsedArg_t *const *const parsedArgs, const parsedArg_t &toCheck) noexcept;
+bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept;
 
 #endif /* ARGS_PARSER_H */

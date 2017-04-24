@@ -34,7 +34,7 @@ void registerArgs(const arg_t *allowedArgs) noexcept
 #endif
 }
 
-bool checkAlreadyFound(const parsedArg_t *const *const parsedArgs, const parsedArg_t &toCheck) noexcept
+bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept
 {
 	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
@@ -89,7 +89,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) 
 			if (found)
 			{
 				argRet->value = strNewDup(argv[i]);
-				if (!(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret.get(), *argRet))
+				if (!(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret, *argRet))
 				{
 					printf("Duplicate argument found: %s\n", argRet->value.get());
 					skip = true;

@@ -98,7 +98,7 @@ public:
 		assertNotNull(parsedArg);
 		parsedArg->value = strNewDup("--arg");
 		parsedArgs[0] = parsedArg.get();
-		assertTrue(checkAlreadyFound(parsedArgs.get(), *parsedArgs[0]));
+		assertTrue(checkAlreadyFound(parsedArgs, *parsedArg));
 
 		assertNull(findArg(nullptr, "", nullptr));
 	}
