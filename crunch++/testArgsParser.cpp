@@ -1,5 +1,7 @@
 #include <crunch++.h>
 #include "ArgsParser.h"
+#include "memory.hxx"
+#include "StringFuncs.h"
 
 using rawStrPtr_t = const char *;
 using strPtr_t = std::unique_ptr<const char []>;
@@ -78,11 +80,35 @@ public:
 		assertNull(parseArguments(2, argv_2));
 	}
 
+	void testInvalid()
+	{
+		const arg_t args_1[1] = { {nullptr, 0, 0, 0} };
+		const arg_t args_2[2] =
+		{
+			{"--arg", 0, 0, 0},
+			{nullptr, 0, 0, 0}
+		};
+		parsedArgs_t parsedArgs;
+		std::unique_ptr<parsedArg_t> parsedArg;
+
+		registerArgs(args_2);
+		parsedArgs = makeUnique<constParsedArg_t []>(2);
+		assertNotNull(parsedArgs);
+		parsedArg = makeUnique<parsedArg_t>();
+		assertNotNull(parsedArg);
+		parsedArg->value = strNewDup("--arg");
+		parsedArgs[0] = parsedArg.get();
+		assertTrue(checkAlreadyFound(parsedArgs.get(), *parsedArgs[0]));
+
+		assertNull(findArg(nullptr, "", nullptr));
+	}
+
 	void registerTests()
 	{
 		CXX_TEST(testNull)
 		CXX_TEST(testEmpty)
 		CXX_TEST(testIncomplete)
+		CXX_TEST(testInvalid)
 	}
 };
 
