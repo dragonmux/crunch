@@ -52,13 +52,13 @@ const char *cxx = "g++ -m32 -std=c++11";
 const char *cc = crunch_GCC;
 const char *cxx = crunch_GXX " -std=c++11";
 #endif
-#define OPTS	"-shared %s%s%s%s-lcrunch -O2 %s -o "
+#define OPTS	"-shared %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so";
 #else
 // _M_64
 const char *cc = "cl";
 const char *cxx = "cl";
-#define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch++.lib %s /Fe"
+#define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch%s.lib %s /Fe"
 const string libExt = ".tlib";
 #endif
 
@@ -203,9 +203,12 @@ int compileTests()
 	{
 		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value.get()))
 		{
-			const char *const compiler = isCXX(namedTests[i]->value.get()) ? cxx : cc;
+			const bool mode = isCXX(namedTests[i]->value.get());
+			const char *const compiler = mode ? cxx : cc;
 			std::unique_ptr<char []> soFile = toSO(namedTests[i]->value.get());
-			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler, namedTests[i]->value.get(), inclDirFlags.get(), libDirFlags.get(), objs.get(), libs.get(), (pthread ? "" : "-pthread"), soFile.get());
+			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler,
+				namedTests[i]->value.get(), inclDirFlags.get(), libDirFlags.get(), objs.get(), libs.get(),
+				mode ? "++" : "", pthread ? "" : "-pthread", soFile.get());
 			if (!silent)
 			{
 				std::unique_ptr<char []> displayString;
