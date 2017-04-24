@@ -54,7 +54,7 @@ double genDbl()
 
 /* Internal sacrificial thread for testing when assertions fail. */
 void *goatThread(void *test)
-	{ ((failFn_t)test)(); }
+	{ ((failFn_t)test)(); return NULL; }
 
 void tryShouldFail(const failFn_t test)
 {
