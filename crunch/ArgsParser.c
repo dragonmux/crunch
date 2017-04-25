@@ -24,17 +24,15 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef _MSC_VER
-CRUNCH_API const arg args[];
-#else
 const arg *args = NULL;
 
 void registerArgs(const arg *allowedArgs)
 {
 	args = allowedArgs;
+#ifdef _MSC_VER
 	stdout = &__iob_func()[1];
-}
 #endif
+}
 
 parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 {

@@ -41,9 +41,7 @@ typedef struct _parsedArg
 #define ARG_REPEATABLE	1
 #define ARG_INCOMPLETE	2
 
-#ifdef _MSC_VER
 CRUNCH_API void registerArgs(const arg *allowedArgs);
-#endif
 CRUNCH_API parsedArg **parseArguments(int argc, char **argv);
 CRUNCH_API parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
 CRUNCH_API arg *findArgInArgs(const char *value);

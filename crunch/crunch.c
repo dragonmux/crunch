@@ -34,7 +34,7 @@
 #endif
 
 static const int ok = 0;
-CRUNCH_API const arg args[] =
+const arg args[] =
 {
 	{"--log", 1, 1, 0},
 	{0}
@@ -239,9 +239,7 @@ void runTests()
 
 int main(int argc, char **argv)
 {
-#ifdef _MSC_VER
 	registerArgs(args);
-#endif
 	parsedArgs = parseArguments(argc, argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
 	{
