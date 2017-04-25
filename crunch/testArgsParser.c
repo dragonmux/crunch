@@ -36,6 +36,23 @@ void testNull()
 	assertNull(parseArguments((uint32_t)-1, argv));
 }
 
+void testEmpty()
+{
+	const char *const argv[2] = {"test", "--dummy"};
+	const arg args[1] = { {nullptr, 0, 0, 0} };
+
+	registerArgs(args);
+	parsedArg **parsedArgs = parseArguments(2, argv);
+	assertNotNull(parsedArgs);
+	assertNotNull(parsedArgs[0]);
+	assertConstNotNull(parsedArgs[0]->value);
+	assertStringEqual(parsedArgs[0]->value, "--dummy");
+	assertIntEqual(parsedArgs[0]->paramsFound, 0);
+	assertIntEqual(parsedArgs[0]->flags, 0);
+	assertNull(parsedArgs[0]->params);
+}
+
 BEGIN_REGISTER_TESTS()
 	TEST(testNull)
+	TEST(testEmpty)
 END_REGISTER_TESTS()
