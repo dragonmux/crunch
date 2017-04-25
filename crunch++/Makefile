@@ -16,18 +16,17 @@
 
 include ../Makefile.inc
 
-PKG_CONFIG_PKGS = crunch
-EXTRA_CFLAGS = -Wall -Wextra -pedantic -pipe -std=c++11
-CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_FLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
-LIBS = $(shell pkg-config --libs crunch++)
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -pthread -pipe -std=c++11
+CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -I../crunch -D__crunch_lib__ -o $@ $<
+LIBS = $(shell pkg-config --libs crunch++) $(EXTRA_LIBS) -lstdc++
 ifneq ($(MAC), 1)
-	EXTRA_FLAGS = -pthread
-	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -pthread -lstdc++ -Wl,-soname,$(SOMAJ) -o $(SO)
+	EXTRA_LIBS = -pthread
+	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) $(LIBS) -Wl,-soname,$(SOMAJ) -o $(SO)
 else
-	EXTRA_FLAGS =
-	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) -lstdc++ -o $(SO) -Wl,-U,_args
+	EXTRA_LIBS =
+	SO_LFLAGS = $(OPTIM_FLAGS) -shared $(O) $(LIBS) -o $(SO) -Wl,-U,_args
 endif
-OUT_LFLAGS = $(OPTIM_FLAGS) $< $(LIBS) -pthread -ldl -lstdc++ -lm -o $@
+OUT_LFLAGS = $(OPTIM_FLAGS) $< $(LIBS) -ldl -lm -o $@
 
 quiet_cmd_crunchMake = -n
 cmd_crunchMake = $(CRUNCHMAKE) $(2)
