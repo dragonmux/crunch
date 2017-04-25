@@ -47,22 +47,22 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #endif
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
-const char *cc = "gcc -m64 -fPIC -DPIC" OPTS_EXTRA;
-const char *cxx = "g++ -m64 -fPIC -DPIC -std=c++11" OPTS_EXTRA;
+const char *const cc = "gcc -m64 -fPIC -DPIC" OPTS_EXTRA;
+const char *const cxx = "g++ -m64 -fPIC -DPIC -std=c++11" OPTS_EXTRA;
 #else
-const char *cc = "gcc -m32" OPTS_EXTRA;
-const char *cxx = "g++ -m32 -std=c++11" OPTS_EXTRA;
+const char *const cc = "gcc -m32" OPTS_EXTRA;
+const char *const cxx = "g++ -m32 -std=c++11" OPTS_EXTRA;
 #endif
 #else
-const char *cc = crunch_GCC OPTS_EXTRA;
-const char *cxx = crunch_GXX " -std=c++11" OPTS_EXTRA;
+const char *const cc = crunch_GCC OPTS_EXTRA;
+const char *const cxx = crunch_GXX " -std=c++11" OPTS_EXTRA;
 #endif
 #define OPTS	"-shared %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so";
 #else
 // _M_64
-const char *cc = "cl";
-const char *cxx = "cl";
+const char *const cc = "cl";
+const char *const cxx = "cl";
 #define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch%s.lib %s /Fe"
 const string libExt = ".tlib";
 #endif
