@@ -121,12 +121,12 @@ public:
 		};
 		parsedArgs_t parsedArgs;
 
+		registerArgs(args);
 		assertEqual(checkParams(5, argv_1, 2, args[0], args), 1);
 		assertEqual(checkParams(5, argv_1, 4, args[1], args), -1);
 		assertEqual(checkParams(5, argv_1, 5, args[0], args), 0);
 		assertEqual(checkParams(5, argv_2, 2, args[0], args), 2);
 
-		registerArgs(args);
 		parsedArgs = parseArguments(5, argv_1);
 		assertNull(parsedArgs);
 
