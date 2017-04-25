@@ -46,7 +46,7 @@ parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
 	return NULL;
 }
 
-uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args)
+uint32_t checkParams(int argc, const char *const *const argv, int argPos, arg *argument, arg *args)
 {
 	uint32_t i, n, min = argument->numMinParams, max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
@@ -71,7 +71,7 @@ uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args
 		return n;
 }
 
-parsedArg **parseArguments(int argc, char **argv)
+parsedArg **parseArguments(int argc, const char *const *const argv)
 {
 	parsedArg **ret;
 	int i, n;
