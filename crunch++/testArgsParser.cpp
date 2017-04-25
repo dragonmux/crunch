@@ -111,19 +111,35 @@ public:
 
 	void testArgCounting()
 	{
-		const rawStrPtr_t argv_1[4] = {"-o", "test", "-a", "-o"};
-		const rawStrPtr_t argv_2[4] = {"-o", "test", "me", "please"};
+		const rawStrPtr_t argv_1[5] = {"test", "-o", "test", "-a", "-o"};
+		const rawStrPtr_t argv_2[5] = {"test", "-o", "test", "me", "please"};
 		const arg_t args[3] =
 		{
 			{"-o", 0, 2, 0},
 			{"-a", 1, 1, 0},
 			{nullptr, 0, 0, 0}
 		};
+		parsedArgs_t parsedArgs;
 
-		assertEqual(checkParams(4, argv_1, 1, args[0], args), 1);
-		assertEqual(checkParams(4, argv_1, 3, args[1], args), -1);
-		assertEqual(checkParams(4, argv_1, 4, args[0], args), 0);
-		assertEqual(checkParams(4, argv_2, 1, args[0], args), 2);
+		assertEqual(checkParams(5, argv_1, 2, args[0], args), 1);
+		assertEqual(checkParams(5, argv_1, 4, args[1], args), -1);
+		assertEqual(checkParams(5, argv_1, 5, args[0], args), 0);
+		assertEqual(checkParams(5, argv_2, 2, args[0], args), 2);
+
+		registerArgs(args);
+		parsedArgs = parseArguments(5, argv_1);
+		assertNull(parsedArgs);
+
+		parsedArgs = parseArguments(5, argv_2);
+		assertNotNull(parsedArgs);
+		assertNotNull(parsedArgs[0]);
+		assertNotNull(parsedArgs[0]->value);
+		assertEqual(parsedArgs[0]->value.get(), "-o");
+		assertEqual(parsedArgs[0]->paramsFound, 2);
+		assertNotNull(parsedArgs[0]->params[0]);
+		assertNotNull(parsedArgs[0]->params[1]);
+		assertEqual(parsedArgs[0]->params[0].get(), "test");
+		assertEqual(parsedArgs[0]->params[1].get(), "me");
 	}
 
 	void registerTests()
