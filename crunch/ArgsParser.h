@@ -42,10 +42,13 @@ typedef struct _parsedArg
 #define ARG_INCOMPLETE	2
 
 #ifdef _MSC_VER
-CRUNCH_API void registerArgs(const arg *allowedargs);
+CRUNCH_API void registerArgs(const arg *allowedArgs);
 #endif
 CRUNCH_API parsedArg **parseArguments(int argc, char **argv);
 CRUNCH_API parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
 CRUNCH_API arg *findArgInArgs(const char *value);
+
+parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck);
+uint32_t checkParams(int argc, char **argv, int argPos, arg *argument, arg *args);
 
 #endif /* __ARGSPARSER_H__ */
