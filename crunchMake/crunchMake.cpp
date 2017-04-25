@@ -40,17 +40,22 @@ parsedArgs_t namedTests;
 uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef _MSC_VER
+#ifdef crunch_PREFIX
+#define OPTS_EXTRA " -I" crunch_PREFIX "/include -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
+#else
+#define OPTS_EXTRA ""
+#endif
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
-const char *cc = "gcc -m64 -fPIC -DPIC";
-const char *cxx = "g++ -m64 -fPIC -DPIC -std=c++11";
+const char *cc = "gcc -m64 -fPIC -DPIC" OPTS_EXTRA;
+const char *cxx = "g++ -m64 -fPIC -DPIC -std=c++11" OPTS_EXTRA;
 #else
-const char *cc = "gcc -m32";
-const char *cxx = "g++ -m32 -std=c++11";
+const char *cc = "gcc -m32" OPTS_EXTRA;
+const char *cxx = "g++ -m32 -std=c++11" OPTS_EXTRA;
 #endif
 #else
-const char *cc = crunch_GCC;
-const char *cxx = crunch_GXX " -std=c++11";
+const char *cc = crunch_GCC OPTS_EXTRA;
+const char *cxx = crunch_GXX " -std=c++11" OPTS_EXTRA;
 #endif
 #define OPTS	"-shared %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so";
