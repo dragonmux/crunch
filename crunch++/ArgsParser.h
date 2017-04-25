@@ -55,5 +55,6 @@ inline constParsedArg_t findArg(const parsedArgs_t &args, const char *const valu
 CRUNCH_API const arg_t *findArgInArgs(const char *const value);
 
 bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept;
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
 
 #endif /* ARGS_PARSER_H */

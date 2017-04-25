@@ -44,7 +44,7 @@ bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toChec
 	return false;
 }
 
-uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t &argument, const arg_t *const args)
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept
 {
 	uint32_t n = 0;
 	const uint32_t min = argument.numMinParams, max = argument.numMaxParams;
