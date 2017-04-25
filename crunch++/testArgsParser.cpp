@@ -111,8 +111,17 @@ public:
 
 	void testArgCounting()
 	{
+		const rawStrPtr_t argv[4] = {"-o", "test", "-a", "-o"};
+		const arg_t args[3] =
+		{
+			{"-o", 0, 2, 0},
+			{"-a", 1, 1, 0},
+			{nullptr, 0, 0, 0}
+		};
 
-
+		//assertEqual(checkParams(4, argv, 0, args[0], args), 1);
+		assertEqual(checkParams(4, argv, 2, args[1], args), -1);
+		assertEqual(checkParams(4, argv, 3, args[0], args), 0);
 	}
 
 	void registerTests()
