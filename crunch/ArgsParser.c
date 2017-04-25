@@ -34,19 +34,19 @@ void registerArgs(const arg *allowedArgs)
 #endif
 }
 
-parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck)
+parsedArg *checkAlreadyFound(const parsedArg *const *const parsedArgs, const parsedArg *const toCheck)
 {
 	uint32_t i;
 	for (i = 0; parsedArgs[i] != NULL; i++)
 	{
-		parsedArg *arg = parsedArgs[i];
+		const parsedArg *const arg = parsedArgs[i];
 		if (strcmp(arg->value, toCheck->value) == 0)
 			return arg;
 	}
 	return NULL;
 }
 
-uint32_t checkParams(const int32_t argc, const char *const *const argv, const int32_t argPos, arg *argument, arg *args)
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg *const argument, const arg *const args)
 {
 	uint32_t i, n, min = argument->numMinParams, max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
@@ -71,7 +71,7 @@ uint32_t checkParams(const int32_t argc, const char *const *const argv, const in
 		return n;
 }
 
-parsedArg **parseArguments(const int32_t argc, const char *const *const argv)
+parsedArg **parseArguments(const uint32_t argc, const char *const *const argv)
 {
 	parsedArg **ret;
 	int i, n;
@@ -90,7 +90,6 @@ parsedArg **parseArguments(const int32_t argc, const char *const *const argv)
 			if (((argument->flags & ARG_INCOMPLETE) == 0 && strcmp(argument->value, argv[i]) == 0) ||
 				strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
 			{
-				int j;
 				found = TRUE;
 				argRet->value = strdup(argv[i]);
 				if ((argument->flags & ARG_REPEATABLE) == 0 && checkAlreadyFound(ret, argRet) != NULL)
@@ -102,7 +101,7 @@ parsedArg **parseArguments(const int32_t argc, const char *const *const argv)
 				}
 				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg *)args);
 				argRet->params = testMalloc(sizeof(char *) * argRet->paramsFound);
-				for (j = 0; j < argRet->paramsFound; j++)
+				for (uint32_t j = 0; j < argRet->paramsFound; j++)
 					argRet->params[j] = strdup(argv[i + j + 1]);
 				i += argRet->paramsFound;
 				argRet->flags = argument->flags;
@@ -125,12 +124,11 @@ parsedArg **parseArguments(const int32_t argc, const char *const *const argv)
 	return testRealloc(ret, sizeof(parsedArg *) * (n + 1));
 }
 
-parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
+const parsedArg *findArg(const parsedArg *const *const args, const char *const value, const parsedArg *const defaultVal)
 {
-	int n;
-	if (args == NULL)
+	if (!args || !value)
 		return defaultVal;
-	for (n = 0; args[n] != NULL; n++)
+	for (uint32_t n = 0; args[n] != NULL; n++)
 	{
 		if (((args[n]->flags & ARG_INCOMPLETE) == 0 && strcmp(args[n]->value, value) == 0) ||
 			strncmp(args[n]->value, value, strlen(value)) == 0)
@@ -139,15 +137,15 @@ parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal)
 	return defaultVal;
 }
 
-arg *findArgInArgs(const char *value)
+const arg *findArgInArgs(const char *const value)
 {
-	arg *curr = (arg *)args;
+	const arg *curr = args;
 	while (curr->value != NULL)
 	{
 		if (((curr->flags & ARG_INCOMPLETE) == 0 && strcmp(curr->value, value) == 0) ||
 			strncmp(curr->value, value, strlen(curr->value)) == 0)
 			return curr;
-		curr++;
+		++curr;
 	}
 	return NULL;
 }

@@ -24,10 +24,10 @@
 
 typedef struct _arg
 {
-	const char *value;
-	uint32_t numMinParams;
-	uint32_t numMaxParams;
-	uint8_t flags;
+	const char *const value;
+	const uint32_t numMinParams;
+	const uint32_t numMaxParams;
+	const uint8_t flags;
 } arg;
 
 typedef struct _parsedArg
@@ -42,11 +42,11 @@ typedef struct _parsedArg
 #define ARG_INCOMPLETE	2
 
 CRUNCH_API void registerArgs(const arg *allowedArgs);
-CRUNCH_API parsedArg **parseArguments(const int32_t argc, const char *const *const argv);
-CRUNCH_API parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
-CRUNCH_API arg *findArgInArgs(const char *value);
+CRUNCH_API parsedArg **parseArguments(const uint32_t argc, const char *const *const argv);
+CRUNCH_API const parsedArg *findArg(const parsedArg *const *const args, const char *const value, const parsedArg *const defaultVal);
+CRUNCH_API const arg *findArgInArgs(const char *const value);
 
-parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck);
-uint32_t checkParams(const int32_t argc, const char *const *const argv, const int32_t argPos, arg *argument, arg *args);
+parsedArg *checkAlreadyFound(const parsedArg *const *const parsedArgs, const parsedArg *const toCheck);
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg *const argument, const arg *const args);
 
 #endif /* __ARGSPARSER_H__ */
