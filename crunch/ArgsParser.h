@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
 #ifndef __ARGSPARSER_H__
 #define __ARGSPARSER_H__
 
-#include <inttypes.h>
+#include <stdint.h>
 #include "crunch.h"
 
 typedef struct _arg
@@ -42,11 +42,11 @@ typedef struct _parsedArg
 #define ARG_INCOMPLETE	2
 
 CRUNCH_API void registerArgs(const arg *allowedArgs);
-CRUNCH_API parsedArg **parseArguments(int argc, const char *const *const argv);
+CRUNCH_API parsedArg **parseArguments(const int32_t argc, const char *const *const argv);
 CRUNCH_API parsedArg *findArg(parsedArg **args, const char *value, parsedArg *defaultVal);
 CRUNCH_API arg *findArgInArgs(const char *value);
 
 parsedArg *checkAlreadyFound(parsedArg **parsedArgs, parsedArg *toCheck);
-uint32_t checkParams(int argc, const char *const *const argv, int argPos, arg *argument, arg *args);
+uint32_t checkParams(const int32_t argc, const char *const *const argv, const int32_t argPos, arg *argument, arg *args);
 
 #endif /* __ARGSPARSER_H__ */
