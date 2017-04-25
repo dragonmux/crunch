@@ -82,8 +82,8 @@ public:
 
 	void testInvalid()
 	{
-		const arg_t args_1[1] = { {nullptr, 0, 0, 0} };
-		const arg_t args_2[2] =
+		const rawStrPtr_t argv[3] = {"test", "--arg", "--arg"};
+		const arg_t args[2] =
 		{
 			{"--arg", 0, 0, 0},
 			{nullptr, 0, 0, 0}
@@ -91,7 +91,7 @@ public:
 		parsedArgs_t parsedArgs;
 		std::unique_ptr<parsedArg_t> parsedArg;
 
-		registerArgs(args_2);
+		registerArgs(args);
 		parsedArgs = makeUnique<constParsedArg_t []>(2);
 		assertNotNull(parsedArgs);
 		parsedArg = makeUnique<parsedArg_t>();
@@ -101,6 +101,18 @@ public:
 		assertTrue(checkAlreadyFound(parsedArgs, *parsedArg));
 
 		assertNull(findArg(nullptr, "", nullptr));
+
+		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
+		parsedArgs = parseArguments(3, argv);
+		assertNotNull(parsedArgs);
+		assertNotNull(parsedArgs[0]);
+		assertNull(parsedArgs[1]);
+	}
+
+	void testArgCounting()
+	{
+
+
 	}
 
 	void registerTests()
@@ -109,6 +121,7 @@ public:
 		CXX_TEST(testEmpty)
 		CXX_TEST(testIncomplete)
 		CXX_TEST(testInvalid)
+		CXX_TEST(testArgCounting)
 	}
 };
 
