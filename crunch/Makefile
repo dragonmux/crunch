@@ -47,7 +47,7 @@ endif
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
-TESTS = testCrunch.so
+TESTS = testArgsParser.so testCrunch.so
 
 VERMAJ = .0
 VERMIN = .1

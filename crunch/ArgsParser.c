@@ -73,14 +73,12 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 
 parsedArg **parseArguments(const uint32_t argc, const char *const *const argv)
 {
-	parsedArg **ret;
-	int i, n;
-
-	if (argc <= 1)
+	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
 		return NULL;
 
-	ret = testMalloc(sizeof(parsedArg *) * argc);
-	for (i = 1, n = 0; i < argc; i++)
+	parsedArg **ret = testMalloc(sizeof(parsedArg *) * argc);
+	uint32_t n = 0;
+	for (uint32_t i = 1; i < argc; i++)
 	{
 		uint8_t found = FALSE;
 		arg *argument = (arg *)args;
