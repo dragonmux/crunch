@@ -29,10 +29,6 @@ else
 endif
 OUT_LFLAGS = $(OPTIM_FLAGS) $< $(LIBS) -pthread -ldl -lstdc++ -lm -o $@
 
-CRUNCHMAKE = crunchMake
-ifeq ($(BUILD_VERBOSE), 0)
-	CRUNCHMAKE += -q
-endif
 quiet_cmd_crunchMake = -n
 cmd_crunchMake = $(CRUNCHMAKE) $(2)
 quiet_cmd_crunch = -n
