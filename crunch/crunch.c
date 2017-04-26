@@ -34,7 +34,7 @@
 #endif
 
 static const int ok = 0;
-const arg_t args[] =
+const arg_t crunchArgs[] =
 {
 	{"--log", 1, 1, 0},
 	{NULL, 0, 0, 0}
@@ -239,7 +239,7 @@ void runTests()
 
 int main(int argc, char **argv)
 {
-	registerArgs(args);
+	registerArgs(crunchArgs);
 	parsedArgs = parseArguments(argc, (const char **)argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
 	{
