@@ -24,9 +24,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-const arg *args = NULL;
+const arg_t *args = NULL;
 
-void registerArgs(const arg *allowedArgs)
+void registerArgs(const arg_t *allowedArgs)
 {
 	args = allowedArgs;
 #ifdef _MSC_VER
@@ -34,25 +34,25 @@ void registerArgs(const arg *allowedArgs)
 #endif
 }
 
-parsedArg *checkAlreadyFound(const parsedArg *const *const parsedArgs, const parsedArg *const toCheck)
+uint8_t checkAlreadyFound(const parsedArg_t *const *const parsedArgs, const parsedArg_t *const toCheck)
 {
 	uint32_t i;
 	for (i = 0; parsedArgs[i] != NULL; i++)
 	{
-		const parsedArg *const arg = parsedArgs[i];
+		const parsedArg_t *const arg = parsedArgs[i];
 		if (strcmp(arg->value, toCheck->value) == 0)
-			return arg;
+			return TRUE;
 	}
-	return NULL;
+	return FALSE;
 }
 
-uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg *const argument, const arg *const args)
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t *const argument, const arg_t *const args)
 {
 	uint32_t i, n, min = argument->numMinParams, max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
 	for (i = argPos, n = 0; i < argc && n < max && eoa == FALSE; i++)
 	{
-		arg *currArg = args;
+		const arg_t *currArg = args;
 		while (currArg->value != NULL && eoa == FALSE)
 		{
 			if (strcmp(currArg->value, argv[i]) == 0)
@@ -71,18 +71,18 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 		return n;
 }
 
-parsedArg **parseArguments(const uint32_t argc, const char *const *const argv)
+parsedArg_t **parseArguments(const uint32_t argc, const char *const *const argv)
 {
 	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
 		return NULL;
 
-	parsedArg **ret = testMalloc(sizeof(parsedArg *) * argc);
+	parsedArg_t **ret = testMalloc(sizeof(parsedArg_t *) * argc);
 	uint32_t n = 0;
 	for (uint32_t i = 1; i < argc; i++)
 	{
 		uint8_t found = FALSE;
-		arg *argument = (arg *)args;
-		parsedArg *argRet = testMalloc(sizeof(parsedArg));
+		const arg_t *argument = args;
+		parsedArg_t *argRet = testMalloc(sizeof(parsedArg_t));
 		while (argument->value != NULL)
 		{
 			if (((argument->flags & ARG_INCOMPLETE) == 0 && strcmp(argument->value, argv[i]) == 0) ||
@@ -90,14 +90,14 @@ parsedArg **parseArguments(const uint32_t argc, const char *const *const argv)
 			{
 				found = TRUE;
 				argRet->value = strdup(argv[i]);
-				if ((argument->flags & ARG_REPEATABLE) == 0 && checkAlreadyFound(ret, argRet) != NULL)
+				if ((argument->flags & ARG_REPEATABLE) == 0 && checkAlreadyFound(ret, argRet))
 				{
 					testPrintf("Duplicate argument found: %s\n", argRet->value);
 					free((void *)argRet->value);
 					free(argRet);
 					break;
 				}
-				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg *)args);
+				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg_t *)args);
 				argRet->params = testMalloc(sizeof(char *) * argRet->paramsFound);
 				for (uint32_t j = 0; j < argRet->paramsFound; j++)
 					argRet->params[j] = strdup(argv[i + j + 1]);
@@ -107,7 +107,7 @@ parsedArg **parseArguments(const uint32_t argc, const char *const *const argv)
 				n++;
 				break;
 			}
-			argument++;
+			++argument;
 		}
 		if (found == FALSE)
 		{
@@ -119,10 +119,10 @@ parsedArg **parseArguments(const uint32_t argc, const char *const *const argv)
 		}
 	}
 	/* Shrink as appropriate */
-	return testRealloc(ret, sizeof(parsedArg *) * (n + 1));
+	return testRealloc(ret, sizeof(parsedArg_t *) * (n + 1));
 }
 
-const parsedArg *findArg(const parsedArg *const *const args, const char *const value, const parsedArg *const defaultVal)
+const parsedArg_t *findArg(const parsedArg_t *const *const args, const char *const value, const parsedArg_t *const defaultVal)
 {
 	if (!args || !value)
 		return defaultVal;
@@ -135,9 +135,9 @@ const parsedArg *findArg(const parsedArg *const *const args, const char *const v
 	return defaultVal;
 }
 
-const arg *findArgInArgs(const char *const value)
+const arg_t *findArgInArgs(const char *const value)
 {
-	const arg *curr = args;
+	const arg_t *curr = args;
 	while (curr->value != NULL)
 	{
 		if (((curr->flags & ARG_INCOMPLETE) == 0 && strcmp(curr->value, value) == 0) ||

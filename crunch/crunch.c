@@ -34,10 +34,10 @@
 #endif
 
 static const int ok = 0;
-const arg args[] =
+const arg_t args[] =
 {
 	{"--log", 1, 1, 0},
-	{0}
+	{NULL, 0, 0, 0}
 };
 
 #ifdef _MSC_VER
@@ -46,8 +46,8 @@ const arg args[] =
 #define LIBEXT "so"
 #endif
 
-parsedArg **parsedArgs = NULL;
-parsedArg **namedTests = NULL;
+parsedArg_t **parsedArgs = NULL;
+parsedArg_t **namedTests = NULL;
 uint32_t numTests = 0;
 const char *cwd = NULL;
 uint8_t loggingTests = 0;
@@ -103,7 +103,7 @@ uint8_t getTests()
 {
 	uint32_t i, j, n;
 	for (n = 0; parsedArgs[n] != NULL; n++);
-	namedTests = testMalloc(sizeof(parsedArg *) * (n + 1));
+	namedTests = testMalloc(sizeof(parsedArg_t *) * (n + 1));
 
 	for (j = 0, i = 0; i < n; i++)
 	{
@@ -120,7 +120,7 @@ uint8_t getTests()
 	}
 	else
 	{
-		namedTests = testRealloc(namedTests, sizeof(parsedArg *) * (j + 1));
+		namedTests = testRealloc(namedTests, sizeof(parsedArg_t *) * (j + 1));
 		numTests = j;
 		return TRUE;
 	}
@@ -146,7 +146,7 @@ void runTests()
 	test *currTest;
 	testLog *logFile = NULL;
 
-	parsedArg *logging = findArg(parsedArgs, "--log", NULL);
+	parsedArg_t *logging = findArg(parsedArgs, "--log", NULL);
 	if (logging != NULL)
 	{
 		logFile = startLogging(logging->params[0]);
@@ -240,7 +240,7 @@ void runTests()
 int main(int argc, char **argv)
 {
 	registerArgs(args);
-	parsedArgs = parseArguments(argc, argv);
+	parsedArgs = parseArguments((const char *const *)argc, argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
 	{
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
