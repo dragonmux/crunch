@@ -36,11 +36,9 @@ void registerArgs(const arg_t *allowedArgs)
 
 uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck)
 {
-	uint32_t i;
-	for (i = 0; parsedArgs[i] != NULL; i++)
+	for (uint32_t i = 0; parsedArgs[i] != NULL; i++)
 	{
-		const parsedArg_t *const arg = parsedArgs[i];
-		if (strcmp(arg->value, toCheck->value) == 0)
+		if (strcmp(parsedArgs[i]->value, toCheck->value) == 0)
 			return TRUE;
 	}
 	return FALSE;
@@ -48,27 +46,24 @@ uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *cons
 
 uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t *const argument, const arg_t *const args)
 {
-	uint32_t i, n, min = argument->numMinParams, max = argument->numMaxParams;
+	uint32_t n = 0;
+	const uint32_t min = argument->numMinParams, max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
-	for (i = argPos, n = 0; i < argc && n < max && eoa == FALSE; i++)
+	for (uint32_t i = argPos; i < argc && n < max && !eoa; ++i)
 	{
 		const arg_t *currArg = args;
-		while (currArg->value != NULL && eoa == FALSE)
+		while (currArg->value != NULL && !eoa)
 		{
 			if (strcmp(currArg->value, argv[i]) == 0)
 				eoa = TRUE;
-			currArg++;
+			++currArg;
 		}
-		if (eoa == TRUE)
-			break;
-		n++;
-		if (n == max)
+		if (eoa || ++n == max)
 			break;
 	}
 	if (n < min)
 		return -1;
-	else
-		return n;
+	return n;
 }
 
 parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
