@@ -57,7 +57,7 @@ crunchMake.o: crunchMake.cpp
 crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
 crunchMake.o: CFLAGS += -Dcrunch_GXX="\"$(GXX)\""
 
-ifeq ($(PREFIX), /usr)
+ifneq ($(PREFIX), /usr)
 crunchMake.o: CFLAGS += -Dcrunch_PREFIX="\"$(PREFIX)\""
 crunchMake.o: CFLAGS += -Dcrunch_LIBDIR="\"$(LIBDIR)\""
 endif
