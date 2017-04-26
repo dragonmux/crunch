@@ -149,7 +149,7 @@ void testArgCounting()
 	assertConstNotNull(parsedArgs[0]);
 	assertConstNotNull(parsedArgs[0]->value);
 	assertStringEqual(parsedArgs[0]->value, "-o");
-	assertEqual(parsedArgs[0]->paramsFound, 2);
+	assertIntEqual(parsedArgs[0]->paramsFound, 2);
 	assertConstNotNull(parsedArgs[0]->params[0]);
 	assertConstNotNull(parsedArgs[0]->params[1]);
 	assertStringEqual(parsedArgs[0]->params[0], "test");
