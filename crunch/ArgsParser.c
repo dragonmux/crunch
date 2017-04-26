@@ -66,6 +66,22 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 	return n;
 }
 
+uint8_t freeParsedArg(parsedArg_t *parsedArg)
+{
+	free((void *)parsedArg->value);
+	free(parsedArg);
+	return TRUE;
+}
+
+void *freeParsedArgs(parsedArgs_t parsedArgs)
+{
+	for (uint32_t i = 0; parsedArgs[i] != NULL; ++i)
+	{
+		freeParsedArg((parsedArg_t *)parsedArgs[i]);
+	}
+	return NULL;
+}
+
 parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 {
 	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
@@ -77,24 +93,30 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	uint32_t n = 0;
 	for (uint32_t i = 1; i < argc; i++)
 	{
-		uint8_t found = FALSE;
+		uint8_t found = FALSE, skip = FALSE;
 		const arg_t *argument = args;
-		parsedArg_t *argRet = testMalloc(sizeof(parsedArg_t));
+		parsedArg_t *argRet = malloc(sizeof(parsedArg_t));
+		if (!argRet)
+			return freeParsedArgs(ret);
 		while (argument->value != NULL)
 		{
-			if (((argument->flags & ARG_INCOMPLETE) == 0 && strcmp(argument->value, argv[i]) == 0) ||
-				strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
+			found = strcmp(argument->value, argv[i]) == 0 || ((argument->flags & ARG_INCOMPLETE) &&
+				strncmp(argument->value, argv[i], strlen(argument->value)) == 0);
+			if (found)
 			{
-				found = TRUE;
 				argRet->value = strdup(argv[i]);
-				if ((argument->flags & ARG_REPEATABLE) == 0 && checkAlreadyFound(ret, argRet))
+				if (!(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret, argRet))
 				{
 					testPrintf("Duplicate argument found: %s\n", argRet->value);
-					free((void *)argRet->value);
-					free(argRet);
+					skip = freeParsedArg(argRet);
 					break;
 				}
-				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, (arg_t *)args);
+				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, args);
+				if (argRet->paramsFound == (uint32_t)-1)
+				{
+					printf("Not enough parameters given for argument %s\n", argv[i]);
+					return NULL;
+				}
 				argRet->params = testMalloc(sizeof(char *) * argRet->paramsFound);
 				for (uint32_t j = 0; j < argRet->paramsFound; j++)
 					argRet->params[j] = strdup(argv[i + j + 1]);
@@ -106,7 +128,9 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 			}
 			++argument;
 		}
-		if (found == FALSE)
+		if (skip)
+			continue;
+		else if (!found)
 		{
 			argRet->value = strdup(argv[i]);
 			argRet->paramsFound = 0;
