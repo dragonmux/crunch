@@ -131,6 +131,7 @@ clean:
 .c.o:
 	$(call run-cmd,cc,$(CFLAGS))
 
+testArgsParser.so: CRUNCHMAKE += -oArgsParser.o
 %.so: %.c
 	$(call run-cmd,crunchMake,$<)
 
