@@ -45,11 +45,11 @@ typedef constParsedArg_t *parsedArgs_t;
 #define ARG_INCOMPLETE	2
 
 CRUNCH_API void registerArgs(const arg_t *allowedArgs);
-CRUNCH_API parsedArg_t **parseArguments(const uint32_t argc, const char *const *const argv);
-CRUNCH_API const parsedArg_t *findArg(const parsedArg_t *const *const args, const char *const value, const parsedArg_t *const defaultVal);
+CRUNCH_API parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv);
+CRUNCH_API constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal);
 CRUNCH_API const arg_t *findArgInArgs(const char *const value);
 
-uint8_t checkAlreadyFound(const parsedArg_t *const *const parsedArgs, const parsedArg_t *const toCheck);
+uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck);
 uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t *const argument, const arg_t *const args);
 
 #endif /* __ARGSPARSER_H__ */

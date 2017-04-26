@@ -34,7 +34,7 @@ void registerArgs(const arg_t *allowedArgs)
 #endif
 }
 
-uint8_t checkAlreadyFound(const parsedArg_t *const *const parsedArgs, const parsedArg_t *const toCheck)
+uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck)
 {
 	uint32_t i;
 	for (i = 0; parsedArgs[i] != NULL; i++)
@@ -71,12 +71,14 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 		return n;
 }
 
-parsedArg_t **parseArguments(const uint32_t argc, const char *const *const argv)
+parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 {
 	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
 		return NULL;
 
-	parsedArg_t **ret = testMalloc(sizeof(parsedArg_t *) * argc);
+	parsedArgs_t ret = malloc(sizeof(constParsedArg_t) * argc);
+	if (!ret)
+		return NULL;
 	uint32_t n = 0;
 	for (uint32_t i = 1; i < argc; i++)
 	{
@@ -119,17 +121,17 @@ parsedArg_t **parseArguments(const uint32_t argc, const char *const *const argv)
 		}
 	}
 	/* Shrink as appropriate */
-	return testRealloc(ret, sizeof(parsedArg_t *) * (n + 1));
+	return testRealloc(ret, sizeof(constParsedArg_t) * (n + 1));
 }
 
-const parsedArg_t *findArg(const parsedArg_t *const *const args, const char *const value, const parsedArg_t *const defaultVal)
+constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal)
 {
 	if (!args || !value)
 		return defaultVal;
 	for (uint32_t n = 0; args[n] != NULL; n++)
 	{
-		if (((args[n]->flags & ARG_INCOMPLETE) == 0 && strcmp(args[n]->value, value) == 0) ||
-			strncmp(args[n]->value, value, strlen(value)) == 0)
+		if (strcmp(args[n]->value, value) == 0 || ((args[n]->flags & ARG_INCOMPLETE) &&
+			strncmp(args[n]->value, value, strlen(value)) == 0))
 			return args[n];
 	}
 	return defaultVal;
