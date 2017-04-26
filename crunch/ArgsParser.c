@@ -117,14 +117,27 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 					printf("Not enough parameters given for argument %s\n", argv[i]);
 					return NULL;
 				}
-				argRet->params = testMalloc(sizeof(char *) * argRet->paramsFound);
-				for (uint32_t j = 0; j < argRet->paramsFound; j++)
-					argRet->params[j] = strdup(argv[i + j + 1]);
+				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
+				if (argRet->paramsFound)
+				{
+					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
+					if (!argRet->params)
+						return freeParsedArg(argRet), freeParsedArgs(ret);
+					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
+					{
+						argRet->params[j] = strdup(argv[i + j + 1]);
+						if (!argRet->params[j])
+							return freeParsedArg(argRet), freeParsedArgs(ret);
+					}
+				}
 				i += argRet->paramsFound;
 				argRet->flags = argument->flags;
-				ret[n] = argRet;
-				n++;
 				break;
+			}
+			else if (!(argument->flags & ARG_INCOMPLETE) && strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
+			{
+				printf("Badly formatted argument (%s)\n", argv[i]);
+				return freeParsedArg(argRet), freeParsedArgs(ret);
 			}
 			++argument;
 		}
@@ -133,14 +146,20 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 		else if (!found)
 		{
 			argRet->value = strdup(argv[i]);
+			if (!argRet->value)
+				return freeParsedArg(argRet), freeParsedArgs(ret);
 			argRet->paramsFound = 0;
 			argRet->flags = argument->flags;
-			ret[n] = argRet;
-			n++;
 		}
+		ret[n++] = argRet;
 	}
 	/* Shrink as appropriate */
-	return testRealloc(ret, sizeof(constParsedArg_t) * (n + 1));
+	parsedArgs_t result = malloc(sizeof(constParsedArg_t) * (n + 1));
+	if (!result)
+		return freeParsedArgs(ret);
+	memcpy(result, ret, sizeof(constParsedArg_t *) * n);
+	result[n] = NULL;
+	return result;
 }
 
 constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal)
