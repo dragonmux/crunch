@@ -46,8 +46,8 @@ const arg_t args[] =
 #define LIBEXT "so"
 #endif
 
-parsedArg_t **parsedArgs = NULL;
-parsedArg_t **namedTests = NULL;
+parsedArgs_t parsedArgs = NULL;
+parsedArgs_t namedTests = NULL;
 uint32_t numTests = 0;
 const char *cwd = NULL;
 uint8_t loggingTests = 0;
@@ -103,7 +103,7 @@ uint8_t getTests()
 {
 	uint32_t i, j, n;
 	for (n = 0; parsedArgs[n] != NULL; n++);
-	namedTests = testMalloc(sizeof(parsedArg_t *) * (n + 1));
+	namedTests = testMalloc(sizeof(constParsedArg_t) * (n + 1));
 
 	for (j = 0, i = 0; i < n; i++)
 	{
@@ -146,7 +146,7 @@ void runTests()
 	test *currTest;
 	testLog *logFile = NULL;
 
-	parsedArg_t *logging = findArg(parsedArgs, "--log", NULL);
+	constParsedArg_t logging = findArg(parsedArgs, "--log", NULL);
 	if (logging != NULL)
 	{
 		logFile = startLogging(logging->params[0]);
@@ -240,7 +240,7 @@ void runTests()
 int main(int argc, char **argv)
 {
 	registerArgs(args);
-	parsedArgs = parseArguments((const char *const *)argc, argv);
+	parsedArgs = parseArguments(argc, (const char **)argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
 	{
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
