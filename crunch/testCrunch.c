@@ -21,6 +21,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif
 #include "Core.h"
 #include "Logger.h"
 
