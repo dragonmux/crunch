@@ -47,6 +47,18 @@ matrix:
             - gcc-4.9
             - g++-4.9
             - clang-3.9
+    - compiler: clang-4.0
+      env: GCC=clang-4.0 GXX=clang++-4.0 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-4.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+            - g++-4.9
+            - clang-4.0
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9 GCOV=gcov-4.9
       addons:
