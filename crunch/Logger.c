@@ -111,7 +111,7 @@ void echoOk()
 void echoFailure()
 {
 	if (isTTY != 0)
-		testPrintf(SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printFailure();
 	failures++;
@@ -155,7 +155,6 @@ void echoFailure()
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.Y--;
 		cursor.dwCursorPosition.X = COL(getColumns());
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -177,10 +176,6 @@ void echoAborted()
 	if (isTTY != 0)
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
-		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.Y--;
-		cursor.dwCursorPosition.X = COL(getColumns()) - 13;
-		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
