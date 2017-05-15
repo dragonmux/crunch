@@ -109,7 +109,7 @@ void echoOk()
 void echoFailure()
 {
 	if (isTTY != 0)
-		testPrintf(CURS_UP SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+		testPrintf(SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printFailure();
 	failures++;
@@ -118,7 +118,7 @@ void echoFailure()
 void echoAborted()
 {
 	if (isTTY != 0)
-		testPrintf(BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
+		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
 		printAborted();
 	throw threadExit_t(0);
@@ -207,15 +207,6 @@ void logResult(resultType type, const char *message, ...)
 	va_start(args, message);
 	vaTestPrintf(message, args);
 	va_end(args);
-	if (type != RESULT_SUCCESS && isTTY != 0)
-#ifndef _MSC_VER
-		testPrintf(NEWLINE);
-#else
-	{
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
-	}
-#endif
 	switch (type)
 	{
 		case RESULT_SUCCESS:
