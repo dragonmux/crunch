@@ -22,9 +22,9 @@
 #include "crunch++.h"
 #include "memory.hxx"
 
-CRUNCH_API const char *boolToString(bool value);
-CRUNCH_API std::unique_ptr<char []> formatString(const char *format, ...) noexcept;
-CRUNCH_API std::unique_ptr<char []> stringDup(const char *const str) noexcept;
-CRUNCH_API std::unique_ptr<const char []> strNewDup(const char *const str) noexcept;
+CRUNCHpp_API const char *boolToString(bool value);
+CRUNCHpp_API std::unique_ptr<char []> formatString(const char *format, ...) noexcept;
+CRUNCHpp_API std::unique_ptr<char []> stringDup(const char *const str) noexcept;
+CRUNCHpp_API std::unique_ptr<const char []> strNewDup(const char *const str) noexcept;
 
 #endif /* __STRINGFUNCS_H__ */
