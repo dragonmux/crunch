@@ -121,7 +121,7 @@ void echoAborted()
 		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
 		printAborted();
-	throw threadExit_t(0);
+	throw threadExit_t(2);
 }
 #else
 void echoOk()
