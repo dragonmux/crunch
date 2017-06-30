@@ -287,7 +287,10 @@ public:
 
 	void testAbort()
 	{
-		logResult(RESULT_ABORT, "This message is only a test");
+		try
+			{ logResult(RESULT_ABORT, "This message is only a test"); }
+		catch (threadExit_t &val)
+			{ assertEqual(val, 2); }
 	}
 
 	void registerTests() final override
