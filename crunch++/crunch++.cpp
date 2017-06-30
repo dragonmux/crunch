@@ -202,7 +202,17 @@ void runTests()
 			else
 				testPrintf("\n");
 			test.testClass->registerTests();
-			test.testClass->test();
+			try
+				{ test.testClass->test(); }
+			catch (threadExit_t &)
+			{
+				delete test.testClass;
+				cxxTests.clear();
+				printStats();
+				if (logging != nullptr)
+					stopLogging(logFile);
+				throw;
+			}
 			delete test.testClass;
 		}
 		cxxTests.clear();
@@ -234,7 +244,12 @@ int main(int argc, char **argv)
 	}
 	isTTY = isatty(fileno(stdout));
 #endif
-	runTests();
+	try { runTests(); }
+	catch (threadExit_t &val)
+	{
+		free((void *)cwd);
+		return val;
+	}
 	free((void *)cwd);
 	return failures ? 1 : 0;
 }

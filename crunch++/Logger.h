@@ -42,6 +42,7 @@ CRUNCH_API testLog *logger;
 
 CRUNCH_API size_t vaTestPrintf(const char *format, va_list args);
 CRUNCH_API size_t testPrintf(const char *format, ...);
+CRUNCH_API void echoAborted();
 CRUNCH_API void logResult(resultType type, const char *message, ...);
 
 #define COLOUR(Code) "\x1B[" Code "m"

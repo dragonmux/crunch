@@ -185,7 +185,7 @@ void echoAborted()
 	}
 	else
 		printAborted();
-	throw threadExit_t(0);
+	throw threadExit_t(2);
 }
 #endif
 

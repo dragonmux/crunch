@@ -1,7 +1,6 @@
 #include "crunch++.h"
 #include "Core.h"
 #include "Logger.h"
-#include <exception>
 
 using namespace std;
 
@@ -48,12 +47,16 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	}
 	catch (...)
 	{
-		exception_ptr e = current_exception();
+		unitClass.exceptions.emplace_back(current_exception());
 		// Did the test switch logging on?
 		if (!loggingTests && logging)
 			// Yes, switch it back off again
 			stopLogging(logger);
-		unitClass.fail("Exception caught by crunch++");
+		logResult(RESULT_FAILURE, "Failure: Exception caught by crunch++");
+#ifndef _MSC_VER
+		testPrintf(CURS_UP);
+#endif
+		return 2;
 	}
 	// Did the test switch logging on?
 	if (!loggingTests && logging)
@@ -73,6 +76,6 @@ void testsuit::test()
 		test.testThread = thread([&, this]{ retVal = testRunner(*this, test); });
 		test.testThread.join();
 		if (retVal == 2)
-			throw threadExit_t(2);
+			echoAborted();
 	}
 }

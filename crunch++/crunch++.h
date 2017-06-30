@@ -27,6 +27,7 @@
 #include <typeinfo>
 #include <functional>
 #include <memory>
+#include <exception>
 
 #ifdef _MSC_VER
 	#ifdef __crunch_lib__
@@ -99,6 +100,7 @@ class CRUNCHpp_API testsuit
 {
 private:
 	template<typename T> using isNumeric = crunch::isNumeric<T>;
+	std::vector<std::exception_ptr> exceptions;
 
 protected:
 	std::vector<cxxTest> tests;
