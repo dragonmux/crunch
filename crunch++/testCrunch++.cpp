@@ -32,7 +32,7 @@
 
 using namespace std;
 
-class crunchTests : public testsuit
+class crunchTests final : public testsuit
 {
 private:
 	void *genPtr()
@@ -290,7 +290,7 @@ public:
 		logResult(RESULT_ABORT, "This message is only a test");
 	}
 
-	void registerTests()
+	void registerTests() final override
 	{
 		CXX_TEST(testAssertTrue)
 		CXX_TEST(testAssertFalse)
