@@ -48,14 +48,14 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
 const char *const cc = "gcc -m64 -fPIC -DPIC" OPTS_EXTRA;
-const char *const cxx = "g++ -m64 -fPIC -DPIC -std=c++11" OPTS_EXTRA;
+const char *const cxx = "g++ -m64 -fPIC -DPIC %s%s";
 #else
 const char *const cc = "gcc -m32" OPTS_EXTRA;
-const char *const cxx = "g++ -m32 -std=c++11" OPTS_EXTRA;
+const char *const cxx = "g++ -m32 %s%s";
 #endif
 #else
 const char *const cc = crunch_GCC OPTS_EXTRA;
-const char *const cxx = crunch_GXX " -std=c++11" OPTS_EXTRA;
+const char *const cxx = crunch_GXX " %s%s";
 #endif
 #define OPTS	"-shared %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so";
@@ -83,6 +83,7 @@ const arg_t args[] =
 	{"-q", 0, 0, 0},
 	{"-pthread", 0, 0, 0},
 	{"-Wl", 0, 0, ARG_INCOMPLETE},
+	{"-std=", 0, 0, ARG_INCOMPLETE},
 	{nullptr, 0, 0, 0}
 };
 
@@ -184,6 +185,31 @@ std::unique_ptr<char []> libDirFlagsToString() { return argsToString(libDirs, nu
 std::unique_ptr<char []> objsToString() { return argsToString(linkObjs, numObjs, 2); }
 std::unique_ptr<char []> libsToString() { return argsToString(linkLibs, numLibs, 0); }
 
+#ifndef _MSC_VER
+const char *standardVersion(constParsedArg_t version)
+{
+	if (!version)
+		return "-std=c++11";
+	const auto str = version->value.get() + 5;
+	if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
+	{
+		testPrintf("Warning, standard version must be at least C++11");
+		return "-std=c++11";
+	}
+	return version->value.get();
+}
+#endif
+
+std::unique_ptr<char []> buildCXXString()
+{
+#ifndef _MSC_VER
+	constParsedArg_t standard = findArg(parsedArgs, "-std=", nullptr);
+	return formatString(cxx, standardVersion(standard), OPTS_EXTRA);
+#else
+	return stringDup(cxx);
+#endif
+}
+
 int compileTests()
 {
 	uint32_t i, ret = 0;
@@ -191,6 +217,7 @@ int compileTests()
 	auto libDirFlags = libDirFlagsToString();
 	auto objs = objsToString();
 	auto libs = libsToString();
+	auto cxx = buildCXXString();
 	bool silent = bool(findArg(parsedArgs, "--silent", nullptr));
 	testLog *logFile = nullptr;
 	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
@@ -209,7 +236,7 @@ int compileTests()
 		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value.get()))
 		{
 			const bool mode = isCXX(namedTests[i]->value.get());
-			const char *const compiler = mode ? cxx : cc;
+			const char *const compiler = mode ? cxx.get() : cc;
 			std::unique_ptr<char []> soFile = toSO(namedTests[i]->value.get());
 			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler,
 				namedTests[i]->value.get(), inclDirFlags.get(), libDirFlags.get(), objs.get(), libs.get(),
