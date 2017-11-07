@@ -122,6 +122,7 @@ check: test
 	$(call run-cmd,rm,prep,testMustNotExist.so)
 	$(call run-cmd,crunch,$(subst .so,,$(TESTS_NORM)) testMustNotExist)
 	$(call run-cmd,crunch,$(subst .so,,$(TESTS_EXCEPT))); test $$? = 2
+	$(call run-cmd,crunch,); test $$? = 2
 
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(EXE)))
