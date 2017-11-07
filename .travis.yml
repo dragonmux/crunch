@@ -28,9 +28,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-3.8 main'
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - ubuntu-toolchain-r-test
+            - ubuntu-toolchain-r
           packages:
             - gcc-4.9
             - g++-4.9
@@ -40,9 +40,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-3.9 main'
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - ubuntu-toolchain-r-test
+            - ubuntu-toolchain-r
           packages:
             - gcc-4.9
             - g++-4.9
@@ -52,13 +52,25 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'deb http://apt.llvm.org/precise/ llvm-toolchain-precise-4.0 main'
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-4.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - ubuntu-toolchain-r-test
+            - ubuntu-toolchain-r
           packages:
             - gcc-4.9
             - g++-4.9
             - clang-4.0
+    - compiler: clang-5.0
+      env: GCC=clang-5.0 GXX=clang++-5.0 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - ubuntu-toolchain-r
+          packages:
+            - gcc-4.9
+            - g++-4.9
+            - clang-5.0
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9 GCOV=gcov-4.9
       addons:
