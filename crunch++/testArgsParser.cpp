@@ -103,6 +103,7 @@ public:
 		assertNull(findArg(nullptr, "", nullptr));
 
 		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
+		startLogging("/dev/null");
 		parsedArgs = parseArguments(3, argv);
 		assertNotNull(parsedArgs);
 		assertNotNull(parsedArgs[0]);
@@ -127,7 +128,9 @@ public:
 		assertEqual(checkParams(5, argv_1, 5, args[0], args), 0);
 		assertEqual(checkParams(5, argv_2, 2, args[0], args), 2);
 
+		auto log = startLogging("/dev/null");
 		parsedArgs = parseArguments(5, argv_1);
+		stopLogging(log);
 		assertNull(parsedArgs);
 
 		parsedArgs = parseArguments(5, argv_2);
