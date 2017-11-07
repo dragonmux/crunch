@@ -76,6 +76,7 @@ const arg_t args[] =
 	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-I", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-L", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-std=", 0, 0, ARG_INCOMPLETE},
 	{"--log", 1, 1, 0},
 	{"--silent", 0, 0, 0},
 	{"-s", 0, 0, 0},
@@ -83,7 +84,6 @@ const arg_t args[] =
 	{"-q", 0, 0, 0},
 	{"-pthread", 0, 0, 0},
 	{"-Wl", 0, 0, ARG_INCOMPLETE},
-	{"-std=", 0, 0, ARG_INCOMPLETE},
 	{nullptr, 0, 0, 0}
 };
 
