@@ -42,7 +42,7 @@ matrix:
           sources:
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - ubuntu-toolchain-r
+            - ubuntu-toolchain-r-test
           packages:
             - gcc-4.9
             - g++-4.9
@@ -54,7 +54,7 @@ matrix:
           sources:
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-4.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - ubuntu-toolchain-r
+            - ubuntu-toolchain-r-test
           packages:
             - gcc-4.9
             - g++-4.9
@@ -66,7 +66,7 @@ matrix:
           sources:
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - ubuntu-toolchain-r
+            - ubuntu-toolchain-r-test
           packages:
             - gcc-4.9
             - g++-4.9
