@@ -76,8 +76,8 @@ public:
 
 		startLogging("/dev/null");
 		registerArgs(args_2);
-		assertNull(parseArguments(2, argv_1));
-		assertNull(parseArguments(2, argv_2));
+		assertNotNull(parseArguments(2, argv_1));
+		assertNotNull(parseArguments(2, argv_2));
 	}
 
 	void testInvalid()
