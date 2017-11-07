@@ -47,7 +47,7 @@ endif
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
-TESTS = testArgsParser.so testCrunch.so
+TESTS = testArgsParser.so testCrunch.so testBad.so
 
 VERMAJ = .0
 VERMIN = .1
@@ -117,7 +117,9 @@ $(PC): $(IN)
 test: $(TESTS)
 
 check: test
-	$(call run-cmd,crunch,$(subst .so,,$(TESTS)))
+	$(call run-cmd,rm,prep,testMustNotExist.so)
+	$(call run-cmd,crunch,$(subst .so,,$(TESTS)) testMustNotExist)
+	$(call run-cmd,crunch,); test $$? = 2
 
 clean:
 	$(call run-cmd,rm,$(EXE),$(EXE) $(patsubst %,%.o,$(EXE)))
