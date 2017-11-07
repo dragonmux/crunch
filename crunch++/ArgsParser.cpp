@@ -118,7 +118,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) 
 				argRet->flags = argument->flags;
 				break;
 			}
-			else if (!(argument->flags & ARG_INCOMPLETE) && strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
+			else if ((argument->flags & ARG_INCOMPLETE) && strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
 			{
 				printf("Badly formatted argument (%s)\n", argv[i]);
 				return nullptr;
