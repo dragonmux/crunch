@@ -136,12 +136,13 @@ clean:
 .cpp.o:
 	$(call run-cmd,cxx,$(CFLAGS))
 
-testArgsParser.so: CRUNCHMAKE += -oArgsParser.o
+testArgsParser.so: CRUNCHMAKE += -oArgsParser.o -oStringFuncs.o
+testCrunch++.so: CRUNCHMAKE += -oStringFuncs.o
 %.so: %.cpp
 	$(call run-cmd,crunchMake,$<)
 
 .PHONY: test clean install priv-install-so install-so all uninstall default .cpp.o $(PC)
 
 crunch++: crunch++.o
-
+crunch++: OUT_LFLAGS += StringFuncs.o
 crunch++.o: crunch++.cpp

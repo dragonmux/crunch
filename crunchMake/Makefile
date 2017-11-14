@@ -53,6 +53,7 @@ clean:
 .PHONY:
 
 crunchMake: crunchMake.o
+crunchMake: LFLAGS += ../crunch++/StringFuncs.o
 crunchMake.o: crunchMake.cpp
 crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
 crunchMake.o: CFLAGS += -Dcrunch_GXX="\"$(GXX)\""
