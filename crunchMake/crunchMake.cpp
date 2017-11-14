@@ -40,6 +40,7 @@ parsedArgs_t namedTests;
 uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
 
 #ifndef _MSC_VER
+#define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
 #ifdef crunch_PREFIX
 #define OPTS_EXTRA " -I" crunch_PREFIX "/include -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
 #else
@@ -48,14 +49,14 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
 const char *const cc = "gcc -m64 -fPIC -DPIC" OPTS_EXTRA;
-const char *const cxx = "g++ -m64 -fPIC -DPIC %s%s";
+const char *const cxx = "g++ -m64 -fPIC -DPIC" OPTS_VIS " %s%s";
 #else
 const char *const cc = "gcc -m32" OPTS_EXTRA;
-const char *const cxx = "g++ -m32 %s%s";
+const char *const cxx = "g++ -m32" OPTS_VIS " %s%s";
 #endif
 #else
 const char *const cc = crunch_GCC OPTS_EXTRA;
-const char *const cxx = crunch_GXX " %s%s";
+const char *const cxx = crunch_GXX OPTS_VIS " %s%s";
 #endif
 #define OPTS	"-shared %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so";

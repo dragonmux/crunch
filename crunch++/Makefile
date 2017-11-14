@@ -138,7 +138,7 @@ clean:
 
 testArgsParser.so: CRUNCHMAKE += -oArgsParser.o -oStringFuncs.o
 testCrunch++.so: CRUNCHMAKE += -oStringFuncs.o
-%.so: %.cpp
+%.so: %.cpp | lib
 	$(call run-cmd,crunchMake,$<)
 
 .PHONY: test clean install priv-install-so install-so all uninstall default .cpp.o $(PC)
