@@ -36,8 +36,8 @@ using namespace std;
 parsedArgs_t parsedArgs;
 parsedArgs_t inclDirs, libDirs;
 parsedArgs_t linkLibs, linkObjs;
-parsedArgs_t namedTests;
-uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0;
+parsedArgs_t namedTests, linkArgs;
+uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0, numLinkArgs = 0;
 
 #ifndef _MSC_VER
 #define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
@@ -85,6 +85,7 @@ const arg_t args[] =
 	{"-pthread", 0, 0, 0},
 	{"-Wl", 0, 0, ARG_INCOMPLETE},
 	{"-std=", 0, 0, ARG_INCOMPLETE},
+	{"-z", 1, 1, ARG_REPEATABLE},
 	{nullptr, 0, 0, 0}
 };
 
@@ -118,21 +119,22 @@ bool getTests()
 inline void getLinkFunc(parsedArgs_t &var, uint32_t &num, const char *find)
 {
 	uint32_t i, n;
-	for (n = 0; parsedArgs[n] != nullptr; n++)
+	for (n = 0; parsedArgs[n] != nullptr; ++n)
 		continue;
 	var = makeUnique<constParsedArg_t []>(n + 1);
-	for (num = 0, i = 0; i < n; i++)
+	if (var == nullptr)
+		return;
+	for (num = 0, i = 0; i < n; ++i)
 	{
 		if (strncmp(parsedArgs[i]->value.get(), find, 2) == 0)
-		{
-			var[num] = parsedArgs[i];
-			num++;
-		}
+			var[num++] = parsedArgs[i];
 	}
 	if (num == 0)
 		var = nullptr;
 
 	parsedArgs_t vars = makeUnique<constParsedArg_t []>(num);
+	if (vars == nullptr)
+		return;
 	std::copy(var.get(), var.get() + num, vars.get());
 	var = std::move(vars);
 }
@@ -141,6 +143,29 @@ void getLinkLibs() { getLinkFunc(linkLibs, numLibs, "-l"); }
 void getLinkObjs() { getLinkFunc(linkObjs, numObjs, "-o"); }
 void getInclDirs() { getLinkFunc(inclDirs, numInclDirs, "-I"); }
 void getLibDirs() { getLinkFunc(libDirs, numLibDirs, "-L"); }
+
+void getLinkArgs()
+{
+	uint32_t i, n, &num = numLinkArgs;
+	for (n = 0; parsedArgs[n] != nullptr; ++n)
+		continue;
+	linkArgs = makeUnique<constParsedArg_t []>(n + 1);
+	if (linkArgs == nullptr)
+		return;
+	for (num = 0, i = 0; i < n; ++i)
+	{
+		if (strcmp(parsedArgs[i]->value.get(), "-z") == 0)
+			linkArgs[num++] = parsedArgs[i];
+	}
+	if (num == 0)
+		linkArgs = nullptr;
+
+	parsedArgs_t vars = makeUnique<constParsedArg_t []>(num);
+	if (vars == nullptr)
+		return;
+	std::copy(linkArgs.get(), linkArgs.get() + num, vars.get());
+	linkArgs = std::move(vars);
+}
 
 bool validExt(const char *file)
 {
@@ -175,8 +200,21 @@ std::unique_ptr<char []> toSO(const char *const file)
 inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
 {
 	std::unique_ptr<char []> ret = stringDup("");
-	for (uint32_t i = 0; i < num; i++)
+	for (uint32_t i = 0; i < num; ++i)
 		ret = std::move(formatString("%s%s ", ret.get(), var[i]->value.get() + offset));
+	var = nullptr;
+	return ret;
+}
+
+inline std::unique_ptr<char []> argParamsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
+{
+	std::unique_ptr<char []> ret = stringDup("");
+	for (uint32_t i = 0; i < num; ++i)
+	{
+		ret = std::move(formatString("%s%s ", ret.get(), var[i]->value.get() + offset));
+		for (uint32_t param = 0; param < var[i]->paramsFound; ++param)
+			ret = std::move(formatString("%s%s ", ret.get(), var[i]->params[param].get()));
+	}
 	var = nullptr;
 	return ret;
 }
@@ -184,7 +222,12 @@ inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t n
 std::unique_ptr<char []> inclDirFlagsToString() { return argsToString(inclDirs, numInclDirs, 0); }
 std::unique_ptr<char []> libDirFlagsToString() { return argsToString(libDirs, numLibDirs, 0); }
 std::unique_ptr<char []> objsToString() { return argsToString(linkObjs, numObjs, 2); }
-std::unique_ptr<char []> libsToString() { return argsToString(linkLibs, numLibs, 0); }
+std::unique_ptr<char []> libsToString()
+{
+	auto libs = argsToString(linkLibs, numLibs, 0);
+	auto args = argParamsToString(linkArgs, numLinkArgs, 0);
+	return formatString("%s%s ", libs.get(), args.get());
+}
 
 #ifndef _MSC_VER
 const char *standardVersion(constParsedArg_t version)
@@ -276,5 +319,6 @@ int main(int argc, char **argv)
 	getLibDirs();
 	getLinkLibs();
 	getLinkObjs();
+	getLinkArgs();
 	return compileTests();
 }
