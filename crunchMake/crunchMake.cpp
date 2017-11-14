@@ -226,7 +226,7 @@ std::unique_ptr<char []> libsToString()
 {
 	auto libs = argsToString(linkLibs, numLibs, 0);
 	auto args = argParamsToString(linkArgs, numLinkArgs, 0);
-	return formatString("%s%s ", libs.get(), args.get());
+	return formatString("%s%s", libs.get(), args.get());
 }
 
 #ifndef _MSC_VER
