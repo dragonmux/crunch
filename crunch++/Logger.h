@@ -30,6 +30,7 @@ typedef enum _resultType
 {
 	RESULT_FAILURE,
 	RESULT_SUCCESS,
+	RESULT_SKIP,
 	RESULT_ABORT
 } resultType;
 
@@ -49,6 +50,7 @@ CRUNCH_API void logResult(resultType type, const char *message, ...);
 #define NORMAL COLOUR("0;39")
 #define SUCCESS COLOUR("1;32")
 #define FAILURE COLOUR("1;31")
+#define WARNING COLOUR("1;33")
 #define BRACKET COLOUR("1;34")
 #define INFO COLOUR("1;36")
 

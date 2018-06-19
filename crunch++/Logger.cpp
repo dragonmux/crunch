@@ -81,20 +81,10 @@ size_t testPrintf(const char *format, ...)
 	return ret;
 }
 
-void printOk()
-{
-	testPrintf(" [  OK  ]\n");
-}
-
-void printFailure()
-{
-	testPrintf(" [ FAIL ]\n");
-}
-
-void printAborted()
-{
-	testPrintf("[ **** ABORTED **** ]\n");
-}
+void printOk() { testPrintf(" [  OK  ]\n"); }
+void printFailure() { testPrintf(" [ FAIL ]\n"); }
+void printSkip() { testPrintf(" [ SKIP ]\n"); }
+void printAborted() { testPrintf("[ **** ABORTED **** ]\n"); }
 
 #ifndef _MSC_VER
 void echoOk()
@@ -103,7 +93,7 @@ void echoOk()
 		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printOk();
-	passes++;
+	++passes;
 }
 
 void echoFailure()
@@ -112,7 +102,16 @@ void echoFailure()
 		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printFailure();
-	failures++;
+	++failures;
+}
+
+void echoSkip()
+{
+	if (isTTY != 0)
+		testPrintf(" " SET_COL BRACKET "[" WARNING " SKIP " BRACKET "]" NEWLINE, COL(getColumns()));
+	else
+		printSkip();
+	++passes;
 }
 
 void echoAborted()
@@ -169,6 +168,27 @@ void echoFailure()
 	failures++;
 }
 
+void echoSkip()
+{
+	if (isTTY != 0)
+	{
+		CONSOLE_SCREEN_BUFFER_INFO cursor;
+		GetConsoleScreenBufferInfo(console, &cursor);
+		cursor.dwCursorPosition.X = COL(getColumns());
+		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		testPrintf("[");
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		testPrintf(" SKIP ");
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		testPrintf("]");
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		testPrintf("\n");
+	}
+	else
+		printSkip();
+}
+
 void echoAborted()
 {
 	if (isTTY != 0)
@@ -209,6 +229,9 @@ void logResult(resultType type, const char *message, ...)
 			break;
 		case RESULT_FAILURE:
 			echoFailure();
+			break;
+		case RESULT_SKIP:
+			echoSkip();
 			break;
 		default:
 			echoAborted();

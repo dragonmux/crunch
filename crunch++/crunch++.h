@@ -108,6 +108,7 @@ protected:
 	// XXX: Fixme.. this had to be added for some tests chained from a main test class
 public:
 	void fail(const char *reason);
+	void skip(const char *reason);
 
 	void assertTrue(const bool value);
 	void assertFalse(const bool value);

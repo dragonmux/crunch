@@ -201,9 +201,11 @@ void runTests()
 #endif
 			else
 				testPrintf("\n");
-			test.testClass->registerTests();
 			try
-				{ test.testClass->test(); }
+			{
+				test.testClass->registerTests();
+				test.testClass->test();
+			}
 			catch (threadExit_t &)
 			{
 				delete test.testClass;

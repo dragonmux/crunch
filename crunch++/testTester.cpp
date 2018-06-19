@@ -28,11 +28,15 @@ public:
 class throwTest final : public testsuit
 {
 public:
+	void testSkip()
+		{ skip("I'm a skipped test"); }
+
 	void testThrow()
 		{ throw testException_t(); }
 
 	void registerTests() final override
 	{
+		CXX_TEST(testSkip)
 		CXX_TEST(testThrow)
 	}
 };

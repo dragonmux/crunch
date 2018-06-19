@@ -41,6 +41,12 @@ void testsuit::fail(const char *reason)
 	throw threadExit_t(1);
 }
 
+void testsuit::skip(const char *reason)
+{
+	logResult(RESULT_SKIP, "Skipping: %s", reason);
+	throw threadExit_t(1);
+}
+
 void testsuit::assertTrue(const bool value)
 {
 	if (!value)
