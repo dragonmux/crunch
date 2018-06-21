@@ -116,6 +116,15 @@ matrix:
           packages:
             - gcc-7
             - g++-7
+    - compiler: gcc-8
+      env: GCC=gcc-8 GXX=g++-8 GCOV=gcov-8
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-8
+            - g++-8
 
 env:
   global:
