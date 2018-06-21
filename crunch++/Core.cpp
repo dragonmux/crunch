@@ -35,13 +35,13 @@ void assertionError(const char *params, T result)
 testsuit::testsuit() { }
 testsuit::~testsuit() { }
 
-void testsuit::fail(const char *reason)
+void testsuit::fail(const char *const reason)
 {
 	logResult(RESULT_FAILURE, "Failure: %s", reason);
 	throw threadExit_t(1);
 }
 
-void testsuit::skip(const char *reason)
+void testsuit::skip(const char *const reason)
 {
 	logResult(RESULT_SKIP, "Skipping: %s", reason);
 	throw threadExit_t(1);
