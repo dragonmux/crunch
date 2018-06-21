@@ -56,8 +56,8 @@ matrix:
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-4.9
-            - g++-4.9
+            - gcc-5
+            - g++-5
             - clang-4.0
     - compiler: clang-5.0
       env: GCC=clang-5.0 GXX=clang++-5.0 COVERAGE=0
@@ -68,9 +68,21 @@ matrix:
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-4.9
-            - g++-4.9
+            - gcc-5
+            - g++-5
             - clang-5.0
+    - compiler: clang-6.0
+      env: GCC=clang-6.0 GXX=clang++-6.0 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - clang-6.0
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9 GCOV=gcov-4.9
       addons:
