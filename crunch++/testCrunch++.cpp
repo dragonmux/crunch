@@ -82,34 +82,62 @@ public:
 
 	void testAssertIntEqual()
 	{
-		int32_t num32;
-		int64_t num64;
 		srand(time(nullptr));
-		num32 = rand();
+		int8_t num8 = rand();
+		int16_t num16 = rand();
+		int32_t num32 = rand();
+		int64_t num64 = (int64_t(rand()) << 32) | int64_t(rand());
+
+		assertEqual(num8, num8);
+		assertEqual(num16, num16);
 		assertEqual(num32, num32);
-		num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		assertEqual(num64, num64);
+
+		while (!num8)
+			num8 = rand();
+		while (!num16)
+			num16 = rand();
 		while (!num32)
 			num32 = rand();
-		tryShouldFail([=]() { assertEqual(int32_t(0), num32); });
 		while (!num32)
 			num64 = (int64_t(rand()) << 32) | int64_t(rand());
+
+		tryShouldFail([=]() { assertEqual(int8_t(0), num8); });
+		tryShouldFail([=]() { assertEqual(int16_t(0), num16); });
+		tryShouldFail([=]() { assertEqual(int32_t(0), num32); });
 		tryShouldFail([=]() { assertEqual(int64_t(0), num64); });
 	}
 
 	void testAssertIntNotEqual()
 	{
+		srand(time(nullptr));
+		int8_t num8;
+		int16_t num16;
 		int32_t num32;
 		int64_t num64;
-		srand(time(nullptr));
+
+		do
+			num8 = rand();
+		while (!num8);
+		do
+			num16 = rand();
+		while (!num16);
 		do
 			num32 = rand();
 		while (!num32);
 		do
 			num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		while (!num64);
+
+		assertNotEqual(num8, 0);
+		assertNotEqual(num16, 0);
 		assertNotEqual(num32, 0);
 		assertNotEqual(num64, 0);
+
+		tryShouldFail([=]() { assertNotEqual(num8, num8); });
+		tryShouldFail([=]() { assertNotEqual(int8_t(0), int8_t(0)); });
+		tryShouldFail([=]() { assertNotEqual(num16, num16); });
+		tryShouldFail([=]() { assertNotEqual(int16_t(0), int16_t(0)); });
 		tryShouldFail([=]() { assertNotEqual(num32, num32); });
 		tryShouldFail([=]() { assertNotEqual(int32_t(0), int32_t(0)); });
 		tryShouldFail([=]() { assertNotEqual(num64, num64); });
@@ -118,30 +146,51 @@ public:
 
 	void testAssertUintEqual()
 	{
-		uint32_t num32;
-		uint64_t num64;
 		srand(time(nullptr));
-		num32 = rand();
+		uint8_t num8 = rand();
+		uint16_t num16 = rand();
+		uint32_t num32 = rand();
+		uint64_t num64 = (int64_t(rand()) << 32) | int64_t(rand());
+
+		assertEqual(num8, num8);
+		assertEqual(num16, num16);
 		assertEqual(num32, num32);
-		num64 = (uint64_t(rand()) << 32) | uint64_t(rand());
 		assertEqual(num64, num64);
+
+		tryShouldFail([this]() { assertEqual(uint8_t(0), uint8_t(1)); });
+		tryShouldFail([this]() { assertEqual(uint16_t(0), uint16_t(1)); });
 		tryShouldFail([this]() { assertEqual(uint32_t(0), uint32_t(1)); });
 		tryShouldFail([this]() { assertEqual(uint64_t(0), uint64_t(1)); });
 	}
 
 	void testAssertUintNotEqual()
 	{
+		srand(time(nullptr));
+		uint8_t num8;
+		uint16_t num16;
 		uint32_t num32;
 		uint64_t num64;
-		srand(time(nullptr));
+
+		do
+			num8 = rand();
+		while (!num8);
+		do
+			num16 = rand();
+		while (!num16);
 		do
 			num32 = rand();
 		while (!num32);
 		do
-			num64 = (uint64_t(rand()) << 32) | uint64_t(rand());
+			num64 = (int64_t(rand()) << 32) | int64_t(rand());
 		while (!num64);
+
+		assertNotEqual(num8, 0);
+		assertNotEqual(num16, 0);
 		assertNotEqual(num32, 0);
 		assertNotEqual(num64, 0);
+
+		tryShouldFail([=]() { assertNotEqual(num8, num8); });
+		tryShouldFail([=]() { assertNotEqual(num16, num16); });
 		tryShouldFail([=]() { assertNotEqual(num32, num32); });
 		tryShouldFail([=]() { assertNotEqual(num64, num64); });
 	}
