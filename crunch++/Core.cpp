@@ -65,6 +65,78 @@ void testsuit::assertFalse(const bool value)
 	}
 }
 
+void testsuit::assertEqual(const int8_t result, const int8_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%d", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(const int8_t result, const int8_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%d", result);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertEqual(const uint8_t result, const uint8_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%u", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(const uint8_t result, const uint8_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%u", result);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertEqual(const int16_t result, const int16_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%d", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(const int16_t result, const int16_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%d", result);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertEqual(const uint16_t result, const uint16_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%u", result, expected);
+		throw threadExit_t(1);
+	}
+}
+
+void testsuit::assertNotEqual(const uint16_t result, const uint16_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%u", result);
+		throw threadExit_t(1);
+	}
+}
+
 void testsuit::assertEqual(const int32_t result, const int32_t expected)
 {
 	if (result != expected)

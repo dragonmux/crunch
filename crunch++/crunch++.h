@@ -113,6 +113,10 @@ public:
 	void assertTrue(const bool value);
 	void assertFalse(const bool value);
 
+	void assertEqual(const int8_t result, const int8_t expected);
+	void assertEqual(const uint8_t result, const uint8_t expected);
+	void assertEqual(const int16_t result, const int16_t expected);
+	void assertEqual(const uint16_t result, const uint16_t expected);
 	void assertEqual(const int32_t result, const int32_t expected);
 	void assertEqual(const uint32_t result, const uint32_t expected);
 	void assertEqual(const int64_t result, const int64_t expected);
@@ -124,6 +128,10 @@ public:
 	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
 		void assertEqual(const T a, const U b) { assertEqual(a, T(b)); }
 
+	void assertNotEqual(const int8_t result, const int8_t expected);
+	void assertNotEqual(const uint8_t result, const uint8_t expected);
+	void assertNotEqual(const int16_t result, const int16_t expected);
+	void assertNotEqual(const uint16_t result, const uint16_t expected);
 	void assertNotEqual(const int32_t result, const int32_t expected);
 	void assertNotEqual(const uint32_t result, const uint32_t expected);
 	void assertNotEqual(const int64_t result, const int64_t expected);
