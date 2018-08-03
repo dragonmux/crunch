@@ -86,6 +86,7 @@ struct cxxUnitTest
 #ifdef _MSC_VER
 CRUNCH_IMP template class CRUNCH_VIS std::allocator<cxxTest>;
 CRUNCH_IMP template class CRUNCH_VIS std::vector<cxxTest>;
+CRUNCH_IMP template class CRUNCH_VIS std::allocator<std::exception_ptr>;
 CRUNCH_IMP template class CRUNCH_VIS std::vector<std::exception_ptr>;
 #endif
 
