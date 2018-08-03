@@ -31,10 +31,8 @@
 
 #ifdef _MSC_VER
 	#ifdef __crunch_lib__
-		#define CRUNCH_IMP
 		#define CRUNCH_VIS	__declspec(dllexport)
 	#else
-		#define CRUNCH_IMP	extern
 		#define CRUNCH_VIS	__declspec(dllimport)
 	#endif
 	#ifdef __cplusplus
@@ -84,10 +82,10 @@ struct cxxUnitTest
 };
 
 #ifdef _MSC_VER
-CRUNCHpp_API template class std::allocator<cxxTest>;
-CRUNCHpp_API template class std::vector<cxxTest>;
-CRUNCHpp_API template class std::allocator<std::exception_ptr>;
-CRUNCHpp_API template class std::vector<std::exception_ptr>;
+extern template class CRUNCH_VIS std::allocator<cxxTest>;
+extern template class CRUNCH_VIS std::vector<cxxTest>;
+extern template class CRUNCH_VIS std::allocator<std::exception_ptr>;
+extern template class CRUNCH_VIS std::vector<std::exception_ptr>;
 #endif
 
 namespace crunch
