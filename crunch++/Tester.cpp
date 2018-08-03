@@ -4,6 +4,13 @@
 
 using namespace std;
 
+#ifdef _MSC_VER
+template class std::allocator<cxxTest>;
+template class std::vector<cxxTest>;
+template class std::allocator<std::exception_ptr>;
+template class std::vector<std::exception_ptr>;
+#endif
+
 bool loggingTests = false;
 std::vector<cxxTestClass> cxxTests;
 
