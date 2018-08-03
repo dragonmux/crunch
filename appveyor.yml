@@ -18,3 +18,8 @@ environment:
   matrix:
     - COVERAGE: 0
     - COVERAGE: 1
+
+matrix:
+  exclude:
+    - configuration: Release
+      COVERAGE: 1
