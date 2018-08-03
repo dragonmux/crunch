@@ -193,7 +193,6 @@ void echoAborted()
 {
 	if (isTTY != 0)
 	{
-		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
