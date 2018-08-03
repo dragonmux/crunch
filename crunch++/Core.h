@@ -21,7 +21,7 @@
 
 #include "crunch++.h"
 
-CRUNCH_API uint32_t passes, failures;
-CRUNCH_API bool loggingTests;
+CRUNCHpp_API uint32_t passes, failures;
+CRUNCHpp_API bool loggingTests;
 
 #endif /* __CORE_H__ */

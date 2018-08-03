@@ -34,17 +34,17 @@ typedef enum _resultType
 	RESULT_ABORT
 } resultType;
 
-CRUNCH_API uint8_t isTTY;
+CRUNCHpp_API uint8_t isTTY;
 #ifdef _MSC_VER
-CRUNCH_API HANDLE console;
+CRUNCHpp_API HANDLE console;
 #endif
-CRUNCH_API bool logging;
-CRUNCH_API testLog *logger;
+CRUNCHpp_API bool logging;
+CRUNCHpp_API testLog *logger;
 
-CRUNCH_API size_t vaTestPrintf(const char *format, va_list args);
-CRUNCH_API size_t testPrintf(const char *format, ...);
-CRUNCH_API void echoAborted();
-CRUNCH_API void logResult(resultType type, const char *message, ...);
+CRUNCHpp_API size_t vaTestPrintf(const char *format, va_list args);
+CRUNCHpp_API size_t testPrintf(const char *format, ...);
+CRUNCHpp_API void echoAborted();
+CRUNCHpp_API void logResult(resultType type, const char *message, ...);
 
 #define COLOUR(Code) "\x1B[" Code "m"
 #define NORMAL COLOUR("0;39")

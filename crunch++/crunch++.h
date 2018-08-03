@@ -40,7 +40,7 @@
 	#ifdef __cplusplus
 		#define CRUNCH_API	extern "C" CRUNCH_VIS
 	#else
-		#define CRUNCH_API	CRUNCH_VIS
+		#define CRUNCH_API	extern CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 
@@ -61,7 +61,7 @@
 	#endif
 	#define CRUNCH_EXPORT		CRUNCH_API
 #endif
-#define CRUNCHpp_API	CRUNCH_VIS
+#define CRUNCHpp_API	extern CRUNCH_VIS
 
 class testsuit;
 
@@ -96,7 +96,7 @@ namespace crunch
 	template<typename T> struct isNumeric : std::integral_constant<bool, std::is_integral<T>::value && !isBoolean<T>::value> { };
 }
 
-class CRUNCHpp_API testsuit
+class CRUNCH_VIS testsuit
 {
 private:
 	template<typename T> using isNumeric = crunch::isNumeric<T>;
@@ -180,7 +180,7 @@ public:
 	}
 };
 
-CRUNCH_API std::vector<cxxTestClass> cxxTests;
+CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
 
 template<typename TestClass> void registerTestClasses()
 {
@@ -208,8 +208,8 @@ typedef struct testLog
 	int fd, stdout;
 } testLog;
 
-CRUNCH_API testLog *startLogging(const char *fileName);
-CRUNCH_API void stopLogging(testLog *logFile);
+CRUNCHpp_API testLog *startLogging(const char *fileName);
+CRUNCHpp_API void stopLogging(testLog *logFile);
 
 /* Give systems that don't have other calling conventions a dud definition of __cdecl */
 #ifndef _WINDOWS
