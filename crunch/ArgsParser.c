@@ -16,13 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+#ifdef __GNUC__
+#define __USE_XOPEN_EXTENDED
+#endif
+#include <string.h>
 #include "crunch.h"
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "Logger.h"
 #include "Memory.h"
-#include <string.h>
-#include <stdlib.h>
 
 const arg_t *args = NULL;
 

@@ -24,6 +24,7 @@
 #include <windows.h>
 #endif
 #include "crunch.h"
+#include <stdarg.h>
 
 typedef enum _resultType
 {
