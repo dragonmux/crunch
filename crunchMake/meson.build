@@ -3,6 +3,28 @@ crunchMakeSrc = ['crunchMake.cpp']
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
 
+crunchConfig = configuration_data()
+whichCC = run_command('python', '-c', 'import os; print(os.environ.get("CC", ""))')
+whichCXX = run_command('python', '-c', 'import os; print(os.environ.get("CXX", ""))')
+
+if whichCC.returncode() != 0 or whichCXX.returncode() != 0
+	error('Failed to detect compilation environment')
+else
+	whichCC = whichCC.stdout().strip()
+	whichCXX = whichCXX.stdout().strip()
+endif
+
+if whichCC != '' and whichCXX != ''
+	crunchConfig.set('CC', whichCC)
+	crunchConfig.set('CXX', whichCXX)
+
+	configure_file(
+		input: 'crunchMake.h.in',
+		output: 'crunchMake.h',
+		configuration: crunchConfig
+	)
+endif
+
 crunchMake = executable(
 	'crunchMake',
 	crunchMakeSrc,
@@ -10,7 +32,6 @@ crunchMake = executable(
 	link_with: [libCrunchpp],
 	dependencies: [threading],
 	cpp_args: [
-		'-Dcrunch_GCC="$(GCC)"',
 		'-Dcrunch_PREFIX="' + prefix + '"',
 		'-Dcrunch_LIBDIR="' + libdir + '"'
 	]
