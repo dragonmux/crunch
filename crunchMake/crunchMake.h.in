@@ -1,0 +1,7 @@
+#ifndef CRUNCH_MAKE__H
+#define CRUNCH_MAKE__H
+
+#define crunch_GCC "@CC@"
+#define crunch_GXX "@CXX@"
+
+#endif /*CRUNCH_MAKE__H*/

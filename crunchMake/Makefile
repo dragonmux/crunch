@@ -54,9 +54,11 @@ clean:
 
 crunchMake: crunchMake.o
 crunchMake: LFLAGS += ../crunch++/StringFuncs.o
-crunchMake.o: crunchMake.cpp
-crunchMake.o: CFLAGS += -Dcrunch_GCC="\"$(GCC)\""
-crunchMake.o: CFLAGS += -Dcrunch_GXX="\"$(GXX)\""
+crunchMake.o: crunchMake.cpp crunchMake.h
+
+crunchMake.h: SED = sed -e 's:@CC@:$(GCC):g' -e 's:@CXX@:$(GXX):g'
+crunchMake.h: crunchMake.h.in
+	$(call run-cmd,sed,$<,$@)
 
 ifneq ($(PREFIX), /usr)
 crunchMake.o: CFLAGS += -Dcrunch_PREFIX="\"$(PREFIX)\""

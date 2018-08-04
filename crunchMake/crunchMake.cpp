@@ -30,6 +30,7 @@
 #endif
 #include <array>
 #include <string>
+#include "crunchMake.h"
 
 using namespace std;
 
