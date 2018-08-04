@@ -82,10 +82,10 @@ struct cxxUnitTest
 };
 
 #ifdef _MSC_VER
-extern template class CRUNCH_VIS std::allocator<cxxTest>;
-extern template class CRUNCH_VIS std::vector<cxxTest>;
-extern template class CRUNCH_VIS std::allocator<std::exception_ptr>;
-extern template class CRUNCH_VIS std::vector<std::exception_ptr>;
+extern template class std::allocator<cxxTest>;
+extern template class std::vector<cxxTest>;
+extern template class std::allocator<std::exception_ptr>;
+extern template class std::vector<std::exception_ptr>;
 #endif
 
 namespace crunch
