@@ -16,7 +16,7 @@
 
 include ../Makefile.inc
 
-EXTRA_CFLAGS = -Wall -Wextra -pedantic -pipe -std=c++11 -I../crunch++
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -pipe -std=c++11 -I../crunch++ -I.
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch++) -lstdc++ -lm -ldl -pthread
 LFLAGS = $(OPTIM_FLAGS) $(O) $(LIBS) -o $@
