@@ -41,7 +41,6 @@ subdir('crunchMake')
 
 buildDir = meson.current_build_dir()
 
-message(run_command('/bin/bash', '-c', 'export').stdout())
 foreach test : libCrunchTests
 	custom_target(
 		test,
