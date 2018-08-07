@@ -202,7 +202,7 @@ inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t n
 {
 	std::unique_ptr<char []> ret = stringDup("");
 	for (uint32_t i = 0; i < num; ++i)
-		ret = std::move(formatString("%s%s ", ret.get(), var[i]->value.get() + offset));
+		ret = formatString("%s%s ", ret.get(), var[i]->value.get() + offset);
 	var = nullptr;
 	return ret;
 }
