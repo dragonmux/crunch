@@ -212,9 +212,9 @@ inline std::unique_ptr<char []> argParamsToString(parsedArgs_t &var, const uint3
 	std::unique_ptr<char []> ret = stringDup("");
 	for (uint32_t i = 0; i < num; ++i)
 	{
-		ret = std::move(formatString("%s%s ", ret.get(), var[i]->value.get() + offset));
+		ret = formatString("%s%s ", ret.get(), var[i]->value.get() + offset);
 		for (uint32_t param = 0; param < var[i]->paramsFound; ++param)
-			ret = std::move(formatString("%s%s ", ret.get(), var[i]->params[param].get()));
+			ret = formatString("%s%s ", ret.get(), var[i]->params[param].get());
 	}
 	var = nullptr;
 	return ret;
