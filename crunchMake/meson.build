@@ -12,14 +12,14 @@ if whichCC.returncode() != 0 or whichCXX.returncode() != 0
 else
 	whichCC = whichCC.stdout().strip()
 	whichCXX = whichCXX.stdout().strip()
+endif
 
+if whichCC != '' and whichCXX != ''
 	if target_machine.cpu_family() == 'x86_64'
 		whichCC += ' -fPIC -DPIC'
 		whichCXX += ' -fPIC -DPIC'
 	endif
-endif
 
-if whichCC != '' and whichCXX != ''
 	crunchConfig.set('CC', whichCC)
 	crunchConfig.set('CXX', whichCXX)
 
