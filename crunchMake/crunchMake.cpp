@@ -62,6 +62,8 @@ const string cc = crunch_GCC;
 string cxx = crunch_GXX OPTS_VIS " "_s;
 #endif
 #define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s -O2 %s -o "
+#define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s -O2 %s -o "
+#define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so"_s;
 #else
 // _M_64
@@ -212,15 +214,23 @@ bool isCXX(const char *file)
 bool isCXX(const std::unique_ptr<const char []> &file)
 	{ return isCXX(file.get()); }
 
-std::unique_ptr<char []> toSO(const char *const file)
+string toO(const string &file)
 {
-	const char *const dot = strrchr(file, '.');
-	const size_t dotPos = dot - file;
-	auto soFile = makeUnique<char []>(dotPos + libExt.size() + 1);
-	memcpy(soFile.get(), file, dotPos);
-	memcpy(soFile.get() + dotPos, libExt.data(), libExt.size() + 1);
-	return soFile;
+	const size_t dotPos = file.find_last_of('.');
+	auto soFile = file.substr(0, dotPos);
+	return soFile += ".o"_s;
 }
+string toO(const std::unique_ptr<const char []> &file)
+	{ return toO(file.get()); }
+
+string toSO(const string &file)
+{
+	const size_t dotPos = file.find_last_of('.');
+	auto soFile = file.substr(0, dotPos);
+	return soFile += libExt;
+}
+string toSO(const std::unique_ptr<const char []> &file)
+	{ return toSO(file.get()); }
 
 inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
 {
@@ -277,6 +287,26 @@ void buildCXXString()
 #endif
 }
 
+int32_t compileGCC(const unique_ptr<const char []> &namedTest)
+{
+	const bool mode = isCXX(namedTest);
+	const string &compiler = mode ? cxx : cc;
+	auto soFile = toSO(namedTest);
+	auto compileString = format("%s %s " OPTS "%s"_s, compiler, namedTest, inclDirFlags,
+		libDirFlags, objs, libs, "",  mode ? "++" : "",
+		pthread ? "" : "-pthread", soFile);
+	if (!silent)
+	{
+		std::unique_ptr<char []> displayString;
+		if (quiet)
+			displayString = format(" CCLD  %s => %s"_s, namedTest, soFile);
+		else
+			displayString = stringDup(compileString.get());
+		printf("%s\n", displayString.get());
+	}
+	return system(compileString.get());
+}
+
 int compileTests()
 {
 	uint32_t i;
@@ -300,22 +330,7 @@ int compileTests()
 	{
 		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value))
 		{
-			const bool mode = isCXX(namedTests[i]->value.get());
-			const string &compiler = mode ? cxx : cc;
-			std::unique_ptr<char []> soFile = toSO(namedTests[i]->value.get());
-			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler.data(),
-				namedTests[i]->value.get(), inclDirFlags.get(), libDirFlags.get(), objs.get(), libs.get(),
-				mode ? "++" : "", pthread ? "" : "-pthread", soFile.get());
-			if (!silent)
-			{
-				std::unique_ptr<char []> displayString;
-				if (quiet)
-					displayString = formatString(" CCLD  %s => %s", namedTests[i]->value.get(), soFile.get());
-				else
-					displayString = stringDup(compileString.get());
-				printf("%s\n", displayString.get());
-			}
-			ret = system(compileString.get());
+			ret = compileGCC(namedTests[i]->value);
 			if (ret)
 				break;
 		}
