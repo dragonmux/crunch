@@ -69,6 +69,21 @@ const char *const cxx = "cl";
 const string libExt = ".tlib";
 #endif
 
+template<typename T> using removeReference = typename std::remove_reference<T>::type;
+template<typename type_t> constexpr type_t &&forward_(removeReference<type_t> &value) noexcept
+	{ return static_cast<type_t &&>(value); }
+template<typename type_t> constexpr type_t &&forward_(removeReference<type_t> &&value) noexcept
+{
+	static_assert(!std::is_lvalue_reference<type_t>::value,
+		"template argument subtituting type_t is an lvalue reference type");
+	return static_cast<type_t &&>(value);
+}
+const char *forward_(const string &value) noexcept { return value.data(); }
+const char *forward_(const unique_ptr<char []> &value) noexcept { return value.get(); }
+const char *forward_(const unique_ptr<const char []> &value) noexcept { return value.get(); }
+template<typename... values_t> inline unique_ptr<char []> format(const string &format, values_t &&... values) noexcept
+	{ return formatString(format.data(), forward_(values)...); }
+
 const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
 const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
 
