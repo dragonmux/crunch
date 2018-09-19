@@ -1,13 +1,12 @@
 language: cpp
 sudo: required
 
-before_install:
+before_script:
   - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
   - make -C crunch lib
   - sudo -E make -C crunch install-so
   - make -C crunch++ lib
   - sudo -E make -C crunch++ install-so
-install:
   - make -C crunch crunch
   - make -C crunch++ crunch++
   - make -C crunchMake
@@ -16,6 +15,7 @@ install:
 script:
   - make test
   - make check
+
 after_success:
   - if [ "$COVERAGE" == "1" ]; then
       bash <(curl -s https://codecov.io/bash) -x $GCOV;
@@ -71,6 +71,18 @@ matrix:
             - gcc-5
             - g++-5
             - clang-5.0
+    - compiler: clang-6.0
+      env: GCC=clang-6.0 GXX=clang++-6.0 GCOV='llvm-cov-6.0 gcov'
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - clang-6.0
     - compiler: clang-6.0
       env: GCC=clang-6.0 GXX=clang++-6.0 COVERAGE=0
       addons:
