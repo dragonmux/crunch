@@ -48,6 +48,17 @@ matrix:
             - g++-4.9
             - clang-3.9
     - compiler: clang-4.0
+      env: GCC=clang-4.0 GXX=clang++-4.0 GCOV='llvm-cov gcov'
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-4.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - ubuntu-toolchain-r-test
+          packages:
+            - llvm-4.0
+            - clang-4.0
+    - compiler: clang-4.0
       env: GCC=clang-4.0 GXX=clang++-4.0 COVERAGE=0
       addons:
         apt:
@@ -56,9 +67,19 @@ matrix:
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-5
-            - g++-5
+            - llvm-4.0
             - clang-4.0
+    - compiler: clang-5.0
+      env: GCC=clang-5.0 GXX=clang++-5.0 GCOV='llvm-cov gcov'
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - ubuntu-toolchain-r-test
+          packages:
+            - llvm-5.0
+            - clang-5.0
     - compiler: clang-5.0
       env: GCC=clang-5.0 GXX=clang++-5.0 COVERAGE=0
       addons:
