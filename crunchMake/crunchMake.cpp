@@ -308,6 +308,43 @@ int32_t compileGCC(const unique_ptr<const char []> &namedTest)
 	return system(compileString.get());
 }
 
+int32_t compileClang(const unique_ptr<const char []> &namedTest)
+{
+	const bool mode = isCXX(namedTest);
+	const string &compiler = mode ? cxx : cc;
+	auto oFile = toO(namedTest);
+	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, namedTest,
+		inclDirFlags, pthread ? "" : "-pthread", oFile);
+	if (!silent)
+	{
+		if (quiet)
+		{
+			auto displayString = format(" CC    %s => %s"_s, namedTest, oFile);
+			puts(displayString.get());
+		}
+		else
+			puts(compileString.get());
+	}
+	int32_t ret = system(compileString.get());
+	if (ret)
+		return ret;
+
+	auto soFile = toSO(namedTest);
+	auto linkString = format("%s %s " LINK_OPTS "%s"_s, compiler, oFile, libDirFlags, objs,
+		libs, codeCoverage ? "--coverage " : "", mode ? "++" : "", pthread ? "" : "-pthread", soFile);
+	if (!silent)
+	{
+		if (quiet)
+		{
+			auto displayString = format(" CCLD  %s => %s"_s, oFile, soFile);
+			puts(displayString.get());
+		}
+		else
+			puts(linkString.get());
+	}
+	return system(linkString.get());
+}
+
 int compileTests()
 {
 	uint32_t i;
@@ -331,7 +368,10 @@ int compileTests()
 	{
 		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value))
 		{
-			ret = compileGCC(namedTests[i]->value);
+			if (crunch_COMPILER == "clang"_s)
+				ret = compileClang(namedTests[i]->value);
+			else
+				ret = compileGCC(namedTests[i]->value);
 			if (ret)
 				break;
 		}
