@@ -47,6 +47,8 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #define LINK_OPTS_EXTRA " -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
 #define OPTS_EXTRA INCLUDE_OPTS_EXTRA LINK_OPTS_EXTRA
 #else
+#define INCLUDE_OPTS_EXTRA ""
+#define LINK_OPTS_EXTRA ""
 #define OPTS_EXTRA ""
 #endif
 #ifdef crunch_GUESSCOMPILER
