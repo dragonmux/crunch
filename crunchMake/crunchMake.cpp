@@ -109,6 +109,7 @@ const arg_t args[] =
 	{"-Wl", 0, 0, ARG_INCOMPLETE},
 	{"-std=", 0, 0, ARG_INCOMPLETE},
 	{"-z", 1, 1, ARG_REPEATABLE},
+	{"--coverage", 0, 0, 0},
 	{nullptr, 0, 0, 0}
 };
 
@@ -293,7 +294,7 @@ int32_t compileGCC(const unique_ptr<const char []> &namedTest)
 	const string &compiler = mode ? cxx : cc;
 	auto soFile = toSO(namedTest);
 	auto compileString = format("%s %s " OPTS "%s"_s, compiler, namedTest, inclDirFlags,
-		libDirFlags, objs, libs, "",  mode ? "++" : "",
+		libDirFlags, objs, libs, codeCoverage ? "-lgcov " : "",  mode ? "++" : "",
 		pthread ? "" : "-pthread", soFile);
 	if (!silent)
 	{
