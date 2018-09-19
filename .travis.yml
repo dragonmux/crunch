@@ -71,7 +71,7 @@ matrix:
             - llvm-5.0
             - clang-5.0
     - compiler: clang-6.0
-      env: GCC=clang-6.0 GXX=clang++-6.0 GCOV='llvm-cov-6.0 gcov'
+      env: GCC=clang-6.0 GXX=clang++-6.0 GCOV='llvm-cov gcov'
       addons:
         apt:
           sources:
