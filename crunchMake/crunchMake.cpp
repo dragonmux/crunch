@@ -43,7 +43,9 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #ifndef _MSC_VER
 #define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
 #ifdef crunch_PREFIX
-#define OPTS_EXTRA " -I" crunch_PREFIX "/include -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
+#define INCLUDE_OPTS_EXTRA " -I" crunch_PREFIX "/include"
+#define LINK_OPTS_EXTRA " -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
+#define OPTS_EXTRA INCLUDE_OPTS_EXTRA LINK_OPTS_EXTRA
 #else
 #define OPTS_EXTRA ""
 #endif
@@ -59,7 +61,7 @@ string cxx = "g++ -m32" OPTS_VIS " "_s;
 const string cc = crunch_GCC;
 string cxx = crunch_GXX OPTS_VIS " "_s;
 #endif
-#define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s-lcrunch%s -O2 %s -o "
+#define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so"_s;
 #else
 // _M_64
@@ -86,6 +88,9 @@ template<typename... values_t> inline unique_ptr<char []> format(const string &f
 
 const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
 const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
+
+std::unique_ptr<char []> inclDirFlags, libDirFlags, objs, libs;
+bool silent, quiet, pthread, codeCoverage;
 
 const arg_t args[] =
 {
@@ -221,7 +226,7 @@ inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t n
 {
 	std::unique_ptr<char []> ret = stringDup("");
 	for (uint32_t i = 0; i < num; ++i)
-		ret = formatString("%s%s ", ret.get(), var[i]->value.get() + offset);
+		ret = format("%s%s "_s, ret, var[i]->value.get() + offset);
 	var = nullptr;
 	return ret;
 }
@@ -231,22 +236,22 @@ inline std::unique_ptr<char []> argParamsToString(parsedArgs_t &var, const uint3
 	std::unique_ptr<char []> ret = stringDup("");
 	for (uint32_t i = 0; i < num; ++i)
 	{
-		ret = formatString("%s%s ", ret.get(), var[i]->value.get() + offset);
+		ret = format("%s%s "_s, ret, var[i]->value.get() + offset);
 		for (uint32_t param = 0; param < var[i]->paramsFound; ++param)
-			ret = formatString("%s%s ", ret.get(), var[i]->params[param].get());
+			ret = format("%s%s "_s, ret, var[i]->params[param]);
 	}
 	var = nullptr;
 	return ret;
 }
 
-std::unique_ptr<char []> inclDirFlagsToString() { return argsToString(inclDirs, numInclDirs, 0); }
-std::unique_ptr<char []> libDirFlagsToString() { return argsToString(libDirs, numLibDirs, 0); }
-std::unique_ptr<char []> objsToString() { return argsToString(linkObjs, numObjs, 2); }
-std::unique_ptr<char []> libsToString()
+void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs, numInclDirs, 0); }
+void libDirFlagsToString() { libDirFlags = argsToString(libDirs, numLibDirs, 0); }
+void objsToString() { objs = argsToString(linkObjs, numObjs, 2); }
+void libsToString()
 {
-	auto libs = argsToString(linkLibs, numLibs, 0);
+	auto libsString = argsToString(linkLibs, numLibs, 0);
 	auto args = argParamsToString(linkArgs, numLinkArgs, 0);
-	return formatString("%s%s", libs.get(), args.get());
+	libs = format("%s%s"_s, libsString, args);
 }
 
 #ifndef _MSC_VER
@@ -276,17 +281,14 @@ int compileTests()
 {
 	uint32_t i;
 	int32_t ret = 0;
-	auto inclDirFlags = inclDirFlagsToString();
-	auto libDirFlags = libDirFlagsToString();
-	auto objs = objsToString();
-	auto libs = libsToString();
+	inclDirFlagsToString();
+	libDirFlagsToString();
+	objsToString();
+	libsToString();
 	buildCXXString();
-	bool silent = bool(findArg(parsedArgs, "--silent", nullptr));
 	testLog *logFile = nullptr;
 	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
 	const bool logging = bool(logParam);
-	bool quiet = bool(findArg(parsedArgs, "--quiet", nullptr));
-	const bool pthread = bool(findArg(parsedArgs, "-pthread", nullptr));
 	if (logging)
 		logFile = startLogging(logParam->params[0].get());
 	if (!silent)
@@ -339,5 +341,9 @@ int main(int argc, char **argv)
 	getLinkLibs();
 	getLinkObjs();
 	getLinkArgs();
+	silent = bool(findArg(parsedArgs, "--silent", nullptr));
+	quiet = bool(findArg(parsedArgs, "--quiet", nullptr));
+	pthread = bool(findArg(parsedArgs, "-pthread", nullptr));
+	codeCoverage = bool(findArg(parsedArgs, "--coverage", nullptr));
 	return compileTests();
 }
