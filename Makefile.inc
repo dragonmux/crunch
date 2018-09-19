@@ -111,14 +111,14 @@ ifeq ($(strip $(DEBUG)), 1)
 	ifeq ($(strip $(COVERAGE)), 1)
 		OPTIM_FLAGS += -O0 -g --coverage
 	endif
-	GCC_FLAGS = 
+	GCC_FLAGS =
 else
-	GCC_VER = $(shell gcc -dumpversion | cut -d . -f 1)
+	GCC_VER = $(shell $(GCC) -dumpversion | cut -d . -f 1)
 	ifeq ($(shell if [ $(GCC_VER) -ge 4 ]; then echo 1; else echo 0; fi), 1)
 		GCC_FLAGS = -fvisibility=hidden
 		GXX_FLAGS = $(GCC_FLAGS) -fvisibility-inlines-hidden
 	else
-		GCC_FLAGS = 
+		GCC_FLAGS =
 		GXX_FLAGS =
 	endif
 	OPTIM_FLAGS = -O2
@@ -141,6 +141,7 @@ CRUNCH = crunch
 CRUNCHpp = crunch++
 UID = $(shell id -u)
 PREFIX ?= /usr
+COMPILER = $(shell $(GCC) --version | head -n 1 | awk -F ' ' '{print $$1}')
 
 ifeq ($(BUILD_VERBOSE), 0)
 	CRUNCHMAKE += -q

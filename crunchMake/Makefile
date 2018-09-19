@@ -56,7 +56,7 @@ crunchMake: crunchMake.o
 crunchMake: LFLAGS += ../crunch++/StringFuncs.o
 crunchMake.o: crunchMake.cpp crunchMake.h
 
-crunchMake.h: SED = sed -e 's:@CC@:$(GCC):g' -e 's:@CXX@:$(GXX):g'
+crunchMake.h: SED = sed -e 's:@CC@:$(GCC):g' -e 's:@CXX@:$(GXX):g' -e 's:@COMPILER@:$(COMPILER):g'
 crunchMake.h: crunchMake.h.in
 	$(call run-cmd,sed,$<,$@)
 
