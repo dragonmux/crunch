@@ -18,6 +18,7 @@
 
 #include <crunch.h>
 #include "ArgsParser.h"
+#include <stdlib.h>
 #include <memory.h>
 #include "StringFuncs.h"
 

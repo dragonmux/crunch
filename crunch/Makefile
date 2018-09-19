@@ -51,7 +51,7 @@ TESTS = testArgsParser.so testCrunch.so testBad.so
 
 VERMAJ = .0
 VERMIN = .1
-VERREV = .0
+VERREV = .1
 ifneq ($(MAC), 1)
 	SOMAJ = libcrunch.so
 else
