@@ -1,7 +1,13 @@
 #ifndef CRUNCH_MAKE__H
 #define CRUNCH_MAKE__H
 
-#define crunch_GCC "@CC@"
-#define crunch_GXX "@CXX@"
+#include <string>
+
+inline std::string operator ""_s(const char *string, const unsigned long length)
+	{ return std::string{string, length}; }
+
+#define crunch_GCC "@CC@"_s
+#define crunch_GXX "@CXX@"_s
+#define crunch_COMPILER "@COMPILER@"_s
 
 #endif /*CRUNCH_MAKE__H*/

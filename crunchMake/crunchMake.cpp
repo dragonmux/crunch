@@ -49,24 +49,24 @@ uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0
 #endif
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
-const char *const cc = "gcc -m64 -fPIC -DPIC" OPTS_EXTRA;
-const char *const cxx = "g++ -m64 -fPIC -DPIC" OPTS_VIS " %s%s";
+const string cc = "gcc -m64 -fPIC -DPIC "_s;
+string cxx = "g++ -m64 -fPIC -DPIC" OPTS_VIS " "_s;
 #else
-const char *const cc = "gcc -m32" OPTS_EXTRA;
-const char *const cxx = "g++ -m32" OPTS_VIS " %s%s";
+const string cc = "gcc -m32 "_s;
+string cxx = "g++ -m32" OPTS_VIS " "_s;
 #endif
 #else
-const char *const cc = crunch_GCC OPTS_EXTRA;
-const char *const cxx = crunch_GXX OPTS_VIS " %s%s";
+const string cc = crunch_GCC;
+string cxx = crunch_GXX OPTS_VIS " "_s;
 #endif
-#define OPTS	"-shared %s%s%s%s-lcrunch%s -O2 %s -o "
-const string libExt = ".so";
+#define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s-lcrunch%s -O2 %s -o "
+const string libExt = ".so"_s;
 #else
 // _M_64
-const char *const cc = "cl";
-const char *const cxx = "cl";
+const string cc = "cl"_s;
+const string cxx = "cl"_s;
 #define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch%s.lib %s /Fe"
-const string libExt = ".tlib";
+const string libExt = ".tlib"_s;
 #endif
 
 template<typename T> using removeReference = typename std::remove_reference<T>::type;
@@ -193,6 +193,8 @@ bool validExt(const char *file)
 			return true;
 	return false;
 }
+bool validExt(const std::unique_ptr<const char []> &file)
+	{ return validExt(file.get()); }
 
 bool isCXX(const char *file)
 {
@@ -202,6 +204,8 @@ bool isCXX(const char *file)
 			return true;
 	return false;
 }
+bool isCXX(const std::unique_ptr<const char []> &file)
+	{ return isCXX(file.get()); }
 
 std::unique_ptr<char []> toSO(const char *const file)
 {
@@ -260,24 +264,23 @@ const char *standardVersion(constParsedArg_t version)
 }
 #endif
 
-std::unique_ptr<char []> buildCXXString()
+void buildCXXString()
 {
 #ifndef _MSC_VER
 	constParsedArg_t standard = findArg(parsedArgs, "-std=", nullptr);
-	return formatString(cxx, standardVersion(standard), OPTS_EXTRA);
-#else
-	return stringDup(cxx);
+	cxx += standardVersion(standard);
 #endif
 }
 
 int compileTests()
 {
-	uint32_t i, ret = 0;
+	uint32_t i;
+	int32_t ret = 0;
 	auto inclDirFlags = inclDirFlagsToString();
 	auto libDirFlags = libDirFlagsToString();
 	auto objs = objsToString();
 	auto libs = libsToString();
-	auto cxx = buildCXXString();
+	buildCXXString();
 	bool silent = bool(findArg(parsedArgs, "--silent", nullptr));
 	testLog *logFile = nullptr;
 	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
@@ -293,12 +296,12 @@ int compileTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value.get()))
+		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value))
 		{
 			const bool mode = isCXX(namedTests[i]->value.get());
-			const char *const compiler = mode ? cxx.get() : cc;
+			const string &compiler = mode ? cxx : cc;
 			std::unique_ptr<char []> soFile = toSO(namedTests[i]->value.get());
-			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler,
+			std::unique_ptr<char []> compileString = formatString("%s %s " OPTS "%s", compiler.data(),
 				namedTests[i]->value.get(), inclDirFlags.get(), libDirFlags.get(), objs.get(), libs.get(),
 				mode ? "++" : "", pthread ? "" : "-pthread", soFile.get());
 			if (!silent)
@@ -311,7 +314,7 @@ int compileTests()
 				printf("%s\n", displayString.get());
 			}
 			ret = system(compileString.get());
-			if (ret != 0)
+			if (ret)
 				break;
 		}
 		else
