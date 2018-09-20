@@ -53,6 +53,7 @@ CRUNCHpp_API constParsedArg_t findArg(constParsedArg_t *const args, const char *
 inline constParsedArg_t findArg(const parsedArgs_t &args, const char *const value, const constParsedArg_t defaultVal)
 	{ return findArg(args.get(), value, defaultVal); }
 CRUNCHpp_API const arg_t *findArgInArgs(const char *const value);
+inline const arg_t *findArgInArgs(const std::unique_ptr<const char []> &value) { return findArgInArgs(value.get()); }
 
 bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept;
 uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
