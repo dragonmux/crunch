@@ -38,17 +38,4 @@ endif
 subdir('crunch')
 subdir('crunch++')
 subdir('crunchMake')
-
-buildDir = meson.current_build_dir()
-
-foreach test : libCrunchTests
-	custom_target(
-		test,
-		command: [crunchMake, '@INPUT@'],
-		input: join_paths('crunch', test + '.c'),
-		output: test + '.so',
-		build_by_default: true
-	)
-endforeach
-
-test('crunch', crunch, args: libCrunchTests, workdir: join_paths(buildDir, 'crunch'))
+subdir('test')
