@@ -103,9 +103,10 @@ bool silent, quiet, pthread, codeCoverage;
 const arg_t args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
-	{"-o", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-O", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-I", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-L", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-o", 1, 1, 0},
 	{"--log", 1, 1, 0},
 	{"--silent", 0, 0, 0},
 	{"-s", 0, 0, 0},
@@ -181,7 +182,7 @@ inline void getLinkFunc(parsedArgs_t &var, uint32_t &num, const char *find)
 }
 
 void getLinkLibs() { getLinkFunc(linkLibs, numLibs, "-l"); }
-void getLinkObjs() { getLinkFunc(linkObjs, numObjs, "-o"); }
+void getLinkObjs() { getLinkFunc(linkObjs, numObjs, "-O"); }
 void getInclDirs() { getLinkFunc(inclDirs, numInclDirs, "-I"); }
 void getLibDirs() { getLinkFunc(libDirs, numLibDirs, "-L"); }
 
@@ -325,7 +326,7 @@ int32_t compileGCC(const unique_ptr<const char []> &namedTest)
 {
 	const bool mode = isCXX(namedTest);
 	const string &compiler = mode ? cxx : cc;
-	auto soFile = toSO(namedTest);
+	auto soFile = computeSOName(namedTest);
 	auto compileString = format("%s %s " OPTS "%s"_s, compiler, namedTest, inclDirFlags,
 		libDirFlags, objs, libs, codeCoverage ? "-lgcov " : "",  mode ? "++" : "",
 		pthread ? "" : "-pthread", soFile);
@@ -345,7 +346,7 @@ int32_t compileClang(const unique_ptr<const char []> &namedTest)
 {
 	const bool mode = isCXX(namedTest);
 	const string &compiler = mode ? cxx : cc;
-	auto oFile = toO(namedTest);
+	auto oFile = computeObjName(namedTest);
 	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, namedTest,
 		inclDirFlags, pthread ? "" : "-pthread", oFile);
 	if (!silent)
@@ -362,7 +363,7 @@ int32_t compileClang(const unique_ptr<const char []> &namedTest)
 	if (ret)
 		return ret;
 
-	auto soFile = toSO(namedTest);
+	auto soFile = computeSOName(namedTest);
 	auto linkString = format("%s %s " LINK_OPTS "%s"_s, compiler, oFile, libDirFlags, objs,
 		libs, codeCoverage ? "--coverage " : "", mode ? "++" : "", pthread ? "" : "-pthread", soFile);
 	if (!silent)
