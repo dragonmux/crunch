@@ -1,5 +1,5 @@
 # This file is part of crunch
-# Copyright © 2014-2017 Rachel Mant (dx-mon@users.sourceforge.net)
+# Copyright © 2014-2018 Rachel Mant (dx-mon@users.sourceforge.net)
 #
 # crunch is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -52,8 +52,8 @@ TESTS_EXCEPT = testTester.so
 TESTS = $(TESTS_NORM) $(TESTS_EXCEPT)
 
 VERMAJ = .0
-VERMIN = .1
-VERREV = .1
+VERMIN = .2
+VERREV = .0
 ifneq ($(MAC), 1)
 	SOMAJ = libcrunch++.so
 else
