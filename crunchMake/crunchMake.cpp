@@ -241,6 +241,14 @@ string toO(const string &file)
 string toO(const std::unique_ptr<const char []> &file)
 	{ return toO(file.get()); }
 
+string computeObjName(const std::unique_ptr<const char []> &file)
+{
+	const auto output = findArg(parsedArgs, "-o", nullptr);
+	if (output)
+		return toO(output->params[0]);
+	return toO(file);
+}
+
 string toSO(const string &file)
 {
 	const size_t dotPos = file.find_last_of('.');
@@ -249,6 +257,14 @@ string toSO(const string &file)
 }
 string toSO(const std::unique_ptr<const char []> &file)
 	{ return toSO(file.get()); }
+
+string computeSOName(const std::unique_ptr<const char []> &file)
+{
+	const auto output = findArg(parsedArgs, "-o", nullptr);
+	if (output)
+		return output->params[0].get();
+	return toSO(file);
+}
 
 inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
 {
