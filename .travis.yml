@@ -122,15 +122,6 @@ matrix:
           packages:
             - gcc-4.9
             - g++-4.9
-    - compiler: gcc-4.9
-      env: GCC=gcc-4.9 GXX=g++-4.9 COVERAGE=0
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.9
-            - g++-4.9
     - compiler: gcc-5
       env: GCC=gcc-5 GXX=g++-5 GCOV=gcov-5
       addons:
@@ -149,8 +140,26 @@ matrix:
           packages:
             - gcc-6
             - g++-6
+    - compiler: gcc-6
+      env: GCC=gcc-6 GXX=g++-6 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-6
+            - g++-6
     - compiler: gcc-7
       env: GCC=gcc-7 GXX=g++-7 GCOV=gcov-7
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
+    - compiler: gcc-7
+      env: GCC=gcc-7 GXX=g++-7 COVERAGE=0
       addons:
         apt:
           sources:
