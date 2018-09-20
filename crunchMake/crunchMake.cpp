@@ -90,8 +90,12 @@ const char *forward_(const unique_ptr<const char []> &value) noexcept { return v
 template<typename... values_t> inline unique_ptr<char []> format(const string &format, values_t &&... values) noexcept
 	{ return formatString(format.data(), forward_(values)...); }
 
-const array<const char *, 8> exts = {".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"};
-const array<const char *, 3> cxxExts = {".cpp", ".cc", ".cxx"};
+template<typename T, typename... values_t> constexpr array<T, sizeof...(values_t)> makeArray(values_t &&... values)
+	{ return {forward<values_t>(values)...}; }
+
+const auto exts = makeArray<const char *>(".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx");
+const auto cxxExts = makeArray<const char *>(".cpp", ".cc", ".cxx");
+const auto objExts = makeArray<const char *>(".o", ".obj", ".a");
 
 std::unique_ptr<char []> inclDirFlags, libDirFlags, objs, libs;
 bool silent, quiet, pthread, codeCoverage;
@@ -115,6 +119,17 @@ const arg_t args[] =
 	{nullptr, 0, 0, 0}
 };
 
+bool isObj(const char *file)
+{
+	const char *dot = strrchr(file, '.');
+	for (auto &ext : objExts)
+		if (strcmp(dot, ext) == 0)
+			return true;
+	return false;
+}
+bool isObj(const std::unique_ptr<const char []> &file)
+	{ return isObj(file.get()); }
+
 bool getTests()
 {
 	uint32_t n, j = 0;
@@ -125,7 +140,7 @@ bool getTests()
 
 	for (uint32_t i = 0; i < n; i++)
 	{
-		if (!findArgInArgs(parsedArgs[i]->value.get()))
+		if (!findArgInArgs(parsedArgs[i]->value) && !isObj(parsedArgs[i]->value))
 		{
 			namedTests[j] = parsedArgs[i];
 			j++;
