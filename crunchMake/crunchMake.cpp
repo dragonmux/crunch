@@ -293,8 +293,8 @@ void libDirFlagsToString() { libDirFlags = argsToString(libDirs, numLibDirs, 0);
 void objsToString() { objs = argsToString(linkObjs, numObjs, 2); }
 void libsToString()
 {
-	auto libsString = argsToString(linkLibs, numLibs, 0);
-	auto args = argParamsToString(linkArgs, numLinkArgs, 0);
+	const auto libsString = argsToString(linkLibs, numLibs, 0);
+	const auto args = argParamsToString(linkArgs, numLinkArgs, 0);
 	libs = format("%s%s"_s, libsString, args);
 }
 
@@ -316,7 +316,7 @@ const char *standardVersion(constParsedArg_t version)
 void buildCXXString()
 {
 #ifndef _MSC_VER
-	constParsedArg_t standard = findArg(parsedArgs, "-std=", nullptr);
+	const auto standard = findArg(parsedArgs, "-std=", nullptr);
 	cxx += standardVersion(standard);
 #endif
 }
