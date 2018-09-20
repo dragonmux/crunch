@@ -1,20 +1,34 @@
 language: cpp
 sudo: required
 
-before_script:
-  - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
-  - make -C crunch lib
-  - sudo -E make -C crunch install-so
-  - make -C crunch++ lib
-  - sudo -E make -C crunch++ install-so
-  - make -C crunch crunch
-  - make -C crunch++ crunch++
-  - make -C crunchMake
-  - sudo -E make install
+if: env(ENGINE) = make
+  install: false
+  before_script:
+    - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
+    - make -C crunch lib
+    - sudo -E make -C crunch install-so
+    - make -C crunch++ lib
+    - sudo -E make -C crunch++ install-so
+    - make -C crunch crunch
+    - make -C crunch++ crunch++
+    - make -C crunchMake
+    - sudo -E make install
+ script:
+    - make test
+    - make check
 
-script:
-  - make test
-  - make check
+if: env(ENGINE) = meson
+  install:
+    - pip3 install --user meson
+    - echo $PATH
+    - apt-cache search ninja-build
+  before_script:
+    - meson build
+    - cd build
+    - ninja
+    - ninja install
+  script:
+    - ninja test
 
 after_success:
   - if [ "$COVERAGE" == "1" ]; then
@@ -176,7 +190,17 @@ matrix:
           packages:
             - gcc-8
             - g++-8
+    - compiler: gcc-7
+      env: CC=gcc-7 CXX=g++-7 COVERAGE=0 ENGINE=meson
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
 
 env:
   global:
     - COVERAGE=1
+    - ENGINE=make
