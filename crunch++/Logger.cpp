@@ -83,6 +83,15 @@ void printFailure() { testPrintf(" [ FAIL ]\n"); }
 void printSkip() { testPrintf(" [ SKIP ]\n"); }
 void printAborted() { testPrintf("[ **** ABORTED **** ]\n"); }
 
+void normal()
+{
+#ifndef _MSC_VER
+	testPrintf(NORMAL);
+#else
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#endif
+}
+
 #ifndef _MSC_VER
 void echoOk()
 {
@@ -210,11 +219,7 @@ void logResult(resultType type, const char *message, ...)
 	va_list args;
 
 	if (isTTY)
-#ifndef _MSC_VER
-		testPrintf(NORMAL);
-#else
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-#endif
+		normal();
 	va_start(args, message);
 	vaTestPrintf(message, args);
 	va_end(args);
