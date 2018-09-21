@@ -4,7 +4,7 @@ libCrunchPath = join_paths([meson.build_root(), libCrunch.outdir()])
 
 foreach test : libCrunchTests
 	custom_target(
-		test,
+		'crunch-' + test,
 		command: [crunchMake, '-q', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath],
 		input: test + '.c',
 		output: test + '.so',
