@@ -1,0 +1,7 @@
+coverage:
+  round: nearest
+
+parsers:
+  gcov:
+    branch_detection:
+      method: yes
