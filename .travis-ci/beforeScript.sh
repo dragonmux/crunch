@@ -12,7 +12,7 @@ if [ "$ENGINE" == "make" ]; then
 	make -C crunchMake
 	sudo -E make install
 elif [ "$ENGINE" == "meson" ]; then
-	CC="$CC_" CXX="$CXX_" meson build
+	CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local
 	cd build
 	ninja
 	ninja install
