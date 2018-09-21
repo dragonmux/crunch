@@ -1,5 +1,6 @@
 language: cpp
 sudo: required
+python: "3.6"
 
 install: .travis-ci/install.sh
 before_script:
