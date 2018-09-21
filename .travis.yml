@@ -175,11 +175,11 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - deadsnakes
           packages:
             - gcc-7
             - g++-7
-            - python3
-            - python3-pip
+            - python3.6
 
 env:
   global:
