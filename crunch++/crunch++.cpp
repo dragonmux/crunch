@@ -70,6 +70,26 @@ void newline()
 		testPrintf("\n");
 }
 
+void red()
+{
+	if (isTTY)
+#ifndef _MSC_VER
+		testPrintf(FAILURE);
+#else
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
+}
+
+void magenta()
+{
+	if (isTTY)
+#ifndef _MSC_VER
+		testPrintf(COLOUR("1;35"));
+#else
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#endif
+}
+
 void printStats()
 {
 	uint64_t total = passes + failures;
@@ -142,42 +162,22 @@ void runTests()
 		{
 			if (!testSuit)
 			{
-				if (isTTY != 0)
-#ifndef _MSC_VER
-					testPrintf(FAILURE);
-#else
-					SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-#endif
+				red();
 				testPrintf("Could not open test library: %s", dlerror());
 				newline();
 			}
-			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(FAILURE);
-#else
-				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-#endif
+			red();
 			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value.get());
 			newline();
 			continue;
 		}
-		if (isTTY != 0)
-#ifndef _MSC_VER
-			testPrintf(COLOUR("1;35"));
-#else
-			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-#endif
+		magenta();
 		testPrintf("Running test suit %s...", namedTests[i]->value.get());
 		newline();
 
 		for (auto &test : cxxTests)
 		{
-			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(COLOUR("1;35"));
-#else
-				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-#endif
+			magenta();
 			testPrintf("Running tests in class %s...", test.testClassName);
 			newline();
 
