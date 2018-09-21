@@ -48,21 +48,18 @@ bool logging = false;
 testLog *logger = NULL;
 uint8_t isTTY = 1;
 
-#ifndef _MSC_VER
 int getColumns()
 {
+#ifndef _MSC_VER
 	struct winsize win;
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
 	return (win.ws_col == 0 ? 80 : win.ws_col);
-}
 #else
-int getColumns()
-{
 	CONSOLE_SCREEN_BUFFER_INFO window;
 	GetConsoleScreenBufferInfo(console, &window);
 	return window.dwSize.X;
-}
 #endif
+}
 
 size_t vaTestPrintf(const char *format, va_list args)
 {
@@ -89,7 +86,7 @@ void printAborted() { testPrintf("[ **** ABORTED **** ]\n"); }
 #ifndef _MSC_VER
 void echoOk()
 {
-	if (isTTY != 0)
+	if (isTTY)
 		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printOk();
@@ -98,7 +95,7 @@ void echoOk()
 
 void echoFailure()
 {
-	if (isTTY != 0)
+	if (isTTY)
 		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printFailure();
@@ -107,7 +104,7 @@ void echoFailure()
 
 void echoSkip()
 {
-	if (isTTY != 0)
+	if (isTTY)
 		testPrintf(" " SET_COL BRACKET "[" WARNING " SKIP " BRACKET "]" NEWLINE, COL(getColumns()));
 	else
 		printSkip();
@@ -116,7 +113,7 @@ void echoSkip()
 
 void echoAborted()
 {
-	if (isTTY != 0)
+	if (isTTY)
 		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
 		printAborted();
@@ -125,7 +122,7 @@ void echoAborted()
 #else
 void echoOk()
 {
-	if (isTTY != 0)
+	if (isTTY)
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
@@ -148,7 +145,7 @@ void echoOk()
 
 void echoFailure()
 {
-	if (isTTY != 0)
+	if (isTTY)
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
@@ -170,7 +167,7 @@ void echoFailure()
 
 void echoSkip()
 {
-	if (isTTY != 0)
+	if (isTTY)
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
@@ -191,7 +188,7 @@ void echoSkip()
 
 void echoAborted()
 {
-	if (isTTY != 0)
+	if (isTTY)
 	{
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");
@@ -212,7 +209,7 @@ void logResult(resultType type, const char *message, ...)
 {
 	va_list args;
 
-	if (isTTY != 0)
+	if (isTTY)
 #ifndef _MSC_VER
 		testPrintf(NORMAL);
 #else
