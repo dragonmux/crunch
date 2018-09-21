@@ -180,6 +180,7 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
+            - ninja-build
 
 env:
   global:
