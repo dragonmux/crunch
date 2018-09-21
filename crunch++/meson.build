@@ -4,6 +4,7 @@ libCrunchppSrc = [
 	'ArgsParser.cpp', 'StringFuncs.cpp', 'Logger.cpp', 'Tester.cpp', 'Core.cpp'
 ]
 crunchppSrc = ['crunch++.cpp']
+crunchppSrcDir = meson.current_source_dir()
 crunchppInc = include_directories('.')
 
 libCrunchpp = library(
