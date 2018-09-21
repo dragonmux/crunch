@@ -55,13 +55,20 @@ const char *cwd = nullptr;
 
 typedef void (__cdecl *registerFn)();
 
-#ifdef _MSC_VER
 void newline()
 {
-	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	testPrintf("\n");
-}
+	if (isTTY)
+#ifdef _MSC_VER
+	{
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		testPrintf("\n");
+	}
+#else
+		testPrintf(NEWLINE);
 #endif
+	else
+		testPrintf("\n");
+}
 
 void printStats()
 {
@@ -142,14 +149,7 @@ void runTests()
 					SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 #endif
 				testPrintf("Could not open test library: %s", dlerror());
-				if (isTTY != 0)
-#ifndef _MSC_VER
-					testPrintf(NEWLINE);
-#else
-					newline();
-#endif
-				else
-					testPrintf("\n");
+				newline();
 			}
 			if (isTTY != 0)
 #ifndef _MSC_VER
@@ -158,14 +158,7 @@ void runTests()
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 #endif
 			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value.get());
-			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(NEWLINE);
-#else
-				newline();
-#endif
-			else
-				testPrintf("\n");
+			newline();
 			continue;
 		}
 		if (isTTY != 0)
@@ -175,14 +168,7 @@ void runTests()
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
 		testPrintf("Running test suit %s...", namedTests[i]->value.get());
-		if (isTTY != 0)
-#ifndef _MSC_VER
-			testPrintf(NEWLINE);
-#else
-			newline();
-#endif
-		else
-			testPrintf("\n");
+		newline();
 
 		for (auto &test : cxxTests)
 		{
@@ -193,14 +179,7 @@ void runTests()
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
 			testPrintf("Running tests in class %s...", test.testClassName);
-			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(NEWLINE);
-#else
-				newline();
-#endif
-			else
-				testPrintf("\n");
+			newline();
 
 			try { test.testClass->registerTests(); }
 			catch (threadExit_t &)
