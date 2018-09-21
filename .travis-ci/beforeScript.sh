@@ -15,5 +15,4 @@ elif [ "$ENGINE" == "meson" ]; then
 	CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local
 	cd build
 	ninja
-	ninja install
 fi

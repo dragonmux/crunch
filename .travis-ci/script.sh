@@ -8,4 +8,5 @@ if [ "$ENGINE" == "make" ]; then
 elif [ "$ENGINE" == "meson" ]; then
 	cd build
 	ninja test
+	ninja install
 fi
