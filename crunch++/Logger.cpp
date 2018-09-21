@@ -243,8 +243,8 @@ testLog *startLogging(const char *fileName)
 {
 	testLog *ret;
 	if (logging)
-		return NULL;
-	ret = new testLog;
+		return nullptr;
+	ret = new testLog();
 	logging = true;
 #ifndef _MSC_VER
 	ret->stdout = dup(STDOUT_FILENO);
@@ -269,12 +269,15 @@ void stopLogging(testLog *logFile)
 		return;
 #ifndef _MSC_VER
 	flock(logFile->fd, LOCK_UN);
+	dup2(logFile->stdout, STDOUT_FILENO);
 #else
 //	locking(logFile->fd, LK_UNLCK, -1);
 #endif
 	fclose(logFile->file);
 	fclose(realStdout);
+#ifdef _MSC_VER
 	realStdout = freopen(TTY, "w", stdout);
+#endif
 	delete logFile;
 	logger = NULL;
 	logging = false;
