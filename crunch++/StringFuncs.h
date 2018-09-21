@@ -27,4 +27,6 @@ extern std::unique_ptr<char []> formatString(const char *format, ...) noexcept;
 extern std::unique_ptr<char []> stringDup(const char *const str) noexcept;
 extern std::unique_ptr<const char []> strNewDup(const char *const str) noexcept;
 
+CRUNCH_VIS const char *boolToString(bool value);
+
 #endif /* __STRINGFUNCS_H__ */
