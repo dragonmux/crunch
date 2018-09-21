@@ -1,34 +1,13 @@
 language: cpp
 sudo: required
 
-if: env(ENGINE) = make
-  install: false
-  before_script:
-    - export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC"
-    - make -C crunch lib
-    - sudo -E make -C crunch install-so
-    - make -C crunch++ lib
-    - sudo -E make -C crunch++ install-so
-    - make -C crunch crunch
-    - make -C crunch++ crunch++
-    - make -C crunchMake
-    - sudo -E make install
- script:
-    - make test
-    - make check
-
-if: env(ENGINE) = meson
-  install:
-    - pip3 install --user meson
-    - echo $PATH
-    - apt-cache search ninja-build
-  before_script:
-    - meson build
-    - cd build
-    - ninja
-    - ninja install
-  script:
-    - ninja test
+install: .travis-ci/install.sh
+before_script:
+  - if [ "$ENGINE" == "make" ]; then
+      export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC";
+    fi
+  - .travis-ci/beforeScript.sh
+script: .travis-ci/script.sh
 
 after_success:
   - if [ "$COVERAGE" == "1" ]; then
@@ -204,3 +183,7 @@ env:
   global:
     - COVERAGE=1
     - ENGINE=make
+
+notifications:
+  - on_success: change
+  - on_failure: change
