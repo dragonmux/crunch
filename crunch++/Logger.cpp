@@ -43,9 +43,9 @@ FILE *stdout;
 	#define TTY	"/dev/tty"
 #endif
 
-FILE *realStdout = NULL;
+FILE *realStdout = nullptr;
 bool logging = false;
-testLog *logger = NULL;
+testLog *logger = nullptr;
 uint8_t isTTY = 1;
 
 int getColumns()
@@ -63,7 +63,7 @@ int getColumns()
 
 size_t vaTestPrintf(const char *format, va_list args)
 {
-	if (realStdout == NULL)
+	if (realStdout == nullptr)
 		realStdout = stdout;
 	return vfprintf(realStdout, format, args);
 }
@@ -251,21 +251,24 @@ testLog *startLogging(const char *fileName)
 #else
 	ret->stdout = dup(fileno(stdout));
 #endif
-	realStdout = fdopen(ret->stdout, "w");
-	ret->file = freopen(fileName, "w", stdout);
+	realStdout = stdout;
+	ret->file = fopen(fileName, "w");
 	ret->fd = fileno(ret->file);
 #ifndef _MSC_VER
 	flock(ret->fd, LOCK_EX);
+	dup2(STDOUT_FILENO, ret->fd);
 #else
 //	locking(ret->fd, LK_LOCK, -1);
+	dup2(fileno(stdout), ret->fd);
 #endif
 	logger = ret;
+	stdout = ret->file;
 	return ret;
 }
 
 void stopLogging(testLog *logFile)
 {
-	if (logFile == NULL)
+	if (logFile == nullptr)
 		return;
 #ifndef _MSC_VER
 	flock(logFile->fd, LOCK_UN);
@@ -274,11 +277,9 @@ void stopLogging(testLog *logFile)
 //	locking(logFile->fd, LK_UNLCK, -1);
 #endif
 	fclose(logFile->file);
-	fclose(realStdout);
-#ifdef _MSC_VER
-	realStdout = freopen(TTY, "w", stdout);
-#endif
+	stdout = realStdout;
+	realStdout = nullptr;
 	delete logFile;
-	logger = NULL;
+	logger = nullptr;
 	logging = false;
 }
