@@ -11,12 +11,14 @@ libCrunchpp = library(
 	'crunch++',
 	libCrunchppSrc,
 	dependencies: [threading],
-	version: meson.project_version()
+	version: meson.project_version(),
+	install: true
 )
 
 crunchpp = executable(
 	'crunch++',
 	crunchppSrc,
 	link_with: [libCrunchpp],
-	dependencies: [threading, dl]
+	dependencies: [threading, dl],
+	install: true
 )

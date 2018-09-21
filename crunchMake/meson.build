@@ -34,5 +34,6 @@ crunchMake = executable(
 	cpp_args: [
 		'-Dcrunch_PREFIX="' + prefix + '"',
 		'-Dcrunch_LIBDIR="' + libdir + '"'
-	]
+	],
+	install: true
 )

@@ -11,12 +11,14 @@ libCrunch = library(
 	'crunch',
 	libCrunchSrc,
 	dependencies: [threading],
-	version: meson.project_version()
+	version: meson.project_version(),
+	install: true
 )
 
 crunch = executable(
 	'crunch',
 	crunchSrc,
 	link_with: [libCrunch],
-	dependencies: [threading, dl]
+	dependencies: [threading, dl],
+	install: true
 )
