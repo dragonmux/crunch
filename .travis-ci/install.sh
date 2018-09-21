@@ -1,4 +1,6 @@
-#!/bin/bash -ev
+#!/bin/bash -e
+unset PS4
+set -x
 
 if [ "$ENGINE" == "meson" ]; then
 	pip3 install --user meson
