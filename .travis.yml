@@ -170,7 +170,7 @@ matrix:
             - gcc-8
             - g++-8
     - compiler: gcc-7
-      env: CC=gcc-7 CXX=g++-7 COVERAGE=0 ENGINE=meson
+      env: CC_=gcc-7 CXX_=g++-7 COVERAGE=0 ENGINE=meson
       addons:
         apt:
           sources:
