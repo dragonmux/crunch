@@ -219,9 +219,8 @@ void runTests()
 			int *retVal;
 			unitTest *test = testMalloc(sizeof(unitTest));
 			test->theTest = currTest;
-			test->testThread = testMalloc(sizeof(pthread_t));
-			pthread_create(test->testThread, &threadAttrs, testRunner, test);
-			pthread_join(*test->testThread, (void **)&retVal);
+			pthread_create(&test->testThread, &threadAttrs, testRunner, test);
+			pthread_join(test->testThread, (void **)&retVal);
 			free(test);
 			if (retVal == &errAbort)
 				exit(0);

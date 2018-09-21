@@ -79,9 +79,8 @@ uint8_t freeParsedArg(parsedArg_t *parsedArg)
 void *freeParsedArgs(parsedArgs_t parsedArgs)
 {
 	for (uint32_t i = 0; parsedArgs[i] != NULL; ++i)
-	{
 		freeParsedArg((parsedArg_t *)parsedArgs[i]);
-	}
+	free(parsedArgs);
 	return NULL;
 }
 
@@ -128,6 +127,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
 					if (!argRet->params)
 						return freeParsedArg(argRet), freeParsedArgs(ret);
+					memset(argRet->params, 0, sizeof(char *) * argRet->paramsFound);
 					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
 					{
 						argRet->params[j] = strdup(argv[i + j + 1]);

@@ -40,7 +40,7 @@ CRUNCH_API uint32_t passes, failures;
 
 typedef struct _unitTest
 {
-	pthread_t *testThread;
+	pthread_t testThread;
 	test *theTest;
 } unitTest;
 
