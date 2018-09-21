@@ -1,6 +1,5 @@
 language: cpp
 sudo: required
-python: "3.6"
 
 install: .travis-ci/install.sh
 before_script:
@@ -179,6 +178,8 @@ matrix:
           packages:
             - gcc-7
             - g++-7
+            - python3
+            - python3-pip
 
 env:
   global:
