@@ -93,6 +93,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	parsedArgs_t ret = malloc(sizeof(constParsedArg_t) * argc);
 	if (!ret)
 		return NULL;
+	memset(ret, 0, sizeof(constParsedArg_t) * argc);
 	uint32_t n = 0;
 	for (uint32_t i = 1; i < argc; i++)
 	{
@@ -101,6 +102,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 		parsedArg_t *argRet = malloc(sizeof(parsedArg_t));
 		if (!argRet)
 			return freeParsedArgs(ret);
+		memset(argRet, 0, sizeof(parsedArg_t));
 		while (argument->value != NULL)
 		{
 			found = strcmp(argument->value, argv[i]) == 0 || ((argument->flags & ARG_INCOMPLETE) &&
