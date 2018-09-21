@@ -3,9 +3,10 @@ libCrunchTests = ['testArgsParser', 'testCrunch', 'testBad']
 foreach test : libCrunchTests
 	custom_target(
 		test,
-		command: [crunchMake, '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir],
+		command: [crunchMake, '-q', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir],
 		input: test + '.c',
 		output: test + '.so',
+		depends: libCrunch,
 		build_by_default: true
 	)
 endforeach
