@@ -54,13 +54,15 @@ uint8_t loggingTests = 0;
 
 typedef void (__cdecl *registerFn)();
 
-#ifdef _MSC_VER
 void newline()
 {
+#ifdef _MSC_VER
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	testPrintf("\n");
-}
+#else
+	testPrintf(NEWLINE);
 #endif
+}
 
 void *testRunner(void *self)
 {
@@ -173,11 +175,7 @@ void runTests()
 #endif
 				testPrintf("Could not open test library: %s", dlerror());
 				if (isTTY != 0)
-#ifndef _MSC_VER
-					testPrintf(NEWLINE);
-#else
 					newline();
-#endif
 				else
 					testPrintf("\n");
 			}
@@ -189,11 +187,7 @@ void runTests()
 #endif
 			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
 			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(NEWLINE);
-#else
 				newline();
-#endif
 			else
 				testPrintf("\n");
 			continue;
@@ -206,11 +200,7 @@ void runTests()
 #endif
 		testPrintf("Running test suit %s...", namedTests[i]->value);
 		if (isTTY != 0)
-#ifndef _MSC_VER
-			testPrintf(NEWLINE);
-#else
 			newline();
-#endif
 		else
 			testPrintf("\n");
 		currTest = tests;
