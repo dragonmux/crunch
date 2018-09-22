@@ -37,8 +37,10 @@ using namespace std;
 parsedArgs_t parsedArgs;
 parsedArgs_t inclDirs, libDirs;
 parsedArgs_t linkLibs, linkObjs;
-parsedArgs_t namedTests, linkArgs;
-uint32_t numTests = 0, numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0, numLinkArgs = 0;
+parsedArgs_t linkArgs;
+uint32_t numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0, numLinkArgs = 0;
+
+vector<unique_ptr<const char []>> tests;
 
 #ifndef _MSC_VER
 #define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
@@ -133,29 +135,13 @@ bool isObj(const std::unique_ptr<const char []> &file)
 
 bool getTests()
 {
-	uint32_t n, j = 0;
-	for (n = 0; parsedArgs[n] != nullptr; n++);
-	namedTests = makeUnique<constParsedArg_t []>(n + 1);
-	if (!namedTests)
-		return false;
-
-	for (uint32_t i = 0; i < n; i++)
+	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
-		if (!findArgInArgs(parsedArgs[i]->value) && !isObj(parsedArgs[i]->value))
-		{
-			namedTests[j] = parsedArgs[i];
-			j++;
-		}
+		const auto &value = parsedArgs[i]->value;
+		if (!findArgInArgs(value) && !isObj(value))
+			tests.emplace_back(strNewDup(value));
 	}
-	if (j == 0)
-		return false;
-	parsedArgs_t tests = makeUnique<constParsedArg_t []>(j);
-	if (!tests)
-		return false;
-	std::copy(namedTests.get(), namedTests.get() + j, tests.get());
-	namedTests = std::move(tests);
-	numTests = j;
-	return true;
+	return tests.size();
 }
 
 inline void getLinkFunc(parsedArgs_t &var, uint32_t &num, const char *find)
@@ -381,7 +367,6 @@ int32_t compileClang(const unique_ptr<const char []> &namedTest)
 
 int compileTests()
 {
-	uint32_t i;
 	int32_t ret = 0;
 	inclDirFlagsToString();
 	libDirFlagsToString();
@@ -398,19 +383,19 @@ int compileTests()
 	if (!quiet)
 		quiet = bool(findArg(parsedArgs, "-q", nullptr));
 
-	for (i = 0; i < numTests; i++)
+	for (const auto &test : tests)
 	{
-		if (access(namedTests[i]->value.get(), R_OK) == 0 && validExt(namedTests[i]->value))
+		if (access(test.get(), R_OK) == 0 && validExt(test))
 		{
 			if (crunch_COMPILER == "clang"_s)
-				ret = compileClang(namedTests[i]->value);
+				ret = compileClang(test);
 			else
-				ret = compileGCC(namedTests[i]->value);
+				ret = compileGCC(test);
 			if (ret)
 				break;
 		}
 		else
-			testPrintf("Error, %s does not exist, skipping..\n", namedTests[i]->value.get());
+			testPrintf("Error, %s does not exist, skipping..\n", test.get());
 	}
 	if (logging)
 		stopLogging(logFile);
