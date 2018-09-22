@@ -35,12 +35,11 @@
 using namespace std;
 
 parsedArgs_t parsedArgs;
-parsedArgs_t inclDirs, libDirs;
-parsedArgs_t linkLibs, linkObjs;
-parsedArgs_t linkArgs;
-uint32_t numInclDirs = 0, numLibDirs = 0, numLibs = 0, numObjs = 0, numLinkArgs = 0;
-
+vector<string> inclDirs, libDirs;
+vector<string> linkLibs, linkObjs;
 vector<unique_ptr<const char []>> tests;
+parsedArgs_t linkArgs;
+uint32_t numLinkArgs = 0;
 
 #ifndef _MSC_VER
 #define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
@@ -99,7 +98,8 @@ const auto exts = makeArray<const char *>(".c", ".cpp", ".cc", ".cxx", ".i", ".s
 const auto cxxExts = makeArray<const char *>(".cpp", ".cc", ".cxx");
 const auto objExts = makeArray<const char *>(".o", ".obj", ".a");
 
-std::unique_ptr<char []> inclDirFlags, libDirFlags, objs, libs;
+string inclDirFlags, libDirFlags, objs;
+std::unique_ptr<char []> libs;
 bool silent, quiet, pthread, codeCoverage;
 
 const arg_t args[] =
@@ -144,33 +144,19 @@ bool getTests()
 	return tests.size();
 }
 
-inline void getLinkFunc(parsedArgs_t &var, uint32_t &num, const char *find)
+inline void getLinkFunc(vector<string> &var, const char *find)
 {
-	uint32_t i, n;
-	for (n = 0; parsedArgs[n] != nullptr; ++n)
-		continue;
-	var = makeUnique<constParsedArg_t []>(n + 1);
-	if (var == nullptr)
-		return;
-	for (num = 0, i = 0; i < n; ++i)
+	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
-		if (strncmp(parsedArgs[i]->value.get(), find, 2) == 0)
-			var[num++] = parsedArgs[i];
+		const auto &value = parsedArgs[i]->value;
+		if (strncmp(value.get(), find, 2) == 0)
+			var.emplace_back(value.get());
 	}
-	if (num == 0)
-		var = nullptr;
-
-	parsedArgs_t vars = makeUnique<constParsedArg_t []>(num);
-	if (vars == nullptr)
-		return;
-	std::copy(var.get(), var.get() + num, vars.get());
-	var = std::move(vars);
 }
 
-void getLinkLibs() { getLinkFunc(linkLibs, numLibs, "-l"); }
-void getLinkObjs() { getLinkFunc(linkObjs, numObjs, "-O"); }
-void getInclDirs() { getLinkFunc(inclDirs, numInclDirs, "-I"); }
-void getLibDirs() { getLinkFunc(libDirs, numLibDirs, "-L"); }
+void getLinkLibs() { getLinkFunc(linkLibs, "-l"); }
+void getInclDirs() { getLinkFunc(inclDirs, "-I"); }
+void getLibDirs() { getLinkFunc(libDirs, "-L"); }
 
 void getLinkArgs()
 {
@@ -253,13 +239,13 @@ string computeSOName(const std::unique_ptr<const char []> &file)
 	return toSO(file);
 }
 
-inline std::unique_ptr<char []> argsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
+inline string argsToString(vector<string> &var, const  uint32_t offset)
 {
-	std::unique_ptr<char []> ret = stringDup("");
-	for (uint32_t i = 0; i < num; ++i)
-		ret = format("%s%s "_s, ret, var[i]->value.get() + offset);
-	var = nullptr;
-	return ret;
+	string ret{""};
+	for (const auto &value : var)
+		ret += value.substr(offset) + ' ';
+	var.clear();
+	return std::move(ret);
 }
 
 inline std::unique_ptr<char []> argParamsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
@@ -275,12 +261,12 @@ inline std::unique_ptr<char []> argParamsToString(parsedArgs_t &var, const uint3
 	return ret;
 }
 
-void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs, numInclDirs, 0); }
-void libDirFlagsToString() { libDirFlags = argsToString(libDirs, numLibDirs, 0); }
-void objsToString() { objs = argsToString(linkObjs, numObjs, 2); }
+void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs, 0); }
+void libDirFlagsToString() { libDirFlags = argsToString(libDirs, 0); }
+void objsToString() { objs = argsToString(linkObjs, 2); }
 void libsToString()
 {
-	const auto libsString = argsToString(linkLibs, numLibs, 0);
+	const auto libsString = argsToString(linkLibs, 0);
 	const auto args = argParamsToString(linkArgs, numLinkArgs, 0);
 	libs = format("%s%s"_s, libsString, args);
 }
