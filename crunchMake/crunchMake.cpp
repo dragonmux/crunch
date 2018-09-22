@@ -37,8 +37,7 @@ using namespace std;
 parsedArgs_t parsedArgs;
 vector<string> inclDirs, libDirs;
 vector<string> linkLibs, linkObjs;
-vector<string> tests;
-parsedArgs_t linkArgs;
+vector<string> linkArgs, tests;
 uint32_t numLinkArgs = 0;
 
 #ifndef _MSC_VER
@@ -98,8 +97,7 @@ const auto exts = makeArray<const char *>(".c", ".cpp", ".cc", ".cxx", ".i", ".s
 const auto cxxExts = makeArray<const char *>(".cpp", ".cc", ".cxx");
 const auto objExts = makeArray<const char *>(".o", ".obj", ".a");
 
-string inclDirFlags, libDirFlags, objs;
-std::unique_ptr<char []> libs;
+string inclDirFlags, libDirFlags, objs, libs;
 bool silent, quiet, pthread, codeCoverage;
 
 const arg_t args[] =
@@ -167,27 +165,25 @@ void getLinkObjs()
 	}
 }
 
+inline string argToString(const parsedArg_t &arg)
+{
+	string ret{arg.value.get()};
+	ret += ' ';
+	for (uint32_t i = 0; i < arg.paramsFound; ++i)
+	{
+		ret += arg.params[i].get();
+		ret += ' ';
+	}
+	return ret;
+}
+
 void getLinkArgs()
 {
-	uint32_t i, n, &num = numLinkArgs;
-	for (n = 0; parsedArgs[n] != nullptr; ++n)
-		continue;
-	linkArgs = makeUnique<constParsedArg_t []>(n + 1);
-	if (linkArgs == nullptr)
-		return;
-	for (num = 0, i = 0; i < n; ++i)
+	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
 		if (strcmp(parsedArgs[i]->value.get(), "-z") == 0)
-			linkArgs[num++] = parsedArgs[i];
+			linkArgs.emplace_back(argToString(*parsedArgs[i]));
 	}
-	if (num == 0)
-		linkArgs = nullptr;
-
-	parsedArgs_t vars = makeUnique<constParsedArg_t []>(num);
-	if (vars == nullptr)
-		return;
-	std::copy(linkArgs.get(), linkArgs.get() + num, vars.get());
-	linkArgs = std::move(vars);
 }
 
 bool validExt(const char *file)
@@ -255,28 +251,10 @@ inline string argsToString(vector<string> &var, const  uint32_t offset)
 	return std::move(ret);
 }
 
-inline std::unique_ptr<char []> argParamsToString(parsedArgs_t &var, const uint32_t num, const  uint32_t offset)
-{
-	std::unique_ptr<char []> ret = stringDup("");
-	for (uint32_t i = 0; i < num; ++i)
-	{
-		ret = format("%s%s "_s, ret, var[i]->value.get() + offset);
-		for (uint32_t param = 0; param < var[i]->paramsFound; ++param)
-			ret = format("%s%s "_s, ret, var[i]->params[param]);
-	}
-	var = nullptr;
-	return ret;
-}
-
 void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs, 0); }
 void libDirFlagsToString() { libDirFlags = argsToString(libDirs, 0); }
 void objsToString() { objs = argsToString(linkObjs, 2); }
-void libsToString()
-{
-	const auto libsString = argsToString(linkLibs, 0);
-	const auto args = argParamsToString(linkArgs, numLinkArgs, 0);
-	libs = format("%s%s"_s, libsString, args);
-}
+void libsToString() { libs = argsToString(linkLibs, 0) + argsToString(linkArgs, 0); }
 
 #ifndef _MSC_VER
 const char *standardVersion(constParsedArg_t version)
