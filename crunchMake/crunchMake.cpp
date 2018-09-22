@@ -37,7 +37,7 @@ using namespace std;
 parsedArgs_t parsedArgs;
 vector<string> inclDirs, libDirs;
 vector<string> linkLibs, linkObjs;
-vector<unique_ptr<const char []>> tests;
+vector<string> tests;
 parsedArgs_t linkArgs;
 uint32_t numLinkArgs = 0;
 
@@ -138,7 +138,7 @@ bool getTests()
 	{
 		const auto &value = parsedArgs[i]->value;
 		if (!findArgInArgs(value) && !isObj(value))
-			tests.emplace_back(strNewDup(value));
+			tests.emplace_back(value.get());
 	}
 	return tests.size();
 }
@@ -200,8 +200,8 @@ bool validExt(const char *file)
 			return true;
 	return false;
 }
-bool validExt(const std::unique_ptr<const char []> &file)
-	{ return validExt(file.get()); }
+bool validExt(const string &file)
+	{ return validExt(file.data()); }
 
 bool isCXX(const char *file)
 {
@@ -211,8 +211,8 @@ bool isCXX(const char *file)
 			return true;
 	return false;
 }
-bool isCXX(const std::unique_ptr<const char []> &file)
-	{ return isCXX(file.get()); }
+bool isCXX(const string &file)
+	{ return isCXX(file.data()); }
 
 string toO(const string &file)
 {
@@ -220,10 +220,10 @@ string toO(const string &file)
 	auto soFile = file.substr(0, dotPos);
 	return soFile += ".o"_s;
 }
-string toO(const std::unique_ptr<const char []> &file)
+string toO(const unique_ptr<const char []> &file)
 	{ return toO(file.get()); }
 
-string computeObjName(const std::unique_ptr<const char []> &file)
+string computeObjName(const string &file)
 {
 	const auto output = findArg(parsedArgs, "-o", nullptr);
 	if (output)
@@ -237,10 +237,8 @@ string toSO(const string &file)
 	auto soFile = file.substr(0, dotPos);
 	return soFile += libExt;
 }
-string toSO(const std::unique_ptr<const char []> &file)
-	{ return toSO(file.get()); }
 
-string computeSOName(const std::unique_ptr<const char []> &file)
+string computeSOName(const string &file)
 {
 	const auto output = findArg(parsedArgs, "-o", nullptr);
 	if (output)
@@ -303,7 +301,7 @@ void buildCXXString()
 #endif
 }
 
-int32_t compileGCC(const unique_ptr<const char []> &test)
+int32_t compileGCC(const string &test)
 {
 	const bool mode = isCXX(test);
 	const string &compiler = mode ? cxx : cc;
@@ -323,7 +321,7 @@ int32_t compileGCC(const unique_ptr<const char []> &test)
 	return system(compileString.get());
 }
 
-int32_t compileClang(const unique_ptr<const char []> &test)
+int32_t compileClang(const string &test)
 {
 	const bool mode = isCXX(test);
 	const string &compiler = mode ? cxx : cc;
@@ -380,7 +378,7 @@ int compileTests()
 
 	for (const auto &test : tests)
 	{
-		if (access(test.get(), R_OK) == 0 && validExt(test))
+		if (access(test.data(), R_OK) == 0 && validExt(test))
 		{
 			if (crunch_COMPILER == "clang"_s)
 				ret = compileClang(test);
@@ -390,7 +388,7 @@ int compileTests()
 				break;
 		}
 		else
-			testPrintf("Error, %s does not exist, skipping..\n", test.get());
+			testPrintf("Error, %s does not exist, skipping..\n", test.data());
 	}
 	if (logging)
 		stopLogging(logFile);
