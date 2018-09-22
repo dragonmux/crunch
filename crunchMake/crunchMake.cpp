@@ -308,19 +308,19 @@ void buildCXXString()
 #endif
 }
 
-int32_t compileGCC(const unique_ptr<const char []> &namedTest)
+int32_t compileGCC(const unique_ptr<const char []> &test)
 {
-	const bool mode = isCXX(namedTest);
+	const bool mode = isCXX(test);
 	const string &compiler = mode ? cxx : cc;
-	auto soFile = computeSOName(namedTest);
-	auto compileString = format("%s %s " OPTS "%s"_s, compiler, namedTest, inclDirFlags,
+	auto soFile = computeSOName(test);
+	auto compileString = format("%s %s " OPTS "%s"_s, compiler, test, inclDirFlags,
 		libDirFlags, objs, libs, codeCoverage ? "-lgcov " : "",  mode ? "++" : "",
 		pthread ? "" : "-pthread", soFile);
 	if (!silent)
 	{
 		std::unique_ptr<char []> displayString;
 		if (quiet)
-			displayString = format(" CCLD  %s => %s"_s, namedTest, soFile);
+			displayString = format(" CCLD  %s => %s"_s, test, soFile);
 		else
 			displayString = stringDup(compileString.get());
 		printf("%s\n", displayString.get());
@@ -328,18 +328,18 @@ int32_t compileGCC(const unique_ptr<const char []> &namedTest)
 	return system(compileString.get());
 }
 
-int32_t compileClang(const unique_ptr<const char []> &namedTest)
+int32_t compileClang(const unique_ptr<const char []> &test)
 {
-	const bool mode = isCXX(namedTest);
+	const bool mode = isCXX(test);
 	const string &compiler = mode ? cxx : cc;
-	auto oFile = computeObjName(namedTest);
-	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, namedTest,
+	auto oFile = computeObjName(test);
+	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, test,
 		inclDirFlags, pthread ? "" : "-pthread", oFile);
 	if (!silent)
 	{
 		if (quiet)
 		{
-			auto displayString = format(" CC    %s => %s"_s, namedTest, oFile);
+			auto displayString = format(" CC    %s => %s"_s, test, oFile);
 			puts(displayString.get());
 		}
 		else
@@ -349,7 +349,7 @@ int32_t compileClang(const unique_ptr<const char []> &namedTest)
 	if (ret)
 		return ret;
 
-	auto soFile = computeSOName(namedTest);
+	auto soFile = computeSOName(test);
 	auto linkString = format("%s %s " LINK_OPTS "%s"_s, compiler, oFile, libDirFlags, objs,
 		libs, codeCoverage ? "--coverage " : "", mode ? "++" : "", pthread ? "" : "-pthread", soFile);
 	if (!silent)
