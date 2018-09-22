@@ -234,15 +234,18 @@ testLog *startLogging(const char *fileName)
 #else
 	ret->stdout = dup(fileno(stdout));
 #endif
-	realStdout = fdopen(ret->stdout, "w");
-	ret->file = freopen(fileName, "w", stdout);
+	realStdout = stdout;
+	ret->file = fopen(fileName, "w");
 	ret->fd = fileno(ret->file);
 #ifndef _MSC_VER
 	flock(ret->fd, LOCK_EX);
+	dup2(STDOUT_FILENO, ret->fd);
 #else
 //	locking(ret->fd, LK_LOCK, -1);
+	dup2(fileno(stdout), ret->fd);
 #endif
 	logger = ret;
+	stdout = ret->file;
 	return ret;
 }
 
@@ -252,12 +255,14 @@ void stopLogging(testLog *logFile)
 		return;
 #ifndef _MSC_VER
 	flock(logFile->fd, LOCK_UN);
+	dup2(logFile->stdout, STDOUT_FILENO);
 #else
 //	locking(logFile->fd, LK_UNLCK, -1);
+	dup2(logFile->stdout, fileno(stdout));
 #endif
 	fclose(logFile->file);
-	fclose(realStdout);
-	realStdout = freopen(TTY, "w", stdout);
+	stdout = realStdout;
+	realStdout = NULL;
 	free(logFile);
 	logger = NULL;
 	logging = 0;

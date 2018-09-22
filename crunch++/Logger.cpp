@@ -275,6 +275,7 @@ void stopLogging(testLog *logFile)
 	dup2(logFile->stdout, STDOUT_FILENO);
 #else
 //	locking(logFile->fd, LK_UNLCK, -1);
+	dup2(logFile->stdout, fileno(stdout));
 #endif
 	fclose(logFile->file);
 	stdout = realStdout;
