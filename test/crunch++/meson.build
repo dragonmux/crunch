@@ -7,7 +7,7 @@ libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
 foreach test : libCrunchppTests
 	custom_target(
 		'crunch++-' + test,
-		command: [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchPath],
+		command: [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath],
 		input: test + '.cpp',
 		output: test + '.so',
 		depends: libCrunch,
