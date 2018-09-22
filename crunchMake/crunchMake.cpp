@@ -242,19 +242,19 @@ string computeSOName(const string &file)
 	return toSO(file);
 }
 
-inline string argsToString(vector<string> &var, const  uint32_t offset)
+inline string argsToString(vector<string> &var)
 {
 	string ret{""};
 	for (const auto &value : var)
-		ret += value.substr(offset) + ' ';
+		ret += value + ' ';
 	var.clear();
 	return std::move(ret);
 }
 
-void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs, 0); }
-void libDirFlagsToString() { libDirFlags = argsToString(libDirs, 0); }
-void objsToString() { objs = argsToString(linkObjs, 2); }
-void libsToString() { libs = argsToString(linkLibs, 0) + argsToString(linkArgs, 0); }
+void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs); }
+void libDirFlagsToString() { libDirFlags = argsToString(libDirs); }
+void objsToString() { objs = argsToString(linkObjs); }
+void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 
 #ifndef _MSC_VER
 const char *standardVersion(constParsedArg_t version)
