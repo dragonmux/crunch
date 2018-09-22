@@ -105,7 +105,6 @@ bool silent, quiet, pthread, codeCoverage;
 const arg_t args[] =
 {
 	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
-	{"-O", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-I", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-L", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-o", 1, 1, 0},
@@ -157,6 +156,16 @@ inline void getLinkFunc(vector<string> &var, const char *find)
 void getLinkLibs() { getLinkFunc(linkLibs, "-l"); }
 void getInclDirs() { getLinkFunc(inclDirs, "-I"); }
 void getLibDirs() { getLinkFunc(libDirs, "-L"); }
+
+void getLinkObjs()
+{
+	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
+	{
+		const auto &value = parsedArgs[i]->value;
+		if (!findArgInArgs(value) && isObj(value))
+			linkObjs.emplace_back(value.get());
+	}
+}
 
 void getLinkArgs()
 {
