@@ -10,6 +10,9 @@ image:
 #  - x86
 #  - x64
 
+install:
+  - cmd: choco install ninja
+
 configuration:
   - Debug
   - Release
