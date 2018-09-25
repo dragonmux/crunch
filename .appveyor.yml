@@ -2,15 +2,22 @@ image:
   - Visual Studio 2015
   - Visual Studio 2017
 
-#platform:
-#  - x86
-#  - x64
+platform:
+  - x86
+  - x64
 
 install:
+  - cmd: if %PLATFORM%==x64 (set PYTHON_ROOT=%PYTHON_ROOT%-x64)
+  - cmd: set PATH=%PYTHON_ROOT%\Scripts;%PYTHON_ROOT%;%PATH%
   - cmd: pip3 install meson
   - cmd: choco install ninja
 
 before_build:
+  - cmd: |
+      if %APPVEYOR_BUILD_WORKER_IMAGE%=="Visual Studio 2015"
+        (call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%)
+      else if %APPVEYOR_BUILD_WORKER_IMAGE%=="Visual Studio 2017"
+        (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %PLATFORM%)
   - cmd: meson build
 
 build:
@@ -25,7 +32,7 @@ environment:
   matrix:
     - COVERAGE: 0
     - COVERAGE: 1
-  PATH: "C:\\Python36-x64\\Scripts;C:\\Python36-x64;%PATH%"
+  PYTHON_ROOT: C:\\Python36
 
 matrix:
   exclude:
