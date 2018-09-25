@@ -11,7 +11,7 @@ image:
 #  - x64
 
 install:
-  - cmd: dir /w C:\Python36-x64/Scripts
+  - cmd: dir /w C:\Python36-x64\Scripts
   - cmd: choco install ninja
 
 configuration:
