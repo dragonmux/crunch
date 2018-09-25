@@ -44,8 +44,9 @@ A complete list of supported assertions is given in crunch.h
 
 ## Integrating crunch
 
-crunchMake is designed to be as compatable as it needs to be with GCC but with the only difference that .o files to link with are given with -o<file>.
-Granted this is slightly confusing syntax seeing as -o is used by GCC for "use this file for output", a better way could not be thought of without teaching crunchMake how to recognise different object types.
+crunchMake is designed to be as compatable as it needs to be with GCC and Clang.
+This includes optionally specifying -o to set the output file name and location of the test.
+If -o is not specified, then crunchMake will compute this for you by taking the input test name and changing the file extension
 
 crunchMake's extra options are --log, --silent, -s, --quiet and -q.
 The --silent and -s option makes crunchMake produce no output of any kind, only compiler standard output.
