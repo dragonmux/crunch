@@ -1,7 +1,3 @@
-build:
-  parallel: true
-  project: VS/crunch.sln
-
 image:
   - Visual Studio 2015
   - Visual Studio 2017
@@ -14,8 +10,12 @@ install:
   - cmd: pip3 install meson
   - cmd: choco install ninja
 
-build:
+before_build:
   - cmd: meson build
+
+build:
+  parallel: true
+  project: VS/crunch.sln
 
 configuration:
   - Debug
