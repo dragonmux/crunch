@@ -16,6 +16,7 @@ threading = dependency('threads')
 
 coverage = get_option('b_coverage')
 buildType = get_option('buildtype')
+isWindows = target_machine.system() == 'windows'
 
 if ['gcc', 'clang'].contains(cc.get_id())
 	add_project_arguments('-Wall', '-Wextra', '-pedantic', language: 'c')
@@ -31,7 +32,7 @@ if ['gcc', 'clang'].contains(cxx.get_id())
 	endif
 endif
 
-if target_machine.system() == 'windows'
+if isWindows
 	add_project_arguments('-D__crunch_lib__', language: ['c', 'cpp'])
 endif
 

@@ -1,4 +1,4 @@
-dl = cxx.find_library('dl')
+dl = cxx.find_library('dl', required: not isWindows)
 
 libCrunchppSrc = [
 	'ArgsParser.cpp', 'StringFuncs.cpp', 'Logger.cpp', 'Tester.cpp', 'Core.cpp'
