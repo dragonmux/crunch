@@ -14,6 +14,9 @@ install:
   - cmd: pip3 install meson
   - cmd: choco install ninja
 
+build:
+  - cmd: meson build
+
 configuration:
   - Debug
   - Release
