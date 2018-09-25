@@ -11,7 +11,7 @@ image:
 #  - x64
 
 install:
-  - cmd: dir /w C:\Python36-x64\Scripts
+  - cmd: pip3 install meson
   - cmd: choco install ninja
 
 configuration:
@@ -22,7 +22,7 @@ environment:
   matrix:
     - COVERAGE: 0
     - COVERAGE: 1
-  PATH: "C:\Python36-x64:%PATH%"
+  PATH: "C:\Python36-x64\Scripts;C:\Python36-x64;%PATH%"
 
 matrix:
   exclude:
