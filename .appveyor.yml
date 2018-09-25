@@ -11,6 +11,7 @@ image:
 #  - x64
 
 install:
+  - cmd: dir /w C:/Python36-x64
   - cmd: choco install ninja
 
 configuration:
@@ -21,6 +22,7 @@ environment:
   matrix:
     - COVERAGE: 0
     - COVERAGE: 1
+  PATH: "C:/Python36-x64:%PATH%"
 
 matrix:
   exclude:
