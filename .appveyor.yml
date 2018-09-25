@@ -8,18 +8,28 @@ platform:
 
 install:
   - cmd: if %PLATFORM%==x64 (set PYTHON_ROOT=%PYTHON_ROOT%-x64)
-  - cmd: set PATH=%PYTHON_ROOT%\Scripts;%PYTHON_ROOT%;%PATH%
-  - cmd: pip3 install meson
-  - cmd: choco install ninja
-
-before_build:
+  - cmd: set PATH=C:\ninja-build;%PYTHON_ROOT%\Scripts;%PYTHON_ROOT%;%PATH%
   - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%)
   - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %PLATFORM%)
-  - cmd: meson build
+  - cmd: mkdir C:\ninja-build
+  - ps: |
+      (new-object net.webclient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip', 'C:\ninja-build\ninja-win.zip')
+  - cmd: 7z x -oC:\ninja-build C:\ninja-build\ninja-win.zip
+  - cmd: pip3 install meson
 
-build:
-  parallel: true
-  project: VS/crunch.sln
+before_build:
+  - cmd: meson build
+  - cmd: cd build
+
+build_script:
+  - cmd: ninja
+
+#build:
+#  parallel: true
+#  project: VS/crunch.sln
+
+test_script:
+  - cmd: ninja test
 
 configuration:
   - Debug
