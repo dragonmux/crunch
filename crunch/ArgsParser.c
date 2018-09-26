@@ -32,7 +32,7 @@ const arg_t *args = NULL;
 void registerArgs(const arg_t *allowedArgs)
 {
 	args = allowedArgs;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && _MSC_VER < 1900L
 	stdout = &__iob_func()[1];
 #endif
 }
@@ -65,7 +65,7 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 			break;
 	}
 	if (n < min)
-		return -1;
+		return UINT32_MAX;
 	return n;
 }
 
