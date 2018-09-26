@@ -10,7 +10,7 @@ foreach test : libCrunchppTests
 		command: [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath],
 		input: test + '.cpp',
 		output: test + '.so',
-		depends: libCrunch,
+		depends: libCrunchpp,
 		build_by_default: true
 	)
 endforeach
