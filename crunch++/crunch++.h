@@ -165,7 +165,7 @@ private:
 public:
 	CRUNCH_VIS virtual ~testsuit();
 	virtual void registerTests() = 0;
-	void test();
+	CRUNCH_VIS void test();
 };
 
 struct threadExit_t
