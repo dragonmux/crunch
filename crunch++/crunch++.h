@@ -195,12 +195,7 @@ typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestCla
 	registerTestClasses<TestClasses...>();
 }
 
-#define CXX_TEST(name) \
-{ \
-	cxxTest test = {nullptr, #name}; \
-	test.testFunc = [this](){ this->name(); }; \
-	tests.push_back(test); \
-}
+#define CXX_TEST(name) tests.emplace_back(cxxTest{[this](){ this->name(); }, #name});
 
 typedef struct testLog
 {
