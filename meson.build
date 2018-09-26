@@ -37,7 +37,9 @@ if isWindows
 	add_global_arguments('-wd4996', language: ['c', 'cpp'])
 endif
 
-subdir('crunch')
+if not isWindows
+	subdir('crunch')
+endif
 subdir('crunch++')
 subdir('crunchMake')
 subdir('test')

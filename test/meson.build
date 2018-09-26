@@ -1,2 +1,4 @@
-subdir('crunch')
+if not isWindows
+	subdir('crunch')
+endif
 subdir('crunch++')
