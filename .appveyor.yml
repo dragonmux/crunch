@@ -1,4 +1,5 @@
 image:
+  - Visual Studio 2013
   - Visual Studio 2015
   - Visual Studio 2017
 
@@ -9,6 +10,7 @@ platform:
 install:
   - cmd: if %PLATFORM%==x64 (set PYTHON_ROOT=%PYTHON_ROOT%-x64)
   - cmd: set PATH=C:\ninja-build;%PYTHON_ROOT%\Scripts;%PYTHON_ROOT%;%PATH%
+  - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2013" (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %PLATFORM%)
   - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%)
   - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %PLATFORM%)
   - cmd: mkdir C:\ninja-build
