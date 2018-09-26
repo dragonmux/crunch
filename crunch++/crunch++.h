@@ -98,7 +98,7 @@ namespace crunch
 	template<typename T> struct isNumeric : std::integral_constant<bool, std::is_integral<T>::value && !isBoolean<T>::value> { };
 }
 
-class CRUNCH_VIS testsuit
+class testsuit
 {
 private:
 	template<typename T> using isNumeric = crunch::isNumeric<T>;
@@ -109,53 +109,53 @@ protected:
 
 	// XXX: Fixme.. this had to be added for some tests chained from a main test class
 public:
-	void fail(const char *const reason);
-	void skip(const char *const reason);
+	CRUNCH_VIS void fail(const char *const reason);
+	CRUNCH_VIS void skip(const char *const reason);
 
-	void assertTrue(const bool value);
-	void assertFalse(const bool value);
+	CRUNCH_VIS void assertTrue(const bool value);
+	CRUNCH_VIS void assertFalse(const bool value);
 
-	void assertEqual(const int8_t result, const int8_t expected);
-	void assertEqual(const uint8_t result, const uint8_t expected);
-	void assertEqual(const int16_t result, const int16_t expected);
-	void assertEqual(const uint16_t result, const uint16_t expected);
-	void assertEqual(const int32_t result, const int32_t expected);
-	void assertEqual(const uint32_t result, const uint32_t expected);
-	void assertEqual(const int64_t result, const int64_t expected);
-	void assertEqual(const uint64_t result, const uint64_t expected);
-	void assertEqual(void *result, void *expected);
-	void assertEqual(double result, double expected);
-	void assertEqual(const char *const result, const char *const expected);
-	void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
+	CRUNCH_VIS void assertEqual(const int8_t result, const int8_t expected);
+	CRUNCH_VIS void assertEqual(const uint8_t result, const uint8_t expected);
+	CRUNCH_VIS void assertEqual(const int16_t result, const int16_t expected);
+	CRUNCH_VIS void assertEqual(const uint16_t result, const uint16_t expected);
+	CRUNCH_VIS void assertEqual(const int32_t result, const int32_t expected);
+	CRUNCH_VIS void assertEqual(const uint32_t result, const uint32_t expected);
+	CRUNCH_VIS void assertEqual(const int64_t result, const int64_t expected);
+	CRUNCH_VIS void assertEqual(const uint64_t result, const uint64_t expected);
+	CRUNCH_VIS void assertEqual(void *result, void *expected);
+	CRUNCH_VIS void assertEqual(double result, double expected);
+	CRUNCH_VIS void assertEqual(const char *const result, const char *const expected);
+	CRUNCH_VIS void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
 	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
 		void assertEqual(const T a, const U b) { assertEqual(a, T(b)); }
 
-	void assertNotEqual(const int8_t result, const int8_t expected);
-	void assertNotEqual(const uint8_t result, const uint8_t expected);
-	void assertNotEqual(const int16_t result, const int16_t expected);
-	void assertNotEqual(const uint16_t result, const uint16_t expected);
-	void assertNotEqual(const int32_t result, const int32_t expected);
-	void assertNotEqual(const uint32_t result, const uint32_t expected);
-	void assertNotEqual(const int64_t result, const int64_t expected);
-	void assertNotEqual(const uint64_t result, const uint64_t expected);
-	void assertNotEqual(void *result, void *expected);
-	void assertNotEqual(double result, double expected);
-	void assertNotEqual(const char *const result, const char *const expected);
-	void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
+	CRUNCH_VIS void assertNotEqual(const int8_t result, const int8_t expected);
+	CRUNCH_VIS void assertNotEqual(const uint8_t result, const uint8_t expected);
+	CRUNCH_VIS void assertNotEqual(const int16_t result, const int16_t expected);
+	CRUNCH_VIS void assertNotEqual(const uint16_t result, const uint16_t expected);
+	CRUNCH_VIS void assertNotEqual(const int32_t result, const int32_t expected);
+	CRUNCH_VIS void assertNotEqual(const uint32_t result, const uint32_t expected);
+	CRUNCH_VIS void assertNotEqual(const int64_t result, const int64_t expected);
+	CRUNCH_VIS void assertNotEqual(const uint64_t result, const uint64_t expected);
+	CRUNCH_VIS void assertNotEqual(void *result, void *expected);
+	CRUNCH_VIS void assertNotEqual(double result, double expected);
+	CRUNCH_VIS void assertNotEqual(const char *const result, const char *const expected);
+	CRUNCH_VIS void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
 	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
 		void assertNotEqual(const T a, const U b) { assertNotEqual(a, T(b)); }
 
-	void assertNull(void *result);
-	void assertNotNull(void *result);
-	void assertNull(const void *const result);
-	void assertNotNull(const void *const result);
+	CRUNCH_VIS void assertNull(void *result);
+	CRUNCH_VIS void assertNotNull(void *result);
+	CRUNCH_VIS void assertNull(const void *const result);
+	CRUNCH_VIS void assertNotNull(const void *const result);
 	template<typename T> void assertNull(std::unique_ptr<T> &result) { assertNull(result.get()); }
 	template<typename T> void assertNotNull(std::unique_ptr<T> &result) { assertNotNull(result.get()); }
 	template<typename T> void assertNull(const std::unique_ptr<T> &result) { assertNull(result.get()); }
 	template<typename T> void assertNotNull(const std::unique_ptr<T> &result) { assertNotNull(result.get()); }
 
-	void assertGreaterThan(const long result, const long expected);
-	void assertLessThan(const long result, const long expected);
+	CRUNCH_VIS void assertGreaterThan(const long result, const long expected);
+	CRUNCH_VIS void assertLessThan(const long result, const long expected);
 
 	testsuit();
 
@@ -163,7 +163,7 @@ private:
 	static int testRunner(testsuit &unitClass, cxxUnitTest &test);
 
 public:
-	virtual ~testsuit();
+	CRUNCH_VIS virtual ~testsuit();
 	virtual void registerTests() = 0;
 	void test();
 };
