@@ -41,6 +41,7 @@
 		#define CRUNCH_API	extern CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		__declspec(dllexport)
+	#define CRUNCH_MAYBE_VIS
 
 	#ifdef stdout
 	#undef stdout
@@ -58,6 +59,7 @@
 		#define CRUNCH_API	extern CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		CRUNCH_API
+	#define CRUNCH_MAYBE_VIS	CRUNCH_VIS
 #endif
 #define CRUNCHpp_API	extern CRUNCH_VIS
 
@@ -98,7 +100,7 @@ namespace crunch
 	template<typename T> struct isNumeric : std::integral_constant<bool, std::is_integral<T>::value && !isBoolean<T>::value> { };
 }
 
-class testsuit
+class CRUNCH_MAYBE_VIS testsuit
 {
 private:
 	template<typename T> using isNumeric = crunch::isNumeric<T>;
