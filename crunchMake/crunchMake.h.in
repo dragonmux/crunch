@@ -3,7 +3,7 @@
 
 #include <string>
 
-inline std::string operator ""_s(const char *string, const unsigned long length)
+inline std::string operator ""_s(const char *string, const std::size_t length)
 	{ return std::string{string, length}; }
 
 #define crunch_GCC "@CC@"_s
