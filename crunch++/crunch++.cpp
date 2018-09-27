@@ -31,9 +31,9 @@
 #include <direct.h>
 #include <io.h>
 #define RTLD_LAZY 0
-#define dlopen(fileName, flag) LoadLibrary(fileName)
-#define dlsym(handle, symbol) GetProcAddress(handle, symbol)
-#define dlclose(handle) FreeLibrary(handle)
+#define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
+#define dlsym(handle, symbol) GetProcAddress(HMODULE(handle), symbol)
+#define dlclose(handle) FreeLibrary(HMODULE(handle))
 
 char *dlerror()
 {
@@ -41,7 +41,7 @@ char *dlerror()
 	char *message;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
 		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL,
-		SUBLANG_DEFAULT), &message, 0, nullptr);
+		SUBLANG_DEFAULT), reinterpret_cast<char *>(&message), 0, nullptr);
 	return message;
 }
 
