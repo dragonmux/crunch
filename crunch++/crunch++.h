@@ -43,7 +43,7 @@
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 	#define CRUNCH_MAYBE_VIS
 
-	#if defined(stdout) && _MSC_VER < 1900L
+	#ifdef stdout
 	#undef stdout
 	CRUNCH_API FILE *stdout;
 	#endif

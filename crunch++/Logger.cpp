@@ -38,9 +38,7 @@
 #ifdef _MSC_VER
 	#define TTY	"CON"
 HANDLE console;
-	#if _MSC_VER < 1900L
 FILE *stdout;
-	#endif
 #else
 	#define TTY	"/dev/tty"
 #endif
