@@ -157,7 +157,7 @@ public:
 	CRUNCH_VIS void assertGreaterThan(const long result, const long expected);
 	CRUNCH_VIS void assertLessThan(const long result, const long expected);
 
-	testsuit();
+	CRUNCH_VIS testsuit();
 
 private:
 	static int testRunner(testsuit &unitClass, cxxUnitTest &test);
