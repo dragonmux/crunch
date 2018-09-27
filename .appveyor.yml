@@ -34,6 +34,7 @@ test_script:
 on_finish:
   - cmd: cd ..
   - cmd: 7z a -ttar -so build.tar build | 7z a -tbzip2 -si build.tar.bz2
+  - cmd: appveyor PushArtifact build.tar.bz2
 
 artifacts:
   - path: build.tar.xz
