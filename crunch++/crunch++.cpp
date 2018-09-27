@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		printf("Error: could not grab console!");
 		return 1;
 	}
-	isTTY = bool{isatty(fileno(stdout))};
+	isTTY = bool(isatty(fileno(stdout)));
 #endif
 	try { runTests(); }
 	catch (threadExit_t &val)
