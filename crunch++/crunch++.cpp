@@ -34,6 +34,17 @@
 #define dlopen(fileName, flag) LoadLibrary(fileName)
 #define dlsym(handle, symbol) GetProcAddress(handle, symbol)
 #define dlclose(handle) FreeLibrary(handle)
+
+char *dlerror()
+{
+	const auto error = GetLastError();
+	char *message;
+	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL,
+		SUBLANG_DEFAULT), &message, 0, nullptr);
+	return message;
+}
+
 #endif
 #include <exception>
 #include <stdlib.h>
