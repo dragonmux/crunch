@@ -62,7 +62,7 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 			break;
 	}
 	if (n < min)
-		return -1;
+		return UINT32_MAX;
 	return n;
 }
 
