@@ -9,7 +9,7 @@ crunchInc = include_directories('.')
 
 crunchArgs = []
 if isWindows
-	crunchArgs += '__crunch_lib__'
+	crunchArgs += '-D__crunch_lib__'
 endif
 
 libCrunch = library(
