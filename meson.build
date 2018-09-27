@@ -34,7 +34,7 @@ endif
 
 if isWindows
 	add_project_arguments('-D__crunch_lib__', language: ['c', 'cpp'])
-	add_global_arguments('-wd4996', language: ['c', 'cpp'])
+	add_global_arguments('-wd4996', '-wd4800', language: ['c', 'cpp'])
 endif
 
 if not isWindows
