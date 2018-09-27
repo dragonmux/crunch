@@ -14,31 +14,31 @@ template class CRUNCH_VIS std::vector<std::exception_ptr>;
 bool loggingTests = false;
 std::vector<cxxTestClass> cxxTests;
 
-#ifdef _MSC_VER
 void newline()
 {
-	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	testPrintf("\n");
-}
+	if (isTTY)
+#ifdef _MSC_VER
+	{
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		testPrintf("\n");
+	}
+#else
+		testPrintf(NEWLINE);
 #endif
+	else
+		testPrintf(" ");
+}
 
 int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 {
-	if (isTTY != 0)
+	if (isTTY)
 #ifndef _MSC_VER
 		testPrintf(INFO);
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
 	testPrintf("%s...", test.theTest.testName);
-	if (isTTY != 0)
-#ifndef _MSC_VER
-		testPrintf(NEWLINE);
-#else
-		newline();
-#endif
-	else
-		testPrintf(" ");
+	newline();
 	try
 	{
 		cxxTest &unitTest = test.theTest;

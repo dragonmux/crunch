@@ -34,7 +34,7 @@ typedef enum _resultType
 	RESULT_ABORT
 } resultType;
 
-CRUNCHpp_API uint8_t isTTY;
+CRUNCHpp_API bool isTTY;
 #ifdef _MSC_VER
 CRUNCHpp_API HANDLE console;
 #endif

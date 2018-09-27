@@ -46,7 +46,7 @@ FILE *stdout;
 FILE *realStdout = nullptr;
 bool logging = false;
 testLog *logger = nullptr;
-uint8_t isTTY = 1;
+bool isTTY = true;
 
 int getColumns()
 {

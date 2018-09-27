@@ -163,7 +163,7 @@ void runTests()
 	testLog *logFile = nullptr;
 
 	constParsedArg_t logging = findArg(parsedArgs, "--log", nullptr);
-	if (bool(logging))
+	if (logging)
 	{
 		logFile = startLogging(logging->params[0].get());
 		loggingTests = true;
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		printf("Error: could not grab console!");
 		return 1;
 	}
-	isTTY = isatty(fileno(stdout));
+	isTTY = bool{isatty(fileno(stdout))};
 #endif
 	try { runTests(); }
 	catch (threadExit_t &val)
