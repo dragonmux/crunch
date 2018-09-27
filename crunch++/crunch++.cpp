@@ -22,14 +22,18 @@
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "crunch++.h"
-#include <dlfcn.h>
 #ifndef _MSC_VER
+#include <dlfcn.h>
 #include <unistd.h>
 #else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <direct.h>
 #include <io.h>
+#define RTLD_LAZY 0
+#define dlopen(fileName, flag) LoadLibrary(fileName)
+#define dlsym(handle, symbol) GetProcAddress(handle, symbol)
+#define dlclose(handle) FreeLibrary(handle)
 #endif
 #include <exception>
 #include <stdlib.h>
