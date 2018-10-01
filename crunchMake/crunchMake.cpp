@@ -290,12 +290,13 @@ int32_t compileGCC(const string &test)
 		pthread ? "" : "-pthread", soFile);
 	if (!silent)
 	{
-		std::unique_ptr<char []> displayString;
 		if (quiet)
-			displayString = format(" CCLD  %s => %s"_s, test, soFile);
+		{
+			auto displayString = format(" CCLD  %s => %s"_s, test, soFile);
+			puts(displayString.get());
+		}
 		else
-			displayString = stringDup(compileString.get());
-		printf("%s\n", displayString.get());
+			puts(compileString.get());
 	}
 	return system(compileString.get());
 }
