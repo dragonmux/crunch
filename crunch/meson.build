@@ -23,3 +23,5 @@ crunch = executable(
 	dependencies: [threading, dl],
 	install: true
 )
+
+install_headers('crunch.h')
