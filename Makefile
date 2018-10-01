@@ -48,3 +48,5 @@ clean:
 	@cd crunch && $(MAKE) clean
 	@cd crunch++ && $(MAKE) clean
 	@cd crunchMake && $(MAKE) clean
+
+.PHONY: test
