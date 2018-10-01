@@ -280,6 +280,7 @@ void buildCXXString()
 #endif
 }
 
+#ifndef _MSC_VER
 int32_t compileGCC(const string &test)
 {
 	const bool mode = isCXX(test);
@@ -337,7 +338,7 @@ int32_t compileClang(const string &test)
 	}
 	return system(linkString.get());
 }
-
+#else
 int32_t compileMSVC(const string &test)
 {
 	auto soFile = computeSOName(test);
@@ -355,6 +356,7 @@ int32_t compileMSVC(const string &test)
 	}
 	return system(compileString.get());
 }
+#endif
 
 int compileTests()
 {
