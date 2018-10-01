@@ -395,7 +395,7 @@ int compileTests()
 #ifndef _MSC_VER
 			if (crunch_COMPILER == "clang"_s)
 				ret = compileClang(test);
-			else if (crunch_COMPILER == "gcc"_s || crunch_COMPILER.empty())
+			else// if (crunch_COMPILER == "gcc"_s || crunch_COMPILER.empty())
 				ret = compileGCC(test);
 #else
 			ret = compileMSVC(test);
