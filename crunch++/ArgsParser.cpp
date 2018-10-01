@@ -152,8 +152,8 @@ constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, 
 		return defaultValue;
 	for (uint32_t n = 0; args[n] != nullptr; ++n)
 	{
-		if (strcmp(args[n]->value.get(), value) == 0 || ((args[n]->flags & ARG_INCOMPLETE) &&
-			strncmp(args[n]->value.get(), value, strlen(value)) == 0))
+		if (((args[n]->flags & ARG_INCOMPLETE) && strncmp(args[n]->value.get(), value, strlen(value)) == 0) ||
+			strcmp(args[n]->value.get(), value) == 0)
 			return args[n];
 	}
 	return defaultValue;
@@ -164,8 +164,8 @@ const arg_t *findArgInArgs(const char *const value)
 	const arg_t *curr = args;
 	while (curr->value != nullptr)
 	{
-		if (((curr->flags & ARG_INCOMPLETE) == 0 && strcmp(curr->value, value) == 0) ||
-			strncmp(curr->value, value, strlen(curr->value)) == 0)
+		if (((curr->flags & ARG_INCOMPLETE) && strncmp(curr->value, value, strlen(curr->value)) == 0) ||
+			strcmp(curr->value, value) == 0)
 			return curr;
 		++curr;
 	}
