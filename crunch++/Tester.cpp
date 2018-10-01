@@ -4,13 +4,6 @@
 
 using namespace std;
 
-#ifdef _MSC_VER
-template class CRUNCH_VIS std::allocator<cxxTest>;
-template class CRUNCH_VIS std::vector<cxxTest>;
-template class CRUNCH_VIS std::allocator<std::exception_ptr>;
-template class CRUNCH_VIS std::vector<std::exception_ptr>;
-#endif
-
 bool loggingTests = false;
 std::vector<cxxTestClass> cxxTests;
 
