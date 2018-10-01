@@ -345,8 +345,8 @@ int32_t compileMSVC(const string &test)
 	auto soFile = computeSOName(test);
 	auto compileString = format("cl %s " COMPILE_OPTS "%s " LINK_OPTS ""_s, test,
 		inclDirFlags, objs, libs, mode ? "++" : "", soFile, libDirFlags);
-	if (!silent)
-	{
+	/*if (!silent)
+	{*/
 		if (quiet)
 		{
 			auto displayString = format(" CCLD  %s => %s"_s, test, soFile);
@@ -354,7 +354,7 @@ int32_t compileMSVC(const string &test)
 		}
 		else
 			puts(compileString.get());
-	}
+	//}
 	return system(compileString.get());
 }
 #endif
