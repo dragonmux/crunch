@@ -243,17 +243,30 @@ string computeSOName(const string &file)
 	return toSO(file);
 }
 
-inline string argsToString(vector<string> &var)
+inline string argsToString(const vector<string> &var)
 {
 	string ret{""};
 	for (const auto &value : var)
 		ret += value + ' ';
-	var.clear();
 	return std::move(ret);
 }
 
+#ifdef _MSC_VER
+string convertLibDirs()
+{
+	string ret{""};
+	for (const auto &value : libDirs)
+		ret += "-libpath:" + value.substr(2) + ' ';
+	return std::move(ret);
+}
+#endif
+
 void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs); }
+#ifndef _MSC_VER
 void libDirFlagsToString() { libDirFlags = argsToString(libDirs); }
+#else
+void libDirFlagsToString() { libDirFlags = convertLibDirs(); }
+#endif
 void objsToString() { objs = argsToString(linkObjs); }
 void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 
