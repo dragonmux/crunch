@@ -9,7 +9,7 @@ foreach test : libCrunchppTests
 		'crunch++-' + test,
 		command: [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath],
 		input: test + '.cpp',
-		output: test + '.so',
+		output: test + testExt,
 		depends: libCrunchpp,
 		build_by_default: true
 	)
