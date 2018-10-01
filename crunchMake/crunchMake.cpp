@@ -341,6 +341,7 @@ int32_t compileClang(const string &test)
 #else
 int32_t compileMSVC(const string &test)
 {
+	const bool mode = isCXX(test);
 	auto soFile = computeSOName(test);
 	auto compileString = format("cl %s " COMPILE_OPTS "%s " LINK_OPTS ""_s, test,
 		inclDirFlags, objs, libs, mode ? "++" : "", soFile, libDirFlags);
