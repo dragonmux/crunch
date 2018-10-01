@@ -32,9 +32,10 @@ if ['gcc', 'clang'].contains(cxx.get_id())
 	endif
 endif
 
+libArgs = []
 if isWindows
+	libArgs += '-D__crunch_lib__'
 	add_project_arguments('-DWIN32', '-D_WINDOWS', language: ['c', 'cpp'])
-	add_project_arguments('-D__crunch_lib__', language: ['c', 'cpp'])
 	add_global_arguments('-wd4996', '-wd4800', '-wd4459', language: ['c', 'cpp'])
 endif
 

@@ -7,15 +7,10 @@ crunchppSrc = ['crunch++.cpp']
 crunchppSrcDir = meson.current_source_dir()
 crunchppInc = include_directories('.')
 
-crunchppArgs = []
-if isWindows
-	crunchppArgs += '-D__crunch_lib__'
-endif
-
 libCrunchpp = library(
 	'crunch++',
 	libCrunchppSrc,
-	cpp_args: crunchppArgs,
+	cpp_args: libArgs,
 	dependencies: [threading],
 	version: meson.project_version(),
 	install: true

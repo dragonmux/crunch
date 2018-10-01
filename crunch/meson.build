@@ -7,15 +7,10 @@ crunchSrc = ['crunch.c']
 crunchSrcDir = meson.current_source_dir()
 crunchInc = include_directories('.')
 
-crunchArgs = []
-if isWindows
-	crunchArgs += '-D__crunch_lib__'
-endif
-
 libCrunch = library(
 	'crunch',
 	libCrunchSrc,
-	cpp_args: crunchArgs,
+	cpp_args: libArgs,
 	dependencies: [threading],
 	version: meson.project_version(),
 	install: true
