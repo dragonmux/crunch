@@ -283,17 +283,13 @@ const char *standardVersion(constParsedArg_t version)
 	}
 	return version->value.get();
 }
-#endif
 
 void buildCXXString()
 {
-#ifndef _MSC_VER
 	const auto standard = findArg(parsedArgs, "-std=", nullptr);
 	cxx += standardVersion(standard);
-#endif
 }
 
-#ifndef _MSC_VER
 int32_t compileGCC(const string &test)
 {
 	const bool mode = isCXX(test);
@@ -379,7 +375,9 @@ int compileTests()
 	libDirFlagsToString();
 	objsToString();
 	libsToString();
+#ifndef _MSC_VER
 	buildCXXString();
+#endif
 	testLog *logFile = nullptr;
 	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
 	const bool logging = bool(logParam);
