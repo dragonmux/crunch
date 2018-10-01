@@ -22,7 +22,7 @@ before_build:
   - cmd: cd build
 
 build_script:
-  - cmd: ninja -v
+  - cmd: ninja
 
 #build:
 #  parallel: true
