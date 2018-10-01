@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2018 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __CRUNCHpp_H__
-#define __CRUNCHpp_H__
+#ifndef CRUNCHpp__H
+#define CRUNCHpp__H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -215,4 +215,4 @@ CRUNCHpp_API void stopLogging(testLog *logFile);
 #endif
 #endif
 
-#endif /*__CRUNCHpp_H__*/
+#endif /*CRUNCHpp__H*/
