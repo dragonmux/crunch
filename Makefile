@@ -23,6 +23,14 @@ all:
 	@$(MAKE) -C crunch++
 	@$(MAKE) -C crunchMake
 
+lib:
+	@$(MAKE) -C crunch lib
+	@$(MAKE) -C crunch++ lib
+
+install-so:
+	@$(MAKE) -C crunch install-so
+	@$(MAKE) -C crunch++ install-so
+
 install:
 	@$(MAKE) -C crunch install
 	@$(MAKE) -C crunch++ install

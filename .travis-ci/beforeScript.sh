@@ -3,10 +3,8 @@ unset PS4
 set -x
 
 if [ "$ENGINE" == "make" ]; then
-	make -C crunch lib
-	sudo -E make -C crunch install-so
-	make -C crunch++ lib
-	sudo -E make -C crunch++ install-so
+	make lib
+	sudo -E make install-so
 	make -C crunch crunch
 	make -C crunch++ crunch++
 	make -C crunchMake
