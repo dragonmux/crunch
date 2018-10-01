@@ -71,9 +71,8 @@ const string libExt = ".so"_s;
 // _M_64
 const string cc = "cl"_s;
 const string cxx = "cl"_s;
-#define OPTS	"/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /LD /D_WINDOWS /nologo %s%s%s%slibcrunch%s.lib %s /Fe"
-#define COMPILE_OPTS "/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /D_WINDOWS /nologo /c %s /Fo "
-#define LINK_OPTS "/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /GL /LD /nologo %s%s%slibcrunch%s.lib %s /Fe"
+#define COMPILE_OPTS "/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /D_WINDOWS /nologo %s%s%slibcrunch%s.lib /Fe"
+#define LINK_OPTS "/LD /link %s"
 const string libExt = ".tlib"_s;
 #endif
 
@@ -338,6 +337,24 @@ int32_t compileClang(const string &test)
 	return system(linkString.get());
 }
 
+int32_t compileMSVC(const string &test)
+{
+	auto soFile = computeSOName(test);
+	auto compileString = format("cl %s " COMPILE_OPTS "%s " LINK_OPTS ""_s, test,
+		inclDirFlags, objs, libs, mode ? "++" : "", soFile, libDirFlags);
+	if (!silent)
+	{
+		if (quiet)
+		{
+			auto displayString = format(" CCLD  %s => %s"_s, test, soFile);
+			puts(displayString.get());
+		}
+		else
+			puts(compileString.get());
+	}
+	return system(compileString.get());
+}
+
 int compileTests()
 {
 	int32_t ret = 0;
@@ -360,10 +377,14 @@ int compileTests()
 	{
 		if (access(test.data(), R_OK) == 0 && validExt(test))
 		{
+#ifndef _MSC_VER
 			if (crunch_COMPILER == "clang"_s)
 				ret = compileClang(test);
-			else
+			else if (crunch_COMPILER == "gcc"_s)
 				ret = compileGCC(test);
+#else
+			ret = compileMSVC(test);
+#endif
 			if (ret)
 				break;
 		}
