@@ -7,7 +7,7 @@ platform:
   - x64
 
 init:
-  - cmd: git config core.symlinks true
+  - cmd: git config --global core.symlinks true
 
 install:
   - cmd: if %PLATFORM%==x64 (set PYTHON_ROOT=%PYTHON_ROOT%-x64)
