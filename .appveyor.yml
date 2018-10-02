@@ -6,6 +6,9 @@ platform:
   - x86
   - x64
 
+init:
+  - cmd: git config core.symlinks true
+
 install:
   - cmd: if %PLATFORM%==x64 (set PYTHON_ROOT=%PYTHON_ROOT%-x64)
   - cmd: set PATH=C:\ninja-build;%PYTHON_ROOT%\Scripts;%PYTHON_ROOT%;%PATH%
