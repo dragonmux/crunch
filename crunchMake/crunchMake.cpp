@@ -71,8 +71,8 @@ const string libExt = ".so"_s;
 // _M_64
 const string cc = "cl"_s;
 const string cxx = "cl"_s;
-#define COMPILE_OPTS "/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /D_WINDOWS /nologo %s%s%slibcrunch%s.lib"
-#define LINK_OPTS "/Fe%s /LD /link %s"
+#define COMPILE_OPTS "/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /D_WINDOWS /nologo %s%s"
+#define LINK_OPTS "/Fe%s /LD /link %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
 #endif
 
@@ -353,9 +353,9 @@ int32_t compileMSVC(const string &test)
 	const bool mode = isCXX(test);
 	auto soFile = computeSOName(test);
 	auto compileString = format("cl %s " COMPILE_OPTS " " LINK_OPTS ""_s, test,
-		inclDirFlags, objs, libs, mode ? "++" : "", soFile, libDirFlags);
-	/*if (!silent)
-	{*/
+		inclDirFlags, objs, soFile, libDirFlags, mode ? "++" : "", libs);
+	if (!silent)
+	{
 		if (quiet)
 		{
 			auto displayString = format(" CCLD  %s => %s"_s, test, soFile);
@@ -363,7 +363,7 @@ int32_t compileMSVC(const string &test)
 		}
 		else
 			puts(compileString.get());
-	//}
+	}
 	return system(compileString.get());
 }
 #endif
