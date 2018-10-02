@@ -24,10 +24,6 @@ before_build:
 build_script:
   - cmd: ninja
 
-#build:
-#  parallel: true
-#  project: VS/crunch.sln
-
 test_script:
   - cmd: ninja test
 
