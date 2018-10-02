@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2017 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2017-2018 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -173,7 +173,7 @@ public:
 	}
 };
 
-CRUNCH_API void registerCXXTests();
+CRUNCHpp_TEST void registerCXXTests();
 void registerCXXTests()
 {
 	registerTestClasses<testArgsParser>();

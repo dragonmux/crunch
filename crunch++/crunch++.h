@@ -19,6 +19,10 @@
 #ifndef CRUNCHpp__H
 #define CRUNCHpp__H
 
+#ifndef __cplusplus
+#error "This is the C++ test harness header, use crunch.h for C"
+#endif
+
 #include <stddef.h>
 #include <stdint.h>
 #include <thread>
@@ -35,13 +39,10 @@
 	#else
 		#define CRUNCH_VIS	__declspec(dllimport)
 	#endif
-	#ifdef __cplusplus
-		#define CRUNCH_API	extern "C" CRUNCH_VIS
-	#else
-		#define CRUNCH_API	extern CRUNCH_VIS
-	#endif
+	#define CRUNCH_API	extern "C" CRUNCH_VIS
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 	#define CRUNCH_MAYBE_VIS
+	#define CRUNCHpp_TEST	extern CRUNCH_EXPORT
 
 	#ifdef stdout
 	#undef stdout
@@ -53,13 +54,10 @@
 	#else
 		#define CRUNCH_VIS
 	#endif
-	#ifdef __cplusplus
-		#define CRUNCH_API	extern "C" CRUNCH_VIS
-	#else
-		#define CRUNCH_API	extern CRUNCH_VIS
-	#endif
+	#define CRUNCH_API	extern "C" CRUNCH_VIS
 	#define CRUNCH_EXPORT		CRUNCH_API
 	#define CRUNCH_MAYBE_VIS	CRUNCH_VIS
+	#define CRUNCHpp_TEST		CRUNCH_API
 #endif
 #define CRUNCHpp_API	extern CRUNCH_VIS
 
