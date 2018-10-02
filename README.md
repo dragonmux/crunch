@@ -19,6 +19,40 @@ If you want to customise your build and installation further, there are some han
  *	GCC - specify your compiler and any global compiler options with this. For example, for a 64-bit build: GCC="gcc -m64 -fPIC -DPIC".
 The build system also accepts the PKG_CONFIG_PATH variable which is forwarded to pkg-config.
 
+## Using crunch++
+
+An example use of crunch++ follows:
+```C++
+#include <crunch++.h>
+
+// The following names are arbitrary unless noted otherwise
+class testSomething final : public testsuit
+{
+private:
+	void testMe()
+	{
+		// Do something..
+	}
+
+public:
+	// This is a mandatory function that allows you to
+	// then register your individual tests to the framework
+	void registerTests() final override
+	{
+		CXX_TEST(testMe)
+	}
+};
+
+// This export must exist and be named as you see here
+// as this is what crunch++ looks for when it loads the
+// testsuite in order to discover the tests
+CRUNCHpp_TEST void registerCXXTests();
+void registerCXXTests()
+{
+	registerTestClasses<testSomething>();
+}
+```
+
 ## Using crunch
 
 Crunch has been designed to be as simple as possible to use and to not get in your way if you don't want it to.
