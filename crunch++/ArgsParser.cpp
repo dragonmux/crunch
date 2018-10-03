@@ -33,12 +33,23 @@ bool arg_t::matches(const char *const str) const noexcept
 	return !strcmp(value.data(), str);
 }
 
+parsedArg_t::parsedArg_t() : value{}, paramsFound{0}, params{}, flags{0}, minLength{0} { }
+
 bool parsedArg_t::matches(const char *const str) const noexcept
 {
 	if (flags & ARG_INCOMPLETE)
 		return strlen(str) >= minLength &&
 			!strncmp(value.data(), str, value.length());
 	return !strcmp(value.data(), str);
+}
+
+void parsedArg_t::swap(parsedArg_t &arg) noexcept
+{
+	value.swap(arg.value);
+	std::swap(paramsFound, arg.paramsFound);
+	params.swap(arg.params);
+	std::swap(flags, arg.flags);
+	std::swap(minLength, arg.minLength);
 }
 
 void registerArgs(const arg_t *allowedArgs) noexcept

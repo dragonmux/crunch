@@ -35,7 +35,7 @@ struct arg_t final
 	CRUNCH_VIS bool matches(const char *const str) const noexcept;
 };
 
-struct parsedArg_t
+struct parsedArg_t final
 {
 	//using strPtr_t = std::unique_ptr<const char []>;
 
@@ -45,7 +45,15 @@ struct parsedArg_t
 	uint8_t flags;
 	size_t minLength;
 
+	CRUNCH_VIS parsedArg_t();
+	parsedArg_t(parsedArg_t &&arg) : parsedArg_t{} { swap(arg); }
+	void operator =(parsedArg_t &&arg) noexcept { swap(arg); }
+
 	CRUNCH_VIS bool matches(const char *const str) const noexcept;
+	CRUNCH_VIS void swap(parsedArg_t &arg) noexcept;
+
+	parsedArg_t(const parsedArg_t &) = delete;
+	parsedArg_t &operator =(const parsedArg_t &) = delete;
 };
 
 using constParsedArg_t = const parsedArg_t *;
