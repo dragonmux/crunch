@@ -25,7 +25,8 @@ build_script:
   - cmd: ninja
 
 test_script:
-  - cmd: ninja test
+  - cmd: meson test --print-errorlogs
+#  - cmd: ninja test
 
 configuration:
   - Debug
