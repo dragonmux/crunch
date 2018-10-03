@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <memory>
 #include <string>
+#include <vector>
 #include "crunch++.h"
 
 struct arg_t final
@@ -40,7 +41,7 @@ struct parsedArg_t
 
 	std::string value;
 	uint32_t paramsFound;
-	std::unique_ptr<std::string []> params;
+	std::vector<std::string> params;
 	uint8_t flags;
 	size_t minLength;
 

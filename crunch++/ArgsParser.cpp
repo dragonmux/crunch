@@ -111,7 +111,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) 
 					break;
 				}
 				argRet->paramsFound = checkParams(argc, argv, i + 1, *argument, args);
-				if (argRet->paramsFound == uint32_t(-1))
+				if (entry.paramsFound == UINT32_MAX)
 				{
 					printf("Not enough parameters given for argument %s\n", argv[i]);
 					return nullptr;
@@ -119,12 +119,11 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) 
 				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
 				if (argRet->paramsFound)
 				{
-					argRet->params = makeUnique<std::string []>(argRet->paramsFound);
-					if (!argRet->params)
-						return nullptr;
+					argRet->params.reserve(argRet->paramsFound);
 					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
-						argRet->params[j] = argv[i + j + 1];
+						argRet->params.emplace_back(argv[i + j + 1]);
 				}
+				argRet->params.shrink_to_fit();
 				i += argRet->paramsFound;
 				argRet->flags = argument->flags;
 				break;
