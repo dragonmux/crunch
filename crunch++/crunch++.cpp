@@ -54,7 +54,7 @@ using namespace std;
 const arg_t args[] =
 {
 	{"--log", 1, 1, 0},
-	{nullptr, 0, 0, 0}
+	{{}, 0, 0, 0}
 };
 
 #ifdef _MSC_VER
@@ -126,7 +126,8 @@ bool getTests()
 
 	for (j = 0, i = 0; i < n; i++)
 	{
-		if (!findArgInArgs(parsedArgs[i]->value.get()))
+		// this might be as simple as (!parsedArgs[i]->minLength) now
+		if (!findArgInArgs(parsedArgs[i]->value.data()))
 		{
 			namedTests[j] = parsedArgs[i];
 			j++;
@@ -165,13 +166,13 @@ void runTests()
 	constParsedArg_t logging = findArg(parsedArgs, "--log", nullptr);
 	if (logging)
 	{
-		logFile = startLogging(logging->params[0].get());
+		logFile = startLogging(logging->params[0].data());
 		loggingTests = true;
 	}
 
 	for (i = 0; i < numTests; i++)
 	{
-		auto testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value.get());
+		auto testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value.data());
 		void *testSuit = dlopen(testLib.get(), RTLD_LAZY);
 		if (!testSuit || !tryRegistration(testSuit))
 		{
@@ -182,12 +183,12 @@ void runTests()
 				newline();
 			}
 			red();
-			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value.get());
+			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value.data());
 			newline();
 			continue;
 		}
 		magenta();
-		testPrintf("Running test suit %s...", namedTests[i]->value.get());
+		testPrintf("Running test suit %s...", namedTests[i]->value.data());
 		newline();
 
 		for (auto &test : cxxTests)

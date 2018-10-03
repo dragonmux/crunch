@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Core.h"
-#include "Logger.h"
-#include "ArgsParser.h"
-#include "StringFuncs.h"
+#include <Core.h>
+#include <Logger.h>
+#include <ArgsParser.h>
+#include <StringFuncs.h>
 #include <string.h>
 #include <stdlib.h>
 #ifndef _MSC_VER
@@ -117,7 +117,7 @@ const arg_t args[] =
 	{"-std=", 0, 0, ARG_INCOMPLETE},
 	{"-z", 1, 1, ARG_REPEATABLE},
 	{"--coverage", 0, 0, 0},
-	{nullptr, 0, 0, 0}
+	{{}, 0, 0, 0}
 };
 
 bool isObj(const char *file)
@@ -128,16 +128,16 @@ bool isObj(const char *file)
 			return true;
 	return false;
 }
-bool isObj(const std::unique_ptr<const char []> &file)
-	{ return isObj(file.get()); }
+bool isObj(const string &file)
+	{ return isObj(file.data()); }
 
 bool getTests()
 {
 	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
 		const auto &value = parsedArgs[i]->value;
-		if (!findArgInArgs(value) && !isObj(value))
-			tests.emplace_back(value.get());
+		if (!findArgInArgs(value.data()) && !isObj(value))
+			tests.emplace_back(value);
 	}
 	return tests.size();
 }
@@ -147,8 +147,8 @@ inline void getLinkFunc(vector<string> &var, const char *find)
 	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
 		const auto &value = parsedArgs[i]->value;
-		if (strncmp(value.get(), find, 2) == 0)
-			var.emplace_back(value.get());
+		if (strncmp(value.data(), find, 2) == 0)
+			var.emplace_back(value);
 	}
 }
 
@@ -161,20 +161,17 @@ void getLinkObjs()
 	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
 		const auto &value = parsedArgs[i]->value;
-		if (!findArgInArgs(value) && isObj(value))
-			linkObjs.emplace_back(value.get());
+		if (!findArgInArgs(value.data()) && isObj(value))
+			linkObjs.emplace_back(value);
 	}
 }
 
 inline string argToString(const parsedArg_t &arg)
 {
-	string ret{arg.value.get()};
+	string ret{arg.value};
 	ret += ' ';
 	for (uint32_t i = 0; i < arg.paramsFound; ++i)
-	{
-		ret += arg.params[i].get();
-		ret += ' ';
-	}
+		ret += arg.params[i] + ' ';
 	return ret;
 }
 
@@ -182,7 +179,7 @@ void getLinkArgs()
 {
 	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
 	{
-		if (strcmp(parsedArgs[i]->value.get(), "-z") == 0)
+		if (parsedArgs[i]->matches("-z"))
 			linkArgs.emplace_back(argToString(*parsedArgs[i]));
 	}
 }
@@ -239,7 +236,7 @@ string computeSOName(const string &file)
 {
 	const auto output = findArg(parsedArgs, "-o", nullptr);
 	if (output)
-		return output->params[0].get();
+		return output->params[0];
 	return toSO(file);
 }
 
@@ -271,17 +268,17 @@ void objsToString() { objs = argsToString(linkObjs); }
 void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 
 #ifndef _MSC_VER
-const char *standardVersion(constParsedArg_t version)
+string standardVersion(constParsedArg_t version)
 {
 	if (!version)
 		return "-std=c++11";
-	const auto str = version->value.get() + 5;
+	const auto str = version->value.data() + 5;
 	if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
 	{
 		testPrintf("Warning, standard version must be at least C++11");
 		return "-std=c++11";
 	}
-	return version->value.get();
+	return version->value;
 }
 
 void buildCXXString()
@@ -382,7 +379,7 @@ int compileTests()
 	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
 	const bool logging = bool(logParam);
 	if (logging)
-		logFile = startLogging(logParam->params[0].get());
+		logFile = startLogging(logParam->params[0].data());
 	if (!silent)
 		silent = bool(findArg(parsedArgs, "-s", nullptr));
 	if (!quiet)
