@@ -50,8 +50,8 @@ public:
 		parsedArgs_t parsedArgs = parseArguments(2, argv);
 		assertNotNull(parsedArgs);
 		assertNotNull(parsedArgs[0]);
-		assertNotNull(parsedArgs[0]->value);
-		assertEqual(parsedArgs[0]->value.get(), "--dummy");
+		assertFalse(parsedArgs[0]->value.empty());
+		assertEqual(parsedArgs[0]->value.data(), "--dummy");
 		assertEqual(parsedArgs[0]->paramsFound, 0);
 		assertEqual(parsedArgs[0]->flags, 0);
 		assertNull(parsedArgs[0]->params);
@@ -78,8 +78,8 @@ public:
 		parsedArgs = parseArguments(2, argv_1);
 		assertNotNull(parsedArgs);
 		assertNotNull(parsedArgs[0]);
-		assertNotNull(parsedArgs[0]->value);
-		assertEqual(parsedArgs[0]->value.get(), "--arg=");
+		assertFalse(parsedArgs[0]->value.empty());
+		assertEqual(parsedArgs[0]->value.data(), "--arg=");
 		assertEqual(parsedArgs[0]->paramsFound, 0);
 		assertEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
 		assertNull(parsedArgs[0]->params);
@@ -87,8 +87,8 @@ public:
 		parsedArgs = parseArguments(2, argv_2);
 		assertNotNull(parsedArgs);
 		assertNotNull(parsedArgs[0]);
-		assertNotNull(parsedArgs[0]->value);
-		assertEqual(parsedArgs[0]->value.get(), "--arg=test");
+		assertFalse(parsedArgs[0]->value.empty());
+		assertEqual(parsedArgs[0]->value.data(), "--arg=test");
 		assertEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
 		assertNull(parsedArgs[0]->params);
 
@@ -114,7 +114,7 @@ public:
 		assertNotNull(parsedArgs);
 		parsedArg = makeUnique<parsedArg_t>();
 		assertNotNull(parsedArg);
-		parsedArg->value = strNewDup("--arg");
+		parsedArg->value = "--arg";
 		parsedArgs[0] = parsedArg.get();
 		assertTrue(checkAlreadyFound(parsedArgs, *parsedArg));
 
@@ -154,13 +154,13 @@ public:
 		parsedArgs = parseArguments(5, argv_2);
 		assertNotNull(parsedArgs);
 		assertNotNull(parsedArgs[0]);
-		assertNotNull(parsedArgs[0]->value);
-		assertEqual(parsedArgs[0]->value.get(), "-o");
+		assertFalse(parsedArgs[0]->value.empty());
+		assertEqual(parsedArgs[0]->value.data(), "-o");
 		assertEqual(parsedArgs[0]->paramsFound, 2);
-		assertNotNull(parsedArgs[0]->params[0]);
-		assertNotNull(parsedArgs[0]->params[1]);
-		assertEqual(parsedArgs[0]->params[0].get(), "test");
-		assertEqual(parsedArgs[0]->params[1].get(), "me");
+		assertFalse(parsedArgs[0]->params[0].empty());
+		assertFalse(parsedArgs[0]->params[1].empty());
+		assertEqual(parsedArgs[0]->params[0].data(), "test");
+		assertEqual(parsedArgs[0]->params[1].data(), "me");
 	}
 
 	void registerTests()
