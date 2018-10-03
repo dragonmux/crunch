@@ -44,7 +44,7 @@ public:
 	void testEmpty()
 	{
 		const rawStrPtr_t argv[2] = {"test", "--dummy"};
-		const arg_t args[1] = { {nullptr, 0, 0, 0} };
+		const arg_t args[1] = {{{}, 0, 0, 0}};
 
 		registerArgs(args);
 		parsedArgs_t parsedArgs = parseArguments(2, argv);
@@ -64,12 +64,12 @@ public:
 		const arg_t args_1[2] =
 		{
 			{"--arg=", 0, 0, ARG_INCOMPLETE},
-			{nullptr, 0, 0, 0}
+			{{}, 0, 0, 0}
 		};
 		const arg_t args_2[2] =
 		{
 			{"--arg", 0, 0, 0},
-			{nullptr, 0, 0, 0}
+			{{}, 0, 0, 0}
 		};
 
 		parsedArgs_t parsedArgs;
@@ -104,7 +104,7 @@ public:
 		const arg_t args[2] =
 		{
 			{"--arg", 0, 0, 0},
-			{nullptr, 0, 0, 0}
+			{{}, 0, 0, 0}
 		};
 		parsedArgs_t parsedArgs;
 		std::unique_ptr<parsedArg_t> parsedArg;
@@ -136,7 +136,7 @@ public:
 		{
 			{"-o", 0, 2, 0},
 			{"-a", 1, 1, 0},
-			{nullptr, 0, 0, 0}
+			{{}, 0, 0, 0}
 		};
 		parsedArgs_t parsedArgs;
 
