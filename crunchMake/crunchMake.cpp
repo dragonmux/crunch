@@ -29,7 +29,9 @@
 #define R_OK 6
 #endif
 #include <array>
+#include <vector>
 #include <string>
+#include <memory>
 #include <crunchMake.h>
 
 using namespace std;
@@ -133,9 +135,9 @@ bool isObj(const string &file)
 
 bool getTests()
 {
-	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
+	for (const auto &parsedArg : parsedArgs)
 	{
-		const auto &value = parsedArgs[i]->value;
+		const auto &value = parsedArg.value;
 		if (!findArgInArgs(value.data()) && !isObj(value))
 			tests.emplace_back(value);
 	}
@@ -144,9 +146,9 @@ bool getTests()
 
 inline void getLinkFunc(vector<string> &var, const char *find)
 {
-	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
+	for (const auto &parsedArg : parsedArgs)
 	{
-		const auto &value = parsedArgs[i]->value;
+		const auto &value = parsedArg.value;
 		if (strncmp(value.data(), find, 2) == 0)
 			var.emplace_back(value);
 	}
@@ -158,9 +160,9 @@ void getLibDirs() { getLinkFunc(libDirs, "-L"); }
 
 void getLinkObjs()
 {
-	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
+	for (const auto &parsedArg : parsedArgs)
 	{
-		const auto &value = parsedArgs[i]->value;
+		const auto &value = parsedArg.value;
 		if (!findArgInArgs(value.data()) && isObj(value))
 			linkObjs.emplace_back(value);
 	}
@@ -177,10 +179,10 @@ inline string argToString(const parsedArg_t &arg)
 
 void getLinkArgs()
 {
-	for (uint32_t i = 0; parsedArgs[i] != nullptr; ++i)
+	for (const auto &parsedArg : parsedArgs)
 	{
-		if (parsedArgs[i]->matches("-z"))
-			linkArgs.emplace_back(argToString(*parsedArgs[i]));
+		if (parsedArg.matches("-z"))
+			linkArgs.emplace_back(argToString(parsedArg));
 	}
 }
 
@@ -376,7 +378,7 @@ int compileTests()
 	buildCXXString();
 #endif
 	testLog *logFile = nullptr;
-	constParsedArg_t logParam = findArg(parsedArgs, "--log", nullptr);
+	const auto logParam = findArg(parsedArgs, "--log", nullptr);
 	const bool logging = bool(logParam);
 	if (logging)
 		logFile = startLogging(logParam->params[0].data());
@@ -412,7 +414,7 @@ int main(int argc, char **argv)
 {
 	registerArgs(args);
 	parsedArgs = parseArguments(argc, argv);
-	if (!parsedArgs || !getTests())
+	if (parsedArgs.empty() || !getTests())
 	{
 		testPrintf("Fatal error: There are no source files to build given on the command line!\n");
 		return 2;
