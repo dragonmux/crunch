@@ -28,6 +28,11 @@ test_script:
   - cmd: meson test --print-errorlogs
 #  - cmd: ninja test
 
+on_finish:
+  - ps1: |
+      $blockRdp = $true;
+      iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 configuration:
   - Debug
   - Release
