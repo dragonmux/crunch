@@ -22,7 +22,6 @@
 #include "StringFuncs.h"
 
 using rawStrPtr_t = const char *;
-using strPtr_t = std::unique_ptr<const char []>;
 
 class testArgsParser : public testsuit
 {
@@ -32,13 +31,13 @@ public:
 		const rawStrPtr_t argv[2] = {"test", "--dummy"};
 
 		registerArgs(nullptr);
-		assertNull(parseArguments(0, nullptr));
-		assertNull(parseArguments(1, nullptr));
-		assertNull(parseArguments(2, nullptr));
-		assertNull(parseArguments(1, argv));
-		assertNull(parseArguments(2, argv));
-		assertNull(parseArguments(uint32_t(-1), nullptr));
-		assertNull(parseArguments(uint32_t(-1), argv));
+		assertTrue(parseArguments(0, nullptr).empty());
+		assertTrue(parseArguments(1, nullptr).empty());
+		assertTrue(parseArguments(2, nullptr).empty());
+		assertTrue(parseArguments(1, argv).empty());
+		assertTrue(parseArguments(2, argv).empty());
+		assertTrue(parseArguments(uint32_t(-1), nullptr).empty());
+		assertTrue(parseArguments(uint32_t(-1), argv).empty());
 	}
 
 	void testEmpty()
@@ -48,13 +47,13 @@ public:
 
 		registerArgs(args);
 		parsedArgs_t parsedArgs = parseArguments(2, argv);
-		assertNotNull(parsedArgs);
-		assertNotNull(parsedArgs[0]);
-		assertFalse(parsedArgs[0]->value.empty());
-		assertEqual(parsedArgs[0]->value.data(), "--dummy");
-		assertEqual(parsedArgs[0]->paramsFound, 0);
-		assertEqual(parsedArgs[0]->flags, 0);
-		assertNull(parsedArgs[0]->params);
+		assertFalse(parsedArgs.empty());
+		assertEqual(parsedArgs.size(), 1);
+		assertFalse(parsedArgs[0].value.empty());
+		assertEqual(parsedArgs[0].value.data(), "--dummy");
+		assertEqual(parsedArgs[0].paramsFound, 0);
+		assertEqual(parsedArgs[0].flags, 0);
+		assertTrue(parsedArgs[0].params.empty());
 	}
 
 	void testIncomplete()
@@ -76,29 +75,29 @@ public:
 		registerArgs(args_1);
 
 		parsedArgs = parseArguments(2, argv_1);
-		assertNotNull(parsedArgs);
-		assertNotNull(parsedArgs[0]);
-		assertFalse(parsedArgs[0]->value.empty());
-		assertEqual(parsedArgs[0]->value.data(), "--arg=");
-		assertEqual(parsedArgs[0]->paramsFound, 0);
-		assertEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
-		assertNull(parsedArgs[0]->params);
+		assertFalse(parsedArgs.empty());
+		assertEqual(parsedArgs.size(), 1);
+		assertFalse(parsedArgs[0].value.empty());
+		assertEqual(parsedArgs[0].value.data(), "--arg=");
+		assertEqual(parsedArgs[0].paramsFound, 0);
+		assertEqual(parsedArgs[0].flags, ARG_INCOMPLETE);
+		assertTrue(parsedArgs[0].params.empty());
 
 		parsedArgs = parseArguments(2, argv_2);
-		assertNotNull(parsedArgs);
-		assertNotNull(parsedArgs[0]);
-		assertFalse(parsedArgs[0]->value.empty());
-		assertEqual(parsedArgs[0]->value.data(), "--arg=test");
-		assertEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
-		assertNull(parsedArgs[0]->params);
+		assertFalse(parsedArgs.empty());
+		assertEqual(parsedArgs.size(), 1);
+		assertFalse(parsedArgs[0].value.empty());
+		assertEqual(parsedArgs[0].value.data(), "--arg=test");
+		assertEqual(parsedArgs[0].flags, ARG_INCOMPLETE);
+		assertTrue(parsedArgs[0].params.empty());
 
 		startLogging("/dev/null");
 		registerArgs(args_2);
-		assertNotNull(parseArguments(2, argv_1));
-		assertNotNull(parseArguments(2, argv_2));
+		assertFalse(parseArguments(2, argv_1).empty());
+		assertFalse(parseArguments(2, argv_2).empty());
 	}
 
-	void testInvalid()
+	void testInvalid() try
 	{
 		const rawStrPtr_t argv[3] = {"test", "--arg", "--arg"};
 		const arg_t args[2] =
@@ -106,27 +105,24 @@ public:
 			{"--arg", 0, 0, 0},
 			{{}, 0, 0, 0}
 		};
-		parsedArgs_t parsedArgs;
-		std::unique_ptr<parsedArg_t> parsedArg;
+		parsedArgs_t parsedArgs{1};
 
 		registerArgs(args);
-		parsedArgs = makeUnique<constParsedArg_t []>(2);
-		assertNotNull(parsedArgs);
-		parsedArg = makeUnique<parsedArg_t>();
-		assertNotNull(parsedArg);
-		parsedArg->value = "--arg";
-		parsedArgs[0] = parsedArg.get();
-		assertTrue(checkAlreadyFound(parsedArgs, *parsedArg));
+		assertFalse(parsedArgs.empty());
+		parsedArg_t &parsedArg = parsedArgs[0];
+		parsedArg.value = "--arg";
+		assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
 
-		assertNull(findArg(nullptr, "", nullptr));
+		assertNull(findArg({}, "", nullptr));
 
 		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
 		startLogging("/dev/null");
 		parsedArgs = parseArguments(3, argv);
-		assertNotNull(parsedArgs);
-		assertNotNull(parsedArgs[0]);
-		assertNull(parsedArgs[1]);
+		assertFalse(parsedArgs.empty());
+		assertEqual(parsedArgs.size(), 1);
 	}
+	catch (std::bad_alloc &e)
+		{ fail(e.what()); }
 
 	void testArgCounting()
 	{
@@ -149,18 +145,18 @@ public:
 		auto log = startLogging("/dev/null");
 		parsedArgs = parseArguments(5, argv_1);
 		stopLogging(log);
-		assertNull(parsedArgs);
+		assertTrue(parsedArgs.empty());
 
 		parsedArgs = parseArguments(5, argv_2);
-		assertNotNull(parsedArgs);
-		assertNotNull(parsedArgs[0]);
-		assertFalse(parsedArgs[0]->value.empty());
-		assertEqual(parsedArgs[0]->value.data(), "-o");
-		assertEqual(parsedArgs[0]->paramsFound, 2);
-		assertFalse(parsedArgs[0]->params[0].empty());
-		assertFalse(parsedArgs[0]->params[1].empty());
-		assertEqual(parsedArgs[0]->params[0].data(), "test");
-		assertEqual(parsedArgs[0]->params[1].data(), "me");
+		assertFalse(parsedArgs.empty());
+		assertEqual(parsedArgs.size(), 2);
+		assertFalse(parsedArgs[0].value.empty());
+		assertEqual(parsedArgs[0].value.data(), "-o");
+		assertEqual(parsedArgs[0].paramsFound, 2);
+		assertFalse(parsedArgs[0].params[0].empty());
+		assertFalse(parsedArgs[0].params[1].empty());
+		assertEqual(parsedArgs[0].params[0].data(), "test");
+		assertEqual(parsedArgs[0].params[1].data(), "me");
 	}
 
 	void registerTests()
