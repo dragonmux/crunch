@@ -81,15 +81,6 @@ struct cxxUnitTest
 	cxxTest theTest;
 };
 
-#if 0
-#ifdef _MSC_VER
-extern template class std::allocator<cxxTest>;
-extern template class std::vector<cxxTest>;
-extern template class std::allocator<std::exception_ptr>;
-extern template class std::vector<std::exception_ptr>;
-#endif
-#endif
-
 namespace crunch
 {
 	template<typename T> struct isBoolean : std::false_type { };
@@ -175,7 +166,7 @@ private:
 
 public:
 	threadExit_t(int exitValue) noexcept : value(exitValue) { }
-	operator int() const noexcept { return value; }
+	CRUNCH_VIS operator int() const noexcept { return value; }
 };
 
 CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
