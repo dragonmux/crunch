@@ -45,6 +45,7 @@ CRUNCHpp_API size_t vaTestPrintf(const char *format, va_list args);
 CRUNCHpp_API size_t testPrintf(const char *format, ...);
 CRUNCHpp_API void echoAborted();
 CRUNCHpp_API void logResult(resultType type, const char *message, ...);
+CRUNCHpp_API void newline();
 
 #define COLOUR(Code) "\x1B[" Code "m"
 #define NORMAL COLOUR("0;39")

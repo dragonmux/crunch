@@ -70,21 +70,6 @@ const char *cwd = nullptr;
 
 typedef void (__cdecl *registerFn)();
 
-void newline()
-{
-	if (isTTY)
-#ifdef _MSC_VER
-	{
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
-	}
-#else
-		testPrintf(NEWLINE);
-#endif
-	else
-		testPrintf("\n");
-}
-
 void red()
 {
 	if (isTTY)
