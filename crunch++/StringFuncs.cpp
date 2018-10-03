@@ -51,15 +51,3 @@ std::unique_ptr<char []> formatString(const char *format, ...) noexcept
 	va_end(args);
 	return ret;
 }
-
-std::unique_ptr<char []> stringDup(const char *const str) noexcept
-{
-	auto ret = makeUnique<char []>(strlen(str) + 1);
-	if (!ret)
-		return nullptr;
-	strcpy(ret.get(), str);
-	return ret;
-}
-
-std::unique_ptr<const char []> strNewDup(const char *const str) noexcept
-	{ return std::unique_ptr<const char []>(stringDup(str).release()); }
