@@ -27,20 +27,20 @@ public:
 
 class throwTest final : public testsuit
 {
-public:
+private:
 	void testSkip()
 		{ skip("I'm a skipped test"); }
 
 	void testThrow()
 		{ throw testException_t(); }
 
+public:
 	void registerTests() final override
 	{
 		CXX_TEST(testSkip)
 		CXX_TEST(testThrow)
 	}
 };
-
 
 CRUNCHpp_TEST void registerCXXTests();
 void registerCXXTests()

@@ -25,7 +25,7 @@ using rawStrPtr_t = const char *;
 
 class testArgsParser : public testsuit
 {
-public:
+private:
 	void testNull()
 	{
 		const rawStrPtr_t argv[2] = {"test", "--dummy"};
@@ -159,6 +159,7 @@ public:
 		assertEqual(parsedArgs[0].params[1].data(), "me");
 	}
 
+public:
 	void registerTests()
 	{
 		CXX_TEST(testNull)

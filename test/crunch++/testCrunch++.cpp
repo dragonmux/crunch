@@ -68,6 +68,7 @@ public:
 		rngGen.seed(time(nullptr));
 	}
 
+private:
 	void testAssertTrue()
 	{
 		assertTrue(true);
@@ -342,6 +343,7 @@ public:
 			{ assertEqual(val, 2); }
 	}
 
+public:
 	void registerTests() final override
 	{
 		CXX_TEST(testAssertTrue)
