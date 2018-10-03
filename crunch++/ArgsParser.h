@@ -57,20 +57,22 @@ struct parsedArg_t final
 };
 
 using constParsedArg_t = const parsedArg_t *;
-using parsedArgs_t = std::unique_ptr<constParsedArg_t []>;
+using parsedArgs_t = std::vector<parsedArg_t>;
+using parsedRefArgs_t = std::vector<const parsedArg_t *>;
 
 #define ARG_REPEATABLE	1
 #define ARG_INCOMPLETE	2
 
 CRUNCHpp_API void registerArgs(const arg_t *allowedArgs) noexcept;
 CRUNCHpp_API parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) noexcept;
-CRUNCHpp_API constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal);
-inline constParsedArg_t findArg(const parsedArgs_t &args, const char *const value, const constParsedArg_t defaultVal)
-	{ return findArg(args.get(), value, defaultVal); }
+CRUNCHpp_API const parsedArg_t *findArg(const parsedArgs_t &args, const char *const value,
+	const parsedArg_t *defaultVal);
 CRUNCHpp_API const arg_t *findArgInArgs(const char *const value);
 inline const arg_t *findArgInArgs(const std::unique_ptr<const char []> &value) { return findArgInArgs(value.get()); }
+inline const arg_t *findArgInArgs(const std::string &value) { return findArgInArgs(value.data()); }
 
 CRUNCH_VIS bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept;
-CRUNCH_VIS uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
+CRUNCH_VIS uint32_t checkParams(const uint32_t argc, const char *const *const argv,
+	const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
 
 #endif /* ARGS_PARSER_H */
