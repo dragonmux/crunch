@@ -21,24 +21,30 @@
 
 #include <stdint.h>
 #include <memory>
+#include <string>
 #include "crunch++.h"
 
 struct arg_t final
 {
-	const char *value;
+	const std::string value;
 	const uint32_t numMinParams;
 	const uint32_t numMaxParams;
 	const uint8_t flags;
+
+	CRUNCH_VIS bool matches(const char *const str) const noexcept;
 };
 
 struct parsedArg_t
 {
-	using strPtr_t = std::unique_ptr<const char []>;
+	//using strPtr_t = std::unique_ptr<const char []>;
 
-	strPtr_t value;
+	std::string value;
 	uint32_t paramsFound;
-	std::unique_ptr<strPtr_t []> params;
+	std::unique_ptr<std::string []> params;
 	uint8_t flags;
+	size_t minLength;
+
+	CRUNCH_VIS bool matches(const char *const str) const noexcept;
 };
 
 using constParsedArg_t = const parsedArg_t *;
