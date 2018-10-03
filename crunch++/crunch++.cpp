@@ -64,7 +64,7 @@ const arg_t args[] =
 #endif
 
 parsedArgs_t parsedArgs;
-parsedArgs_t namedTests;
+parsedRefArgs_t namedTests;
 uint32_t numTests = 0;
 const char *cwd = nullptr;
 
@@ -117,32 +117,16 @@ void printStats()
 
 bool getTests()
 {
-	uint32_t i, j, n;
-	for (n = 0; parsedArgs[n] != nullptr; n++)
-		continue;
-	namedTests = makeUnique<constParsedArg_t []>(n + 1);
-	if (!namedTests)
-		return false;
-
-	for (j = 0, i = 0; i < n; i++)
+	namedTests.reserve(parsedArgs.size());
+	for (const auto &parsedArg : parsedArgs)
 	{
-		// this might be as simple as (!parsedArgs[i]->minLength) now
-		if (!findArgInArgs(parsedArgs[i]->value.data()))
-		{
-			namedTests[j] = parsedArgs[i];
-			j++;
-		}
+		// this might be as simple as (!parsedArg.minLength) now
+		if (!findArgInArgs(parsedArg.value.data()))
+			namedTests.push_back(&parsedArg);
 	}
-	if (j == 0)
-		return false;
-	parsedArgs_t tests = makeUnique<constParsedArg_t []>(j + 1);
-	if (!tests)
-		return false;
-	std::copy(namedTests.get(), namedTests.get() + j, tests.get());
-	namedTests = std::move(tests);
-	namedTests[j] = nullptr;
-	numTests = j;
-	return true;
+	namedTests.shrink_to_fit();
+	numTests = namedTests.size();
+	return !namedTests.empty();
 }
 
 bool tryRegistration(void *testSuit)
@@ -163,7 +147,7 @@ void runTests()
 	uint32_t i;
 	testLog *logFile = nullptr;
 
-	constParsedArg_t logging = findArg(parsedArgs, "--log", nullptr);
+	const auto logging = findArg(parsedArgs, "--log", nullptr);
 	if (logging)
 	{
 		logFile = startLogging(logging->params[0].data());
@@ -229,7 +213,7 @@ int main(int argc, char **argv)
 {
 	registerArgs(args);
 	parsedArgs = parseArguments(argc, argv);
-	if (!parsedArgs || !getTests())
+	if (parsedArgs.empty() || !getTests())
 	{
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
