@@ -68,7 +68,7 @@ parsedRefArgs_t namedTests;
 uint32_t numTests = 0;
 const char *cwd = nullptr;
 
-typedef void (__cdecl *registerFn)();
+using registerFn = void (__cdecl *)();
 
 void red()
 {
