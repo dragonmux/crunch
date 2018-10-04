@@ -287,10 +287,10 @@ private:
 
 	void testAssertGreaterThan()
 	{
-		long value;
+		intptr_t value;
 		srand(time(nullptr));
 		do
-			value = long(genPtr());
+			value = intptr_t(genPtr());
 		while (!value);
 		assertGreaterThan(value, 0);
 		tryShouldFail([=]() { assertGreaterThan(value, value); });
@@ -299,10 +299,10 @@ private:
 
 	void testAssertLessThan()
 	{
-		long value;
+		intptr_t value;
 		srand(time(nullptr));
 		do
-			value = long(genPtr());
+			value = intptr_t(genPtr());
 		while (!value);
 		assertLessThan(0, value);
 		tryShouldFail([=]() { assertLessThan(value, value); });
