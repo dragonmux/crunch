@@ -38,7 +38,7 @@ private:
 	void *genPtr()
 	{
 #if defined(_M_X64) || defined(__X86_64__)
-		return (((void *)(long)rand()) << 32) | ((void *)(long)rand());
+		return ((void *)(long(rand()) << 32)) | ((void *)long(rand()));
 #else
 		return (void *)(long)rand();
 #endif
