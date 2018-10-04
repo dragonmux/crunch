@@ -42,7 +42,7 @@
 	#define CRUNCH_API	extern "C" CRUNCH_VIS
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 	#define CRUNCH_MAYBE_VIS
-	#define CRUNCHpp_TEST	extern CRUNCH_EXPORT
+	#define CRUNCHpp_TEST	extern "C" CRUNCH_EXPORT
 
 	#ifdef stdout
 	#undef stdout
