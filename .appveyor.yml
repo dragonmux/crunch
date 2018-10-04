@@ -15,7 +15,7 @@ install:
   - ps: |
       (new-object net.webclient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip', 'C:\ninja-build\ninja-win.zip')
   - cmd: 7z x -oC:\ninja-build C:\ninja-build\ninja-win.zip
-  - cmd: pip3 install git://git@github.com:mesonbuild/meson.git@master
+  - cmd: pip3 install git://git@github.com:mesonbuild/meson.git
 #  - cmd: pip3 install meson
 
 before_build:
