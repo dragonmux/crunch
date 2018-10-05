@@ -36,7 +36,10 @@ libArgs = []
 if isWindows
 	libArgs += '-D__crunch_lib__'
 	add_project_arguments('-DWIN32', '-D_WINDOWS', language: ['c', 'cpp'])
-	add_global_arguments('-wd4996', '-wd4800', '-wd4459', language: ['c', 'cpp'])
+	add_project_arguments('-wd4996', '-wd4800', '-wd4459', language: ['c', 'cpp'])
+	if buildType == 'debug'
+		add_project_arguments('-D_DEBUG', language: ['c', 'cpp'])
+	endif
 endif
 
 if not isWindows
