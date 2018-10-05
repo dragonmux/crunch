@@ -79,3 +79,6 @@ void testsuit::test()
 			echoAborted();
 	}
 }
+
+void crunchTestClass(testsuit *tests, const char *name)
+	{ cxxTests.emplace_back(cxxTestClass{tests, name}); }

@@ -169,10 +169,10 @@ public:
 	CRUNCH_VIS operator int() const noexcept { return value; }
 };
 
-CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
+CRUNCHpp_API void crunchTestClass(testsuit *tests, const char *name);
 
 template<typename TestClass> void registerTestClasses()
-	{ cxxTests.emplace_back(cxxTestClass{new TestClass(), typeid(TestClass).name()}); }
+	{ crunchTestClass(new TestClass(), typeid(TestClass).name()); }
 
 template<typename TestClass, typename ...TestClasses>
 typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()

@@ -23,5 +23,6 @@
 
 CRUNCHpp_API uint32_t passes, failures;
 CRUNCHpp_API bool loggingTests;
+CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
 
 #endif /* __CORE_H__ */
