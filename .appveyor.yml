@@ -7,6 +7,8 @@ platform:
   - x64
 
 install:
+  - cmd: if %CONFIGURATION==Debug (set APPVEYOR_BUILD_TYPE=debug)
+  - cmd: if %CONFIGURATION==Release (set APPVEYOR_BUILD_TYPE=release)
   - cmd: if %PLATFORM%==x64 (set PYTHON_ROOT=%PYTHON_ROOT%-x64)
   - cmd: set PATH=C:\ninja-build;%PYTHON_ROOT%\Scripts;%PYTHON_ROOT%;%PATH%
   - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%)
@@ -19,7 +21,7 @@ install:
 #  - cmd: pip3 install meson
 
 before_build:
-  - cmd: meson build --buildtype=%CONFIGURATION%
+  - cmd: meson build --buildtype=%APPVEYOR_BUILD_TYPE%
   - cmd: cd build
 
 build_script:
