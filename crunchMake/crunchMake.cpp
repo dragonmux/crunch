@@ -79,7 +79,7 @@ const string libExt = ".so"_s;
 #endif
 const string cc = "cl"_s;
 const string cxx = "cl"_s;
-#define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /Wall /nologo /Za %s%s"
+#define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo /Za %s%s"
 #define LINK_OPTS LINK_OPTS_EXTRA " /Fe%s /link %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
 #endif
