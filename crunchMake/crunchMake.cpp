@@ -70,11 +70,17 @@ string cxx = crunch_GXX OPTS_VIS " "_s;
 #define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s -O2 %s -o "
 const string libExt = ".so"_s;
 #else
-// _M_64
+#ifdef _DEBUG
+#define COMPILE_OPTS_EXTRA "/Oi /D_DEBUG /Zi"
+#define LINK_OPTS_EXTRA "/LDd"
+#else
+#define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
+#define LINK_OPTS_EXTRA "/LD"
+#endif
 const string cc = "cl"_s;
 const string cxx = "cl"_s;
-#define COMPILE_OPTS "/Gd /Ox /Ob2 /Oi /Oy- /GF /GS /Gy /EHsc /GL /GT /D_WINDOWS /nologo %s%s"
-#define LINK_OPTS "/Fe%s /LD /link %slibcrunch%s.lib %s"
+#define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /Wall /nologo /Za %s%s"
+#define LINK_OPTS LINK_OPTS_EXTRA " /Fe%s /link %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
 #endif
 
