@@ -172,10 +172,7 @@ public:
 CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
 
 template<typename TestClass> void registerTestClasses()
-{
-	cxxTestClass testClass = {new TestClass(), typeid(TestClass).name()};
-	cxxTests.push_back(testClass);
-}
+	{ cxxTests.emplace_back(cxxTestClass{new TestClass(), typeid(TestClass).name()}); }
 
 template<typename TestClass, typename ...TestClasses>
 typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()
