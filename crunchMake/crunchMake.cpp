@@ -72,15 +72,15 @@ const string libExt = ".so"_s;
 #else
 #ifdef _DEBUG
 #define COMPILE_OPTS_EXTRA "/Oi /D_DEBUG /Zi"
-#define LINK_OPTS_EXTRA "/LDd"
+#define LINK_OPTS_EXTRA "/LDd /link"
 #else
 #define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
-#define LINK_OPTS_EXTRA "/LD"
+#define LINK_OPTS_EXTRA "/LD /link /DEBUG"
 #endif
 const string cc = "cl"_s;
 const string cxx = "cl"_s;
 #define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo /Za %s%s"
-#define LINK_OPTS LINK_OPTS_EXTRA " /Fe%s /link %slibcrunch%s.lib %s"
+#define LINK_OPTS "/Fe%s /FS " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
 #endif
 
