@@ -193,6 +193,7 @@ void runTests()
 			delete test.testClass;
 		}
 		cxxTests.clear();
+		cxxTests.shrink_to_fit();
 	}
 
 	printStats();
