@@ -114,7 +114,7 @@ bool getTests()
 	return !namedTests.empty();
 }
 
-bool tryRegistration(void *testSuit)
+bool tryRegistration(void *testSuit) try
 {
 	registerFn registerTests;
 	registerTests = (registerFn)dlsym(testSuit, "registerCXXTests");
@@ -125,6 +125,12 @@ bool tryRegistration(void *testSuit)
 	}
 	registerTests();
 	return true;
+}
+catch (std::bad_alloc &e)
+{
+	testPrintf("Error encountered while performing test registration: %s\n", e.what());
+	cxxTests.clear();
+	return false;
 }
 
 void runTests()
