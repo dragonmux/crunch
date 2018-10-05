@@ -19,7 +19,7 @@ install:
 #  - cmd: pip3 install meson
 
 before_build:
-  - cmd: meson build
+  - cmd: meson build --buildtype=%CONFIGURATION%
   - cmd: cd build
 
 build_script:
