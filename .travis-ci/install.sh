@@ -2,6 +2,8 @@
 unset PS4
 set -x
 
+export
+
 if [ "$ENGINE" == "meson" ]; then
 	wget https://bootstrap.pypa.io/get-pip.py
 	wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip
