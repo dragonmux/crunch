@@ -18,15 +18,17 @@ after_success:
 
 matrix:
   include:
-#    - compiler: clang-3.8
-#      env: GCC=clang-3.8 GXX=clang++-3.8 COVERAGE=0
-#      addons:
-#        apt:
-#          sources:
-#            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.8 main'
-#              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-#          packages:
-#            - clang-3.8
+    - compiler: clang-3.8
+      env: CC_=clang-3.8 CXX_=clang++-3.8 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.8 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-3.8
+            - python3.6
 #    - compiler: clang-3.9
 #      env: GCC=clang-3.9 GXX=clang++-3.9 COVERAGE=0
 #      addons:
@@ -142,7 +144,7 @@ matrix:
 #            - gcc-7
 #            - g++-7
 #    - compiler: gcc-7
-#      env: GCC=gcc-7 GXX=g++-7 COVERAGE=0
+#      env: GCC=gcc-7 GXX=g++-7 COVERAGE=0 ENGINE=make
 #      addons:
 #        apt:
 #          sources:
@@ -160,7 +162,7 @@ matrix:
 #            - gcc-8
 #            - g++-8
     - compiler: gcc-7
-      env: CC_=gcc-7 CXX_=g++-7 COVERAGE=0 ENGINE=meson
+      env: CC_=gcc-7 CXX_=g++-7 CC=gcc-7 CXX=g++-7 COVERAGE=0
       addons:
         apt:
           sources:
@@ -170,15 +172,15 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
-    - env: ARCH=amd64 COVERAGE=0 ENGINE=meson PATH=/c/Python36/Scripts:/c/Python36:$PATH
+    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
       os: windows
-    - env: ARCH=x86 COVERAGE=0 ENGINE=meson PATH=/c/Python36/Scripts:/c/Python36:$PATH
+    - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
       os: windows
 
 env:
   global:
     - COVERAGE=1
-    - ENGINE=make
+    - ENGINE=meson
 
 notifications:
   - on_success: change
