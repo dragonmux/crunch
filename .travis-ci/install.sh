@@ -1,5 +1,5 @@
 #!/bin/bash -e
-unset PS4
+export PS4="$ "
 set -x
 
 if [ "$TRAVIS_OS_NAME" == "windows" ]; then
