@@ -13,6 +13,8 @@ elif [ "$ENGINE" == "meson" ]; then
 	else
 		unset CC CXX CC_FOR_BUILD CXX_FOR_BUILD
 		set +e
+		ls '/c/Program Files (x86)'
+		ls '/c/Program Files \(x86\)'
 		ls '/c/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Tools'
 		ls '/c/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools'
 		set -e
