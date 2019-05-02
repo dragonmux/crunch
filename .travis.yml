@@ -1,5 +1,7 @@
 language: cpp
 sudo: required
+os: linux
+#dist: xenial
 
 install: .travis-ci/install.sh
 before_script:
@@ -180,7 +182,6 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
-  allow_failures:
     - os: windows
       env: COVERAGE=0 ENGINE=meson
 
