@@ -2,7 +2,8 @@
 unset PS4
 set -x
 
-if [ "$TRAVIS_OS_NAME" == "Windows" ]; then
+if [ "$TRAVIS_OS_NAME" == "windows" ]; then
+	alias wget='wget --progress=dot:mega'
 	wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe
 	wget https://bootstrap.pypa.io/get-pip.py
 	wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip
