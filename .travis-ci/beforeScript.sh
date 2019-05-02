@@ -12,7 +12,7 @@ elif [ "$ENGINE" == "meson" ]; then
 		CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local
 	else
 		unset CC CXX CC_FOR_BUILD CXX_FOR_BUILD
-		./meson.bat
+		.travis-ci/meson.bat $ARCH
 	fi
 	cd build
 	ninja

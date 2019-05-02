@@ -170,7 +170,9 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
-    - env: COVERAGE=0 ENGINE=meson PATH=/c/Python36/Scripts:/c/Python36:$PATH
+    - env: ARCH=amd64 COVERAGE=0 ENGINE=meson PATH=/c/Python36/Scripts:/c/Python36:$PATH
+      os: windows
+    - env: ARCH=x86 COVERAGE=0 ENGINE=meson PATH=/c/Python36/Scripts:/c/Python36:$PATH
       os: windows
 
 env:
