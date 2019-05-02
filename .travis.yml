@@ -170,8 +170,9 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
-    - os: windows
-      env: COVERAGE=0 ENGINE=meson
+    - compiler: cl
+      env: CC_=cl CXX_=cl COVERAGE=0 ENGINE=meson
+      os: windows
 
 env:
   global:
