@@ -3,11 +3,11 @@ unset PS4
 set -x
 
 if [ "$TRAVIS_OS_NAME" == "windows" ]; then
-	alias wget='wget --progress=dot:giga'
-	wget https://bootstrap.pypa.io/get-pip.py
-	wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip
+	wget --progress=dot:mega https://bootstrap.pypa.io/get-pip.py
+	wget --progress=dot:mega https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip
 	choco install python --version 3.6.8
-	python get-pip.py --user
+	python3 get-pip.py --user
+	pip3 install --user meson
 	mkdir /c/tools/ninja-build
 	7z x -oC:\tools\ninja-build ninja-win.zip
 	rm python-3.6.8-amd64.exe get-pip.py ninja-win.zip
