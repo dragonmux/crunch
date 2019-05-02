@@ -10,10 +10,10 @@ if [ "$ENGINE" == "make" ]; then
 elif [ "$ENGINE" == "meson" ]; then
 	if [ "$TRAVIS_OS_NAME" != "windows" ]; then
 		CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local
+		cd build
+		ninja
 	else
 		unset CC CXX CC_FOR_BUILD CXX_FOR_BUILD
-		.travis-ci/meson.bat $ARCH
+		.travis-ci/build.bat $ARCH
 	fi
-	cd build
-	ninja
 fi
