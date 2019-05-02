@@ -12,12 +12,7 @@ elif [ "$ENGINE" == "meson" ]; then
 		CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local
 	else
 		unset CC CXX CC_FOR_BUILD CXX_FOR_BUILD
-		set +e
-		echo "    VC"
-		ls '/c/Program Files (x86)/Microsoft Visual Studio 14.0/VC'
-		set -e
-		'/c/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/vsvars32.bat'
-		meson build --prefix=$HOME/local
+		./meson.bat
 	fi
 	cd build
 	ninja
