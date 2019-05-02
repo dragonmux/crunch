@@ -11,7 +11,11 @@ elif [ "$ENGINE" == "meson" ]; then
 	if [ "$TRAVIS_OS_NAME" != "windows" ]; then
 		CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local
 	else
-		export
+		unset CC CXX CC_FOR_BUILD CXX_FOR_BUILD
+		set +e
+		ls '/c/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Tools'
+		ls '/c/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools'
+		set -e
 		# TODO: Source/run the VS2017 vcvarsall.bat
 		meson build --prefix=$HOME/local
 	fi
