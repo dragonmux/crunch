@@ -171,7 +171,7 @@ matrix:
             - g++-7
             - python3.6
     - compiler: cl
-      env: CC_=cl CXX_=cl COVERAGE=0 ENGINE=meson
+      env: CC_=cl CXX_=cl COVERAGE=0 ENGINE=meson PATH=/c/Python36/Scripts:/c/Python36:$PATH
       os: windows
 
 env:
