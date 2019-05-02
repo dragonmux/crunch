@@ -13,13 +13,12 @@ elif [ "$ENGINE" == "meson" ]; then
 	else
 		unset CC CXX CC_FOR_BUILD CXX_FOR_BUILD
 		set +e
-		echo "    SDKs"
-		ls '/c/Program Files (x86)/Windows Kits'
 		echo "    MSVC"
-		ls '/c/Program Files (x86)/Microsoft Visual Studio'
+		ls '/c/Program Files (x86)/Microsoft Visual Studio/2017'
 		echo "    Tools"
 		ls '/c/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools'
 		set -e
+		cat '/c/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/vsvars32.bat'
 		# TODO: Source/run the VS2017 vcvarsall.bat
 		meson build --prefix=$HOME/local
 	fi
