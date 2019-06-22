@@ -254,7 +254,7 @@ inline string argsToString(const vector<string> &var)
 	string ret{""};
 	for (const auto &value : var)
 		ret += value + ' ';
-	return std::move(ret);
+	return ret;
 }
 
 #ifdef _MSC_VER
@@ -263,7 +263,7 @@ string convertLibDirs()
 	string ret{""};
 	for (const auto &value : libDirs)
 		ret += "-libpath:" + value.substr(2) + ' ';
-	return std::move(ret);
+	return ret;
 }
 #endif
 
