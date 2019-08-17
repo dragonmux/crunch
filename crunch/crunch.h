@@ -88,11 +88,7 @@ CRUNCH_EXPORT void registerTests() \
 	tests = (test *)__tests; \
 }
 
-typedef struct testLog
-{
-	FILE *file;
-	int fd, stdout;
-} testLog;
+typedef struct testLog testLog;
 
 #ifdef TRUE
 #undef TRUE

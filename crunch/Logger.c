@@ -49,6 +49,12 @@ FILE *stdout;
 	#define TTY	"/dev/tty"
 #endif
 
+struct testLog
+{
+	FILE *file;
+	int fd, stdout;
+};
+
 const int errAbort = 2;
 FILE *realStdout = NULL;
 uint8_t logging = 0;
