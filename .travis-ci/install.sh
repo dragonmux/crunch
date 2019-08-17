@@ -6,6 +6,9 @@ if [ "$TRAVIS_OS_NAME" == "windows" ]; then
 	wget --progress=dot:mega https://bootstrap.pypa.io/get-pip.py
 	wget --progress=dot:mega https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip
 	choco install python --version 3.6.8
+	if [ "$CC_" == "clang" ]; then
+		choco install llvm
+	fi
 	python get-pip.py
 	pip3 install meson
 	mkdir /c/tools/ninja-build
