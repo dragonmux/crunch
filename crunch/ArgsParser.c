@@ -73,7 +73,7 @@ uint8_t freeParsedArg(parsedArg_t *parsedArg)
 {
 	if (parsedArg->params)
 	{
-		for (uint32_t i = 0; parsedArg->params[i]; ++i)
+		for (uint32_t i = 0; i < parsedArg->paramsFound; ++i)
 			free(parsedArg->params[i]);
 		free(parsedArg->params);
 	}
@@ -132,10 +132,10 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
 				if (argRet->paramsFound)
 				{
-					argRet->params = malloc(sizeof(char *) * argRet->paramsFound + 1);
+					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
 					if (!argRet->params)
 						return freeParsedArg(argRet), freeParsedArgs(ret);
-					memset(argRet->params, 0, sizeof(char *) * argRet->paramsFound + 1);
+					memset(argRet->params, 0, sizeof(char *) * argRet->paramsFound);
 					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
 					{
 						argRet->params[j] = strdup(argv[i + j + 1]);
@@ -171,6 +171,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	if (!result)
 		return freeParsedArgs(ret);
 	memcpy(result, ret, sizeof(constParsedArg_t *) * n);
+	free(ret);
 	result[n] = NULL;
 	return result;
 }
