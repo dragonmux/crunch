@@ -52,7 +52,7 @@ FILE *stdout;
 struct testLog
 {
 	FILE *file;
-	int fd, stdout;
+	int stdout;
 };
 
 const int errAbort = 2;
@@ -249,13 +249,13 @@ testLog *startLogging(const char *fileName)
 	ret->stdout = dup(fileno(stdout));
 #endif
 	realStdout = stdout;
-	ret->fd = fileno(ret->file);
+	const int fileFD = fileno(ret->file);
 #ifndef _MSC_VER
-	flock(ret->fd, LOCK_EX);
-	dup2(STDOUT_FILENO, ret->fd);
+	flock(fileFD, LOCK_EX);
+	dup2(fileFD, STDOUT_FILENO);
 #else
-//	locking(ret->fd, LK_LOCK, -1);
-	dup2(fileno(stdout), ret->fd);
+//	locking(fileFD, LK_LOCK, -1);
+	dup2(fileFD, fileno(stdout));
 #endif
 	logger = ret;
 	stdout = ret->file;
@@ -267,11 +267,11 @@ void stopLogging(testLog *logFile)
 	if (logFile == NULL)
 		return;
 #ifndef _MSC_VER
-	flock(logFile->fd, LOCK_UN);
 	dup2(logFile->stdout, STDOUT_FILENO);
+	flock(fileno(logFile->file), LOCK_UN);
 #else
-//	locking(logFile->fd, LK_UNLCK, -1);
 	dup2(logFile->stdout, fileno(stdout));
+//	locking(fileno(logFile->file), LK_UNLCK, -1);
 #endif
 	fclose(logFile->file);
 	stdout = realStdout;
