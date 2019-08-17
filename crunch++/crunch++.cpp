@@ -65,7 +65,7 @@ const arg_t args[] =
 
 parsedArgs_t parsedArgs;
 parsedRefArgs_t namedTests;
-uint32_t numTests = 0;
+size_t numTests = 0;
 const char *cwd = nullptr;
 
 using registerFn = void (__cdecl *)();
