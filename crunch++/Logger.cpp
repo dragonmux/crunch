@@ -250,15 +250,15 @@ testLog *startLogging(const char *fileName)
 {
 	if (logging)
 		return nullptr;
-	auto ret = makeUnique<testLog>();
+	auto logger = makeUnique<testLog>();
 	logging = true;
 #ifndef _MSC_VER
-	ret->stdout = dup(STDOUT_FILENO);
+	logger->stdout = dup(STDOUT_FILENO);
 #else
-	ret->stdout = dup(fileno(stdout));
+	logger->stdout = dup(fileno(stdout));
 #endif
 	realStdout = stdout;
-	ret->file = fopen(fileName, "w");
+	logger->file = fopen(fileName, "w");
 	const int fileFD = fileno(logger->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
@@ -267,9 +267,9 @@ testLog *startLogging(const char *fileName)
 //	locking(fileFD, LK_LOCK, -1);
 	dup2(fileFD, fileno(stdout));
 #endif
-	logger = ret;
-	stdout = ret->file;
-	return ret.release();
+	::logger = logger.get();
+	stdout = logger->file;
+	return logger.release();
 }
 
 void stopLogging(testLog *loggerPtr)
