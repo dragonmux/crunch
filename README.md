@@ -4,7 +4,6 @@ Having looked at and messed a bit with testing systems such as Deja GNU and deci
 environment for each and every test in a test suit.
 
 [![Build Status](https://travis-ci.org/DX-MON/crunch.svg?branch=master)](https://travis-ci.org/DX-MON/crunch)
-[![Build status](https://ci.appveyor.com/api/projects/status/vu950g1cljkixx7g?svg=true)](https://ci.appveyor.com/project/DX-MON/crunch)
 [![codecov](https://codecov.io/gh/DX-MON/crunch/branch/master/graph/badge.svg)](https://codecov.io/gh/DX-MON/crunch)
 
 ## Building crunch
