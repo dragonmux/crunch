@@ -47,7 +47,7 @@ FILE *stdout;
 struct testLog
 {
 	FILE *file;
-	int stdout;
+	int fd;
 };
 
 FILE *realStdout = nullptr;
@@ -253,9 +253,9 @@ testLog *startLogging(const char *fileName)
 	auto logger = makeUnique<testLog>();
 	logging = true;
 #ifndef _MSC_VER
-	logger->stdout = dup(STDOUT_FILENO);
+	logger->fd = dup(STDOUT_FILENO);
 #else
-	logger->stdout = dup(fileno(stdout));
+	logger->fd = dup(fileno(stdout));
 #endif
 	realStdout = stdout;
 	logger->file = fopen(fileName, "w");
@@ -279,11 +279,12 @@ void stopLogging(testLog *loggerPtr)
 	std::unique_ptr<testLog> logger{loggerPtr};
 #ifndef _MSC_VER
 	flock(fileno(logger->file), LOCK_UN);
-	dup2(logger->stdout, STDOUT_FILENO);
+	dup2(logger->fd, STDOUT_FILENO);
 #else
 //	locking(fileno(logger->file), LK_UNLCK, -1);
-	dup2(logger->stdout, fileno(stdout));
+	dup2(logger->fd, fileno(stdout));
 #endif
+	close(logger->fd);
 	fclose(logFile->file);
 	stdout = realStdout;
 	realStdout = nullptr;
