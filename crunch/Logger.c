@@ -226,27 +226,26 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	testLog *ret;
 	if (logging == 1)
 		return NULL;
-	ret = testMalloc(sizeof(testLog));
-	if (!ret)
+	testLog *logger_ = testMalloc(sizeof(testLog));
+	if (!logger_)
 		return NULL;
-	ret->file = fopen(fileName, "w");
-	if (!ret->file)
+	logger_->file = fopen(fileName, "w");
+	if (!logger_->file)
 	{
-		free(ret);
+		free(logger_);
 		return NULL;
 	}
 	logging = 1;
 #ifndef _MSC_VER
-	ret->fd = dup(STDOUT_FILENO);
+	logger_->fd = dup(STDOUT_FILENO);
 #else
-	ret->fd = dup(fileno(stdout));
+	logger_->fd = dup(fileno(stdout));
 #endif
-	ret->stdout = stdout;
-	stdout = ret->file;
-	const int fileFD = fileno(ret->file);
+	logger_->stdout = stdout;
+	stdout = logger_->file;
+	const int fileFD = fileno(logger_->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
 	dup2(fileFD, STDOUT_FILENO);
@@ -254,8 +253,8 @@ testLog *startLogging(const char *fileName)
 //	locking(fileFD, LK_LOCK, -1);
 	dup2(fileFD, fileno(stdout));
 #endif
-	logger = ret;
-	return ret;
+	logger = logger_;
+	return logger_;
 }
 
 void stopLogging(testLog *logger_)
