@@ -47,10 +47,10 @@ FILE *stdout;
 struct testLog
 {
 	FILE *file;
+	FILE *stdout;
 	int fd;
 };
 
-FILE *realStdout = nullptr;
 bool logging = false;
 testLog *logger = nullptr;
 bool isTTY = true;
@@ -69,11 +69,7 @@ int getColumns()
 }
 
 size_t vaTestPrintf(const char *format, va_list args)
-{
-	if (realStdout == nullptr)
-		realStdout = stdout;
-	return vfprintf(realStdout, format, args);
-}
+	{ return vfprintf(logger ? logger->stdout : stdout, format, args); }
 
 size_t testPrintf(const char *format, ...)
 {
@@ -257,7 +253,7 @@ testLog *startLogging(const char *fileName)
 #else
 	logger->fd = dup(fileno(stdout));
 #endif
-	realStdout = stdout;
+	logger->stdout = stdout;
 	logger->file = fopen(fileName, "w");
 	const int fileFD = fileno(logger->file);
 #ifndef _MSC_VER
@@ -285,9 +281,8 @@ void stopLogging(testLog *loggerPtr)
 	dup2(logger->fd, fileno(stdout));
 #endif
 	close(logger->fd);
-	fclose(logFile->file);
-	stdout = realStdout;
-	realStdout = nullptr;
+	fclose(logger->file);
+	stdout = logger->stdout;
 	::logger = nullptr;
 	logging = false;
 }
