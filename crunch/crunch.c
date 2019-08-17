@@ -141,7 +141,7 @@ uint8_t tryRegistration(void *testSuit)
 	return TRUE;
 }
 
-void runTests()
+int runTests()
 {
 	pthread_attr_t threadAttrs;
 	uint32_t i;
@@ -213,9 +213,9 @@ void runTests()
 			pthread_join(test->testThread, (void **)&retVal);
 			free(test);
 			if (retVal == &errAbort)
-				exit(0);
+				return 1;
 			else if (retVal == NULL || *retVal == 2)
-				exit(2);
+				return 2;
 			currTest++;
 		}
 	}
@@ -251,9 +251,11 @@ int main(int argc, char **argv)
 	}
 	isTTY = isatty(fileno(stdout));
 #endif
-	runTests();
+	const int result = runTests();
 	free(namedTests);
 	free((void *)cwd);
 	callFreeParsedArgs();
+	if (result)
+		return result == 1 ? 0 : 2;
 	return failures == 0 ? 0 : 1;
 }
