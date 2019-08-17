@@ -15,6 +15,10 @@ after_success:
   - if [ "$COVERAGE" == "1" ]; then
       bash <(curl -s https://codecov.io/bash) -x "$GCOV";
     fi
+after_failure:
+  - if [ "$ENGINE" == "meson" ]; then
+      cat build/meson-logs/testlog.txt;
+    fi
 
 matrix:
   include:
