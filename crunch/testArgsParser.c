@@ -117,7 +117,7 @@ void testInvalid()
 	parsedArg->value = strdup("--arg");
 	parsedArgs[0] = parsedArg;
 	assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
-	free(parsedArg->value);
+	free((void *)parsedArg->value);
 	free(parsedArg);
 	free(parsedArgs);
 
@@ -151,7 +151,6 @@ void testArgCounting()
 
 	parsedArgs = parseArguments(5, argv_1);
 	assertNull(parsedArgs);
-	freeParsedArgs(parsedArgs);
 
 	parsedArgs = parseArguments(5, argv_2);
 	assertConstNotNull(parsedArgs);
