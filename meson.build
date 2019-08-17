@@ -1,16 +1,9 @@
-isWindows = target_machine.system() == 'windows'
-if isWindows
-	cppStd = 'cpp_std=c++14'
-else
-	cppStd = 'cpp_std=c++11'
-endif
-
 project(
 	'crunch',
 	['c', 'cpp'],
 	default_options: [
 		'c_std=c99',
-		cppStd,
+		'cpp_std=c++11',
 		'warning_level=3',
 		'b_pch=false'
 	],
@@ -23,6 +16,7 @@ threading = dependency('threads')
 
 coverage = get_option('b_coverage')
 buildType = get_option('buildtype')
+isWindows = target_machine.system() == 'windows'
 
 if ['gcc', 'clang'].contains(cc.get_id())
 	add_project_arguments('-Wall', '-Wextra', '-pedantic', language: 'c')
