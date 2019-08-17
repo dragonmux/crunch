@@ -180,6 +180,16 @@ matrix:
           packages:
             - gcc-8
             - g++-8
+    - compiler: gcc-9
+      env: GCC=gcc-9 GXX=g++-9 GCOV=gcov-9
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - deadsnakes
+          packages:
+            - gcc-9
+            - g++-9
     - compiler: gcc-7
       env: CC_=gcc-7 CXX_=g++-7 COVERAGE=0
       addons:
