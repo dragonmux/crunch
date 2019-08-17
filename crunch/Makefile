@@ -33,7 +33,6 @@ cmd_crunchMake = $(CRUNCHMAKE) $(2)
 quiet_cmd_crunch = -n
 cmd_crunch = $(CRUNCH) $(2)
 
-LIBDIR ?= $(PREFIX)/lib
 PKGDIR = $(LIBDIR)/pkgconfig
 INCDIR = $(PREFIX)/include
 BINDIR = $(PREFIX)/bin

@@ -141,6 +141,7 @@ CRUNCH = crunch
 CRUNCHpp = crunch++
 UID = $(shell id -u)
 PREFIX ?= /usr
+LIBDIR ?= $(PREFIX)/lib
 COMPILER = $(shell $(GCC) --version | head -n 1 | awk -F ' ' '{print $$1}')
 
 ifeq ($(BUILD_VERBOSE), 0)
