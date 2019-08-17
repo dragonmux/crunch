@@ -5,7 +5,8 @@ project(
 		'c_std=c99',
 		'cpp_std=c++11',
 		'warning_level=3',
-		'b_pch=false'
+		'b_pch=false'.
+		'buildtype=release'
 	],
 	version: '0.3.0'
 )
