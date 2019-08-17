@@ -40,7 +40,7 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	catch (threadExit_t &val)
 	{
 		// Did the test switch logging on?
-		if (!loggingTests && logging)
+		if (!loggingTests && logger)
 			// Yes, switch it back off again
 			stopLogging(logger);
 		return val;
@@ -49,7 +49,7 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	{
 		unitClass.exceptions.emplace_back(current_exception());
 		// Did the test switch logging on?
-		if (!loggingTests && logging)
+		if (!loggingTests && logger)
 			// Yes, switch it back off again
 			stopLogging(logger);
 		logResult(RESULT_FAILURE, "Failure: Exception caught by crunch++");
@@ -59,7 +59,7 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 		return 2;
 	}
 	// Did the test switch logging on?
-	if (!loggingTests && logging)
+	if (!loggingTests && logger)
 		// Yes, switch it back off again
 		stopLogging(logger);
 	logResult(RESULT_SUCCESS, "");

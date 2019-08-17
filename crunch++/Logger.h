@@ -38,7 +38,6 @@ CRUNCHpp_API bool isTTY;
 #ifdef _MSC_VER
 CRUNCHpp_API HANDLE console;
 #endif
-CRUNCHpp_API bool logging;
 CRUNCHpp_API testLog *logger;
 
 CRUNCHpp_API size_t vaTestPrintf(const char *format, va_list args);
