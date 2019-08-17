@@ -186,8 +186,9 @@ matrix:
           packages:
             - gcc-7
             - g++-7
+            - python3.6
     - compiler: gcc-7
-      env: GCC=gcc-7 GXX=g++-7 COVERAGE=0 ENGINE=make
+      env: CC_=gcc-7 CXX_=g++-7 COVERAGE=0
       addons:
         apt:
           sources:
@@ -196,6 +197,7 @@ matrix:
           packages:
             - gcc-7
             - g++-7
+            - python3.6
     - compiler: gcc-8
       env: GCC=gcc-8 GXX=g++-8 GCOV=gcov-8
       addons:
@@ -218,17 +220,26 @@ matrix:
             - gcc-9
             - g++-9
             - python3.6
-    - compiler: gcc-7
-      env: CC_=gcc-7 CXX_=g++-7 COVERAGE=0
+    - compiler: gcc-9
+      env: GCC=gcc-9 GXX=g++-9 COVERAGE=0
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - gcc-7
-            - g++-7
+            - gcc-9
+            - g++-9
             - python3.6
+    - compiler: gcc-8
+      env: GCC=gcc-8 GXX=g++-8 COVERAGE=0 ENGINE=make
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-8
+            - g++-8
     - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
       os: windows
     - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
