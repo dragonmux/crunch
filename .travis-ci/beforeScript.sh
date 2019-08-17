@@ -17,7 +17,7 @@ if [ "$ENGINE" == "make" ]; then
 	make exe
 	sudo -E make install
 elif [ "$ENGINE" == "meson" ]; then
-	if [ "$TRAVIS_OS_NAME" != "windows" ]; then
+	if [ "$TRAVIS_OS_NAME" != "windows" -o "$CC_" == "clang" ]; then
 		CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local -D b_coverage=`codecov`
 		cd build
 		ninja
