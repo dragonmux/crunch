@@ -10,7 +10,7 @@ elif [ "$ENGINE" == "meson" ]; then
 	if [ "$TRAVIS_OS_NAME" != "windows" ]; then
 		ninja test
 	else
-		meson test --no-rebuild --print-errorlogs -v
+		meson test --no-rebuild --num-processes 1 -v
 	fi
 	ninja install
 fi
