@@ -224,7 +224,10 @@ void runTests()
 	printStats();
 	if (logging != NULL)
 		stopLogging(logFile);
+	return 0;
 }
+
+void callFreeParsedArgs() { parsedArgs = freeParsedArgs(parsedArgs); }
 
 int main(int argc, char **argv)
 {
@@ -232,6 +235,7 @@ int main(int argc, char **argv)
 	parsedArgs = parseArguments(argc, (const char **)argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
 	{
+		callFreeParsedArgs();
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
 	}
@@ -250,5 +254,6 @@ int main(int argc, char **argv)
 	runTests();
 	free(namedTests);
 	free((void *)cwd);
+	callFreeParsedArgs();
 	return failures == 0 ? 0 : 1;
 }

@@ -71,6 +71,12 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 
 uint8_t freeParsedArg(parsedArg_t *parsedArg)
 {
+	if (parsedArg->params)
+	{
+		for (uint32_t i = 0; parsedArg->params[i]; ++i)
+			free(parsedArg->params[i]);
+		free(parsedArg->params);
+	}
 	free((void *)parsedArg->value);
 	free(parsedArg);
 	return TRUE;
@@ -78,7 +84,9 @@ uint8_t freeParsedArg(parsedArg_t *parsedArg)
 
 void *freeParsedArgs(parsedArgs_t parsedArgs)
 {
-	for (uint32_t i = 0; parsedArgs[i] != NULL; ++i)
+	if (!parsedArgs)
+		return NULL;
+	for (uint32_t i = 0; parsedArgs[i]; ++i)
 		freeParsedArg((parsedArg_t *)parsedArgs[i]);
 	free(parsedArgs);
 	return NULL;
@@ -124,10 +132,10 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
 				if (argRet->paramsFound)
 				{
-					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
+					argRet->params = malloc(sizeof(char *) * argRet->paramsFound + 1);
 					if (!argRet->params)
 						return freeParsedArg(argRet), freeParsedArgs(ret);
-					memset(argRet->params, 0, sizeof(char *) * argRet->paramsFound);
+					memset(argRet->params, 0, sizeof(char *) * argRet->paramsFound + 1);
 					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
 					{
 						argRet->params[j] = strdup(argv[i + j + 1]);

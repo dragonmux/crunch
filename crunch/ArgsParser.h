@@ -48,6 +48,7 @@ CRUNCH_API void registerArgs(const arg_t *allowedArgs);
 CRUNCH_API parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv);
 CRUNCH_API constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal);
 CRUNCH_API const arg_t *findArgInArgs(const char *const value);
+CRUNCH_API void *freeParsedArgs(parsedArgs_t parsedArgs);
 
 CRUNCH_VIS uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck);
 CRUNCH_VIS uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t *const argument, const arg_t *const args);
