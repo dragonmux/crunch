@@ -246,13 +246,16 @@ testLog *startLogging(const char *fileName)
 	if (::logger)
 		return nullptr;
 	auto logger = makeUnique<testLog>();
+	logger->file = fopen(fileName, "w");
+	if (!logger->file)
+		return nullptr;
 #ifndef _MSC_VER
 	logger->fd = dup(STDOUT_FILENO);
 #else
 	logger->fd = dup(fileno(stdout));
 #endif
 	logger->stdout = stdout;
-	logger->file = fopen(fileName, "w");
+	stdout = logger->file;
 	const int fileFD = fileno(logger->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
@@ -262,7 +265,6 @@ testLog *startLogging(const char *fileName)
 	dup2(fileFD, fileno(stdout));
 #endif
 	::logger = logger.get();
-	stdout = logger->file;
 	return logger.release();
 }
 
