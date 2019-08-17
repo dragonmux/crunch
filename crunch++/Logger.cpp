@@ -47,7 +47,7 @@ FILE *stdout;
 struct testLog
 {
 	FILE *file;
-	int fd, stdout;
+	int stdout;
 };
 
 FILE *realStdout = nullptr;
@@ -259,13 +259,13 @@ testLog *startLogging(const char *fileName)
 #endif
 	realStdout = stdout;
 	ret->file = fopen(fileName, "w");
-	ret->fd = fileno(ret->file);
+	const int fileFD = fileno(logger->file);
 #ifndef _MSC_VER
-	flock(ret->fd, LOCK_EX);
-	dup2(STDOUT_FILENO, ret->fd);
+	flock(fileFD, LOCK_EX);
+	dup2(fileFD, STDOUT_FILENO);
 #else
-//	locking(ret->fd, LK_LOCK, -1);
-	dup2(fileno(stdout), ret->fd);
+//	locking(fileFD, LK_LOCK, -1);
+	dup2(fileFD, fileno(stdout));
 #endif
 	logger = ret;
 	stdout = ret->file;
@@ -278,11 +278,11 @@ void stopLogging(testLog *loggerPtr)
 		return;
 	std::unique_ptr<testLog> logger{loggerPtr};
 #ifndef _MSC_VER
-	flock(logFile->fd, LOCK_UN);
-	dup2(logFile->stdout, STDOUT_FILENO);
+	flock(fileno(logger->file), LOCK_UN);
+	dup2(logger->stdout, STDOUT_FILENO);
 #else
-//	locking(logFile->fd, LK_UNLCK, -1);
-	dup2(logFile->stdout, fileno(stdout));
+//	locking(fileno(logger->file), LK_UNLCK, -1);
+	dup2(logger->stdout, fileno(stdout));
 #endif
 	fclose(logFile->file);
 	stdout = realStdout;
