@@ -51,7 +51,6 @@ struct testLog
 	int fd;
 };
 
-bool logging = false;
 testLog *logger = nullptr;
 bool isTTY = true;
 
@@ -244,10 +243,9 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	if (logging)
+	if (::logger)
 		return nullptr;
 	auto logger = makeUnique<testLog>();
-	logging = true;
 #ifndef _MSC_VER
 	logger->fd = dup(STDOUT_FILENO);
 #else
@@ -270,7 +268,7 @@ testLog *startLogging(const char *fileName)
 
 void stopLogging(testLog *loggerPtr)
 {
-	if (!loggerPtr)
+	if (!loggerPtr || loggerPtr != ::logger)
 		return;
 	std::unique_ptr<testLog> logger{loggerPtr};
 	stdout = logger->stdout;
@@ -284,5 +282,4 @@ void stopLogging(testLog *loggerPtr)
 	close(logger->fd);
 	fclose(logger->file);
 	::logger = nullptr;
-	logging = false;
 }
