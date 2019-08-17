@@ -52,6 +52,7 @@ void testEmpty()
 	assertIntEqual(parsedArgs[0]->paramsFound, 0);
 	assertIntEqual(parsedArgs[0]->flags, 0);
 	assertNull(parsedArgs[0]->params);
+	freeParsedArgs(parsedArgs);
 }
 
 void testIncomplete()
@@ -80,6 +81,7 @@ void testIncomplete()
 	assertIntEqual(parsedArgs[0]->paramsFound, 0);
 	assertIntEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
 	assertNull(parsedArgs[0]->params);
+	freeParsedArgs(parsedArgs);
 
 	parsedArgs = parseArguments(2, argv_2);
 	assertConstNotNull(parsedArgs);
@@ -88,6 +90,7 @@ void testIncomplete()
 	assertStringEqual(parsedArgs[0]->value, "--arg=test");
 	assertIntEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
 	assertNull(parsedArgs[0]->params);
+	freeParsedArgs(parsedArgs);
 
 	startLogging("/dev/null");
 	registerArgs(args_2);
@@ -114,6 +117,9 @@ void testInvalid()
 	parsedArg->value = strdup("--arg");
 	parsedArgs[0] = parsedArg;
 	assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
+	free(parsedArg->value);
+	free(parsedArg);
+	free(parsedArgs);
 
 	assertConstNull(findArg(nullptr, "", nullptr));
 
@@ -122,6 +128,7 @@ void testInvalid()
 	assertConstNotNull(parsedArgs);
 	assertConstNotNull(parsedArgs[0]);
 	assertConstNull(parsedArgs[1]);
+	freeParsedArgs(parsedArgs);
 }
 
 void testArgCounting()
@@ -144,6 +151,7 @@ void testArgCounting()
 
 	parsedArgs = parseArguments(5, argv_1);
 	assertNull(parsedArgs);
+	freeParsedArgs(parsedArgs);
 
 	parsedArgs = parseArguments(5, argv_2);
 	assertConstNotNull(parsedArgs);
@@ -155,6 +163,7 @@ void testArgCounting()
 	assertConstNotNull(parsedArgs[0]->params[1]);
 	assertStringEqual(parsedArgs[0]->params[0], "test");
 	assertStringEqual(parsedArgs[0]->params[1], "me");
+	freeParsedArgs(parsedArgs);
 }
 
 BEGIN_REGISTER_TESTS()
