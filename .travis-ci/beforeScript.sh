@@ -12,9 +12,10 @@ codecov()
 }
 
 if [ "$ENGINE" == "make" ]; then
+	mkdir -p $PREFIX/lib/pkgconfig
 	make lib
 	make install-so
-	make exe V=1
+	make exe
 	make install
 elif [ "$ENGINE" == "meson" ]; then
 	[ "$TRAVIS_OS_NAME" == "windows" -a "$CC_" == "clang" ] && EXTRA_OPTS="-Dcpp_std=c++14" || EXTRA_OPTS=""

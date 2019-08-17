@@ -6,7 +6,7 @@ install: .travis-ci/install.sh
 before_script:
   - if [ "$ENGINE" == "make" ]; then
       export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC";
-      export PREFIX=$HOME/.local;
+      export PREFIX=$HOME/.local PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig;
     fi
   - .travis-ci/beforeScript.sh
 script: .travis-ci/script.sh
