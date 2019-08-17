@@ -45,17 +45,6 @@ matrix:
             - clang-3.9
             - python3.6
     - compiler: clang-4.0
-      env: GCC=clang-4.0 GXX=clang++-4.0 GCOV='llvm-cov gcov'
-      addons:
-        apt:
-          sources:
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-4.0 main'
-              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - deadsnakes
-          packages:
-            - clang-4.0
-            - python3.6
-    - compiler: clang-4.0
       env: GCC=clang-4.0 GXX=clang++-4.0 COVERAGE=0
       addons:
         apt:
@@ -65,17 +54,6 @@ matrix:
             - deadsnakes
           packages:
             - clang-4.0
-            - python3.6
-    - compiler: clang-5.0
-      env: GCC=clang-5.0 GXX=clang++-5.0 GCOV='llvm-cov gcov'
-      addons:
-        apt:
-          sources:
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main'
-              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - deadsnakes
-          packages:
-            - clang-5.0
             - python3.6
     - compiler: clang-5.0
       env: GCC=clang-5.0 GXX=clang++-5.0 COVERAGE=0
@@ -111,6 +89,17 @@ matrix:
             - clang-6.0
             - python3.6
     - compiler: clang-7.0
+      env: GCC=clang-7.0 GXX=clang++-7.0 GCOV='llvm-cov gcov'
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-7.0
+            - python3.6
+    - compiler: clang-7.0
       env: GCC=clang-7.0 GXX=clang++-7.0 COVERAGE=0
       addons:
         apt:
@@ -120,6 +109,17 @@ matrix:
             - deadsnakes
           packages:
             - clang-7.0
+            - python3.6
+    - compiler: clang-8.0
+      env: GCC=clang-8.0 GXX=clang++-8.0 GCOV='llvm-cov gcov'
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-8.0
             - python3.6
     - compiler: clang-8.0
       env: GCC=clang-8.0 GXX=clang++-8.0 COVERAGE=0
