@@ -1,5 +1,4 @@
 language: cpp
-sudo: required
 os: linux
 dist: xenial
 
@@ -7,6 +6,7 @@ install: .travis-ci/install.sh
 before_script:
   - if [ "$ENGINE" == "make" ]; then
       export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC";
+      export PREFIX=$HOME/.local;
     fi
   - .travis-ci/beforeScript.sh
 script: .travis-ci/script.sh

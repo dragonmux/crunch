@@ -13,9 +13,9 @@ codecov()
 
 if [ "$ENGINE" == "make" ]; then
 	make lib
-	sudo -E make install-so
+	make install-so
 	make exe
-	sudo -E make install
+	make install
 elif [ "$ENGINE" == "meson" ]; then
 	[ "$TRAVIS_OS_NAME" == "windows" -a "$CC_" == "clang" ] && EXTRA_OPTS="-Dcpp_std=c++14" || EXTRA_OPTS=""
 	[ $COVERAGE -ne 0 ] && EXTRA_OPTS="$EXTRA_OPTS --buildtype=debug"
