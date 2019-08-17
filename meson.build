@@ -41,6 +41,9 @@ if isWindows
 		'-D_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1',
 		'-D_CRT_NONSTDC_NO_WARNINGS=1',
 		language: 'cpp')
+	if cxx.get_id() == 'clang'
+		add_project_arguments('-D_NO_CRT_STDIO_INLINE', language: 'cpp')
+	endif
 	if buildType == 'debug'
 		add_project_arguments('-D_DEBUG', language: ['c', 'cpp'])
 	endif
