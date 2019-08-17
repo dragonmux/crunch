@@ -38,7 +38,6 @@ CRUNCH_API uint8_t isTTY;
 #ifdef _MSC_VER
 CRUNCH_API HANDLE console;
 #endif
-CRUNCH_API uint8_t logging;
 CRUNCH_API testLog *logger;
 
 CRUNCH_API size_t vaTestPrintf(const char *format, va_list args);

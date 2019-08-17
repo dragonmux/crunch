@@ -84,7 +84,7 @@ void *testRunner(void *self)
 		testPrintf(" ");
 	test->theTest->testFunc();
 	// Did the test switch logging on?
-	if (loggingTests == 0 && logging == 1)
+	if (!loggingTests && logger)
 		// Yes, switch it back off again
 		stopLogging(logger);
 	logResult(RESULT_SUCCESS, "");

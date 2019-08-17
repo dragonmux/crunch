@@ -57,7 +57,6 @@ struct testLog
 };
 
 const int errAbort = 2;
-uint8_t logging = 0;
 testLog *logger = NULL;
 uint8_t isTTY = 1;
 
@@ -226,7 +225,7 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	if (logging == 1)
+	if (logger)
 		return NULL;
 	testLog *logger_ = testMalloc(sizeof(testLog));
 	if (!logger_)
@@ -237,7 +236,6 @@ testLog *startLogging(const char *fileName)
 		free(logger_);
 		return NULL;
 	}
-	logging = 1;
 #ifndef _MSC_VER
 	logger_->fd = dup(STDOUT_FILENO);
 #else
@@ -273,5 +271,4 @@ void stopLogging(testLog *logger_)
 	fclose(logger_->file);
 	logger = NULL;
 	free(logger_);
-	logging = 0;
 }
