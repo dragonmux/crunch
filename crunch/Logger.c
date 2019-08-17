@@ -262,21 +262,21 @@ testLog *startLogging(const char *fileName)
 	return ret;
 }
 
-void stopLogging(testLog *logFile)
+void stopLogging(testLog *logger_)
 {
-	if (logFile == NULL)
+	if (logger_ == NULL)
 		return;
 #ifndef _MSC_VER
-	dup2(logFile->stdout, STDOUT_FILENO);
-	flock(fileno(logFile->file), LOCK_UN);
+	dup2(logger_->stdout, STDOUT_FILENO);
+	flock(fileno(logger_->file), LOCK_UN);
 #else
-	dup2(logFile->stdout, fileno(stdout));
-//	locking(fileno(logFile->file), LK_UNLCK, -1);
+	dup2(logger_->stdout, fileno(stdout));
+//	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
-	fclose(logFile->file);
+	fclose(logger_->file);
 	stdout = realStdout;
 	realStdout = NULL;
-	free(logFile);
 	logger = NULL;
+	free(logger_);
 	logging = 0;
 }
