@@ -273,16 +273,16 @@ void stopLogging(testLog *loggerPtr)
 	if (!loggerPtr)
 		return;
 	std::unique_ptr<testLog> logger{loggerPtr};
+	stdout = logger->stdout;
 #ifndef _MSC_VER
-	flock(fileno(logger->file), LOCK_UN);
 	dup2(logger->fd, STDOUT_FILENO);
+	flock(fileno(logger->file), LOCK_UN);
 #else
-//	locking(fileno(logger->file), LK_UNLCK, -1);
 	dup2(logger->fd, fileno(stdout));
+//	locking(fileno(logger->file), LK_UNLCK, -1);
 #endif
 	close(logger->fd);
 	fclose(logger->file);
-	stdout = logger->stdout;
 	::logger = nullptr;
 	logging = false;
 }
