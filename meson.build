@@ -53,7 +53,9 @@ if cxx.get_id() == 'msvc'
 	add_project_arguments('-wd4996', '-wd4800', '-wd4459', language: ['c', 'cpp'])
 endif
 
-subdir('crunch')
+if not isWindows
+	subdir('crunch')
+endif
 subdir('crunch++')
 subdir('crunchMake')
 subdir('test')
