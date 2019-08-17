@@ -43,6 +43,12 @@ FILE *stdout;
 	#define TTY	"/dev/tty"
 #endif
 
+struct testLog
+{
+	FILE *file;
+	int fd, stdout;
+};
+
 FILE *realStdout = nullptr;
 bool logging = false;
 testLog *logger = nullptr;

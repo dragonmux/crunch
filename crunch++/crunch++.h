@@ -183,14 +183,10 @@ typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestCla
 
 #define CXX_TEST(name) tests.emplace_back(cxxTest{[this](){ this->name(); }, #name});
 
-typedef struct testLog
-{
-	FILE *file;
-	int fd, stdout;
-} testLog;
+struct testLog;
 
 CRUNCHpp_API testLog *startLogging(const char *fileName);
-CRUNCHpp_API void stopLogging(testLog *logFile);
+CRUNCHpp_API void stopLogging(testLog *logger);
 
 /* Give systems that don't have other calling conventions a dud definition of __cdecl */
 #ifndef _WINDOWS
