@@ -234,6 +234,14 @@ testLog *startLogging(const char *fileName)
 	if (logging == 1)
 		return NULL;
 	ret = testMalloc(sizeof(testLog));
+	if (!ret)
+		return NULL;
+	ret->file = fopen(fileName, "w");
+	if (!ret->file)
+	{
+		free(ret);
+		return NULL;
+	}
 	logging = 1;
 #ifndef _MSC_VER
 	ret->stdout = dup(STDOUT_FILENO);
@@ -241,7 +249,6 @@ testLog *startLogging(const char *fileName)
 	ret->stdout = dup(fileno(stdout));
 #endif
 	realStdout = stdout;
-	ret->file = fopen(fileName, "w");
 	ret->fd = fileno(ret->file);
 #ifndef _MSC_VER
 	flock(ret->fd, LOCK_EX);
