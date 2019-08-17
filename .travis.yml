@@ -110,6 +110,28 @@ matrix:
           packages:
             - clang-6.0
             - python3.6
+    - compiler: clang-7.0
+      env: GCC=clang-7.0 GXX=clang++-7.0 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-7.0
+            - python3.6
+    - compiler: clang-8.0
+      env: GCC=clang-8.0 GXX=clang++-8.0 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8.0 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-8.0
+            - python3.6
     - compiler: gcc-4.9
       env: GCC=gcc-4.9 GXX=g++-4.9 GCOV=gcov-4.9
       addons:
