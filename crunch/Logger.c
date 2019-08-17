@@ -52,11 +52,11 @@ FILE *stdout;
 struct testLog
 {
 	FILE *file;
+	FILE *stdout;
 	int fd;
 };
 
 const int errAbort = 2;
-FILE *realStdout = NULL;
 uint8_t logging = 0;
 testLog *logger = NULL;
 uint8_t isTTY = 1;
@@ -78,11 +78,7 @@ int getColumns()
 #endif
 
 size_t vaTestPrintf(const char *format, va_list args)
-{
-	if (realStdout == NULL)
-		realStdout = stdout;
-	return vfprintf(realStdout, format, args);
-}
+	{ return vfprintf(logger ? logger->stdout : stdout, format, args); }
 
 size_t testPrintf(const char *format, ...)
 {
@@ -248,7 +244,8 @@ testLog *startLogging(const char *fileName)
 #else
 	ret->fd = dup(fileno(stdout));
 #endif
-	realStdout = stdout;
+	ret->stdout = stdout;
+	stdout = ret->file;
 	const int fileFD = fileno(ret->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
@@ -258,14 +255,14 @@ testLog *startLogging(const char *fileName)
 	dup2(fileFD, fileno(stdout));
 #endif
 	logger = ret;
-	stdout = ret->file;
 	return ret;
 }
 
 void stopLogging(testLog *logger_)
 {
-	if (logger_ == NULL)
+	if (!logger_ || logger_ != logger)
 		return;
+	stdout = logger->stdout;
 #ifndef _MSC_VER
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);
@@ -275,8 +272,6 @@ void stopLogging(testLog *logger_)
 #endif
 	close(logger_->fd);
 	fclose(logger_->file);
-	stdout = realStdout;
-	realStdout = NULL;
 	logger = NULL;
 	free(logger_);
 	logging = 0;
