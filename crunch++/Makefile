@@ -51,7 +51,7 @@ TESTS_EXCEPT = testTester.so
 TESTS = $(TESTS_NORM) $(TESTS_EXCEPT)
 
 VERMAJ = .0
-VERMIN = .2
+VERMIN = .3
 VERREV = .0
 ifneq ($(MAC), 1)
 	SOMAJ = libcrunch++.so

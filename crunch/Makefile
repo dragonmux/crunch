@@ -49,7 +49,7 @@ O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o
 TESTS = testArgsParser.so testCrunch.so testBad.so
 
 VERMAJ = .0
-VERMIN = .2
+VERMIN = .3
 VERREV = .0
 ifneq ($(MAC), 1)
 	SOMAJ = libcrunch.so
