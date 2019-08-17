@@ -141,7 +141,7 @@ matrix:
             - clang-8
             - python3.6
     - compiler: gcc-4.9
-      env: CC_=gcc-4.9 CXX_=g++-4.9 GCOV=gcov-4.9
+      env: CC_=gcc-4.9 CXX_=g++-4.9 COVERAGE=0
       addons:
         apt:
           sources:
@@ -152,7 +152,7 @@ matrix:
             - g++-4.9
             - python3.6
     - compiler: gcc-5
-      env: CC_=gcc-5 CXX_=g++-5 GCOV=gcov-5
+      env: CC_=gcc-5 CXX_=g++-5 COVERAGE=0
       addons:
         apt:
           sources:
@@ -161,17 +161,6 @@ matrix:
           packages:
             - gcc-5
             - g++-5
-            - python3.6
-    - compiler: gcc-6
-      env: CC_=gcc-6 CXX_=g++-6 GCOV=gcov-6
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - deadsnakes
-          packages:
-            - gcc-6
-            - g++-6
             - python3.6
     - compiler: gcc-6
       env: CC_=gcc-6 CXX_=g++-6 COVERAGE=0
@@ -208,6 +197,17 @@ matrix:
             - python3.6
     - compiler: gcc-8
       env: CC_=gcc-8 CXX_=g++-8 GCOV=gcov-8
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - deadsnakes
+          packages:
+            - gcc-8
+            - g++-8
+            - python3.6
+    - compiler: gcc-8
+      env: CC_=gcc-8 CXX_=g++-8 COVERAGE=0
       addons:
         apt:
           sources:
