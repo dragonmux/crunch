@@ -18,6 +18,7 @@
 
 #include "Core.h"
 #include "Logger.h"
+#include "memory.hxx"
 #ifndef _MSC_VER
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -247,10 +248,9 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	testLog *ret;
 	if (logging)
 		return nullptr;
-	ret = new testLog();
+	auto ret = makeUnique<testLog>();
 	logging = true;
 #ifndef _MSC_VER
 	ret->stdout = dup(STDOUT_FILENO);
@@ -269,13 +269,14 @@ testLog *startLogging(const char *fileName)
 #endif
 	logger = ret;
 	stdout = ret->file;
-	return ret;
+	return ret.release();
 }
 
-void stopLogging(testLog *logFile)
+void stopLogging(testLog *loggerPtr)
 {
-	if (logFile == nullptr)
+	if (!loggerPtr)
 		return;
+	std::unique_ptr<testLog> logger{loggerPtr};
 #ifndef _MSC_VER
 	flock(logFile->fd, LOCK_UN);
 	dup2(logFile->stdout, STDOUT_FILENO);
@@ -286,7 +287,6 @@ void stopLogging(testLog *logFile)
 	fclose(logFile->file);
 	stdout = realStdout;
 	realStdout = nullptr;
-	delete logFile;
-	logger = nullptr;
+	::logger = nullptr;
 	logging = false;
 }
