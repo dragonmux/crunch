@@ -5,7 +5,7 @@ dist: xenial
 install: .travis-ci/install.sh
 before_script:
   - if [ "$ENGINE" == "make" ]; then
-      export GCC="$GCC -m64 -fPIC -DPIC" GXX="$GXX -m64 -fPIC -DPIC";
+      export GCC="$CC -m64 -fPIC -DPIC" GXX="$CXX -m64 -fPIC -DPIC";
       export PREFIX=$HOME/.local PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig;
     fi
   - .travis-ci/beforeScript.sh
@@ -240,7 +240,7 @@ matrix:
             - g++-9
             - python3.6
     - compiler: gcc-8
-      env: GCC=gcc-8 GXX=g++-8 COVERAGE=0 ENGINE=make
+      env: CC=gcc-8 CXX=g++-8 COVERAGE=0 ENGINE=make
       addons:
         apt:
           sources:
