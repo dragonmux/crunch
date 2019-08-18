@@ -3,9 +3,13 @@ libCrunchTests = ['testArgsParser', 'testCrunch', 'testBad']
 libCrunchPath = join_paths([meson.build_root(), libCrunch.outdir()])
 
 foreach test : libCrunchTests
+	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath]
+	if buildType == 'debug'
+		command += ['--debug']
+	endif
 	custom_target(
 		'crunch-' + test,
-		command: [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath],
+		command: command,
 		input: test + '.c',
 		output: test + '.so',
 		depends: libCrunch,

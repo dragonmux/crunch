@@ -65,9 +65,9 @@ string cxx = "g++ -m32" OPTS_VIS " "_s;
 const string cc = crunch_GCC;
 string cxx = crunch_GXX OPTS_VIS " "_s;
 #endif
-#define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s -O2 %s -o "
-#define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s -O2 %s -o "
-#define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s -O2 %s -o "
+#define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s %s %s -o "
+#define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s %s %s -o "
+#define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s %s %s -o "
 const string libExt = ".so"_s;
 #else
 #ifdef _DEBUG
@@ -108,7 +108,7 @@ const auto cxxExts = makeArray<const char *>(".cpp", ".cc", ".cxx");
 const auto objExts = makeArray<const char *>(".o", ".obj", ".a");
 
 string inclDirFlags, libDirFlags, objs, libs;
-bool silent, quiet, pthread, codeCoverage;
+bool silent, quiet, pthread, codeCoverage, debugBuild;
 
 const arg_t args[] =
 {
@@ -126,6 +126,7 @@ const arg_t args[] =
 	{"-std=", 0, 0, ARG_INCOMPLETE},
 	{"-z", 1, 1, ARG_REPEATABLE},
 	{"--coverage", 0, 0, 0},
+	{"--debug", 0, 0, 0},
 	{{}, 0, 0, 0}
 };
 
@@ -303,7 +304,7 @@ int32_t compileGCC(const string &test)
 	auto soFile = computeSOName(test);
 	auto compileString = format("%s %s " OPTS "%s"_s, compiler, test, inclDirFlags,
 		libDirFlags, objs, libs, codeCoverage ? "-lgcov " : "",  mode ? "++" : "",
-		pthread ? "" : "-pthread", soFile);
+		debugBuild ? "-O0 -g" : "-O2", pthread ? "" : "-pthread", soFile);
 	if (!silent)
 	{
 		if (quiet)
@@ -323,7 +324,7 @@ int32_t compileClang(const string &test)
 	const string &compiler = mode ? cxx : cc;
 	auto oFile = computeObjName(test);
 	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, test,
-		inclDirFlags, pthread ? "" : "-pthread", oFile);
+		inclDirFlags, debugBuild ? "-O0 -g" : "-O2", pthread ? "" : "-pthread", oFile);
 	if (!silent)
 	{
 		if (quiet)
@@ -340,7 +341,8 @@ int32_t compileClang(const string &test)
 
 	auto soFile = computeSOName(test);
 	auto linkString = format("%s %s " LINK_OPTS "%s"_s, compiler, oFile, libDirFlags, objs,
-		libs, codeCoverage ? "--coverage " : "", mode ? "++" : "", pthread ? "" : "-pthread", soFile);
+		libs, codeCoverage ? "--coverage " : "", mode ? "++" : "", debugBuild ? "-O0 -g" : "-O2",
+		pthread ? "" : "-pthread", soFile);
 	if (!silent)
 	{
 		if (quiet)
@@ -435,5 +437,6 @@ int main(int argc, char **argv)
 	quiet = bool(findArg(parsedArgs, "--quiet", nullptr));
 	pthread = bool(findArg(parsedArgs, "-pthread", nullptr));
 	codeCoverage = bool(findArg(parsedArgs, "--coverage", nullptr));
+	debugBuild = bool(findArg(parsedArgs, "--debug", nullptr));
 	return compileTests();
 }
