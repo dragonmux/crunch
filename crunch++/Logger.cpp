@@ -283,5 +283,5 @@ void stopLogging(testLog *loggerPtr)
 #endif
 	close(logger_->fd);
 	fclose(logger_->file);
-	logger_ = nullptr;
+	logger = nullptr;
 }
