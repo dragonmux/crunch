@@ -248,7 +248,7 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	if (logger)
+	if (logger || !fileName)
 		return nullptr;
 	auto logger_ = makeUnique<testLog>();
 	logger_->file = fopen(fileName, "w");

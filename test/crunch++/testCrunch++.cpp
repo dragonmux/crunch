@@ -334,6 +334,8 @@ private:
 		forcePrint("Asserted console print");
 		assertNull(startLogging(nullptr));
 		forcePrint("Asserted bad startLogging()");
+		assertNull(startLogging(""));
+		forcePrint("Asserted bad startLogging()");
 		const auto logFile = startLogging(fileName.data());
 		assertNotNull(logFile);
 		forcePrint("Asserted good startLogging()", logFile);

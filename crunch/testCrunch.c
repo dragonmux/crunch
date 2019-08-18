@@ -276,6 +276,7 @@ void testLogging()
 	const char *const fileString = "Print to file test";
 	assertGreaterThan(puts("Print to console test"), -1);
 	assertNull(startLogging(NULL));
+	assertNull(startLogging(""));
 	testLog *const logFile = startLogging(fileName);
 	assertNotNull(logFile);
 	// Assert that double-logging is not allowed
