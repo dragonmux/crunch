@@ -22,7 +22,8 @@ crunch = executable(
 	crunchSrc,
 	link_with: [libCrunch],
 	dependencies: [threading, dl],
-	install: true
+	install: true,
+	install_rpath: libdir
 )
 
 pkgconfig.generate(

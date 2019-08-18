@@ -22,7 +22,8 @@ crunchpp = executable(
 	crunchppSrc,
 	link_with: [libCrunchpp],
 	dependencies: [threading, dl],
-	install: true
+	install: true,
+	install_rpath: libdir
 )
 
 pkgconfig.generate(

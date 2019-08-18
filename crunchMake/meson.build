@@ -1,8 +1,5 @@
 crunchMakeSrc = ['crunchMake.cpp']
 
-prefix = get_option('prefix')
-libdir = join_paths(prefix, get_option('libdir'))
-
 crunchConfig = configuration_data()
 whichCC = cc.cmd_array()
 whichCXX = cxx.cmd_array()
@@ -35,5 +32,6 @@ crunchMake = executable(
 		'-Dcrunch_PREFIX="' + prefix + '"',
 		'-Dcrunch_LIBDIR="' + libdir + '"'
 	],
-	install: true
+	install: true,
+	install_rpath: libdir
 )
