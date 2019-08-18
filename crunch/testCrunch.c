@@ -272,12 +272,15 @@ void testLogging()
 {
 	testLog *logFile;
 	assertGreaterThan(printf("Print to console test\n"), 0);
+	assertNull(startLogging(NULL));
 	logFile = startLogging("test.log");
 	assertNotNull(logFile);
 	// Assert that double-logging is not allowed
 	assertNull(startLogging("test.log"));
+	stopLogging(NULL); // code coverage stuff.. this shouldn't affect the next line.
 	assertGreaterThan(printf("Print to file test\n"), 0);
 	stopLogging(logFile);
+	stopLogging(logFile); // code coverage stuff.. this should be harmless.
 	assertIntEqual(unlink("test.log"), 0);
 }
 
