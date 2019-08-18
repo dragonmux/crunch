@@ -243,20 +243,20 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	if (::logger)
+	if (logger)
 		return nullptr;
-	auto logger = makeUnique<testLog>();
-	logger->file = fopen(fileName, "w");
-	if (!logger->file)
+	auto logger_ = makeUnique<testLog>();
+	logger_->file = fopen(fileName, "w");
+	if (!logger_->file)
 		return nullptr;
 #ifndef _MSC_VER
-	logger->fd = dup(STDOUT_FILENO);
+	logger_->fd = dup(STDOUT_FILENO);
 #else
-	logger->fd = dup(fileno(stdout));
+	logger_->fd = dup(fileno(stdout));
 #endif
-	logger->stdout = stdout;
-	stdout = logger->file;
-	const int fileFD = fileno(logger->file);
+	logger_->stdout = stdout;
+	stdout = logger_->file;
+	const int fileFD = fileno(logger_->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
 	dup2(fileFD, STDOUT_FILENO);
@@ -264,24 +264,24 @@ testLog *startLogging(const char *fileName)
 //	locking(fileFD, LK_LOCK, -1);
 	dup2(fileFD, fileno(stdout));
 #endif
-	::logger = logger.get();
-	return logger.release();
+	logger = logger_.get();
+	return logger_.release();
 }
 
 void stopLogging(testLog *loggerPtr)
 {
-	if (!loggerPtr || loggerPtr != ::logger)
+	if (!loggerPtr || loggerPtr != logger)
 		return;
-	std::unique_ptr<testLog> logger{loggerPtr};
-	stdout = logger->stdout;
+	std::unique_ptr<testLog> logger_{loggerPtr};
+	stdout = logger_->stdout;
 #ifndef _MSC_VER
-	dup2(logger->fd, STDOUT_FILENO);
-	flock(fileno(logger->file), LOCK_UN);
+	dup2(logger_->fd, STDOUT_FILENO);
+	flock(fileno(logger_->file), LOCK_UN);
 #else
-	dup2(logger->fd, fileno(stdout));
-//	locking(fileno(logger->file), LK_UNLCK, -1);
+	dup2(logger_->fd, fileno(stdout));
+//	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
-	close(logger->fd);
-	fclose(logger->file);
-	::logger = nullptr;
+	close(logger_->fd);
+	fclose(logger_->file);
+	logger_ = nullptr;
 }
