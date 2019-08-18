@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 {
 #if _WINDOWS
 	_set_invalid_parameter_handler(invalidHandler);
-	_CrtSetReportMode(_CRT_ASSERT, 0)
+	_CrtSetReportMode(_CRT_ASSERT, 0);
 #endif
 	registerArgs(args);
 	parsedArgs = parseArguments(argc, argv);
