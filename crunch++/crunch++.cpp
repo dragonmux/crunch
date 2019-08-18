@@ -66,7 +66,7 @@ const arg_t args[] =
 parsedArgs_t parsedArgs;
 parsedRefArgs_t namedTests;
 size_t numTests = 0;
-const char *cwd = nullptr;
+const char *workingDir = nullptr;
 
 using registerFn = void (__cdecl *)();
 
@@ -147,7 +147,7 @@ void runTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		auto testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value.data());
+		auto testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value.data());
 		void *testSuit = dlopen(testLib.get(), RTLD_LAZY);
 		if (!testSuit || !tryRegistration(testSuit))
 		{
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
 	}
-	cwd = getcwd(nullptr, 0);
+	workingDir = getcwd(nullptr, 0);
 #ifndef _MSC_VER
 	isTTY = isatty(STDOUT_FILENO);
 #else
@@ -225,9 +225,9 @@ int main(int argc, char **argv)
 	try { runTests(); }
 	catch (threadExit_t &val)
 	{
-		free((void *)cwd);
+		free((void *)workingDir);
 		return val;
 	}
-	free((void *)cwd);
+	free((void *)workingDir);
 	return failures ? 1 : 0;
 }

@@ -49,7 +49,7 @@ const arg_t crunchArgs[] =
 parsedArgs_t parsedArgs = NULL;
 parsedArgs_t namedTests = NULL;
 uint32_t numTests = 0;
-const char *cwd = NULL;
+const char *workingDir = NULL;
 uint8_t loggingTests = 0;
 
 typedef void (__cdecl *registerFn)();
@@ -160,7 +160,7 @@ int runTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		char *testLib = formatString("%s/%s." LIBEXT, cwd, namedTests[i]->value);
+		char *testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value);
 		void *testSuit = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
 	}
-	cwd = getcwd(NULL, 0);
+	workingDir = getcwd(NULL, 0);
 #ifndef _MSC_VER
 	isTTY = isatty(STDOUT_FILENO);
 #else
@@ -253,7 +253,7 @@ int main(int argc, char **argv)
 #endif
 	const int result = runTests();
 	free(namedTests);
-	free((void *)cwd);
+	free((void *)workingDir);
 	callFreeParsedArgs();
 	if (result)
 		return result == 1 ? 0 : 2;
