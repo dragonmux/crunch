@@ -252,7 +252,7 @@ testLog *startLogging(const char *fileName)
 	dup2(fileFD, STDOUT_FILENO);
 #else
 //	locking(fileFD, LK_LOCK, -1);
-	dup2(fileFD, fileno(stdout));
+	dup2(fileFD, fileno(logger_->realStdout));
 #endif
 	return logger_;
 }
@@ -265,7 +265,7 @@ void stopLogging(testLog *logger_)
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);
 #else
-	dup2(logger_->fd, fileno(stdout));
+	dup2(logger_->fd, fileno(logger_->realStdout));
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
 	stdout = logger_->realStdout;
