@@ -23,7 +23,7 @@ after_failure:
 matrix:
   include:
     - compiler: clang-3.8
-      env: CC_=clang-3.8 CXX_=clang++-3.8 COVERAGE=0
+      env: CC=clang-3.8 CXX=clang++-3.8 COVERAGE=0
       addons:
         apt:
           sources:
@@ -34,7 +34,7 @@ matrix:
             - clang-3.8
             - python3.6
     - compiler: clang-3.9
-      env: CC_=clang-3.9 CXX_=clang++-3.9 COVERAGE=0
+      env: CC=clang-3.9 CXX=clang++-3.9 COVERAGE=0
       addons:
         apt:
           sources:
@@ -45,7 +45,7 @@ matrix:
             - clang-3.9
             - python3.6
     - compiler: clang-4.0
-      env: CC_=clang-4.0 CXX_=clang++-4.0 COVERAGE=0
+      env: CC=clang-4.0 CXX=clang++-4.0 COVERAGE=0
       addons:
         apt:
           sources:
@@ -57,7 +57,7 @@ matrix:
             - clang-4.0
             - python3.6
     - compiler: clang-5.0
-      env: CC_=clang-5.0 CXX_=clang++-5.0 COVERAGE=0
+      env: CC=clang-5.0 CXX=clang++-5.0 COVERAGE=0
       addons:
         apt:
           sources:
@@ -69,7 +69,7 @@ matrix:
             - clang-5.0
             - python3.6
     - compiler: clang-6.0
-      env: CC_=clang-6.0 CXX_=clang++-6.0 GCOV='llvm-cov gcov'
+      env: CC=clang-6.0 CXX=clang++-6.0 GCOV='llvm-cov gcov'
       addons:
         apt:
           sources:
@@ -81,7 +81,7 @@ matrix:
             - clang-6.0
             - python3.6
     - compiler: clang-6.0
-      env: CC_=clang-6.0 CXX_=clang++-6.0 COVERAGE=0
+      env: CC=clang-6.0 CXX=clang++-6.0 COVERAGE=0
       addons:
         apt:
           sources:
@@ -93,7 +93,7 @@ matrix:
             - clang-6.0
             - python3.6
     - compiler: clang-7
-      env: CC_=clang-7 CXX_=clang++-7 GCOV='llvm-cov gcov'
+      env: CC=clang-7 CXX=clang++-7 GCOV='llvm-cov gcov'
       addons:
         apt:
           sources:
@@ -105,7 +105,7 @@ matrix:
             - clang-7
             - python3.6
     - compiler: clang-7
-      env: CC_=clang-7 CXX_=clang++-7 COVERAGE=0
+      env: CC=clang-7 CXX=clang++-7 COVERAGE=0
       addons:
         apt:
           sources:
@@ -117,7 +117,7 @@ matrix:
             - clang-7
             - python3.6
     - compiler: clang-8
-      env: CC_=clang-8 CXX_=clang++-8 GCOV='llvm-cov gcov'
+      env: CC=clang-8 CXX=clang++-8 GCOV='llvm-cov gcov'
       addons:
         apt:
           sources:
@@ -129,7 +129,7 @@ matrix:
             - clang-8
             - python3.6
     - compiler: clang-8.0
-      env: CC_=clang-8 CXX_=clang++-8 COVERAGE=0
+      env: CC=clang-8 CXX=clang++-8 COVERAGE=0
       addons:
         apt:
           sources:
@@ -141,7 +141,7 @@ matrix:
             - clang-8
             - python3.6
     - compiler: gcc-4.9
-      env: CC_=gcc-4.9 CXX_=g++-4.9 COVERAGE=0
+      env: CC=gcc-4.9 CXX=g++-4.9 COVERAGE=0
       addons:
         apt:
           sources:
@@ -152,7 +152,7 @@ matrix:
             - g++-4.9
             - python3.6
     - compiler: gcc-5
-      env: CC_=gcc-5 CXX_=g++-5 COVERAGE=0
+      env: CC=gcc-5 CXX=g++-5 COVERAGE=0
       addons:
         apt:
           sources:
@@ -163,7 +163,7 @@ matrix:
             - g++-5
             - python3.6
     - compiler: gcc-6
-      env: CC_=gcc-6 CXX_=g++-6 COVERAGE=0
+      env: CC=gcc-6 CXX=g++-6 COVERAGE=0
       addons:
         apt:
           sources:
@@ -174,7 +174,7 @@ matrix:
             - g++-6
             - python3.6
     - compiler: gcc-7
-      env: CC_=gcc-7 CXX_=g++-7 GCOV=gcov-7
+      env: CC=gcc-7 CXX=g++-7 GCOV=gcov-7
       addons:
         apt:
           sources:
@@ -185,7 +185,7 @@ matrix:
             - g++-7
             - python3.6
     - compiler: gcc-7
-      env: CC_=gcc-7 CXX_=g++-7 COVERAGE=0
+      env: CC=gcc-7 CXX=g++-7 COVERAGE=0
       addons:
         apt:
           sources:
@@ -196,7 +196,7 @@ matrix:
             - g++-7
             - python3.6
     - compiler: gcc-8
-      env: CC_=gcc-8 CXX_=g++-8 GCOV=gcov-8
+      env: CC=gcc-8 CXX=g++-8 GCOV=gcov-8
       addons:
         apt:
           sources:
@@ -207,7 +207,7 @@ matrix:
             - g++-8
             - python3.6
     - compiler: gcc-8
-      env: CC_=gcc-8 CXX_=g++-8 COVERAGE=0
+      env: CC=gcc-8 CXX=g++-8 COVERAGE=0
       addons:
         apt:
           sources:
@@ -218,7 +218,7 @@ matrix:
             - g++-8
             - python3.6
     - compiler: gcc-9
-      env: CC_=gcc-9 CXX_=g++-9 GCOV=gcov-9
+      env: CC=gcc-9 CXX=g++-9 GCOV=gcov-9
       addons:
         apt:
           sources:
@@ -229,7 +229,7 @@ matrix:
             - g++-9
             - python3.6
     - compiler: gcc-9
-      env: CC_=gcc-9 CXX_=g++-9 COVERAGE=0
+      env: CC=gcc-9 CXX=g++-9 COVERAGE=0
       addons:
         apt:
           sources:
@@ -252,7 +252,7 @@ matrix:
       os: windows
     - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
       os: windows
-#    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:/c/Program Files/LLVM/bin:$PATH" CC_=clang CXX_=clang++
+#    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:/c/Program Files/LLVM/bin:$PATH" CC=clang CXX=clang++
 #      os: windows
 
 env:

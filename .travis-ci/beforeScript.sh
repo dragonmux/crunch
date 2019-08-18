@@ -18,10 +18,10 @@ if [ "$ENGINE" == "make" ]; then
 	make exe
 	make install
 elif [ "$ENGINE" == "meson" ]; then
-	[ "$TRAVIS_OS_NAME" == "windows" -a "$CC_" == "clang" ] && EXTRA_OPTS="-Dcpp_std=c++14" || EXTRA_OPTS=""
+	[ "$TRAVIS_OS_NAME" == "windows" -a "$CC" == "clang" ] && EXTRA_OPTS="-Dcpp_std=c++14" || EXTRA_OPTS=""
 	[ $COVERAGE -ne 0 ] && EXTRA_OPTS="$EXTRA_OPTS --buildtype=debug"
-	if [ "$TRAVIS_OS_NAME" != "windows" -o "$CC_" == "clang" ]; then
-		CC="$CC_" CXX="$CXX_" meson build --prefix=$HOME/.local -Db_coverage=`codecov` $EXTRA_OPTS
+	if [ "$TRAVIS_OS_NAME" != "windows" -o "$CC" == "clang" ]; then
+		meson build --prefix=$HOME/.local -Db_coverage=`codecov` $EXTRA_OPTS
 		cd build
 		ninja
 	else
