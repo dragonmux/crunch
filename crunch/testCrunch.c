@@ -274,14 +274,14 @@ void testLogging()
 {
 	const char *const fileName ="test.log";
 	const char *const fileString = "Print to file test";
-	assertGreaterThan(printf("Print to console test\n"), -1);
+	assertGreaterThan(puts("Print to console test"), -1);
 	assertNull(startLogging(NULL));
 	testLog *const logFile = startLogging(fileName);
 	assertNotNull(logFile);
 	// Assert that double-logging is not allowed
 	assertNull(startLogging(fileName));
 	stopLogging(NULL); // code coverage stuff.. this shouldn't affect the next line.
-	assertGreaterThan(printf("Print to file test\n"), -1);
+	assertGreaterThan(puts(fileString), -1);
 	stopLogging(logFile);
 	stopLogging(logFile); // code coverage stuff.. this should be harmless.
 	FILE *const file = fopen(fileName, "r");
