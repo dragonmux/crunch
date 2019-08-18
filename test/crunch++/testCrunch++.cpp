@@ -314,20 +314,40 @@ private:
 		tryShouldFail([=]() { assertLessThan(value, 0); });
 	}
 
+	void forcePrint(const char *const what, FILE *const where = stdout)
+	{
+		fputs(what, where);
+		fputc('\n', where);
+		fflush(where);
+	}
+	void forcePrint(const char *const what, FILE **const wherePtr)
+		{ forcePrint(what, wherePtr[1]); }
+	void forcePrint(const char *const what, testLog *const wherePtr)
+		{ forcePrint(what, reinterpret_cast<FILE **>(wherePtr)); }
+
 	void testLogging()
 	{
 		const std::string fileName{"test.log"_s};
 		const std::string fileString{"Print to file test"_s};
+		forcePrint("Entering testLogging()");
 		assertGreaterThan(puts("Print to console test"), -1);
+		forcePrint("Asserted console print");
 		assertNull(startLogging(nullptr));
+		forcePrint("Asserted bad startLogging()");
 		const auto logFile = startLogging(fileName.data());
 		assertNotNull(logFile);
+		forcePrint("Asserted good startLogging()", logFile);
 		// Checks that trying to begin logging while already logging causes the framework to ignore the second request
 		assertNull(startLogging(fileName.data()));
+		forcePrint("Asserted bad double-call startLogging()", logFile);
 		stopLogging(nullptr); // code coverage stuff.. this shouldn't affect the next line.
+		forcePrint("Asserted bad stopLogging()", logFile);
 		assertGreaterThan(puts(fileString.data()), -1);
+		forcePrint("Asserted logged print", logFile);
 		stopLogging(logFile);
+		forcePrint("Asserted good stopLogging()");
 		stopLogging(logFile); // code coverage stuff.. this should be harmless.
+		forcePrint("Asserted bad double-call stopLogging()");
 		const auto file = fopen(fileName.data(), "r");
 		assertNotNull(file);
 		struct stat fileStat{};
