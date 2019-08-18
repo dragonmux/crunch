@@ -48,6 +48,7 @@ struct testLog
 {
 	FILE *file;
 	FILE *stdout;
+	FILE *realStdout;
 	int fd;
 };
 
@@ -253,11 +254,14 @@ testLog *startLogging(const char *fileName)
 	logger_->file = fopen(fileName, "w");
 	if (!logger_->file)
 		return nullptr;
+	logger_->realStdout = stdout;
 #ifndef _MSC_VER
 	logger_->fd = dup(STDOUT_FILENO);
 #else
 	logger_->fd = dup(fileno(stdout));
 #endif
+	stdout = logger_->file;
+	logger = logger_.get();
 	logger_->stdout = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
 #ifndef _MSC_VER
@@ -267,7 +271,6 @@ testLog *startLogging(const char *fileName)
 //	locking(fileFD, LK_LOCK, -1);
 	dup2(fileFD, fileno(stdout));
 #endif
-	logger = logger_.get();
 	return logger_.release();
 }
 
@@ -283,6 +286,7 @@ void stopLogging(testLog *loggerPtr)
 	dup2(logger_->fd, fileno(stdout));
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
+	stdout = logger_->realStdout;
 	logger = nullptr;
 	fclose(logger_->stdout);
 	fclose(logger_->file);
