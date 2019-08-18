@@ -5,6 +5,7 @@ environment for each and every test in a test suit.
 
 [![Build Status](https://travis-ci.org/DX-MON/crunch.svg?branch=master)](https://travis-ci.org/DX-MON/crunch)
 [![codecov](https://codecov.io/gh/DX-MON/crunch/branch/master/graph/badge.svg)](https://codecov.io/gh/DX-MON/crunch)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/DX-MON/crunch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DX-MON/crunch/alerts/)
 
 ## Building crunch
 
