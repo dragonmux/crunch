@@ -201,8 +201,15 @@ void runTests()
 		stopLogging(logFile);
 }
 
+#ifdef _WINDOWS
+void invalidHandler(const wchar_t *, const wchar_t *, const wchar_t *, const uint32_t, const uintptr_t) { }
+#endif
+
 int main(int argc, char **argv)
 {
+#if _WINDOWS
+	_set_invalid_parameter_handler(invalidHandler);
+#endif
 	registerArgs(args);
 	parsedArgs = parseArguments(argc, argv);
 	if (parsedArgs.empty() || !getTests())

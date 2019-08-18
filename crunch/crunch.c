@@ -227,10 +227,18 @@ int runTests()
 	return 0;
 }
 
+#ifdef _WINDOWS
+void invalidHandler(const wchar_t *expr, const wchar_t *func, const wchar_t *file,
+	const uint32_t line, const uintptr_t res) { }
+#endif
+
 void callFreeParsedArgs() { parsedArgs = freeParsedArgs(parsedArgs); }
 
 int main(int argc, char **argv)
 {
+#ifdef _WINDOWS
+	_set_invalid_parameter_handler(invalidHandler);
+#endif
 	registerArgs(crunchArgs);
 	parsedArgs = parseArguments(argc, (const char **)argv);
 	if (parsedArgs == NULL || getTests() == FALSE)
