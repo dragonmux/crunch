@@ -274,7 +274,7 @@ void testLogging()
 {
 	const char *const fileName ="test.log";
 	const char *const fileString = "Print to file test";
-	assertGreaterThan(printf("Print to console test\n"), 0);
+	assertGreaterThan(printf("Print to console test\n"), -1);
 	assertNull(startLogging(NULL));
 	testLog *const logFile = startLogging(fileName);
 	assertNotNull(logFile);

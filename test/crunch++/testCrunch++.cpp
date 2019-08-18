@@ -316,9 +316,9 @@ private:
 
 	void testLogging()
 	{
-		const std::string fileName = "test.log"_s;
-		const std::string fileString = "Print to file test"_s;
-		assertGreaterThan(puts("Print to console test"), 0);
+		const std::string fileName{"test.log"_s};
+		const std::string fileString{"Print to file test"_s};
+		assertGreaterThan(puts("Print to console test"), -1);
 		assertNull(startLogging(nullptr));
 		const auto logFile = startLogging(fileName.data());
 		assertNotNull(logFile);
