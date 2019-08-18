@@ -17,7 +17,7 @@ after_success:
     fi
 after_failure:
   - if [ "$ENGINE" == "meson" ]; then
-      cat build/meson-logs/testlog.txt;
+      cat build/meson-logs/testlog.txt || true;
     fi
 
 matrix:
