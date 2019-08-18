@@ -241,8 +241,7 @@ testLog *startLogging(const char *fileName)
 #else
 	logger_->fd = dup(fileno(stdout));
 #endif
-	logger_->stdout = stdout;
-	stdout = logger_->file;
+	logger_->stdout = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
@@ -259,7 +258,6 @@ void stopLogging(testLog *logger_)
 {
 	if (!logger_ || logger_ != logger)
 		return;
-	stdout = logger->stdout;
 #ifndef _MSC_VER
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);
@@ -267,8 +265,8 @@ void stopLogging(testLog *logger_)
 	dup2(logger_->fd, fileno(stdout));
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
-	close(logger_->fd);
-	fclose(logger_->file);
 	logger = NULL;
+	fclose(logger_->stdout);
+	fclose(logger_->file);
 	free(logger_);
 }

@@ -283,7 +283,7 @@ void stopLogging(testLog *loggerPtr)
 	dup2(logger_->fd, fileno(stdout));
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
+	logger = nullptr;
 	fclose(logger_->stdout);
 	fclose(logger_->file);
-	logger = nullptr;
 }
