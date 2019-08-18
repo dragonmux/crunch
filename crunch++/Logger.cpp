@@ -68,7 +68,11 @@ int getColumns()
 }
 
 size_t vaTestPrintf(const char *format, va_list args)
-	{ return vfprintf(logger ? logger->stdout : stdout, format, args); }
+{
+	const auto ret = vfprintf(logger ? logger->stdout : stdout, format, args);
+	fflush(logger ? logger->stdout : stdout);
+	return ret;
+}
 
 size_t testPrintf(const char *format, ...)
 {
