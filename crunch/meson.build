@@ -25,4 +25,12 @@ crunch = executable(
 	install: true
 )
 
+pkgconfig.generate(
+	libCrunch,
+	name: 'crunch',
+	filebase: 'crunch',
+	version: meson.project_version(),
+	description: 'crunch is a unit testing framework for C'
+)
+
 install_headers('crunch.h')

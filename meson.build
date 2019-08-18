@@ -14,6 +14,7 @@ project(
 cc = meson.get_compiler('c')
 cxx = meson.get_compiler('cpp')
 threading = dependency('threads')
+pkgconfig = import('pkgconfig')
 
 coverage = get_option('b_coverage')
 buildType = get_option('buildtype')
