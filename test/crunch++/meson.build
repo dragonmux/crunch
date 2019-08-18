@@ -5,7 +5,15 @@ libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
 libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
 
 foreach test : libCrunchppTests
-	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
+	command = [
+		crunchMake,
+		'-s',
+		'@INPUT@',
+		'-o', '@OUTPUT@',
+		'-I' + crunchppSrcDir,
+		'-L' + libCrunchppPath,
+		'-z', 'defs'
+	]
 	if buildType == 'debug'
 		command += ['--debug']
 	endif
