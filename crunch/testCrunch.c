@@ -281,7 +281,7 @@ void testLogging()
 	// Assert that double-logging is not allowed
 	assertNull(startLogging(fileName));
 	stopLogging(NULL); // code coverage stuff.. this shouldn't affect the next line.
-	assertGreaterThan(printf("Print to file test\n"), 0);
+	assertGreaterThan(printf("Print to file test\n"), -1);
 	stopLogging(logFile);
 	stopLogging(logFile); // code coverage stuff.. this should be harmless.
 	FILE *const file = fopen(fileName, "r");

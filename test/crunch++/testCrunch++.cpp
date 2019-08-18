@@ -325,7 +325,7 @@ private:
 		// Checks that trying to begin logging while already logging causes the framework to ignore the second request
 		assertNull(startLogging(fileName.data()));
 		stopLogging(nullptr); // code coverage stuff.. this shouldn't affect the next line.
-		assertGreaterThan(puts(fileString.data()), 0);
+		assertGreaterThan(puts(fileString.data()), -1);
 		stopLogging(logFile);
 		stopLogging(logFile); // code coverage stuff.. this should be harmless.
 		const auto file = fopen(fileName.data(), "r");
