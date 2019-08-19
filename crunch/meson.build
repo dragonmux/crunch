@@ -9,7 +9,7 @@ libCrunch = shared_library(
 	'libcrunch',
 	libCrunchSrc,
 	name_prefix: '',
-	cpp_args: libArgs,
+	c_args: libArgs,
 	dependencies: [threading],
 	version: meson.project_version(),
 	install: true
