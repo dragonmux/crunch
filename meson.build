@@ -21,6 +21,7 @@ buildType = get_option('buildtype')
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
 isWindows = target_machine.system() == 'windows'
+dl = cxx.find_library('dl', required: not isWindows)
 
 if ['gcc', 'clang'].contains(cc.get_id())
 	add_project_arguments('-Wall', '-Wextra', '-pedantic', language: 'c')

@@ -1,5 +1,3 @@
-dl = cc.find_library('dl', required: not isWindows)
-
 libCrunchSrc = [
 	'ArgsParser.c', 'Memory.c', 'StringFuncs.c', 'Logger.c', 'Core.c'
 ]
