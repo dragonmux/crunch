@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013-2017 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2019 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <pthread.h>
+#include <threads.h>
 #include <crunch.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -58,28 +58,20 @@ double genDbl()
 }
 
 /* Internal sacrificial thread for testing when assertions fail. */
-void *goatThread(void *test)
-	{ ((failFn_t)test)(); return NULL; }
+int goatThread(void *test)
+	{ ((failFn_t)test)(); return 0; }
 
 void tryShouldFail(const failFn_t test)
 {
-	int *retVal;
-	pthread_t testThread;
-	pthread_attr_t threadAttrs;
+	int retVal;
+	thrd_t testThread;
 
-	pthread_attr_init(&threadAttrs);
-	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
-	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);
-	pthread_create(&testThread, &threadAttrs, goatThread, test);
-	pthread_join(testThread, (void **)&retVal);
-	if (retVal == &errAbort)
-		assertIntEqual(*retVal, 2);
-	else
-	{
-		assertNotNull(retVal);
-		assertIntEqual(*retVal, 1);
+	thrd_create(&testThread, goatThread, test);
+	thrd_join(testThread, &retVal);
+	assertGreaterThan(retVal, 0);
+	assertLessThan(retVal, 3);
+	if (retVal == 1)
 		--failures;
-	}
 }
 
 void testAssertTrue1() { assertTrue(FALSE); }

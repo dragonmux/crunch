@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2019 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,7 +33,6 @@
 #include <io.h>
 #endif
 
-static const int ok = 0;
 const arg_t crunchArgs[] =
 {
 	{"--log", 1, 1, 0},
@@ -64,16 +63,16 @@ void newline()
 #endif
 }
 
-void *testRunner(void *self)
+int testRunner(void *testPtr)
 {
-	unitTest *test = (unitTest *)self;
+	test *theTest = testPtr;
 	if (isTTY != 0)
 #ifndef _MSC_VER
 		testPrintf(INFO);
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
-	testPrintf("%s...", test->theTest->testName);
+	testPrintf("%s...", theTest->testName);
 	if (isTTY != 0)
 #ifndef _MSC_VER
 		testPrintf(NEWLINE);
@@ -82,13 +81,13 @@ void *testRunner(void *self)
 #endif
 	else
 		testPrintf(" ");
-	test->theTest->testFunc();
+	theTest->testFunc();
 	// Did the test switch logging on?
 	if (!loggingTests && logger)
 		// Yes, switch it back off again
 		stopLogging(logger);
 	logResult(RESULT_SUCCESS, "");
-	pthreadExit(&ok);
+	return 0;
 }
 
 void printStats()
@@ -143,20 +142,16 @@ uint8_t tryRegistration(void *testSuit)
 
 int runTests()
 {
-	pthread_attr_t threadAttrs;
 	uint32_t i;
 	test *currTest;
 	testLog *logFile = NULL;
 
 	constParsedArg_t logging = findArg(parsedArgs, "--log", NULL);
-	if (logging != NULL)
+	if (logging)
 	{
 		logFile = startLogging(logging->params[0]);
 		loggingTests = 1;
 	}
-	pthread_attr_init(&threadAttrs);
-	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
-	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);
 
 	for (i = 0; i < numTests; i++)
 	{
@@ -204,25 +199,20 @@ int runTests()
 		else
 			testPrintf("\n");
 		currTest = tests;
-		while (currTest->testFunc != NULL)
+		while (currTest->testFunc)
 		{
-			int *retVal;
-			unitTest *test = testMalloc(sizeof(unitTest));
-			test->theTest = currTest;
-			pthread_create(&test->testThread, &threadAttrs, testRunner, test);
-			pthread_join(test->testThread, (void **)&retVal);
-			free(test);
-			if (retVal == &errAbort)
-				return 1;
-			else if (retVal == NULL || *retVal == 2)
-				return 2;
-			currTest++;
+			int retVal = 2;
+			thrd_t testThread;
+			thrd_create(&testThread, testRunner, currTest);
+			thrd_join(testThread, &retVal);
+			if (retVal)
+				return retVal;
+			++currTest;
 		}
 	}
 
-	pthread_attr_destroy(&threadAttrs);
 	printStats();
-	if (logging != NULL)
+	if (logging)
 		stopLogging(logFile);
 	return 0;
 }

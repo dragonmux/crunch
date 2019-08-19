@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2019 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,23 +25,12 @@
 #define NORETURN(def) def __attribute((noreturn))
 #endif
 
-#include <pthread.h>
+#include <threads.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include "crunch.h"
 
 CRUNCH_API NORETURN(void libDebugExit(int num));
-
 CRUNCH_API uint32_t passes, failures;
-
-#define pthreadExit(val) \
-	pthread_exit((void *)val); \
-	exit(*val)
-
-typedef struct _unitTest
-{
-	pthread_t testThread;
-	test *theTest;
-} unitTest;
 
 #endif /* __CORE_H__ */

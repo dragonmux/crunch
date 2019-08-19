@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2019 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -130,7 +130,7 @@ void echoAborted()
 		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
 		printAborted();
-	pthreadExit(&errAbort);
+	thrd_exit(errAbort);
 }
 #else
 void echoOk()
@@ -194,7 +194,7 @@ void echoAborted()
 	}
 	else
 		printAborted();
-	pthreadExit(&errAbort);
+	thrd_exit(errAbort);
 }
 #endif
 
