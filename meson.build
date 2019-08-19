@@ -2,7 +2,7 @@ project(
 	'crunch',
 	['c', 'cpp'],
 	default_options: [
-		'c_std=c99',
+		'c_std=c11',
 		'cpp_std=c++11',
 		'warning_level=3',
 		'b_pch=false',
