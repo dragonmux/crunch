@@ -25,7 +25,7 @@
 #define NORETURN(def) def __attribute((noreturn))
 #endif
 
-#include <threads.h>
+#include "threading/threadShim.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include "crunch.h"

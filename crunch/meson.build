@@ -5,11 +5,18 @@ crunchSrc = ['crunch.c']
 crunchSrcDir = meson.current_source_dir()
 crunchInc = include_directories('.')
 
+threadArgs = []
+if cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
+	threadArgs += ['-DUSE_C11_THREADING']
+else
+	libCrunchSrc += ['threading/threadShim.c']
+endif
+
 libCrunch = shared_library(
 	'libcrunch',
 	libCrunchSrc,
 	name_prefix: '',
-	c_args: libArgs,
+	c_args: libArgs + threadArgs,
 	dependencies: [threading],
 	version: meson.project_version(),
 	install: true
