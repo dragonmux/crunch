@@ -129,6 +129,7 @@ clean:
 	$(call run-cmd,ccld,$(OUT_LFLAGS))
 	$(call debug-strip,$(OUT_STRIP) $@)
 
+threading/threadShim.o: EXTRA_CFLAGS += -I.
 .c.o:
 	$(call run-cmd,cc,$(CFLAGS))
 
