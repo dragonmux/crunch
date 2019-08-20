@@ -63,7 +63,7 @@ int goatThread(void *test)
 
 void tryShouldFail(const failFn_t test)
 {
-	int retVal;
+	int retVal = 0;
 	thrd_t testThread;
 
 	thrd_create(&testThread, goatThread, test);

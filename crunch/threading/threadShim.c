@@ -27,7 +27,7 @@ int thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
 	pthread_attr_init(&threadAttrs);
 	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
 	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);
-	const int result = pthread_create(thr, &threadAttrs, (pthread_start_t)(void *)func, arg);
+	const int result = pthread_create(thr, &threadAttrs, (pthread_start_t)func, arg);
 	pthread_attr_destroy(&threadAttrs);
 	return thrd_err_map(result);
 }
