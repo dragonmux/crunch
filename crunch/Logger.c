@@ -68,7 +68,7 @@ int getColumns()
 	return (win.ws_col == 0 ? 80 : win.ws_col);
 }
 #else
-int getColumns()
+uint16_t getColumns()
 {
 	CONSOLE_SCREEN_BUFFER_INFO window;
 	GetConsoleScreenBufferInfo(console, &window);
