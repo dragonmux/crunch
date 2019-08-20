@@ -16,7 +16,7 @@
 
 include ../Makefile.inc
 
-EXTRA_CFLAGS = -Wall -Wextra -pedantic -pthread -std=gnu99
+EXTRA_CFLAGS = -Wall -Wextra -pedantic -pthread -std=c11 -I.
 CFLAGS = -c $(OPTIM_FLAGS) $(EXTRA_CFLAGS) -D__crunch_lib__ -o $@ $<
 LIBS = $(shell pkg-config --libs crunch) $(EXTRA_LIBS)
 ifneq ($(MAC), 1)
@@ -129,7 +129,6 @@ clean:
 	$(call run-cmd,ccld,$(OUT_LFLAGS))
 	$(call debug-strip,$(OUT_STRIP) $@)
 
-threading/threadShim.o: EXTRA_CFLAGS += -I.
 .c.o:
 	$(call run-cmd,cc,$(CFLAGS))
 
