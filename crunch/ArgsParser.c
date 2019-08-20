@@ -78,7 +78,7 @@ uint8_t freeParsedArg(parsedArg_t *parsedArg)
 	{
 		for (uint32_t i = 0; i < parsedArg->paramsFound; ++i)
 			free((void *)parsedArg->params[i]);
-		free(parsedArg->params);
+		free((void *)parsedArg->params);
 	}
 	free((void *)parsedArg->value);
 	free(parsedArg);
