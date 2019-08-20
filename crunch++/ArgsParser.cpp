@@ -71,14 +71,14 @@ bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toChec
 }
 
 uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos,
-	const arg_t &argument, const arg_t *const args) noexcept
+	const arg_t &argument, const arg_t *const args_) noexcept
 {
 	uint32_t n = 0;
 	const uint32_t min = argument.numMinParams, max = argument.numMaxParams;
 	bool eoa = false;
 	for (uint32_t i = argPos; i < argc && n < max && !eoa; ++i)
 	{
-		const arg_t *currArg = args;
+		const arg_t *currArg = args_;
 		while (!currArg->value.empty() && !eoa)
 		{
 			if (currArg->matches(argv[i]))
@@ -162,11 +162,11 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) 
 catch (std::bad_alloc &)
 	{ return {}; }
 
-const parsedArg_t *findArg(const parsedArgs_t &args, const char *const value, const parsedArg_t *defaultValue)
+const parsedArg_t *findArg(const parsedArgs_t &args_, const char *const value, const parsedArg_t *defaultValue)
 {
-	if (args.empty() || !value)
+	if (args_.empty() || !value)
 		return defaultValue;
-	for (const auto &arg : args)
+	for (const auto &arg : args_)
 	{
 		if (arg.matches(value))
 			return &arg;
