@@ -47,14 +47,15 @@ uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *cons
 	return FALSE;
 }
 
-uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t *const argument, const arg_t *const args)
+uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos,
+	const arg_t *const argument, const arg_t *const args_)
 {
 	uint32_t n = 0;
 	const uint32_t min = argument->numMinParams, max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
 	for (uint32_t i = argPos; i < argc && n < max && !eoa; ++i)
 	{
-		const arg_t *currArg = args;
+		const arg_t *currArg = args_;
 		while (currArg->value != NULL && !eoa)
 		{
 			if (strcmp(currArg->value, argv[i]) == 0)
@@ -178,15 +179,15 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	return result;
 }
 
-constParsedArg_t findArg(constParsedArg_t *const args, const char *const value, const constParsedArg_t defaultVal)
+constParsedArg_t findArg(constParsedArg_t *const args_, const char *const value, const constParsedArg_t defaultVal)
 {
-	if (!args || !value)
+	if (!args_ || !value)
 		return defaultVal;
-	for (uint32_t n = 0; args[n] != NULL; n++)
+	for (uint32_t n = 0; args_[n] != NULL; n++)
 	{
-		if (strcmp(args[n]->value, value) == 0 || ((args[n]->flags & ARG_INCOMPLETE) &&
-			strncmp(args[n]->value, value, strlen(value)) == 0))
-			return args[n];
+		if (strcmp(args_[n]->value, value) == 0 || ((args_[n]->flags & ARG_INCOMPLETE) &&
+			strncmp(args_[n]->value, value, strlen(value)) == 0))
+			return args_[n];
 	}
 	return defaultVal;
 }
