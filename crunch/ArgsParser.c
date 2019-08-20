@@ -91,7 +91,7 @@ void *freeParsedArgs(parsedArgs_t parsedArgs)
 		return NULL;
 	for (uint32_t i = 0; parsedArgs[i]; ++i)
 		freeParsedArg((void *)parsedArgs[i]);
-	free(parsedArgs);
+	free((void *)parsedArgs);
 	return NULL;
 }
 
@@ -103,7 +103,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	parsedArgs_t ret = malloc(sizeof(constParsedArg_t) * argc);
 	if (!ret)
 		return NULL;
-	memset(ret, 0, sizeof(constParsedArg_t) * argc);
+	memset((void *)ret, 0, sizeof(constParsedArg_t) * argc);
 	uint32_t n = 0;
 	for (uint32_t i = 1; i < argc; i++)
 	{
@@ -138,7 +138,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
 					if (!argRet->params)
 						return freeParsedArg(argRet), freeParsedArgs(ret);
-					memset(argRet->params, 0, sizeof(char *) * argRet->paramsFound);
+					memset((void *)argRet->params, 0, sizeof(char *) * argRet->paramsFound);
 					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
 					{
 						argRet->params[j] = strdup(argv[i + j + 1]);
@@ -173,8 +173,8 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	parsedArgs_t result = malloc(sizeof(constParsedArg_t) * (n + 1));
 	if (!result)
 		return freeParsedArgs(ret);
-	memcpy(result, ret, sizeof(constParsedArg_t *) * n);
-	free(ret);
+	memcpy((void *)result, ret, sizeof(constParsedArg_t *) * n);
+	free((void *)ret);
 	result[n] = NULL;
 	return result;
 }
