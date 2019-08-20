@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include "crunch.h"
 
-CRUNCH_API NORETURN(void libDebugExit(int num));
 CRUNCH_API uint32_t passes, failures;
 
 enum

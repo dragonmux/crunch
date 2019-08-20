@@ -220,9 +220,3 @@ void assertLessThan(long result, long expected)
 		thrd_exit(THREAD_ERROR);
 	}
 }
-
-void libDebugExit(int num)
-{
-	/* This will change yet. */
-	exit(num);
-}
