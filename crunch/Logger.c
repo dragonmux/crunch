@@ -37,7 +37,7 @@
 #ifndef _MSC_VER
 #define COL(val) val - 8
 #else
-#define COL(val) val - 9
+#define COL(val) (uint16_t)(val - 9)
 #endif
 #define WCOL(val) val - 2
 
