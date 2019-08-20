@@ -19,12 +19,6 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
-#ifdef _MSC_VER
-#define NORETURN(def) __declspec(noreturn) def
-#else
-#define NORETURN(def) def __attribute((noreturn))
-#endif
-
 #include "threading/threadShim.h"
 #include <stdint.h>
 #include <stdlib.h>

@@ -1,4 +1,6 @@
 #include "threadShim.h"
+
+#ifndef _WINDOWS
 #include <errno.h>
 #include <stdint.h>
 
@@ -42,3 +44,44 @@ int thrd_join(thrd_t thr, int *res)
 }
 
 void thrd_exit(int res) { pthread_exit((void *)(uintptr_t)res); }
+#else
+int thrd_get_error()
+{
+	const DWORD lastError = GetLastError();
+	switch (result)
+	{
+		case ERROR_SUCCESS:
+			return thrd_success;
+		case ERROR_OUTOFMEMORY:
+			return thrd_nomem;
+		case WAIT_TIMEOUT:
+			return thrd_timedout;
+		case ERROR_BUSY:
+			return thrd_busy;
+		default:
+			return thrd_error;
+	}
+}
+
+int thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
+{
+	*thr = CreateThread(NULL, 0, func, arg, 0, NULL);
+	return thrd_get_error();
+}
+
+int thrd_join(thrd_t thr, int *res)
+{
+	DWORD result = WaitForSingleObject(thr, INFINITE);
+	if (result)
+	{
+		if (result == WAIT_TIMEOUT)
+			return thrd_timedout;
+		return thrd_get_error();
+	}
+	if (GetExitCodeThread(thr, &result) && res)
+		*res = result;
+	return thrd_get_error();
+}
+
+void thrd_exit(int res) { ExitThread(res); }
+#endif
