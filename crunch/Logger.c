@@ -57,7 +57,6 @@ struct testLog
 	int fd;
 };
 
-const int errAbort = 2;
 testLog *logger = NULL;
 uint8_t isTTY = 1;
 
@@ -130,7 +129,7 @@ void echoAborted()
 		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
 	else
 		printAborted();
-	thrd_exit(errAbort);
+	thrd_exit(THREAD_ABORT);
 }
 #else
 void echoOk()
@@ -194,7 +193,7 @@ void echoAborted()
 	}
 	else
 		printAborted();
-	thrd_exit(errAbort);
+	thrd_exit(THREAD_ABORT);
 }
 #endif
 

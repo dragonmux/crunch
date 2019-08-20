@@ -33,4 +33,11 @@
 CRUNCH_API NORETURN(void libDebugExit(int num));
 CRUNCH_API uint32_t passes, failures;
 
+enum
+{
+	THREAD_SUCCESS = 0,
+	THREAD_ERROR = 1,
+	THREAD_ABORT = 2
+};
+
 #endif /* __CORE_H__ */

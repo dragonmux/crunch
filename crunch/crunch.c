@@ -87,7 +87,7 @@ int testRunner(void *testPtr)
 		// Yes, switch it back off again
 		stopLogging(logger);
 	logResult(RESULT_SUCCESS, "");
-	return 0;
+	return THREAD_SUCCESS;
 }
 
 void printStats()
@@ -201,11 +201,11 @@ int runTests()
 		currTest = tests;
 		while (currTest->testFunc)
 		{
-			int retVal = 2;
+			int retVal = THREAD_ABORT;
 			thrd_t testThread;
 			thrd_create(&testThread, testRunner, currTest);
 			thrd_join(testThread, &retVal);
-			if (retVal)
+			if (retVal != THREAD_SUCCESS)
 				return retVal;
 			++currTest;
 		}
@@ -214,7 +214,7 @@ int runTests()
 	printStats();
 	if (logging)
 		stopLogging(logFile);
-	return 0;
+	return THREAD_SUCCESS;
 }
 
 #ifdef _WINDOWS
@@ -254,7 +254,7 @@ int main(int argc, char **argv)
 	free(namedTests);
 	free((void *)workingDir);
 	callFreeParsedArgs();
-	if (result)
-		return result == 1 ? 0 : 2;
+	if (result != THREAD_SUCCESS)
+		return result == THREAD_ERROR ? 0 : 2;
 	return failures == 0 ? 0 : 1;
 }
