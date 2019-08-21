@@ -19,7 +19,7 @@
 #ifndef __STRINGFUNCS_H__
 #define __STRINGFUNCS_H__
 
-#include <inttypes.h>
+#include <stdint.h>
 #include "crunch.h"
 
 CRUNCH_API const char *boolToString(uint8_t value);

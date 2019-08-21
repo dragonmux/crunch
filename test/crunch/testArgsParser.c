@@ -20,6 +20,7 @@
 #include "ArgsParser.h"
 #include <stdlib.h>
 #include <memory.h>
+#include <string.h>
 #include "StringFuncs.h"
 
 #define nullptr (void *)0
