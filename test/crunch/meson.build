@@ -11,7 +11,7 @@ foreach test : libCrunchTests
 		'crunch-' + test,
 		command: command,
 		input: test + '.c',
-		output: test + '.so',
+		output: test + testExt,
 		depends: libCrunch,
 		build_by_default: true
 	)
