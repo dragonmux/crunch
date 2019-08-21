@@ -272,7 +272,7 @@ int main(int argc, char **argv)
 		printf("Error: could not grab console!");
 		return 1;
 	}
-	isTTY = isatty(fileno(stdout));
+	isTTY = (uint8_t)isatty(fileno(stdout));
 #endif
 	const int result = runTests();
 	free((void *)namedTests);
