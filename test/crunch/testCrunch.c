@@ -46,7 +46,7 @@ const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 void *genPtr()
 {
 #if defined(_M_X64) || defined(__X86_64__)
-	return ((void *)((uintptr_t)rand() << 32)) | ((void *)(uintptr_t)rand());
+	return (void *)(((uintptr_t)rand() << 32) | (uintptr_t)rand());
 #else
 	return (void *)(uintptr_t)rand();
 #endif
