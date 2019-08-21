@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 	isTTY = isatty(fileno(stdout));
 #endif
 	const int result = runTests();
-	free(namedTests);
+	free((void *)namedTests);
 	free((void *)workingDir);
 	callFreeParsedArgs();
 	if (result != THREAD_SUCCESS)
