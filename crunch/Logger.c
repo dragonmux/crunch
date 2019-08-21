@@ -76,7 +76,7 @@ uint16_t getColumns()
 #endif
 
 size_t vaTestPrintf(const char *format, va_list args)
-	{ return vfprintf(logger ? logger->stdout : stdout, format, args); }
+	{ return vfprintf(logger ? logger->stdout_ : stdout, format, args); }
 
 size_t testPrintf(const char *format, ...)
 {
