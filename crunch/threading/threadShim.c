@@ -25,6 +25,8 @@ int thrd_err_map(const int result)
 
 int thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
 {
+	if (!thr)
+		return thrd_error;
 	pthread_attr_t threadAttrs;
 	pthread_attr_init(&threadAttrs);
 	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
@@ -65,6 +67,8 @@ int thrd_get_error()
 
 int thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
 {
+	if (!thr)
+		return thrd_error;
 	*thr = CreateThread(NULL, 0, func, arg, 0, NULL);
 	return thrd_get_error();
 }
