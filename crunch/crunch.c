@@ -33,8 +33,8 @@
 #include <io.h>
 #define RTLD_LAZY 0
 #define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
-#define dlsym(handle, symbol) GetProcAddress(HMODULE(handle), symbol)
-#define dlclose(handle) FreeLibrary(HMODULE(handle))
+#define dlsym(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
+#define dlclose(handle) FreeLibrary((HMODULE)handle)
 
 char *dlerror()
 {
@@ -42,7 +42,7 @@ char *dlerror()
 	char *message;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
 		FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error, MAKELANGID(LANG_NEUTRAL,
-		SUBLANG_DEFAULT), &message, 0, NULL);
+		SUBLANG_DEFAULT), (char *)&message, 0, NULL);
 	return message;
 }
 
