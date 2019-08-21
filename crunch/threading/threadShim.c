@@ -47,6 +47,12 @@ int thrd_join(thrd_t thr, int *res)
 
 void thrd_exit(int res) { pthread_exit((void *)(uintptr_t)res); }
 #else
+typedef struct
+{
+	thrd_start_t func;
+	void *arg;
+} thrd_params_t;
+
 int thrd_get_error()
 {
 	const DWORD lastError = GetLastError();
@@ -65,11 +71,27 @@ int thrd_get_error()
 	}
 }
 
+DWORD WINAPI thrd_start(void *paramsPtr)
+{
+	thrd_params_t *params = paramsPtr;
+	thrd_start_t func = params->func;
+	void *arg = params->arg;
+	free(params);
+	return (*func)(arg);
+}
+
 int thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
 {
 	if (!thr)
 		return thrd_error;
-	*thr = CreateThread(NULL, 0, func, arg, 0, NULL);
+	thrd_params_t *params = malloc(sizeof(thrd_params_t));
+	if (!params)
+		return thrd_nomem;
+	params->func = func;
+	params->arg = arg;
+	*thr = CreateThread(NULL, 0, thrd_start, params, CREATE_SUSPENDED, NULL);
+	if (*thr)
+		ResumeThread(*thr);
 	return thrd_get_error();
 }
 
