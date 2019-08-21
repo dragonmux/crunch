@@ -38,11 +38,11 @@
 
 char *dlerror()
 {
-	const auto error = GetLastError();
+	const DWORD error = GetLastError();
 	char *message;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL,
-		SUBLANG_DEFAULT), reinterpret_cast<char *>(&message), 0, nullptr);
+		FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error, MAKELANGID(LANG_NEUTRAL,
+		SUBLANG_DEFAULT), &message, 0, NULL);
 	return message;
 }
 
