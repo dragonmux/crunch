@@ -44,7 +44,6 @@
 #ifdef _MSC_VER
 	#define TTY	"CON"
 HANDLE console;
-FILE *stdout;
 #else
 	#define TTY	"/dev/tty"
 #endif
@@ -52,7 +51,7 @@ FILE *stdout;
 struct testLog
 {
 	FILE *file;
-	FILE *stdout;
+	FILE *stdout_;
 	FILE *realStdout;
 	int fd;
 };
@@ -243,7 +242,7 @@ testLog *startLogging(const char *fileName)
 #endif
 	stdout = logger_->file;
 	logger = logger_;
-	logger_->stdout = fdopen(logger_->fd, "w");
+	logger_->stdout_ = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
@@ -268,7 +267,7 @@ void stopLogging(testLog *logger_)
 #endif
 	stdout = logger_->realStdout;
 	logger = NULL;
-	fclose(logger_->stdout);
+	fclose(logger_->stdout_);
 	fclose(logger_->file);
 	free(logger_);
 }
