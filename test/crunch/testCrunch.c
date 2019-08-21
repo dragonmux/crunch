@@ -46,9 +46,9 @@ const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 void *genPtr()
 {
 #if defined(_M_X64) || defined(__X86_64__)
-	return (((void *)(long)rand()) << 32) | ((void *)(long)rand());
+	return ((void *)((uintptr_t)rand() << 32)) | ((void *)(uintptr_t)rand());
 #else
-	return (void *)(long)rand();
+	return (void *)(uintptr_t)rand();
 #endif
 }
 
@@ -279,7 +279,7 @@ void testLogging()
 	stopLogging(logFile); // code coverage stuff.. this should be harmless.
 	FILE *const file = fopen(fileName, "r");
 	assertNotNull(file);
-	struct stat fileStat = {};
+	struct stat fileStat;
 	assertIntEqual(fstat(fileno(file), &fileStat), 0);
 	assertGreaterThan(fileStat.st_size, strlen(fileString));
 	for (size_t i = 0; i < strlen(fileString); ++i)
