@@ -23,14 +23,29 @@
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "Memory.h"
-#include <dlfcn.h>
 #ifndef _MSC_VER
+#include <dlfcn.h>
 #include <unistd.h>
 #else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <direct.h>
 #include <io.h>
+#define RTLD_LAZY 0
+#define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
+#define dlsym(handle, symbol) GetProcAddress(HMODULE(handle), symbol)
+#define dlclose(handle) FreeLibrary(HMODULE(handle))
+
+char *dlerror()
+{
+	const auto error = GetLastError();
+	char *message;
+	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL,
+		SUBLANG_DEFAULT), reinterpret_cast<char *>(&message), 0, nullptr);
+	return message;
+}
+
 #endif
 
 const arg_t crunchArgs[] =
