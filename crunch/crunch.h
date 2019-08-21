@@ -62,10 +62,6 @@
 
 #include <inttypes.h>
 #include <stdio.h>
-#if defined(stdout) && !defined(__MACOS__)
-#undef stdout
-CRUNCH_API FILE *stdout;
-#endif
 
 typedef struct _test
 {
