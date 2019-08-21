@@ -234,8 +234,16 @@ int runTests()
 }
 
 #ifdef _WINDOWS
+#define UNUSED(x) (void)x
 void invalidHandler(const wchar_t *expr, const wchar_t *func, const wchar_t *file,
-	const uint32_t line, const uintptr_t res) { }
+	const uint32_t line, const uintptr_t res)
+{
+	UNUSED(expr);
+	UNUSED(func);
+	UNUSED(file);
+	UNUSED(line);
+	UNUSED(res);
+}
 #endif
 
 void callFreeParsedArgs() { parsedArgs = freeParsedArgs(parsedArgs); }
