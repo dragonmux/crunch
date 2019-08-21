@@ -47,6 +47,8 @@ int thrd_join(thrd_t thr, int *res)
 
 void thrd_exit(int res) { pthread_exit((void *)(uintptr_t)res); }
 #else
+#include <stdlib.h>
+
 typedef struct
 {
 	thrd_start_t func;
