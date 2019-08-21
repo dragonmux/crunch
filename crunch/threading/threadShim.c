@@ -48,7 +48,7 @@ void thrd_exit(int res) { pthread_exit((void *)(uintptr_t)res); }
 int thrd_get_error()
 {
 	const DWORD lastError = GetLastError();
-	switch (result)
+	switch (lastError)
 	{
 		case ERROR_SUCCESS:
 			return thrd_success;
