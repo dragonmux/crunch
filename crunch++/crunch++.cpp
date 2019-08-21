@@ -45,6 +45,7 @@ char *dlerror()
 	return message;
 }
 
+#include <crtdbg.h>
 #endif
 #include <exception>
 #include <stdlib.h>

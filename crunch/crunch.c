@@ -46,6 +46,7 @@ char *dlerror()
 	return message;
 }
 
+#include <crtdbg.h>
 #endif
 
 const arg_t crunchArgs[] =
