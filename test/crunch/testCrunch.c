@@ -242,7 +242,7 @@ void testAssertGreaterThan()
 {
 	srand(time(NULL));
 	do
-		value = (long)genPtr();
+		value = (long)(uintptr_t)genPtr();
 	while (ptr == NULL);
 	assertGreaterThan(value, 0);
 	tryShouldFail(testAssertGreaterThan1);
@@ -255,7 +255,7 @@ void testAssertLessThan()
 {
 	srand(time(NULL));
 	do
-		value = (long)genPtr();
+		value = (long)(uintptr_t)genPtr();
 	while (ptr == NULL);
 	assertLessThan(0, value);
 	tryShouldFail(testAssertLessThan1);
