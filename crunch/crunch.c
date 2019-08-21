@@ -132,12 +132,12 @@ uint8_t getTests()
 	}
 	if (j == 0)
 	{
-		free(namedTests);
+		free((void *)namedTests);
 		return FALSE;
 	}
 	else
 	{
-		namedTests = testRealloc(namedTests, sizeof(parsedArg_t *) * (j + 1));
+		namedTests = testRealloc((void *)namedTests, sizeof(parsedArg_t *) * (j + 1));
 		numTests = j;
 		return TRUE;
 	}
