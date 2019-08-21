@@ -30,13 +30,13 @@ void testNull()
 	const char *argv[2] = {"test", "--dummy"};
 
 	registerArgs(nullptr);
-	assertNull(parseArguments(0, nullptr));
-	assertNull(parseArguments(1, nullptr));
-	assertNull(parseArguments(2, nullptr));
-	assertNull(parseArguments(1, argv));
-	assertNull(parseArguments(2, argv));
-	assertNull(parseArguments((uint32_t)-1, nullptr));
-	assertNull(parseArguments((uint32_t)-1, argv));
+	assertConstNull(parseArguments(0, nullptr));
+	assertConstNull(parseArguments(1, nullptr));
+	assertConstNull(parseArguments(2, nullptr));
+	assertConstNull(parseArguments(1, argv));
+	assertConstNull(parseArguments(2, argv));
+	assertConstNull(parseArguments((uint32_t)-1, nullptr));
+	assertConstNull(parseArguments((uint32_t)-1, argv));
 }
 
 void testEmpty()
@@ -52,7 +52,7 @@ void testEmpty()
 	assertStringEqual(parsedArgs[0]->value, "--dummy");
 	assertIntEqual(parsedArgs[0]->paramsFound, 0);
 	assertIntEqual(parsedArgs[0]->flags, 0);
-	assertNull(parsedArgs[0]->params);
+	assertConstNull(parsedArgs[0]->params);
 	freeParsedArgs(parsedArgs);
 }
 
@@ -81,7 +81,7 @@ void testIncomplete()
 	assertStringEqual(parsedArgs[0]->value, "--arg=");
 	assertIntEqual(parsedArgs[0]->paramsFound, 0);
 	assertIntEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
-	assertNull(parsedArgs[0]->params);
+	assertConstNull(parsedArgs[0]->params);
 	freeParsedArgs(parsedArgs);
 
 	parsedArgs = parseArguments(2, argv_2);
@@ -90,13 +90,13 @@ void testIncomplete()
 	assertConstNotNull(parsedArgs[0]->value);
 	assertStringEqual(parsedArgs[0]->value, "--arg=test");
 	assertIntEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
-	assertNull(parsedArgs[0]->params);
+	assertConstNull(parsedArgs[0]->params);
 	freeParsedArgs(parsedArgs);
 
 	startLogging("/dev/null");
 	registerArgs(args_2);
-	assertNull(parseArguments(2, argv_1));
-	assertNull(parseArguments(2, argv_2));
+	assertConstNull(parseArguments(2, argv_1));
+	assertConstNull(parseArguments(2, argv_2));
 }
 
 void testInvalid()
@@ -120,7 +120,7 @@ void testInvalid()
 	assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
 	free((void *)parsedArg->value);
 	free(parsedArg);
-	free(parsedArgs);
+	free((void *)parsedArgs);
 
 	assertConstNull(findArg(nullptr, "", nullptr));
 
@@ -151,7 +151,7 @@ void testArgCounting()
 	assertIntEqual(checkParams(5, argv_2, 2, &args[0], args), 2);
 
 	parsedArgs = parseArguments(5, argv_1);
-	assertNull(parsedArgs);
+	assertConstNull(parsedArgs);
 
 	parsedArgs = parseArguments(5, argv_2);
 	assertConstNotNull(parsedArgs);
