@@ -46,7 +46,7 @@ HANDLE console;
 struct testLog
 {
 	FILE *file;
-	FILE *stdout;
+	FILE *stdout_;
 	FILE *realStdout;
 	int fd;
 };
@@ -69,8 +69,8 @@ int getColumns()
 
 size_t vaTestPrintf(const char *format, va_list args)
 {
-	const auto ret = vfprintf(logger ? logger->stdout : stdout, format, args);
-	fflush(logger ? logger->stdout : stdout);
+	const auto ret = vfprintf(logger ? logger->stdout_ : stdout, format, args);
+	fflush(logger ? logger->stdout_ : stdout);
 	return ret;
 }
 
@@ -261,7 +261,7 @@ testLog *startLogging(const char *fileName)
 	logger_->fd = dup(fileno(stdout));
 #endif
 	logger = logger_.get();
-	logger_->stdout = fdopen(logger_->fd, "w");
+	logger_->stdout_ = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
@@ -287,6 +287,6 @@ void stopLogging(testLog *loggerPtr)
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
 	logger = nullptr;
-	fclose(logger_->stdout);
+	fclose(logger_->stdout_);
 	fclose(logger_->file);
 }
