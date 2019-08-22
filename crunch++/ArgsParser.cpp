@@ -53,12 +53,7 @@ void parsedArg_t::swap(parsedArg_t &arg) noexcept
 }
 
 void registerArgs(const arg_t *allowedArgs) noexcept
-{
-	args = allowedArgs;
-#ifdef _MSC_VER
-	stdout = __acrt_iob_func(1);
-#endif
-}
+	{ args = allowedArgs; }
 
 bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept
 {
