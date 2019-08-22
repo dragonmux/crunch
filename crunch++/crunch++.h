@@ -43,11 +43,6 @@
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 	#define CRUNCH_MAYBE_VIS
 	#define CRUNCHpp_TEST	extern "C" CRUNCH_EXPORT
-
-	#ifdef stdout
-	#undef stdout
-	CRUNCH_API FILE *stdout;
-	#endif
 #else
 	#if __GNUC__ >= 4
 		#define CRUNCH_VIS __attribute__ ((visibility("default")))

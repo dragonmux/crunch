@@ -39,7 +39,6 @@
 #ifdef _MSC_VER
 	#define TTY	"CON"
 HANDLE console;
-FILE *stdout;
 #else
 	#define TTY	"/dev/tty"
 #endif
@@ -257,10 +256,10 @@ testLog *startLogging(const char *fileName)
 	logger_->realStdout = stdout;
 #ifndef _MSC_VER
 	logger_->fd = dup(STDOUT_FILENO);
+	stdout = logger_->file;
 #else
 	logger_->fd = dup(fileno(stdout));
 #endif
-	stdout = logger_->file;
 	logger = logger_.get();
 	logger_->stdout = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
@@ -282,11 +281,11 @@ void stopLogging(testLog *loggerPtr)
 #ifndef _MSC_VER
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);
+	stdout = logger_->realStdout;
 #else
 	dup2(logger_->fd, fileno(logger_->realStdout));
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
-	stdout = logger_->realStdout;
 	logger = nullptr;
 	fclose(logger_->stdout);
 	fclose(logger_->file);
