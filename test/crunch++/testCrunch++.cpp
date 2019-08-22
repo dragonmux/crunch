@@ -329,7 +329,6 @@ private:
 		assertGreaterThan(puts(fileString.data()), -1);
 		stopLogging(logFile);
 		stopLogging(logFile); // code coverage stuff.. this should be harmless.
-#ifndef _WINDOWS
 		const auto file = fopen(fileName.data(), "r");
 		assertNotNull(file);
 		struct stat fileStat{};
@@ -345,7 +344,6 @@ private:
 		// the logic to do so is narly, and having checked the line itself made it,
 		// it seems like there's very little point.
 		assertEqual(fclose(file), 0);
-#endif
 		assertEqual(unlink(fileName.data()), 0);
 	}
 
