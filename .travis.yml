@@ -248,11 +248,11 @@ matrix:
           packages:
             - gcc-8
             - g++-8
-    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
+    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
       os: windows
-    - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:$PATH
+    - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
       os: windows
-#    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python36/Scripts:/c/Python36:/c/Program Files/LLVM/bin:$PATH" CC=clang CXX=clang++
+#    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:/c/Program Files/LLVM/bin:$PATH" CC=clang CXX=clang++
 #      os: windows
 
 env:
