@@ -5,7 +5,7 @@ set -x
 if [ "$TRAVIS_OS_NAME" == "windows" ]; then
 	wget --progress=dot:mega https://bootstrap.pypa.io/get-pip.py
 	wget --progress=dot:mega https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-win.zip
-	choco install python --version 3.6.8
+	choco install python --version 3.7.4
 	if [ "$CC_" == "clang" ]; then
 		choco upgrade llvm
 	fi
