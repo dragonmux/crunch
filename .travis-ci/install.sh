@@ -9,7 +9,7 @@ if [ "$TRAVIS_OS_NAME" == "windows" ]; then
 	if [ "$CC_" == "clang" ]; then
 		choco upgrade llvm
 	fi
-	python get-pip.py
+	python3 get-pip.py
 	pip3 install meson
 	mkdir /c/tools/ninja-build
 	7z x -oC:\\tools\\ninja-build ninja-win.zip
