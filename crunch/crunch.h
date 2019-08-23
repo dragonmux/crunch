@@ -129,6 +129,7 @@ CRUNCH_API void assertGreaterThan(long result, long expected);
 CRUNCH_API void assertLessThan(long result, long expected);
 
 CRUNCH_API test *tests;
+CRUNCH_API int32_t allocCount;
 
 CRUNCH_API testLog *startLogging(const char *fileName);
 CRUNCH_API void stopLogging(testLog *logFile);

@@ -24,6 +24,7 @@
 
 test *tests;
 uint32_t passes = 0, failures = 0;
+int32_t allocCount = -1;
 
 #define DOUBLE_DELTA	0.0000001
 

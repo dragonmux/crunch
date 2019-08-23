@@ -23,6 +23,7 @@
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #ifndef _MSC_VER
+#define __USE_GNU
 #include <dlfcn.h>
 #include <unistd.h>
 #else
@@ -70,6 +71,18 @@ typedef void (__cdecl *registerFn)();
 
 void noMemory()
 	{ puts("**** crunch Fatal ****\nCould not allocate enough memory!\n**** crunch Fatal ****"); }
+
+#ifndef _WINDOWS
+typedef void *(*malloc_t)(size_t);
+malloc_t malloc_ = NULL;
+
+void *malloc(size_t size)
+{
+	if (allocCount >= 0 && !allocCount--)
+		return NULL;
+	return malloc_(size);
+}
+#endif
 
 void newline()
 {
@@ -271,6 +284,8 @@ int main(int argc, char **argv)
 	_set_invalid_parameter_handler(invalidHandler);
 	_CrtSetReportMode(_CRT_ASSERT, 0);
 	_CrtSetReportMode(_CRT_ERROR, 0);
+#else
+	malloc_ = (malloc_t)dlsym(RTLD_NEXT, "malloc");
 #endif
 	registerArgs(crunchArgs);
 	parsedArgs = parseArguments(argc, (const char **)argv);
