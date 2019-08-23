@@ -52,7 +52,7 @@ TESTS = $(TESTS_NORM) $(TESTS_EXCEPT)
 
 VERMAJ = .0
 VERMIN = .3
-VERREV = .1
+VERREV = .2
 ifneq ($(MAC), 1)
 	SOMAJ = libcrunch++.so
 else

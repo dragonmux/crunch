@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include "Core.h"
 #include "Logger.h"
-#include "Memory.h"
 #ifndef _MSC_VER
 #include <unistd.h>
 #include <sys/ioctl.h>

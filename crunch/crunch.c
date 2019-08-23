@@ -22,7 +22,6 @@
 #include "Logger.h"
 #include "ArgsParser.h"
 #include "StringFuncs.h"
-#include "Memory.h"
 #ifndef _MSC_VER
 #include <dlfcn.h>
 #include <unistd.h>

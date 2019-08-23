@@ -18,9 +18,9 @@
 
 #include "crunch.h"
 #include "StringFuncs.h"
-#include "Memory.h"
 #include <string.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 const char *boolToString(uint8_t value)

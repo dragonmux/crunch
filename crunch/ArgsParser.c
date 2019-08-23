@@ -25,7 +25,6 @@
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "Logger.h"
-#include "Memory.h"
 
 const arg_t *args = NULL;
 

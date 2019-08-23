@@ -1,5 +1,5 @@
 libCrunchSrc = [
-	'ArgsParser.c', 'Memory.c', 'StringFuncs.c', 'Logger.c', 'Core.c'
+	'ArgsParser.c', 'StringFuncs.c', 'Logger.c', 'Core.c'
 ]
 crunchSrc = ['crunch.c']
 crunchSrcDir = meson.current_source_dir()
