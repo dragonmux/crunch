@@ -9,7 +9,7 @@ foreach test : libCrunchppTests
 	if cxx.get_id() != 'msvc'
 		command += ['-z', 'defs']
 	endif
-	if buildType == 'debug'
+	if debug
 		command += ['--debug']
 	endif
 	custom_target(

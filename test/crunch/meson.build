@@ -4,7 +4,7 @@ libCrunchPath = join_paths([meson.build_root(), libCrunch.outdir()])
 
 foreach test : libCrunchTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath]
-	if buildType == 'debug'
+	if debug
 		command += ['--debug']
 	endif
 	custom_target(
