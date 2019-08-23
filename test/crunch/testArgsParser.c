@@ -169,6 +169,7 @@ void testArgCounting()
 	freeParsedArgs(parsedArgs);
 }
 
+#ifndef NO_ALLOC_TEST
 void testAllocs()
 {
 	const arg_t args[3] =
@@ -208,6 +209,7 @@ void testAllocs()
 	assertNull(parseArguments(7, argv));
 	assertIntEqual(allocCount, -1);
 }
+#endif
 
 BEGIN_REGISTER_TESTS()
 	TEST(testNull)
@@ -215,5 +217,7 @@ BEGIN_REGISTER_TESTS()
 	TEST(testIncomplete)
 	TEST(testInvalid)
 	TEST(testArgCounting)
+#ifndef NO_ALLOC_TEST
 	TEST(testAllocs)
+#endif
 END_REGISTER_TESTS()

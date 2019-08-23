@@ -6,6 +6,8 @@ foreach test : libCrunchTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath]
 	if debug
 		command += ['--debug']
+	else
+		command += ['-DNO_ALLOC_TEST']
 	endif
 	custom_target(
 		'crunch-' + test,

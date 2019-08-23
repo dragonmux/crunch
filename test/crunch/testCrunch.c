@@ -308,6 +308,7 @@ void testAbort()
 	tryShouldFail(testAbort1);
 }
 
+#ifndef NO_ALLOC_TEST
 void testAllocs()
 {
 	allocCount = 0;
@@ -317,6 +318,7 @@ void testAllocs()
 	assertNull(startLogging(""));
 	assertIntEqual(allocCount, -1);
 }
+#endif
 
 BEGIN_REGISTER_TESTS()
 	TEST(testAssertTrue)
@@ -338,5 +340,7 @@ BEGIN_REGISTER_TESTS()
 	TEST(testLogging)
 	TEST(testFail)
 	TEST(testAbort)
+#ifndef NO_ALLOC_TEST
 	TEST(testAllocs)
+#endif
 END_REGISTER_TESTS()
