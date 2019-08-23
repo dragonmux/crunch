@@ -16,11 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef __GNUC__
-#define __USE_POSIX
-#define _POSIX_SOURCE
-#endif
-#include <stdio.h>
 #include "Core.h"
 #include "Logger.h"
 #ifndef _MSC_VER
@@ -31,7 +26,7 @@
 #include <io.h>
 #include <sys/locking.h>
 #endif
-#include <stdarg.h>
+#include <stdio.h>
 
 #ifndef _MSC_VER
 #define COL(val) val - 8
