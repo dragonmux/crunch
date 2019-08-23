@@ -12,7 +12,7 @@ foreach test : libCrunchTests
 	custom_target(
 		'crunch-' + test,
 		command: command,
-		input: test + '.c',
+		input: files(test + '.c'),
 		output: test + testExt,
 		depends: libCrunch,
 		build_by_default: true
