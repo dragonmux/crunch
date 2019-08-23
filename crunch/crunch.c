@@ -80,6 +80,8 @@ void *malloc(size_t size)
 {
 	if (allocCount >= 0 && !allocCount--)
 		return NULL;
+	else if (!malloc_)
+		malloc_ = (malloc_t)dlsym(RTLD_NEXT, "malloc");
 	return malloc_(size);
 }
 #endif
@@ -284,8 +286,6 @@ int main(int argc, char **argv)
 	_set_invalid_parameter_handler(invalidHandler);
 	_CrtSetReportMode(_CRT_ASSERT, 0);
 	_CrtSetReportMode(_CRT_ERROR, 0);
-#else
-	malloc_ = (malloc_t)dlsym(RTLD_NEXT, "malloc");
 #endif
 	registerArgs(crunchArgs);
 	parsedArgs = parseArguments(argc, (const char **)argv);
