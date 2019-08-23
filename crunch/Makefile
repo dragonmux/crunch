@@ -45,7 +45,7 @@ else
 endif
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
-O = ArgsParser.o Memory.o StringFuncs.o Logger.o Core.o threading/threadShim.o
+O = ArgsParser.o StringFuncs.o Logger.o Core.o threading/threadShim.o
 TESTS = testArgsParser.so testCrunch.so testBad.so
 
 VERMAJ = .0
