@@ -28,6 +28,7 @@
 #include <string.h>
 #include "Core.h"
 #include "Logger.h"
+#include "StringFuncs.h"
 
 typedef void (*failFn_t)();
 
@@ -307,6 +308,12 @@ void testAbort()
 	tryShouldFail(testAbort1);
 }
 
+void testAllocs()
+{
+	allocCount = 0;
+	assertNull(formatString(""));
+}
+
 BEGIN_REGISTER_TESTS()
 	TEST(testAssertTrue)
 	TEST(testAssertFalse)
@@ -327,4 +334,5 @@ BEGIN_REGISTER_TESTS()
 	TEST(testLogging)
 	TEST(testFail)
 	TEST(testAbort)
+	TEST(testAllocs)
 END_REGISTER_TESTS()
