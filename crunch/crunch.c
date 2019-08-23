@@ -246,7 +246,7 @@ int runTests()
 			thrd_t testThread;
 			thrd_create(&testThread, testRunner, currTest);
 			thrd_join(testThread, &retVal);
-			allocCount = -1;
+			//allocCount = -1;
 			if (retVal != THREAD_SUCCESS)
 				return retVal;
 			++currTest;
