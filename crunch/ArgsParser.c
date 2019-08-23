@@ -28,13 +28,7 @@
 
 const arg_t *args = NULL;
 
-void registerArgs(const arg_t *allowedArgs)
-{
-	args = allowedArgs;
-#if defined(_MSC_VER) && _MSC_VER < 1900L
-	stdout = &__iob_func()[1];
-#endif
-}
+void registerArgs(const arg_t *allowedArgs) { args = allowedArgs; }
 
 uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck)
 {
