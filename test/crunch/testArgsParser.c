@@ -130,6 +130,9 @@ void testInvalid()
 	assertConstNotNull(parsedArgs[0]);
 	assertConstNull(parsedArgs[1]);
 	freeParsedArgs(parsedArgs);
+
+	assertTrue(freeParsedArg(NULL));
+	assertNull(freeParsedArgs(NULL));
 }
 
 void testArgCounting()
@@ -166,10 +169,28 @@ void testArgCounting()
 	freeParsedArgs(parsedArgs);
 }
 
+void testAllocs()
+{
+	const arg_t args[3] =
+	{
+		{"-o", 0, 2, 0},
+		{"-a", 1, 1, 0},
+		{nullptr, 0, 0, 0}
+	};
+	const char *const argv[7] = {"test", "-o", "test", "me", "please", "-a", "file"};
+
+	registerArgs(args);
+	allocCount = 0;
+	assertNull(parseArguments(7, argv));
+	allocCount = 1;
+	assertNull(parseArguments(7, argv));
+}
+
 BEGIN_REGISTER_TESTS()
 	TEST(testNull)
 	TEST(testEmpty)
 	TEST(testIncomplete)
 	TEST(testInvalid)
 	TEST(testArgCounting)
+	TEST(testAllocs)
 END_REGISTER_TESTS()
