@@ -88,12 +88,17 @@ void *malloc(size_t size)
 
 void newline()
 {
+	if (isTTY != 0)
+	{
 #ifdef _MSC_VER
-	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	testPrintf("\n");
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		testPrintf("\n");
 #else
-	testPrintf(NEWLINE);
+		testPrintf(NEWLINE);
 #endif
+	}
+	else
+		testPrintf("\n");
 }
 
 int testRunner(void *testPtr)
@@ -107,11 +112,7 @@ int testRunner(void *testPtr)
 #endif
 	testPrintf("%s...", theTest->testName);
 	if (isTTY != 0)
-#ifndef _MSC_VER
-		testPrintf(NEWLINE);
-#else
 		newline();
-#endif
 	else
 		testPrintf(" ");
 	theTest->testFunc();
@@ -218,10 +219,7 @@ int runTests()
 					SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 #endif
 				testPrintf("Could not open test library: %s", dlerror());
-				if (isTTY != 0)
-					newline();
-				else
-					testPrintf("\n");
+				newline();
 			}
 			if (isTTY != 0)
 #ifndef _MSC_VER
@@ -230,10 +228,7 @@ int runTests()
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 #endif
 			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
-			if (isTTY != 0)
-				newline();
-			else
-				testPrintf("\n");
+			newline();
 			continue;
 		}
 		if (isTTY != 0)
@@ -243,10 +238,7 @@ int runTests()
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
 		testPrintf("Running test suit %s...", namedTests[i]->value);
-		if (isTTY != 0)
-			newline();
-		else
-			testPrintf("\n");
+		newline();
 		currTest = tests;
 		while (currTest->testFunc)
 		{
