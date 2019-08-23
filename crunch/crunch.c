@@ -115,6 +115,7 @@ int testRunner(void *testPtr)
 	else
 		testPrintf(" ");
 	theTest->testFunc();
+	allocCount = -1;
 	// Did the test switch logging on?
 	if (!loggingTests && logger)
 		// Yes, switch it back off again
