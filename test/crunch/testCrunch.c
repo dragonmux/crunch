@@ -312,8 +312,10 @@ void testAllocs()
 {
 	allocCount = 0;
 	assertNull(formatString(""));
+	assertIntEqual(allocCount, -1);
 	allocCount = 0;
 	assertNull(startLogging(""));
+	assertIntEqual(allocCount, -1);
 }
 
 BEGIN_REGISTER_TESTS()
