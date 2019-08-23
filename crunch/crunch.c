@@ -69,6 +69,9 @@ uint8_t loggingTests = 0;
 
 typedef void (__cdecl *registerFn)();
 
+void noMemory()
+	{ puts("**** crunch Fatal ****\nCould not allocate enough memory!\n**** crunch Fatal ****"); }
+
 void newline()
 {
 #ifdef _MSC_VER
@@ -120,7 +123,12 @@ uint8_t getTests()
 {
 	uint32_t i, j, n;
 	for (n = 0; parsedArgs[n] != NULL; n++);
-	namedTests = testMalloc(sizeof(constParsedArg_t) * (n + 1));
+	namedTests = malloc(sizeof(constParsedArg_t) * (n + 1));
+	if (!namedTests)
+	{
+		noMemory();
+		return FALSE;
+	}
 
 	for (j = 0, i = 0; i < n; i++)
 	{
@@ -137,7 +145,12 @@ uint8_t getTests()
 	}
 	else
 	{
-		namedTests = testRealloc((void *)namedTests, sizeof(parsedArg_t *) * (j + 1));
+		namedTests = realloc((void *)namedTests, sizeof(parsedArg_t *) * (j + 1));
+		if (!namedTests)
+		{
+			noMemory();
+			return FALSE;
+		}
 		numTests = j;
 		return TRUE;
 	}
@@ -172,6 +185,11 @@ int runTests()
 	for (i = 0; i < numTests; i++)
 	{
 		char *testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value);
+		if (!testLib)
+		{
+			noMemory();
+			return THREAD_ABORT;
+		}
 		void *testSuit = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
 		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)

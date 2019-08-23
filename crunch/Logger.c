@@ -225,7 +225,7 @@ testLog *startLogging(const char *fileName)
 {
 	if (logger)
 		return NULL;
-	testLog *logger_ = testMalloc(sizeof(testLog));
+	testLog *logger_ = malloc(sizeof(testLog));
 	if (!logger_)
 		return NULL;
 	logger_->file = fopen(fileName, "w");
