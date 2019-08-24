@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef __GNUC__
+#define __USE_POSIX
+#define _POSIX_SOURCE
+#endif
 #include "Core.h"
 #include "Logger.h"
 #ifndef _MSC_VER
