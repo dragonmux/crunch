@@ -1,5 +1,8 @@
 extraction:
   cpp:
+    after_prepare:
+      - pip3 install --upgrade setuptools wheel
+      - pip3 install --upgrade meson
     configure:
       command:
         - meson build
