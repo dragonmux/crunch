@@ -31,6 +31,7 @@
 #else
 #define DEV_NULL "NUL"
 #define STDIN_FILENO fileno(stdin)
+#define O_CLOEXEC O_BINARY
 #endif
 
 class loggerTests final : public testsuit
