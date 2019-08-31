@@ -81,7 +81,7 @@ const string libExt = ".so"_s;
 const string cc = "cl"_s;
 const string cxx = "cl"_s;
 #define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
-#define LINK_OPTS "/Fe%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
+#define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
 #endif
 
@@ -223,12 +223,22 @@ bool isCXX(const char *file)
 bool isCXX(const string &file)
 	{ return isCXX(file.data()); }
 
+#ifndef _MSC_VER
 string toO(const string &file)
 {
 	const size_t dotPos = file.find_last_of('.');
-	auto soFile = file.substr(0, dotPos);
-	return soFile += ".o"_s;
+	auto objFile = file.substr(0, dotPos);
+	return objFile += ".o"_s;
 }
+#else
+string toO(const string &file)
+{
+	const size_t dotPos = file.find_last_of('.');
+	auto objFile = file.substr(0, dotPos);
+	return objFile += ".obj"_s;
+}
+#endif
+
 string toO(const unique_ptr<const char []> &file)
 	{ return toO(file.get()); }
 
@@ -365,8 +375,9 @@ int32_t compileMSVC(const string &test)
 {
 	const bool mode = isCXX(test);
 	auto soFile = computeSOName(test);
+	auto objFile = computeObjName(test);
 	auto compileString = format("cl %s " COMPILE_OPTS " " LINK_OPTS ""_s, test,
-		inclDirFlags, objs, soFile, libDirFlags, mode ? "++" : "", libs);
+		inclDirFlags, objs, soFile, objFile, libDirFlags, mode ? "++" : "", libs);
 	if (!silent)
 	{
 		if (quiet)
