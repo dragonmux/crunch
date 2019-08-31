@@ -43,14 +43,6 @@ HANDLE console;
 	#define TTY	"/dev/tty"
 #endif
 
-struct testLog
-{
-	FILE *file;
-	FILE *stdout_;
-	FILE *realStdout;
-	int fd;
-};
-
 testLog *logger = nullptr;
 bool isTTY = true;
 

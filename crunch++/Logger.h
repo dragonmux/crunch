@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013-2018 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2019 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,13 +26,21 @@
 #include "crunch++.h"
 #include <stdarg.h>
 
-typedef enum _resultType
+enum resultType
 {
 	RESULT_FAILURE,
 	RESULT_SUCCESS,
 	RESULT_SKIP,
 	RESULT_ABORT
-} resultType;
+};
+
+struct testLog
+{
+	FILE *file;
+	FILE *stdout_;
+	FILE *realStdout;
+	int fd;
+};
 
 CRUNCHpp_API bool isTTY;
 #ifdef _MSC_VER
