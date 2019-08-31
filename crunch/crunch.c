@@ -175,7 +175,7 @@ uint8_t getTests()
 uint8_t tryRegistration(void *testSuit)
 {
 	registerFn registerTests;
-	registerTests = dlsym(testSuit, "registerTests");
+	registerTests = (registerFn)dlsym(testSuit, "registerTests");
 	if (registerTests == NULL)
 	{
 		dlclose(testSuit);
