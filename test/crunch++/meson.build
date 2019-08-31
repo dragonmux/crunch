@@ -1,4 +1,4 @@
-libCrunchppTestsNorm = ['testArgsParser', 'testCrunch++', 'testBad']
+libCrunchppTestsNorm = ['testArgsParser', 'testCrunch++', 'testBad', 'testLogger']
 libCrunchppTestsExcept = ['testTester']
 libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
 

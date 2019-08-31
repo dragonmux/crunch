@@ -46,7 +46,7 @@ endif
 SED = sed -e 's:@LIBDIR@:$(LIBDIR):g' -e 's:@PREFIX@:$(PREFIX):g'
 
 O = ArgsParser.o StringFuncs.o Logger.o Tester.o Core.o
-TESTS_NORM = testArgsParser.so testCrunch++.so testBad.so
+TESTS_NORM = testArgsParser.so testCrunch++.so testBad.so testLogger.so
 TESTS_EXCEPT = testTester.so
 TESTS = $(TESTS_NORM) $(TESTS_EXCEPT)
 
