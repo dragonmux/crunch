@@ -55,15 +55,15 @@ uint32_t numLinkArgs = 0;
 #endif
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
-const string cc = "gcc -m64 -fPIC -DPIC "_s;
-string cxx = "g++ -m64 -fPIC -DPIC" OPTS_VIS " "_s;
+const string cCompiler = "gcc -m64 -fPIC -DPIC "_s;
+string cxxCompiler = "g++ -m64 -fPIC -DPIC" OPTS_VIS " "_s;
 #else
-const string cc = "gcc -m32 "_s;
-string cxx = "g++ -m32" OPTS_VIS " "_s;
+const string cCompiler = "gcc -m32 "_s;
+string cxxCompiler = "g++ -m32" OPTS_VIS " "_s;
 #endif
 #else
-const string cc = crunch_GCC;
-string cxx = crunch_GXX OPTS_VIS " "_s;
+const string cCompiler = crunch_GCC;
+string cxxCompiler = crunch_GXX OPTS_VIS " "_s;
 #endif
 #define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s %s %s -o "
 #define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s %s %s -o "
@@ -78,8 +78,8 @@ const string libExt = ".so"_s;
 #define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
 #define LINK_OPTS_EXTRA "/LD /link"
 #endif
-const string cc = "cl"_s;
-const string cxx = "cl"_s;
+const string cCompiler = "cl"_s;
+const string cxxCompiler = "cl"_s;
 #define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
 #define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
@@ -309,13 +309,13 @@ string standardVersion(constParsedArg_t version)
 void buildCXXString()
 {
 	const auto standard = findArg(parsedArgs, "-std=", nullptr);
-	cxx += standardVersion(standard);
+	cxxCompiler += standardVersion(standard);
 }
 
 int32_t compileGCC(const string &test)
 {
 	const bool mode = isCXX(test);
-	const string &compiler = mode ? cxx : cc;
+	const string &compiler = mode ? cxxCompiler : cCompiler;
 	auto soFile = computeSOName(test);
 	auto compileString = format("%s %s " OPTS "%s"_s, compiler, test, inclDirFlags,
 		libDirFlags, objs, libs, codeCoverage ? "-lgcov " : "",  mode ? "++" : "",
@@ -336,7 +336,7 @@ int32_t compileGCC(const string &test)
 int32_t compileClang(const string &test)
 {
 	const bool mode = isCXX(test);
-	const string &compiler = mode ? cxx : cc;
+	const string &compiler = mode ? cxxCompiler : cCompiler;
 	auto oFile = computeObjName(test);
 	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, test,
 		inclDirFlags, debugBuild ? "-O0 -g" : "-O2", pthread ? "" : "-pthread", oFile);
