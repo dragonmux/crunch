@@ -19,7 +19,7 @@
 #include "Core.h"
 #include "Logger.h"
 #include "memory.hxx"
-#ifndef _MSC_VER
+#ifndef _WINDOWS
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/file.h>
@@ -29,18 +29,18 @@
 #endif
 #include <stdio.h>
 
-#ifndef _MSC_VER
+#ifndef _WINDOWS
 #define COL(val) val - 8
 #else
 #define COL(val) int16_t(val - 9)
 #endif
 #define WCOL(val) val - 2
 
-#ifdef _MSC_VER
+#ifndef _WINDOWS
+	#define TTY	"/dev/tty"
+#else
 	#define TTY	"CON"
 HANDLE console;
-#else
-	#define TTY	"/dev/tty"
 #endif
 
 testLog *logger = nullptr;
@@ -48,8 +48,8 @@ bool isTTY = true;
 
 int getColumns()
 {
-#ifndef _MSC_VER
-	struct winsize win;
+#ifndef _WINDOWS
+	struct winsize win{};
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
 	return (win.ws_col == 0 ? 80 : win.ws_col);
 #else
