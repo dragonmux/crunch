@@ -20,16 +20,17 @@
 #include "Logger.h"
 #ifndef _WINDOWS
 #include <unistd.h>
-#include <fcntl.h>
 #else
 #include <io.h>
 #endif
+#include <fcntl.h>
 #include <stdio.h>
 
 #ifndef _WINDOWS
 #define DEV_NULL "/dev/null"
 #else
 #define DEV_NULL "NUL"
+#define STDIN_FILENO fileno(stdin)
 #endif
 
 class loggerTests final : public testsuit
