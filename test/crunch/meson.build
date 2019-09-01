@@ -27,7 +27,7 @@ test(
 )
 
 test(
-	'empty',
+	'crunch-empty',
 	crunch,
 	workdir: meson.current_build_dir(),
 	should_fail: true

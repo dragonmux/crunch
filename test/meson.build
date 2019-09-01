@@ -5,3 +5,10 @@ else
 endif
 subdir('crunch')
 subdir('crunch++')
+
+test(
+	'crunchMake-none',
+	crunchMake,
+	workdir: meson.current_build_dir(),
+	should_fail: true
+)

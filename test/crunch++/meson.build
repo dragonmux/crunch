@@ -30,7 +30,7 @@ test(
 )
 
 test(
-	'except',
+	'crunch++-except',
 	crunchpp,
 	args: libCrunchppTestsExcept,
 	workdir: meson.current_build_dir(),
@@ -38,7 +38,7 @@ test(
 )
 
 test(
-	'empty',
+	'crunch++-empty',
 	crunchpp,
 	workdir: meson.current_build_dir(),
 	should_fail: true
