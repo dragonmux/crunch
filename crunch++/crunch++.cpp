@@ -164,7 +164,7 @@ void runTests()
 			continue;
 		}
 		magenta();
-		testPrintf("Running test suit %s...", namedTests[i]->value.data());
+		testPrintf("Running test suite %s...", namedTests[i]->value.data());
 		newline();
 
 		for (auto &test : cxxTests)
@@ -177,6 +177,14 @@ void runTests()
 			catch (threadExit_t &)
 			{
 				delete test.testClass;
+				continue;
+			}
+			catch (std::bad_alloc &)
+			{
+				delete test.testClass;
+				red();
+				testPrintf("Failed to allocate memory while registering suite");
+				newline();
 				continue;
 			}
 
