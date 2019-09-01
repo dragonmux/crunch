@@ -31,7 +31,7 @@
 #define DEV_NULL "/dev/null"
 #else
 #define DEV_NULL "NUL"
-#define STDIN_FILENO fileno(stdin)
+#define STDOUT_FILENO fileno(stdout)
 #define O_CLOEXEC O_BINARY
 #endif
 
