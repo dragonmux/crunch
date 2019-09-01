@@ -18,6 +18,7 @@
 
 #include <crunch++.h>
 #include "Logger.h"
+#include "Core.h"
 #ifndef _WINDOWS
 #include <unistd.h>
 #else
@@ -50,6 +51,19 @@ private:
 		logger = nullptr;
 	}
 
+	void testSuccess()
+	{
+		//logger = &pipeLogger;
+		isTTY = false;
+		logResult(RESULT_SUCCESS, "");
+		--passes;
+		isTTY = true;
+		logResult(RESULT_SUCCESS, "");
+		--passes;
+		isTTY = isatty(STDOUT_FILENO);
+		//logger = nullptr;
+	}
+
 public:
 	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdoutFD{dup(STDOUT_FILENO)},
 		ourLogger{nullptr, fdopen(stdoutFD, "w"), nullptr, 0} { }
@@ -61,6 +75,7 @@ public:
 			skip("Unable to open null device for tests");
 		CXX_TEST(testColumns)
 #ifndef _WINDOWS
+		CXX_TEST(testSuccess)
 #endif
 	}
 };
