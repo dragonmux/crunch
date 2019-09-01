@@ -51,11 +51,11 @@ int getColumns()
 #ifndef _WINDOWS
 	struct winsize win{};
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
-	return (win.ws_col == 0 ? 80 : win.ws_col);
+	return !win.ws_col ? 80 : win.ws_col;
 #else
 	CONSOLE_SCREEN_BUFFER_INFO window{};
 	GetConsoleScreenBufferInfo(console, &window);
-	return window.dwSize.X;
+	return !window.dwSize.X ? 80 : window.dwSize.X;
 #endif
 }
 
