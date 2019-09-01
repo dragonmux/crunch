@@ -398,8 +398,15 @@ public:
 	}
 };
 
+class registrationTest final : public testsuit
+{
+public:
+	void registerTests() final override
+		{ throw std::bad_alloc(); }
+};
+
 CRUNCHpp_TEST void registerCXXTests();
 void registerCXXTests()
 {
-	registerTestClasses<crunchTests>();
+	registerTestClasses<crunchTests, registrationTest>();
 }
