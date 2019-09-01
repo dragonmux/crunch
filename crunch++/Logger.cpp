@@ -83,14 +83,14 @@ void printAborted() { testPrintf("[ **** ABORTED **** ]\n"); }
 
 void normal()
 {
-#ifndef _MSC_VER
+#ifndef _WINDOWS
 	testPrintf(NORMAL);
 #else
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 #endif
 }
 
-#ifndef _MSC_VER
+#ifndef _WINDOWS
 void echoOk()
 {
 	if (isTTY)
