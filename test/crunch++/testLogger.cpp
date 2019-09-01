@@ -38,24 +38,26 @@ class loggerTests final : public testsuit
 {
 private:
 	int nullFD = -1;
+	int stdinFD = -1;
 
 	void testColumns()
 	{
-		int stdinFD = dup(STDIN_FILENO);
 		assertEqual(dup2(nullFD, STDIN_FILENO), STDIN_FILENO);
 		assertEqual(getColumns(), 80);
 		assertEqual(dup2(stdinFD, STDIN_FILENO), STDIN_FILENO);
 	}
 
 public:
-	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)} { }
-	~loggerTests() noexcept { close(nullFD); }
+	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdinFD{dup(STDIN_FILENO)} { }
+	~loggerTests() noexcept { close(nullFD); close(stdinFD); }
 
 	void registerTests() final override
 	{
-		if (nullFD == -1)
+		if (nullFD == -1 || stdinFD == -1)
 			skip("Unable to open null device for tests");
 		CXX_TEST(testColumns)
+#ifndef _WINDOWS
+#endif
 	}
 };
 
