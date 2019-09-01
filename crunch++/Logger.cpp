@@ -50,7 +50,7 @@ int getColumns()
 {
 #ifndef _WINDOWS
 	struct winsize win{};
-	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
 	return !win.ws_col ? 80 : win.ws_col;
 #else
 	CONSOLE_SCREEN_BUFFER_INFO window{};
