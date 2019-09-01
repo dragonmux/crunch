@@ -53,7 +53,7 @@ int getColumns()
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
 	return (win.ws_col == 0 ? 80 : win.ws_col);
 #else
-	CONSOLE_SCREEN_BUFFER_INFO window;
+	CONSOLE_SCREEN_BUFFER_INFO window{};
 	GetConsoleScreenBufferInfo(console, &window);
 	return window.dwSize.X;
 #endif
