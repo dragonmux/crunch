@@ -82,10 +82,10 @@ private:
 		//logger = &pipeLogger;
 		isTTY = false;
 		logResult(RESULT_SKIP, "");
-		--failures;
+		--passes;
 		isTTY = true;
 		logResult(RESULT_SKIP, "");
-		--failures;
+		--passes;
 		isTTY = isatty(STDOUT_FILENO);
 		//logger = nullptr;
 	}
