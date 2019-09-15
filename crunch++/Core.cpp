@@ -11,14 +11,14 @@ template<typename T>
 void assertionFailure(const char *what, T result, T expected)
 {
 	auto mesg = formatString("Assertion failure: %s", what);
-	logResult(RESULT_FAILURE, mesg.get(), expected, result);
+	logResult(RESULT_FAILURE, mesg.get(), result, expected);
 }
 
 template<typename T>
 void assertionError(const char *params, T result, T expected)
 {
 	auto what = formatString("expected %s, got %s", params, params);
-	assertionFailure(what.get(), result, expected);
+	assertionFailure(what.get(), expected, result);
 }
 
 template<typename T>
