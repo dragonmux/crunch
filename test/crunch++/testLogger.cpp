@@ -71,12 +71,13 @@ public:
 
 	void registerTests() final override
 	{
+#ifdef _WINDOWS
+		skip("This suite does not work on windows");
+#endif
 		if (nullFD == -1 || stdoutFD == -1)
 			skip("Unable to open null device for tests");
 		CXX_TEST(testColumns)
-#ifndef _WINDOWS
 		CXX_TEST(testSuccess)
-#endif
 	}
 };
 
