@@ -105,7 +105,7 @@ private:
 			num16 = rand();
 		while (!num32)
 			num32 = rand();
-		while (!num32)
+		while (!num64)
 			num64 = (int64_t(rand()) << 32) | int64_t(rand());
 
 		tryShouldFail([=]() { assertEqual(int8_t(0), num8); });
