@@ -64,6 +64,19 @@ private:
 		//logger = nullptr;
 	}
 
+	void testFailure()
+	{
+		//logger = &pipeLogger;
+		isTTY = false;
+		logResult(RESULT_FAILURE, "");
+		--failures;
+		isTTY = true;
+		logResult(RESULT_FAILURE, "");
+		--failures;
+		isTTY = isatty(STDOUT_FILENO);
+		//logger = nullptr;
+	}
+
 public:
 	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdoutFD{dup(STDOUT_FILENO)},
 		ourLogger{nullptr, fdopen(stdoutFD, "w"), nullptr, 0} { }
@@ -78,6 +91,7 @@ public:
 			skip("Unable to open null device for tests");
 		CXX_TEST(testColumns)
 		CXX_TEST(testSuccess)
+		CXX_TEST(testFailure)
 	}
 };
 
