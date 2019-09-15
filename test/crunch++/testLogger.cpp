@@ -90,6 +90,27 @@ private:
 		//logger = nullptr;
 	}
 
+	void tryLogAbort()
+	{
+		try
+			{ logResult(RESULT_ABORT, ""); }
+		catch (threadExit_t &)
+			{ return; }
+		isTTY = isatty(STDOUT_FILENO);
+		fail("logResult() failed to throw exception");
+	}
+
+	void testAbort()
+	{
+		//logger = &pipeLogger;
+		isTTY = false;
+		tryLogAbort();
+		isTTY = true;
+		tryLogAbort();
+		isTTY = isatty(STDOUT_FILENO);
+		//logger = nullptr;
+	}
+
 public:
 	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdoutFD{dup(STDOUT_FILENO)},
 		ourLogger{nullptr, fdopen(stdoutFD, "w"), nullptr, 0} { }
@@ -106,6 +127,7 @@ public:
 		CXX_TEST(testSuccess)
 		CXX_TEST(testFailure)
 		CXX_TEST(testSkip)
+		CXX_TEST(testAbort)
 	}
 };
 
