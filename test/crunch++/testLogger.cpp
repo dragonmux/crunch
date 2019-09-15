@@ -77,6 +77,19 @@ private:
 		//logger = nullptr;
 	}
 
+	void testSkip()
+	{
+		//logger = &pipeLogger;
+		isTTY = false;
+		logResult(RESULT_SKIP, "");
+		--failures;
+		isTTY = true;
+		logResult(RESULT_SKIP, "");
+		--failures;
+		isTTY = isatty(STDOUT_FILENO);
+		//logger = nullptr;
+	}
+
 public:
 	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdoutFD{dup(STDOUT_FILENO)},
 		ourLogger{nullptr, fdopen(stdoutFD, "w"), nullptr, 0} { }
@@ -92,6 +105,7 @@ public:
 		CXX_TEST(testColumns)
 		CXX_TEST(testSuccess)
 		CXX_TEST(testFailure)
+		CXX_TEST(testSkip)
 	}
 };
 
