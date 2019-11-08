@@ -49,6 +49,7 @@ struct parsedArg_t final
 	parsedArg_t(parsedArg_t &&arg) : parsedArg_t{} { swap(arg); }
 	void operator =(parsedArg_t &&arg) noexcept { swap(arg); }
 
+	bool matches(const char *const str, const size_t length) const noexcept;
 	CRUNCH_VIS bool matches(const char *const str) const noexcept;
 	CRUNCH_VIS void swap(parsedArg_t &arg) noexcept;
 

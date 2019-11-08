@@ -36,10 +36,13 @@ bool arg_t::matches(const char *const str) const noexcept
 parsedArg_t::parsedArg_t() : value{}, paramsFound{0}, params{}, flags{0}, minLength{0} { }
 
 bool parsedArg_t::matches(const char *const str) const noexcept
+	{ return matches(str, strlen(str)); }
+
+bool parsedArg_t::matches(const char *const str, const size_t length) const noexcept
 {
 	if (flags & ARG_INCOMPLETE)
-		return strlen(str) >= minLength &&
-			!strncmp(value.data(), str, value.length());
+		return length >= minLength &&
+			!strncmp(value.data(), str, length);
 	return !strcmp(value.data(), str);
 }
 
