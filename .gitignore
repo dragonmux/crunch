@@ -21,5 +21,6 @@ build*/compile_commands.json
 build.ninja
 
 build
+.vscode
 
 crunchMake.h
