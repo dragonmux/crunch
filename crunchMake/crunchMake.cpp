@@ -55,14 +55,14 @@ uint32_t numLinkArgs = 0;
 #endif
 #ifdef crunch_GUESSCOMPILER
 #ifdef __x86_64__
-const string cCompiler = "gcc -m64 -fPIC -DPIC "_s;
+string cCompiler = "gcc -m64 -fPIC -DPIC "_s;
 string cxxCompiler = "g++ -m64 -fPIC -DPIC" OPTS_VIS " "_s;
 #else
-const string cCompiler = "gcc -m32 "_s;
+string cCompiler = "gcc -m32 "_s;
 string cxxCompiler = "g++ -m32" OPTS_VIS " "_s;
 #endif
 #else
-const string cCompiler = crunch_GCC;
+string cCompiler = crunch_GCC " "_s;
 string cxxCompiler = crunch_GXX OPTS_VIS " "_s;
 #endif
 #define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s %s %s -o "
@@ -78,8 +78,8 @@ const string libExt = ".so"_s;
 #define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
 #define LINK_OPTS_EXTRA "/LD /link"
 #endif
-const string cCompiler = "cl"_s;
-const string cxxCompiler = "cl"_s;
+string cCompiler = "cl"_s;
+string cxxCompiler = "cl"_s;
 #define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
 #define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
@@ -128,6 +128,7 @@ const arg_t args[] =
 	{"-z", 1, 1, ARG_REPEATABLE},
 	{"--coverage", 0, 0, 0},
 	{"--debug", 0, 0, 0},
+	{"-fsanitize=", 0, 0, ARG_INCOMPLETE},
 	{{}, 0, 0, 0}
 };
 
@@ -309,7 +310,7 @@ string standardVersion(constParsedArg_t version)
 void buildCXXString()
 {
 	const auto standard = findArg(parsedArgs, "-std=", nullptr);
-	cxxCompiler += standardVersion(standard);
+	cxxCompiler += standardVersion(standard) + ' ';
 }
 
 int32_t compileGCC(const string &test)
@@ -392,6 +393,15 @@ int32_t compileMSVC(const string &test)
 }
 #endif
 
+void handleSanitizers()
+{
+	const auto sanitizer = findArg(parsedArgs, "-fsanitize=", nullptr);
+	if (!sanitizer)
+		return;
+	cCompiler += sanitizer->value + ' ';
+	cxxCompiler += sanitizer->value + ' ';
+}
+
 int compileTests()
 {
 	int32_t ret = 0;
@@ -411,6 +421,8 @@ int compileTests()
 		silent = bool(findArg(parsedArgs, "-s", nullptr));
 	if (!quiet)
 		quiet = bool(findArg(parsedArgs, "-q", nullptr));
+
+	handleSanitizers();
 
 	for (const auto &test : tests)
 	{
