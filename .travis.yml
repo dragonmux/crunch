@@ -248,12 +248,36 @@ matrix:
           packages:
             - gcc-8
             - g++-8
-    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
-      os: windows
-    - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
-      os: windows
+#    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
+#      os: windows
+#    - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
+#      os: windows
 #    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:/c/Program Files/LLVM/bin:$PATH" CC=clang CXX=clang++
 #      os: windows
+    - if: branch = coverityScan
+      env:
+        - secure: "gz+ykSgS9RNnEKbKBGJEe6J+7TR6fplpuTrjSc05R3Z/DREVRjFWeL3lBqah4u53UCbK3Na99fCJq/IAfR2Ltby/Wo+iv3bdxOrwxGoaljbp9EPWUT9jLX+yeSdZFrPKyqV8S//fzp5sffZF/401G79yk7z6ZrIiI3a+efg1fGg="
+      compiler: gcc-9
+      env: CC=gcc-9 CXX=g++-9 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - deadsnakes
+          packages:
+            - gcc-9
+            - g++-9
+            - python3.6
+        coverity_scan:
+          project:
+            name: "DX-MON/crunch"
+            description: "crunch your code. Crunch is a unit testing framework written for C and C++."
+          notification_email: dx-mon@users.sourceforge.net
+          build_command_prepend: ".travis-ci/beforeScript.sh"
+          build_command: ".travis-ci/script.sh"
+          branch_pattern: coverityScan
+      before_install:
+        - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 env:
   global:
