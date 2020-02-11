@@ -256,9 +256,9 @@ matrix:
 #      os: windows
     - if: branch = coverityScan
       env:
+        - CC=gcc-9 CXX=g++-9 COVERAGE=0
         - secure: "gz+ykSgS9RNnEKbKBGJEe6J+7TR6fplpuTrjSc05R3Z/DREVRjFWeL3lBqah4u53UCbK3Na99fCJq/IAfR2Ltby/Wo+iv3bdxOrwxGoaljbp9EPWUT9jLX+yeSdZFrPKyqV8S//fzp5sffZF/401G79yk7z6ZrIiI3a+efg1fGg="
       compiler: gcc-9
-      env: CC=gcc-9 CXX=g++-9 COVERAGE=0
       addons:
         apt:
           sources:
