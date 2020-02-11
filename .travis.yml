@@ -33,6 +33,7 @@ matrix:
           packages:
             - clang-3.8
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-3.9
       env: CC=clang-3.9 CXX=clang++-3.9 COVERAGE=0
       addons:
@@ -44,6 +45,7 @@ matrix:
           packages:
             - clang-3.9
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-4.0
       env: CC=clang-4.0 CXX=clang++-4.0 COVERAGE=0
       addons:
@@ -56,6 +58,7 @@ matrix:
             - llvm-4.0
             - clang-4.0
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-5.0
       env: CC=clang-5.0 CXX=clang++-5.0 COVERAGE=0
       addons:
@@ -68,6 +71,7 @@ matrix:
             - llvm-5.0
             - clang-5.0
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-6.0
       env: CC=clang-6.0 CXX=clang++-6.0 GCOV='llvm-cov gcov'
       addons:
@@ -80,6 +84,7 @@ matrix:
             - llvm-6.0
             - clang-6.0
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-6.0
       env: CC=clang-6.0 CXX=clang++-6.0 COVERAGE=0
       addons:
@@ -92,6 +97,7 @@ matrix:
             - llvm-6.0
             - clang-6.0
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-7
       env: CC=clang-7 CXX=clang++-7 GCOV='llvm-cov gcov'
       addons:
@@ -104,6 +110,7 @@ matrix:
             - llvm-7
             - clang-7
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-7
       env: CC=clang-7 CXX=clang++-7 COVERAGE=0
       addons:
@@ -116,6 +123,7 @@ matrix:
             - llvm-7
             - clang-7
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-8
       env: CC=clang-8 CXX=clang++-8 GCOV='llvm-cov gcov'
       addons:
@@ -128,6 +136,7 @@ matrix:
             - llvm-8
             - clang-8
             - python3.6
+      if: branch != coverityScan
     - compiler: clang-8.0
       env: CC=clang-8 CXX=clang++-8 COVERAGE=0
       addons:
@@ -140,6 +149,7 @@ matrix:
             - llvm-8
             - clang-8
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-4.9
       env: CC=gcc-4.9 CXX=g++-4.9 COVERAGE=0
       addons:
@@ -151,6 +161,7 @@ matrix:
             - gcc-4.9
             - g++-4.9
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-5
       env: CC=gcc-5 CXX=g++-5 COVERAGE=0
       addons:
@@ -162,6 +173,7 @@ matrix:
             - gcc-5
             - g++-5
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-6
       env: CC=gcc-6 CXX=g++-6 COVERAGE=0
       addons:
@@ -173,6 +185,7 @@ matrix:
             - gcc-6
             - g++-6
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-7
       env: CC=gcc-7 CXX=g++-7 GCOV=gcov-7
       addons:
@@ -184,6 +197,7 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-7
       env: CC=gcc-7 CXX=g++-7 COVERAGE=0
       addons:
@@ -195,6 +209,7 @@ matrix:
             - gcc-7
             - g++-7
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-8
       env: CC=gcc-8 CXX=g++-8 GCOV=gcov-8
       addons:
@@ -206,6 +221,7 @@ matrix:
             - gcc-8
             - g++-8
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-8
       env: CC=gcc-8 CXX=g++-8 COVERAGE=0
       addons:
@@ -217,6 +233,7 @@ matrix:
             - gcc-8
             - g++-8
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-9
       env: CC=gcc-9 CXX=g++-9 GCOV=gcov-9
       addons:
@@ -228,6 +245,7 @@ matrix:
             - gcc-9
             - g++-9
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-9
       env: CC=gcc-9 CXX=g++-9 COVERAGE=0
       addons:
@@ -239,6 +257,7 @@ matrix:
             - gcc-9
             - g++-9
             - python3.6
+      if: branch != coverityScan
     - compiler: gcc-8
       env: CC=gcc-8 CXX=g++-8 COVERAGE=0 ENGINE=make
       addons:
@@ -248,12 +267,16 @@ matrix:
           packages:
             - gcc-8
             - g++-8
+      if: branch != coverityScan
 #    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
 #      os: windows
+#      if: branch != coverityScan
 #    - env: ARCH=x86 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
 #      os: windows
+#      if: branch != coverityScan
 #    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:/c/Program Files/LLVM/bin:$PATH" CC=clang CXX=clang++
 #      os: windows
+#      if: branch != coverityScan
     - if: branch = coverityScan
       env:
         - CC=gcc-9 CXX=g++-9 COVERAGE=0
