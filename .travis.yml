@@ -23,7 +23,7 @@ after_failure:
 cache:
   pip: true
   directories:
-    - $HOME/
+    - /tmp/coverity-scan-analysis
 
 matrix:
   include:
