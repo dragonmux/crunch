@@ -1,6 +1,4 @@
 #!/bin/bash -e
-export PS4="$ "
-set -x
 
 TOOL_ARCHIVE=/tmp/coverity.tar.gz
 TOOL_BASE=/tmp/coverity-scan-analysis
@@ -10,7 +8,7 @@ echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CER
 
 pushd /tmp
 echo -e "\033[33;1mDownloading Coverity Scan Analysis Tool...\033[0m"
-wget -nv $TOOL_URL --post-data "project=$COVERITY_PROJECT_NAME&token=$COVERITY_SCAN_TOKEN" -o coverity.tar.gz
+wget -nv $TOOL_URL --post-data "project=$COVERITY_PROJECT_NAME&token=$COVERITY_SCAN_TOKEN" -O coverity.tar.gz
 
 echo -e "\033[33;1mExtracting Coverity Scan Analysis Tool...\033[0m"
 mkdir -p $TOOL_BASE
