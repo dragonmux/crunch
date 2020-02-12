@@ -2,10 +2,21 @@
 export PS4="$ "
 set -x
 
+TOOL_ARCHIVE=/tmp/coverity.tar.gz
+TOOL_BASE=/tmp/coverity-scan-analysis
+TOOL_URL=https://scan.coverity.com/download/`uname`
+
 echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
 pushd /tmp
-curl https://scan.coverity.com/download/`uname` -F token=$COVERITY_SCAN_TOKEN -F project=$COVERITY_PROJECT_NAME -o coverity.tar.gz
-tar xzf coverity.tar.gz
+echo -e "\033[33;1mDownloading Coverity Scan Analysis Tool...\033[0m"
+wget -nv $TOOL_URL --post-data "project=$COVERITY_PROJECT_NAME&token=$COVERITY_SCAN_TOKEN" -o coverity.tar.gz
+
+echo -e "\033[33;1mExtracting Coverity Scan Analysis Tool...\033[0m"
+mkdir -p $TOOL_BASE
+pushd $TOOL_BASE
+tar xzf $TOOL_ARCHIVE
+popd
+
 rm coverity.tar.gz
 popd
-#wget https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh

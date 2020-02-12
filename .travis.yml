@@ -301,16 +301,15 @@ matrix:
             name: "DX-MON/crunch"
             description: "crunch your code. Crunch is a unit testing framework written for C and C++."
           notification_email: dx-mon@users.sourceforge.net
-          build_command_prepend: "meson setup --prefix=$HOME/.local . .."
-          build_command: "ninja"
+          build_command_prepend: "meson build --prefix=$HOME/.local"
+          build_command: "ninja -C build"
           branch_pattern: coverityScan
       before_install: .travis-ci/installCoverity.sh
       install:
-        - mv /tmp/cov-* ~/.local/coverity
-        - export PATH=$HOME/.local/coverity/bin:$PATH
+        - TOOL_BASE=/tmp/coverity-scan-analysis
+        - TOOL_DIR=`find $TOOL_BASE -type d -name 'cov-analysis*'`
+        - export PATH=$TOOL_DIR/bin:$PATH
       before_script:
-        - mkdir build
-        - cd build
         - cov-configure --comptype gcc --compiler `which gcc-9`
         - cov-configure --comptype g++ --compiler `which g++-9`
       script:
