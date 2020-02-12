@@ -21,6 +21,7 @@
 #include "Logger.h"
 #include "StringFuncs.h"
 #include <string.h>
+#include <inttypes.h>
 
 test *tests;
 uint32_t passes = 0, failures = 0;
@@ -80,7 +81,7 @@ void assertInt64Equal(int64_t result, int64_t expected)
 {
 	if (result != expected)
 	{
-		ASSERTION_ERROR("%lld", result, expected);
+		ASSERTION_ERROR("%" PRId64, result, expected);
 		thrd_exit(THREAD_ERROR);
 	}
 }
@@ -89,7 +90,7 @@ void assertInt64NotEqual(int64_t result, int64_t expected)
 {
 	if (result == expected)
 	{
-		ASSERTION_ERROR("%lld", result, expected);
+		ASSERTION_ERROR("%" PRId64, result, expected);
 		thrd_exit(THREAD_ERROR);
 	}
 }
