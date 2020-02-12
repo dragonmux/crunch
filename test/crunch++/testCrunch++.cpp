@@ -17,7 +17,7 @@
  */
 
 #include <crunch++.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
@@ -53,7 +53,7 @@ private:
 	const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	default_random_engine rngGen;
-	unique_ptr<uniform_real_distribution<double>> rng;
+	uniform_real_distribution<double> rng;
 
 	void tryShouldFail(const std::function<void()> &test)
 	{
@@ -68,9 +68,10 @@ private:
 	}
 
 public:
-	crunchTests() : rng(new uniform_real_distribution<double>(-1.0, 1.0))
+	crunchTests() : rng{-1.0, 1.0}
 	{
-		rngGen.seed(time(nullptr));
+		std::random_device randDev;
+		rngGen.seed(randDev());
 	}
 
 private:
@@ -203,15 +204,15 @@ private:
 
 	void testAssertDoubleEqual()
 	{
-		double num = (*rng)(rngGen);
+		double num = rng(rngGen);
 		assertEqual(num, num);
 		tryShouldFail([=]() { assertEqual(0.0, 0.1); });
 	}
 
 	void testAssertDoubleNotEqual()
 	{
-		double numA = (*rng)(rngGen);
-		double numB = (*rng)(rngGen);
+		double numA = rng(rngGen);
+		double numB = rng(rngGen);
 		assertNotEqual(numA, numB);
 		tryShouldFail([=]() { assertNotEqual(numA, numA); });
 		tryShouldFail([=]() { assertNotEqual(numB, numB); });
