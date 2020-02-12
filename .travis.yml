@@ -311,7 +311,6 @@ matrix:
         - export PATH=$TOOL_DIR/bin:$PATH
       before_script:
         - cov-configure --comptype gcc --compiler `which gcc-9`
-        - cov-configure --comptype g++ --compiler `which g++-9`
       script:
 
 env:
