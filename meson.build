@@ -23,18 +23,12 @@ libdir = join_paths(prefix, get_option('libdir'))
 isWindows = target_machine.system() == 'windows'
 dl = cxx.find_library('dl', required: not isWindows)
 
-if ['gcc', 'clang'].contains(cc.get_id())
-	add_project_arguments('-Wall', '-Wextra', '-pedantic', language: 'c')
-	if coverage and debug
-		add_project_arguments('--coverage', language: 'c')
-	endif
+if ['gcc', 'clang'].contains(cc.get_id()) and coverage and debug
+	add_project_arguments('--coverage', language: 'c')
 endif
 
-if ['gcc', 'clang'].contains(cxx.get_id())
-	add_project_arguments('-Wall', '-Wextra', '-pedantic', language: 'cpp')
-	if coverage and debug
-		add_project_arguments('--coverage', language: 'cpp')
-	endif
+if ['gcc', 'clang'].contains(cxx.get_id()) and coverage and debug
+	add_project_arguments('--coverage', language: 'cpp')
 endif
 
 libArgs = []
