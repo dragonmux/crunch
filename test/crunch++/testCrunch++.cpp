@@ -93,7 +93,6 @@ private:
 
 	void testAssertIntEqual()
 	{
-		srand(time(nullptr));
 		int8_t num8 = int8_t(intRng(rngGen));
 		int16_t num16 = int16_t(intRng(rngGen));
 		int32_t num32 = int32_t(intRng(rngGen));
@@ -121,7 +120,6 @@ private:
 
 	void testAssertIntNotEqual()
 	{
-		srand(time(nullptr));
 		int8_t num8{};
 		int16_t num16{};
 		int32_t num32{};
@@ -146,13 +144,13 @@ private:
 		assertNotEqual(num64, 0);
 
 		tryShouldFail([=]() { assertNotEqual(num8, num8); });
-		tryShouldFail([=]() { assertNotEqual(int8_t(0), int8_t(0)); });
+		tryShouldFail([=]() { assertNotEqual(int8_t{0}, int8_t{0}); });
 		tryShouldFail([=]() { assertNotEqual(num16, num16); });
-		tryShouldFail([=]() { assertNotEqual(int16_t(0), int16_t(0)); });
+		tryShouldFail([=]() { assertNotEqual(int16_t{0}, int16_t{0}); });
 		tryShouldFail([=]() { assertNotEqual(num32, num32); });
-		tryShouldFail([=]() { assertNotEqual(int32_t(0), int32_t(0)); });
+		tryShouldFail([=]() { assertNotEqual(int32_t{0}, int32_t{0}); });
 		tryShouldFail([=]() { assertNotEqual(num64, num64); });
-		tryShouldFail([=]() { assertNotEqual(int64_t(0), int64_t(0)); });
+		tryShouldFail([=]() { assertNotEqual(int64_t{0}, int64_t{0}); });
 	}
 
 	void testAssertUintEqual()
