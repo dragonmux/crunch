@@ -2,7 +2,8 @@
 #include "Core.h"
 #include "Logger.h"
 #include "StringFuncs.h"
-#include <string.h>
+#include <cstring>
+#include <cinttypes>
 
 uint32_t passes = 0, failures = 0;
 const double doubleDelta = 0.0000001;
@@ -177,7 +178,7 @@ void testsuit::assertEqual(const int64_t result, const int64_t expected)
 {
 	if (result != expected)
 	{
-		assertionError("%lld", result, expected);
+		assertionError("%" PRId64, result, expected);
 		throw threadExit_t(1);
 	}
 }
@@ -186,7 +187,7 @@ void testsuit::assertNotEqual(const int64_t result, const int64_t expected)
 {
 	if (result == expected)
 	{
-		assertionError("%lld", result);
+		assertionError("%" PRId64, result);
 		throw threadExit_t(1);
 	}
 }
@@ -195,7 +196,7 @@ void testsuit::assertEqual(const uint64_t result, const uint64_t expected)
 {
 	if (result != expected)
 	{
-		assertionError("%llu", result, expected);
+		assertionError("%" PRIu64, result, expected);
 		throw threadExit_t(1);
 	}
 }
@@ -204,7 +205,7 @@ void testsuit::assertNotEqual(const uint64_t result, const uint64_t expected)
 {
 	if (result == expected)
 	{
-		assertionError("%llu", result);
+		assertionError("%" PRIu64, result);
 		throw threadExit_t(1);
 	}
 }
