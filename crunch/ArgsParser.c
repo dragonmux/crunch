@@ -166,7 +166,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	parsedArgs_t result = malloc(sizeof(constParsedArg_t) * (n + 1));
 	if (!result)
 		return freeParsedArgs(ret);
-	memcpy((void *)result, ret, sizeof(constParsedArg_t *) * n);
+	memcpy((void *)result, ret, sizeof(constParsedArg_t) * n);
 	free((void *)ret);
 	result[n] = NULL;
 	return result;
