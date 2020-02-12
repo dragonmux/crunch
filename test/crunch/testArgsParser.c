@@ -111,7 +111,7 @@ void testInvalid()
 	parsedArg_t *parsedArg;
 
 	registerArgs(args);
-	parsedArgs = malloc(sizeof(constParsedArg_t *) * 2);
+	parsedArgs = malloc(sizeof(constParsedArg_t) * 2);
 	assertConstNotNull(parsedArgs);
 	parsedArg = malloc(sizeof(parsedArg_t));
 	assertNotNull(parsedArg);
