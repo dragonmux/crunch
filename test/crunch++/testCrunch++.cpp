@@ -18,12 +18,12 @@
 
 #include <crunch++.h>
 #include <cstdint>
-#include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <time.h>
 #ifndef _MSC_VER
 #include <unistd.h>
+#else
+#include <io.h>
 #endif
 #include <memory>
 #include <random>
