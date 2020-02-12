@@ -15,10 +15,16 @@ if [ "$TRAVIS_OS_NAME" == "windows" ]; then
 	7z x -oC:\\tools\\ninja-build ninja-win.zip
 	rm get-pip.py ninja-win.zip
 elif [ "$ENGINE" == "meson" ]; then
-	wget https://bootstrap.pypa.io/get-pip.py
-	wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip
-	python3.6 get-pip.py --user
-	pip3 install --user meson
-	unzip ninja-linux.zip -d ~/.local/bin
-	rm get-pip.py ninja-linux.zip
+	if [ ! -e $HOME/.local/bin/meson ]; then
+		wget https://bootstrap.pypa.io/get-pip.py
+		python3.6 get-pip.py --user
+		pip3 install --user meson
+		rm get-pip.py
+	fi
+
+	if [ ! -e $HOME/.local/bin/ninja ]; then
+		wget https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
+		unzip ninja-linux.zip -d ~/.local/bin
+		rm ninja-linux.zip
+	fi
 fi
