@@ -113,8 +113,15 @@ private:
 
 public:
 	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdoutFD{dup(STDOUT_FILENO)},
-		ourLogger{nullptr, fdopen(stdoutFD, "w"), nullptr, 0} { }
-	~loggerTests() noexcept { close(nullFD); close(stdoutFD); fclose(ourLogger.stdout_); }
+		ourLogger{nullptr, stdoutFD != -1 ? fdopen(stdoutFD, "w") : nullptr, nullptr, 0} { }
+
+	~loggerTests() noexcept
+	{
+		close(nullFD);
+		close(stdoutFD);
+		if (ourLogger.stdout_)
+			fclose(ourLogger.stdout_);
+	}
 
 	void registerTests() final override
 	{
