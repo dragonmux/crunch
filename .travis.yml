@@ -296,10 +296,11 @@ matrix:
             name: "DX-MON/crunch"
             description: "crunch your code. Crunch is a unit testing framework written for C and C++."
           notification_email: dx-mon@users.sourceforge.net
-          build_command_prepend: ".travis-ci/beforeScript.sh"
-          build_command: ".travis-ci/script.sh"
+          build_command: "ninja"
           branch_pattern: coverityScan
       before_script:
+        - meson build --prefix=$HOME/.local -Db_coverage=`codecov`
+        - cd build
       script:
       before_install:
         - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
