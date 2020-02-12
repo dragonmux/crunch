@@ -17,6 +17,7 @@
  */
 
 #include <crunch++.h>
+#include <cstdint>
 #include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -34,6 +35,7 @@
 using std::unique_ptr;
 using std::default_random_engine;
 using std::uniform_real_distribution;
+using std::uniform_int_distribution;
 inline std::string operator ""_s(const char *string, const std::size_t length)
 	{ return std::string{string, length}; }
 
@@ -53,7 +55,9 @@ private:
 	const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	default_random_engine rngGen;
-	uniform_real_distribution<double> rng;
+	uniform_real_distribution<double> dblRng;
+	uniform_int_distribution<int64_t> intRng;
+	uniform_int_distribution<uint64_t> uintRng;
 
 	void tryShouldFail(const std::function<void()> &test)
 	{
@@ -68,7 +72,7 @@ private:
 	}
 
 public:
-	crunchTests() : rng{-1.0, 1.0}
+	crunchTests() : dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX}, uintRng{0, UINT64_MAX}
 	{
 		std::random_device randDev;
 		rngGen.seed(randDev());
@@ -90,10 +94,10 @@ private:
 	void testAssertIntEqual()
 	{
 		srand(time(nullptr));
-		int8_t num8 = rand();
-		int16_t num16 = rand();
-		int32_t num32 = rand();
-		int64_t num64 = (int64_t(rand()) << 32) | int64_t(rand());
+		int8_t num8 = int8_t(intRng(rngGen));
+		int16_t num16 = int16_t(intRng(rngGen));
+		int32_t num32 = int32_t(intRng(rngGen));
+		int64_t num64 = intRng(rngGen);
 
 		assertEqual(num8, num8);
 		assertEqual(num16, num16);
@@ -101,39 +105,39 @@ private:
 		assertEqual(num64, num64);
 
 		while (!num8)
-			num8 = rand();
+			num8 = int8_t(intRng(rngGen));
 		while (!num16)
-			num16 = rand();
+			num16 = int16_t(intRng(rngGen));
 		while (!num32)
-			num32 = rand();
+			num32 = int32_t(intRng(rngGen));
 		while (!num64)
-			num64 = (int64_t(rand()) << 32) | int64_t(rand());
+			num64 = intRng(rngGen);
 
-		tryShouldFail([=]() { assertEqual(int8_t(0), num8); });
-		tryShouldFail([=]() { assertEqual(int16_t(0), num16); });
-		tryShouldFail([=]() { assertEqual(int32_t(0), num32); });
-		tryShouldFail([=]() { assertEqual(int64_t(0), num64); });
+		tryShouldFail([=]() { assertEqual(int8_t{0}, num8); });
+		tryShouldFail([=]() { assertEqual(int16_t{0}, num16); });
+		tryShouldFail([=]() { assertEqual(int32_t{0}, num32); });
+		tryShouldFail([=]() { assertEqual(int64_t{0}, num64); });
 	}
 
 	void testAssertIntNotEqual()
 	{
 		srand(time(nullptr));
-		int8_t num8;
-		int16_t num16;
-		int32_t num32;
-		int64_t num64;
+		int8_t num8{};
+		int16_t num16{};
+		int32_t num32{};
+		int64_t num64{};
 
 		do
-			num8 = rand();
+			num8 = int8_t(intRng(rngGen));
 		while (!num8);
 		do
-			num16 = rand();
+			num16 = int16_t(intRng(rngGen));
 		while (!num16);
 		do
-			num32 = rand();
+			num32 = int32_t(intRng(rngGen));
 		while (!num32);
 		do
-			num64 = (int64_t(rand()) << 32) | int64_t(rand());
+			num64 = intRng(rngGen);
 		while (!num64);
 
 		assertNotEqual(num8, 0);
@@ -204,15 +208,17 @@ private:
 
 	void testAssertDoubleEqual()
 	{
-		double num = rng(rngGen);
+		double num = dblRng(rngGen);
 		assertEqual(num, num);
 		tryShouldFail([=]() { assertEqual(0.0, 0.1); });
 	}
 
 	void testAssertDoubleNotEqual()
 	{
-		double numA = rng(rngGen);
-		double numB = rng(rngGen);
+		double numA = dblRng(rngGen);
+		double numB = dblRng(rngGen);
+		while (numA == numB)
+			numB = dblRng(rngGen);
 		assertNotEqual(numA, numB);
 		tryShouldFail([=]() { assertNotEqual(numA, numA); });
 		tryShouldFail([=]() { assertNotEqual(numB, numB); });
