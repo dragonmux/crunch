@@ -20,6 +20,11 @@ after_failure:
       cat build/meson-logs/testlog.txt || true;
     fi
 
+cache:
+  pip: true
+  directories:
+    - $HOME/
+
 matrix:
   include:
     - compiler: clang-3.8
@@ -279,7 +284,7 @@ matrix:
 #      if: branch != coverityScan
     - if: branch = coverityScan
       env:
-        - CC=gcc-9 CXX=g++-9 COVERAGE=0
+        - CC=gcc-9 CXX=g++-9 COVERAGE=0 COVERITY_PROJECT_NAME=DX-MON/crunch
         - secure: "F5Sjj6am7EmjkgP3YGUe2WpLnC/UNnBXJ/aJpH3DDq1wFef7jhkNhGZvSrv6ls6AvR4WotkEU8sfEUfzs2H9W0c5rwySCEvK8u8AvTNxvHzQoBNh2BPpriVZlrHpkurFwQmzLjXomKuLy8q1dfQCwDnt+ZLrXRmxHCH0ziDgGSQ="
       compiler: gcc-9
       addons:
@@ -299,14 +304,16 @@ matrix:
           build_command_prepend: "meson setup --prefix=$HOME/.local . .."
           build_command: "ninja"
           branch_pattern: coverityScan
+      before_install: .travis-ci/installCoverity.sh
+      install:
+        - mv /tmp/cov-* ~/.local/coverity
+        - export PATH=$HOME/.local/coverity/bin:$PATH
       before_script:
         - mkdir build
         - cd build
         - cov-configure --comptype gcc --compiler `which gcc-9`
         - cov-configure --comptype g++ --compiler `which g++-9`
       script:
-      before_install:
-        - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 env:
   global:
