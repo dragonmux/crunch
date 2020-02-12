@@ -299,7 +299,7 @@ matrix:
           build_command: "ninja"
           branch_pattern: coverityScan
       before_script:
-        - meson build --prefix=$HOME/.local -Db_coverage=`codecov`
+        - meson build --prefix=$HOME/.local
         - cd build
       script:
       before_install:
