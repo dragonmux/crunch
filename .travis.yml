@@ -302,6 +302,8 @@ matrix:
       before_script:
         - mkdir build
         - cd build
+        - cov-configure --comptype gcc --compiler `which gcc-9`
+        - cov-configure --comptype g++ --compiler `which g++-9`
       script:
       before_install:
         - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
