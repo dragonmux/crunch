@@ -312,6 +312,7 @@ matrix:
       before_script:
         - cov-configure --comptype gcc --compiler `which gcc-9`
       script:
+      after_failure: cat cov-int/scm_log.txt
 
 env:
   global:
