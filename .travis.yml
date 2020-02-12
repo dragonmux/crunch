@@ -304,8 +304,8 @@ matrix:
           build_command_prepend: "meson build --prefix=$HOME/.local"
           build_command: "ninja -C build"
           branch_pattern: coverityScan
-      before_install: .travis-ci/installCoverity.sh
-      install:
+      before_install:
+        - .travis-ci/installCoverity.sh
         - TOOL_BASE=/tmp/coverity-scan-analysis
         - TOOL_DIR=`find $TOOL_BASE -type d -name 'cov-analysis*'`
         - export PATH=$TOOL_DIR/bin:$PATH
