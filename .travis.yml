@@ -296,10 +296,11 @@ matrix:
             name: "DX-MON/crunch"
             description: "crunch your code. Crunch is a unit testing framework written for C and C++."
           notification_email: dx-mon@users.sourceforge.net
+          build_command_prepend: "meson setup --prefix=$HOME/.local . .."
           build_command: "ninja"
           branch_pattern: coverityScan
       before_script:
-        - meson build --prefix=$HOME/.local
+        - mkdir build
         - cd build
       script:
       before_install:
