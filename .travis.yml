@@ -310,7 +310,8 @@ matrix:
         - TOOL_DIR=`find $TOOL_BASE -type d -name 'cov-analysis*'`
         - export PATH=$TOOL_DIR/bin:$PATH
       before_script:
-        - cov-configure --gcc --compiler `which gcc-9`
+        - cov-configure --compiler `which gcc-9` -- -std=c11 -fPIC
+        - cov-configure --compiler `which g++-9` -- -std=c++11 -fPIC
       script:
       after_failure: cat cov-int/build-log.txt
 
