@@ -42,15 +42,6 @@ inline std::string operator ""_s(const char *string, const std::size_t length)
 class crunchTests final : public testsuit
 {
 private:
-	void *genPtr()
-	{
-#if defined(_M_X64) || defined(__x86_64__)
-		return reinterpret_cast<void *>((intptr_t(rand()) << 32) | intptr_t(rand()));
-#else
-		return reinterpret_cast<void *>(intptr_t(rand()));
-#endif
-	}
-
 	const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
 	const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -58,6 +49,7 @@ private:
 	uniform_real_distribution<double> dblRng;
 	uniform_int_distribution<int64_t> intRng;
 	uniform_int_distribution<uint64_t> uintRng;
+	uniform_int_distribution<intptr_t> ptrRng;
 
 	void tryShouldFail(const std::function<void()> &test)
 	{
@@ -71,8 +63,11 @@ private:
 		fail("Expected threadExit_t exception not thrown");
 	}
 
+	inline void *genPtr() { return reinterpret_cast<void *>(ptrRng(rngGen)); }
+
 public:
-	crunchTests() : dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX}, uintRng{0, UINT64_MAX}
+	crunchTests() : dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX}, uintRng{0, UINT64_MAX},
+		ptrRng{INTPTR_MIN, INTPTR_MAX}
 	{
 		std::random_device randDev;
 		rngGen.seed(randDev());
@@ -222,9 +217,7 @@ private:
 
 	void testAssertPtrEqual()
 	{
-		void *ptr;
-		srand(time(nullptr));
-		ptr = genPtr();
+		void *ptr = genPtr();
 		assertEqual(ptr, ptr);
 		while (!ptr)
 			ptr = genPtr();
@@ -233,11 +226,10 @@ private:
 
 	void testAssertPtrNotEqual()
 	{
-		void *ptr;
-		srand(time(nullptr));
+		void *ptr{nullptr};
 		do
 			ptr = genPtr();
-		while (ptr == nullptr);
+		while (!ptr);
 		assertNotEqual(ptr, nullptr);
 		tryShouldFail([=]() { assertNotEqual(ptr, ptr); });
 	}
@@ -282,11 +274,10 @@ private:
 
 	void testAssertNotNull()
 	{
-		void *ptr;
-		srand(time(nullptr));
+		void *ptr{nullptr};
 		do
 			ptr = genPtr();
-		while (ptr == nullptr);
+		while (!ptr);
 		assertNotNull(ptr);
 		assertNotNull((const void *)ptr);
 		tryShouldFail([=]() { assertNotNull(static_cast<void *>(nullptr)); });
@@ -295,11 +286,11 @@ private:
 
 	void testAssertGreaterThan()
 	{
-		intptr_t value;
-		srand(time(nullptr));
+		intptr_t value{};
 		do
-			value = intptr_t(genPtr());
+			value = ptrRng(rngGen);
 		while (!value);
+		value &= ~(1U << (sizeof(intptr_t) - 1));
 		assertGreaterThan(value, 0);
 		tryShouldFail([=]() { assertGreaterThan(value, value); });
 		tryShouldFail([=]() { assertGreaterThan(0, value); });
@@ -307,11 +298,11 @@ private:
 
 	void testAssertLessThan()
 	{
-		intptr_t value;
-		srand(time(nullptr));
+		intptr_t value{};
 		do
-			value = intptr_t(genPtr());
+			value = ptrRng(rngGen);
 		while (!value);
+		value &= ~(1U << (sizeof(intptr_t) - 1));
 		assertLessThan(0, value);
 		tryShouldFail([=]() { assertLessThan(value, value); });
 		tryShouldFail([=]() { assertLessThan(value, 0); });
