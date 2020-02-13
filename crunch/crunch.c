@@ -18,6 +18,7 @@
 
 #include "threading/threadShim.h"
 #include <stdio.h>
+#include <inttypes.h>
 #include "Core.h"
 #include "Logger.h"
 #include "ArgsParser.h"
@@ -128,7 +129,7 @@ int testRunner(void *testPtr)
 void printStats()
 {
 	uint64_t total = passes + failures;
-	testPrintf("Total tests: %u,  Failures: %u,  Pass rate: ", total, failures);
+	testPrintf("Total tests: %" PRIu64 ",  Failures: %" PRIu32 ",  Pass rate: ", total, failures);
 	if (total == 0)
 		testPrintf("--\n");
 	else

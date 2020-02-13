@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
+#include <cstring>
+#include <cinttypes>
 #include "Core.h"
 #include "Logger.h"
 #include "ArgsParser.h"
@@ -94,7 +95,7 @@ void magenta()
 void printStats()
 {
 	uint64_t total = passes + failures;
-	testPrintf("Total tests: %u,  Failures: %u,  Pass rate: ", total, failures);
+	testPrintf("Total tests: %" PRIu64 ",  Failures: %" PRIu32 ",  Pass rate: ", total, failures);
 	if (total == 0)
 		testPrintf("--\n");
 	else
