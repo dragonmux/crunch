@@ -312,7 +312,7 @@ matrix:
       before_script:
         - cov-configure --compiler `which gcc-9` -- -std=c11 -fPIC
         - cov-configure --compiler `which g++-9` -- -std=c++11 -fPIC
-      script: echo "Skipping \`script\` owing to Coverity build"
+      script: cat cov-int/build-log.txt
       after_failure: cat cov-int/build-log.txt
 
 env:
