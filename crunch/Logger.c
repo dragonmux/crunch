@@ -239,6 +239,12 @@ testLog *startLogging(const char *fileName)
 #else
 	logger_->fd = dup(fileno(stdout));
 #endif
+	if (logger_->fd == -1)
+	{
+		stdout = logger_->realStdout;
+		free(logger_);
+		return NULL;
+	}
 	logger = logger_;
 	logger_->stdout_ = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
