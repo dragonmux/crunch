@@ -252,17 +252,17 @@ testLog *startLogging(const char *fileName)
 #else
 	logger_->fd = dup(fileno(stdout));
 #endif
-	logger = logger_.get();
-	logger_->stdout_ = fdopen(logger_->fd, "w");
-	const int fileFD = fileno(logger_->file);
+	logger = logger_.release();
+	logger->stdout_ = fdopen(logger->fd, "w");
+	const int fileFD = fileno(logger->file);
 #ifndef _MSC_VER
 	flock(fileFD, LOCK_EX);
 	dup2(fileFD, STDOUT_FILENO);
 #else
 //	locking(fileFD, LK_LOCK, -1);
-	dup2(fileFD, fileno(logger_->realStdout));
+	dup2(fileFD, fileno(logger->realStdout));
 #endif
-	return logger_.release();
+	return logger;
 }
 
 void stopLogging(testLog *loggerPtr)
