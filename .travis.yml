@@ -307,7 +307,7 @@ matrix:
       before_install:
         - .travis-ci/installCoverity.sh
       before_script:
-      script: cat cov-int/build-log.txt
+      script: touch build
       after_failure: cat cov-int/build-log.txt
 
 env:
