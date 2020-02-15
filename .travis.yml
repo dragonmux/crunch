@@ -306,12 +306,7 @@ matrix:
           branch_pattern: coverityScan
       before_install:
         - .travis-ci/installCoverity.sh
-        - TOOL_BASE=/tmp/coverity-scan-analysis
-        - TOOL_DIR=`find $TOOL_BASE -type d -name 'cov-analysis*'`
-        - export PATH=$TOOL_DIR/bin:$PATH
       before_script:
-        - cov-configure --compiler `which gcc-9` -- -std=c11 -fPIC
-        - cov-configure --compiler `which g++-9` -- -std=c++11 -fPIC
       script: cat cov-int/build-log.txt
       after_failure: cat cov-int/build-log.txt
 
