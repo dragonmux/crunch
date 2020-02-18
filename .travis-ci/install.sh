@@ -14,7 +14,7 @@ if [ "$TRAVIS_OS_NAME" == "windows" ]; then
 	mkdir /c/tools/ninja-build
 	7z x -oC:\\tools\\ninja-build ninja-win.zip
 	rm get-pip.py ninja-win.zip
-elif [ "$ENGINE" == "meson" ]; then
+else
 	if [ ! -e $HOME/.local/bin/meson ]; then
 		wget https://bootstrap.pypa.io/get-pip.py
 		python3.6 get-pip.py --user

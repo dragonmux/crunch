@@ -3,12 +3,7 @@ os: linux
 dist: xenial
 
 install: .travis-ci/install.sh
-before_script:
-  - if [ "$ENGINE" == "make" ]; then
-      export GCC="$CC -m64 -fPIC -DPIC" GXX="$CXX -m64 -fPIC -DPIC";
-      export PREFIX=$HOME/.local PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig;
-    fi
-  - .travis-ci/beforeScript.sh
+before_script: .travis-ci/beforeScript.sh
 script: .travis-ci/script.sh
 
 after_success:
@@ -264,11 +259,10 @@ matrix:
 #    - env: ARCH=amd64 COVERAGE=0 PATH="/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:/c/Program Files/LLVM/bin:$PATH" CC=clang CXX=clang++
 #      os: windows
 #      if: branch != coverityScan
-    - if: branch = coverityScan
+    - compiler: gcc-9
       env:
         - CC=gcc-9 CXX=g++-9 COVERAGE=0 COVERITY_PROJECT_NAME=DX-MON/crunch
         - secure: "F5Sjj6am7EmjkgP3YGUe2WpLnC/UNnBXJ/aJpH3DDq1wFef7jhkNhGZvSrv6ls6AvR4WotkEU8sfEUfzs2H9W0c5rwySCEvK8u8AvTNxvHzQoBNh2BPpriVZlrHpkurFwQmzLjXomKuLy8q1dfQCwDnt+ZLrXRmxHCH0ziDgGSQ="
-      compiler: gcc-9
       addons:
         apt:
           sources:
@@ -290,11 +284,11 @@ matrix:
       before_script:
       script: touch build
       after_failure: cat cov-int/build-log.txt
+      if: branch = coverityScan
 
 env:
   global:
     - COVERAGE=1
-    - ENGINE=meson
 
 notifications:
   email:
