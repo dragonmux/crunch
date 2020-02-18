@@ -1,7 +1,13 @@
 #ifndef RANLUX__H
 #define RANLUX__H
 
+#ifdef __cplusplus
+#include <cstdint>
+extern "C"
+{
+#else
 #include <stdint.h>
+#endif
 
 // Implemented based on https://github.com/boostorg/random/issues/57
 
@@ -14,5 +20,9 @@ extern uint32_t genRanlux32(void *const state);
 // RANLUX64
 extern void initRanlux64(const uint16_t luxury, const uint64_t seed);
 extern uint64_t genRanlux64();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*RANLUX__H*/
