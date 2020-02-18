@@ -253,30 +253,42 @@ void testAssertNotNull()
 	tryShouldFail(testAssertNotNull2);
 }
 
-void testAssertGreaterThan1() { assertGreaterThan(value, value); }
-void testAssertGreaterThan2() { assertGreaterThan(0, value); }
+void testAssertGreaterThan1() { assertGreaterThan(num32, num32); }
+void testAssertGreaterThan2() { assertGreaterThan(0, num32); }
+void testAssertGreaterThan3() { assertGreaterThan(num64, num64); }
+void testAssertGreaterThan4() { assertGreaterThan(0, num64); }
 void testAssertGreaterThan()
 {
-	srand(time(NULL));
-	do
-		value = (long)(uintptr_t)genPtr();
-	while (ptr == NULL);
-	assertGreaterThan(value, 0);
+	num32 = num64 = 0;
+	while (num32 == 0)
+		num32 = genRanlux32(ranlux32);
+	while (num64 == 0)
+		num64 = genRanlux64(ranlux64);
+	assertGreaterThan(value, num32);
+	assertGreaterThan64(value, num64);
 	tryShouldFail(testAssertGreaterThan1);
 	tryShouldFail(testAssertGreaterThan2);
+	tryShouldFail(testAssertGreaterThan3);
+	tryShouldFail(testAssertGreaterThan4);
 }
 
-void testAssertLessThan1() { assertLessThan(value, value); }
-void testAssertLessThan2() { assertLessThan(value, 0); }
+void testAssertLessThan1() { assertLessThan(num32, num32); }
+void testAssertLessThan2() { assertLessThan(num32, 0); }
+void testAssertLessThan3() { assertLessThan(num64, num64); }
+void testAssertLessThan4() { assertLessThan(num64, 0); }
 void testAssertLessThan()
 {
-	srand(time(NULL));
-	do
-		value = (long)(uintptr_t)genPtr();
-	while (ptr == NULL);
-	assertLessThan(0, value);
+	num32 = num64 = 0;
+	while (num32 == 0)
+		num32 = genRanlux32(ranlux32);
+	while (num64 == 0)
+		num64 = genRanlux64(ranlux64);
+	assertLessThan(0, num32);
+	assertLessThan64(0, num64);
 	tryShouldFail(testAssertLessThan1);
 	tryShouldFail(testAssertLessThan2);
+	tryShouldFail(testAssertLessThan3);
+	tryShouldFail(testAssertLessThan4);
 }
 
 void testLogging()
