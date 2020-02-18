@@ -11,8 +11,8 @@ extern "C"
 
 // Implemented based on https://github.com/boostorg/random/issues/57
 
-struct ranlux32_t;
-struct ranlux64_t;
+typedef struct ranlux32_t ranlux32_t;
+typedef struct ranlux64_t ranlux64_t;
 
 // RANLUX32 w/ a Luxury value of 389
 // word size (w) = 32, short lag (s) = 3, long lag (r) = 17

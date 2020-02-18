@@ -29,9 +29,11 @@
 #include "Core.h"
 #include "Logger.h"
 #include "StringFuncs.h"
+#include <ranlux.h>
 
 typedef void (*failFn_t)();
 
+ranlux32_t *ranlux32;
 void *ptr;
 long value;
 /*int32_t snum32;
@@ -43,6 +45,18 @@ int64_t num64;
 double dblA, dblB;
 const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
 const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+void setup()
+{
+	ranlux32 = initRanlux32(0);
+	if (ranlux32 == NULL)
+		fail("Failed to initalise 32-bit random number generator");
+}
+
+void teardown()
+{
+	freeRanlux32(ranlux32);
+}
 
 void *genPtr()
 {
@@ -94,12 +108,12 @@ void testAssertIntEqual2() { assertInt64Equal(0, num64); }
 void testAssertIntEqual()
 {
 	srand(time(NULL));
-	num32 = rand();
+	num32 = genRanlux32(ranlux32);
 	assertIntEqual(num32, num32);
 	num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
 	assertIntEqual(num64, num64);
 	while (num32 == 0)
-		num32 = rand();
+		num32 = genRanlux32(ranlux32);
 	tryShouldFail(testAssertIntEqual1);
 	while (num64 == 0)
 		num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
@@ -112,10 +126,10 @@ void testAssertIntNotEqual3() { assertInt64NotEqual(num64, num64); }
 void testAssertIntNotEqual4() { assertInt64NotEqual(0, 0); }
 void testAssertIntNotEqual()
 {
+	num32 = 0;
 	srand(time(NULL));
-	do
-		num32 = rand();
-	while (num32 == 0);
+	while (num32 == 0)
+		num32 = genRanlux32(ranlux32);
 	do
 		num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
 	while (num64 == 0);
@@ -321,6 +335,7 @@ void testAllocs()
 #endif
 
 BEGIN_REGISTER_TESTS()
+	TEST(setup)
 	TEST(testAssertTrue)
 	TEST(testAssertFalse)
 	TEST(testAssertIntEqual)
@@ -343,4 +358,5 @@ BEGIN_REGISTER_TESTS()
 #ifndef NO_ALLOC_TEST
 	TEST(testAllocs)
 #endif
+	TEST(teardown)
 END_REGISTER_TESTS()
