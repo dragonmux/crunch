@@ -12,7 +12,7 @@ foreach test : libCrunchTests
 
 	inputs = [files(test + '.c')]
 	if test == 'testCrunch'
-		command += ['-I' + ranluxSrcDir]
+		command += ['-I' + ranluxSrcDir, '-lstdc++']
 		inputs += [ranlux]
 	endif
 
