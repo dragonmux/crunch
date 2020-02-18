@@ -62,7 +62,7 @@ void teardown()
 	freeRanlux64(ranlux64);
 }
 
-inline void *genPtr()
+void *genPtr()
 {
 	uintptr_t ptr;
 	if (sizeof(void *) <= 32)
