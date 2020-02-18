@@ -63,13 +63,14 @@ void teardown()
 	freeRanlux64(ranlux64);
 }
 
-void *genPtr()
+inline void *genPtr()
 {
-#if defined(_M_X64) || defined(__X86_64__)
-	return (void *)(((uintptr_t)rand() << 32) | (uintptr_t)rand());
-#else
-	return (void *)(uintptr_t)rand();
-#endif
+	uintptr_t ptr;
+	if (sizeof(void *) <= 32)
+		ptr = genRanlux32(ranlux32);
+	else
+		ptr = genRanlux64(ranlux64);
+	return (void *)ptr;
 }
 
 double genDbl()
@@ -170,7 +171,6 @@ void testAssertDoubleNotEqual()
 void testAssertPtrEqual1() { assertPtrEqual(ptr, NULL); }
 void testAssertPtrEqual()
 {
-	srand(time(NULL));
 	ptr = genPtr();
 	assertPtrEqual(ptr, ptr);
 	while (ptr == NULL)
@@ -182,10 +182,9 @@ void testAssertPtrNotEqual1() { assertPtrNotEqual(ptr, ptr); }
 void testAssertPtrNotEqual2() { assertPtrNotEqual(NULL, NULL); }
 void testAssertPtrNotEqual()
 {
-	srand(time(NULL));
-	do
+	ptr = NULL;
+	while (ptr == NULL)
 		ptr = genPtr();
-	while (ptr == NULL);
 	assertPtrNotEqual(ptr, NULL);
 	tryShouldFail(testAssertPtrNotEqual1);
 	tryShouldFail(testAssertPtrNotEqual2);
