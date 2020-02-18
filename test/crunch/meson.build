@@ -9,10 +9,17 @@ foreach test : libCrunchTests
 	else
 		command += ['-DNO_ALLOC_TEST']
 	endif
+
+	inputs = [files(test + '.c')]
+	if test == 'testCrunch'
+		command += ['-I' + ranluxSrcDir]
+		inputs += [ranlux]
+	endif
+
 	custom_target(
 		'crunch-' + test,
 		command: command,
-		input: files(test + '.c'),
+		input: inputs,
 		output: test + testExt,
 		depends: libCrunch,
 		build_by_default: true
