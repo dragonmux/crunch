@@ -6,14 +6,14 @@
 struct ranlux32Base_t final
 {
 private:
-	std::array<uint32_t, 17> x;
-	uint8_t carry;
-	uint8_t p;
-
 	constexpr static uint8_t wordSize = 32;
 	constexpr static uint8_t shortLag = 3;
 	constexpr static uint8_t longLag = 17;
 	constexpr static uint32_t defaultSeed = 19780503U;
+
+	std::array<uint32_t, longLag> x;
+	uint8_t carry;
+	uint8_t p;
 
 public:
 	ranlux32Base_t(const uint32_t seed) noexcept : x{}, carry{}, p{0}
@@ -51,7 +51,7 @@ struct ranlux32_t final
 {
 private:
 	ranlux32Base_t baseState;
-	uint32_t blockUsed;
+	uint16_t blockUsed;
 
 	constexpr static uint16_t luxury = 389;
 	constexpr static uint8_t blockSize = 16;

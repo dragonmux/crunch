@@ -21,9 +21,10 @@ void freeRanlux32(ranlux32_t *const state);
 uint32_t genRanlux32(ranlux32_t *const state);
 
 // RANLUX64
-extern void initRanlux64(const uint16_t luxury, const uint64_t seed);
-extern void freeRanlux64(void *const state);
-extern uint64_t genRanlux64();
+// word size (w) = 64, short lag (s) = 5, long lag (r) = 62
+ranlux64_t *initRanlux64(const uint64_t seed);
+void freeRanlux64(ranlux64_t *const state);
+uint64_t genRanlux64(ranlux64_t *const state);
 
 #ifdef __cplusplus
 }

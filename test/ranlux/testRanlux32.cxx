@@ -56,6 +56,8 @@ private:
 			const auto crunchResult = genRanlux32(crunchRanlux);
 			assertEqual(crunchResult, stdResult);
 		}
+
+		freeRanlux32(crunchRanlux);
 	}
 
 public:
