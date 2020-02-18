@@ -17,7 +17,7 @@
  */
 
 #include <random>
-#include <crunch++.h>
+#include <crunch++/crunch++.h>
 #include "ranlux.h"
 
 using ranlux32Base_t = std::subtract_with_carry_engine<uint32_t, 32, 3, 17>;
