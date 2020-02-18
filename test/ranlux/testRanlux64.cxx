@@ -30,11 +30,7 @@ private:
 	uint64_t seed;
 
 public:
-	ranlux64Test() : seed{}
-	{
-		std::random_device randDev{};
-		seed = randDev();
-	}
+	ranlux64Test() : seed{randomSeed64()} { }
 
 private:
 	void testConstruction()

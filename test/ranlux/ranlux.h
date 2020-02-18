@@ -14,6 +14,10 @@ extern "C"
 typedef struct ranlux32_t ranlux32_t;
 typedef struct ranlux64_t ranlux64_t;
 
+// Seed value readers
+uint32_t randomSeed32();
+uint64_t randomSeed64();
+
 // RANLUX32 w/ a Luxury value of 389
 // word size (w) = 32, short lag (s) = 3, long lag (r) = 17
 ranlux32_t *initRanlux32(const uint32_t seed);

@@ -29,11 +29,7 @@ private:
 	uint32_t seed;
 
 public:
-	ranlux32Test() : seed{}
-	{
-		std::random_device randDev{};
-		seed = randDev();
-	}
+	ranlux32Test() : seed{randomSeed32()} { }
 
 private:
 	void testConstruction()

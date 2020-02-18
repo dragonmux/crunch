@@ -1,6 +1,6 @@
 ranlux = static_library(
 	'ranlux',
-	['ranlux32.cxx', 'ranlux64.cxx'],
+	['ranlux32.cxx', 'ranlux64.cxx', 'helpers.cxx'],
 	pic: true,
 	include_directories: projectInclude,
 	install: false,
@@ -18,7 +18,7 @@ objectMap = {
 
 foreach test : ranluxTests
 	map = objectMap.get(test)
-	testObjs = [ranlux.extract_objects(map['test'])]
+	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx'])]
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.source_root(), '-L' + libCrunchppPath]
 	if cxx.get_id() != 'msvc'
 		command += ['-z', 'defs']
