@@ -21,7 +21,7 @@
 #include "ranlux.h"
 
 using ranlux32Base_t = std::subtract_with_carry_engine<uint32_t, 32, 3, 17>;
-using ranlux32_t = std::discard_block_engine<ranlux32Base_t, 389, 16>;
+using ranlux32STL_t = std::discard_block_engine<ranlux32Base_t, 389, 16>;
 
 struct ranlux32Test final : public testsuit
 {
@@ -45,7 +45,7 @@ private:
 
 	void testCorrectness()
 	{
-		ranlux32_t stdRanlux{seed};
+		ranlux32STL_t stdRanlux{seed};
 		auto crunchRanlux{initRanlux32(seed)};
 		assertNotNull(crunchRanlux);
 

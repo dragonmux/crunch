@@ -71,16 +71,12 @@ public:
 	}
 };
 
-void *initRanlux32(const uint32_t seed) try
+ranlux32_t *initRanlux32(const uint32_t seed) try
 	{ return makeUnique<ranlux32_t>(seed).release(); }
 catch (...)
 	{ return nullptr; }
 
-void freeRanlux32(void *const state)
-	{ std::unique_ptr<ranlux32_t> ranluxState{static_cast<ranlux32_t *>(state)}; }
+void freeRanlux32(ranlux32_t *const state)
+	{ std::unique_ptr<ranlux32_t> ranluxState{state}; }
 
-uint32_t genRanlux32(void *const state)
-{
-	ranlux32_t &ranluxState = *static_cast<ranlux32_t *>(state);
-	return ranluxState();
-}
+uint32_t genRanlux32(ranlux32_t *const state) { return (*state)(); }
