@@ -34,6 +34,7 @@
 typedef void (*failFn_t)();
 
 ranlux32_t *ranlux32;
+ranlux64_t *ranlux64;
 void *ptr;
 long value;
 /*int32_t snum32;
@@ -48,14 +49,18 @@ const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 void setup()
 {
-	ranlux32 = initRanlux32(0);
+	ranlux32 = initRanlux32(randomSeed32());
 	if (ranlux32 == NULL)
 		fail("Failed to initalise 32-bit random number generator");
+	ranlux64 = initRanlux64(randomSeed64());
+	if (ranlux64 == NULL)
+		fail("Failed to initalise 64-bit random number generator");
 }
 
 void teardown()
 {
 	freeRanlux32(ranlux32);
+	freeRanlux64(ranlux64);
 }
 
 void *genPtr()
@@ -107,16 +112,15 @@ void testAssertIntEqual1() { assertIntEqual(0, num32); }
 void testAssertIntEqual2() { assertInt64Equal(0, num64); }
 void testAssertIntEqual()
 {
-	srand(time(NULL));
 	num32 = genRanlux32(ranlux32);
 	assertIntEqual(num32, num32);
-	num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
+	num64 = genRanlux64(ranlux64);
 	assertIntEqual(num64, num64);
 	while (num32 == 0)
 		num32 = genRanlux32(ranlux32);
 	tryShouldFail(testAssertIntEqual1);
 	while (num64 == 0)
-		num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
+		num64 = genRanlux64(ranlux64);
 	tryShouldFail(testAssertIntEqual2);
 }
 
@@ -126,14 +130,13 @@ void testAssertIntNotEqual3() { assertInt64NotEqual(num64, num64); }
 void testAssertIntNotEqual4() { assertInt64NotEqual(0, 0); }
 void testAssertIntNotEqual()
 {
-	num32 = 0;
-	srand(time(NULL));
+	num32 = num64 = 0;
 	while (num32 == 0)
 		num32 = genRanlux32(ranlux32);
-	do
-		num64 = (((int64_t)rand()) << 32) | ((int64_t)rand());
-	while (num64 == 0);
+	while (num64 == 0)
+		num64 = genRanlux64(ranlux64);
 	assertIntNotEqual(num32, 0);
+	assertInt64NotEqual(num64, 0);
 	tryShouldFail(testAssertIntNotEqual1);
 	tryShouldFail(testAssertIntNotEqual2);
 	tryShouldFail(testAssertIntNotEqual3);
