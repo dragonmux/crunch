@@ -24,7 +24,7 @@ foreach test : ranluxTests
 		command += ['-z', 'defs']
 	endif
 	if debug
-		command += '--debug'
+		command += ['--debug']
 	endif
 
 	custom_target(
