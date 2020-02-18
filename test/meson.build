@@ -3,6 +3,18 @@ if not isWindows
 else
 	testExt = '.tlib'
 endif
+
+commandExtra = []
+if coverage
+	commandExtra += ['--coverage']
+endif
+if debug
+	commandExtra += ['--debug']
+endif
+if cxx.get_id() != 'msvc'
+	commandExtra += ['-z', 'defs']
+endif
+
 subdir('ranlux')
 subdir('crunch')
 subdir('crunch++')

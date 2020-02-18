@@ -20,16 +20,10 @@ foreach test : ranluxTests
 	map = objectMap.get(test)
 	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx'])]
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.source_root(), '-L' + libCrunchppPath]
-	if cxx.get_id() != 'msvc'
-		command += ['-z', 'defs']
-	endif
-	if debug
-		command += ['--debug']
-	endif
 
 	custom_target(
 		test,
-		command: command,
+		command: command + commandExtra,
 		input: [test + '.cxx'] + testObjs,
 		output: test + testExt,
 		depends: libCrunchpp,

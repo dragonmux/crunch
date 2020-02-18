@@ -3,16 +3,6 @@ libCrunchppTestsExcept = ['testTester']
 libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
 
 libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
-commandExtra = []
-if coverage
-	commandExtra += ['--coverage']
-endif
-if debug
-	commandExtra += ['--debug']
-endif
-if cxx.get_id() != 'msvc'
-	commandExtra += ['-z', 'defs']
-endif
 
 foreach test : libCrunchppTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
