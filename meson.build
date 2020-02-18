@@ -8,7 +8,7 @@ project(
 		'b_pch=false',
 		'buildtype=release'
 	],
-	version: '0.3.2'
+	version: '0.4.0'
 )
 
 cc = meson.get_compiler('c')
