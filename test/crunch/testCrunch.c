@@ -264,8 +264,8 @@ void testAssertGreaterThan()
 		num32 = genRanlux32(ranlux32);
 	while (num64 == 0)
 		num64 = genRanlux64(ranlux64);
-	assertGreaterThan(value, num32);
-	assertGreaterThan64(value, num64);
+	assertGreaterThan(num32, 0);
+	assertGreaterThan64(num64, 0);
 	tryShouldFail(testAssertGreaterThan1);
 	tryShouldFail(testAssertGreaterThan2);
 	tryShouldFail(testAssertGreaterThan3);
