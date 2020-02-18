@@ -36,7 +36,6 @@ typedef void (*failFn_t)();
 ranlux32_t *ranlux32;
 ranlux64_t *ranlux64;
 void *ptr;
-long value;
 /*int32_t snum32;
 int64_t snum64;
 uint32_t unum32;
