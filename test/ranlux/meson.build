@@ -1,18 +1,19 @@
 ranlux = static_library(
 	'ranlux',
-	['ranlux32.cxx'],
+	['ranlux32.cxx', 'ranlux64.cxx'],
 	pic: true,
 	include_directories: projectInclude,
 	install: false,
 	build_by_default: true
 )
 
-ranluxTests = ['testRanlux32']
+ranluxTests = ['testRanlux32', 'testRanlux64']
 libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
 ranluxSrcDir = meson.current_source_dir()
 
 objectMap = {
-	'testRanlux32': {'test': ['ranlux32.cxx'], 'name': 'ranlux32'}
+	'testRanlux32': {'test': ['ranlux32.cxx'], 'name': 'ranlux32'},
+	'testRanlux64': {'test': ['ranlux64.cxx'], 'name': 'ranlux64'}
 }
 
 foreach test : ranluxTests
