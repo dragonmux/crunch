@@ -3,6 +3,7 @@ if not isWindows
 else
 	testExt = '.tlib'
 endif
+subdir('ranlux')
 subdir('crunch')
 subdir('crunch++')
 

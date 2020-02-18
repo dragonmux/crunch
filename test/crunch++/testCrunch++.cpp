@@ -69,7 +69,7 @@ public:
 	crunchTests() : dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX}, uintRng{0, UINT64_MAX},
 		ptrRng{INTPTR_MIN, INTPTR_MAX}
 	{
-		std::random_device randDev;
+		std::random_device randDev{};
 		rngGen.seed(randDev());
 	}
 
