@@ -1,1 +1,0 @@
-../test/crunch++/testRegistration.cpp
