@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2020 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __CRUNCH_H__
-#define __CRUNCH_H__
+#ifndef CRUNCH__H
+#define CRUNCH__H
 
 #include <stddef.h>
 
@@ -125,8 +125,10 @@ CRUNCH_API void assertNotNull(void *result);
 CRUNCH_API void assertConstNull(const void *const result);
 CRUNCH_API void assertConstNotNull(const void *const result);
 
-CRUNCH_API void assertGreaterThan(long result, long expected);
-CRUNCH_API void assertLessThan(long result, long expected);
+CRUNCH_API void assertGreaterThan(int32_t result, int32_t expected);
+CRUNCH_API void assertGreaterThan64(int64_t result, int64_t expected);
+CRUNCH_API void assertLessThan(int32_t result, int32_t expected);
+CRUNCH_API void assertLessThan64(int64_t result, int64_t expected);
 
 CRUNCH_API test *tests;
 CRUNCH_API int32_t allocCount;
@@ -134,4 +136,4 @@ CRUNCH_API int32_t allocCount;
 CRUNCH_API testLog *startLogging(const char *fileName);
 CRUNCH_API void stopLogging(testLog *logFile);
 
-#endif /* __CRUNCH_H__ */
+#endif /* CRUNCH__H */

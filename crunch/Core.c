@@ -205,20 +205,38 @@ void assertConstNotNull(const void *const result)
 	}
 }
 
-void assertGreaterThan(long result, long expected)
+void assertGreaterThan(int32_t result, int32_t expected)
 {
 	if (result <= expected)
 	{
-		ASSERTION_FAILURE("%ld was not greater than %ld", result, expected);
+		ASSERTION_FAILURE("%d was not greater than %d", result, expected);
 		thrd_exit(THREAD_ERROR);
 	}
 }
 
-void assertLessThan(long result, long expected)
+void assertGreaterThan64(int64_t result, int64_t expected)
+{
+	if (result <= expected)
+	{
+		ASSERTION_FAILURE("%" PRId64 " was not greater than %" PRId64, result, expected);
+		thrd_exit(THREAD_ERROR);
+	}
+}
+
+void assertLessThan(int32_t result, int32_t expected)
 {
 	if (result >= expected)
 	{
-		ASSERTION_FAILURE("%ld was not less than %ld", result, expected);
+		ASSERTION_FAILURE("%d was not less than %d", result, expected);
+		thrd_exit(THREAD_ERROR);
+	}
+}
+
+void assertLessThan64(int64_t result, int64_t expected)
+{
+	if (result >= expected)
+	{
+		ASSERTION_FAILURE("%" PRId64 " was not less than %" PRId64, result, expected);
 		thrd_exit(THREAD_ERROR);
 	}
 }
