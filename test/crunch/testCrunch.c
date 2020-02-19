@@ -294,13 +294,16 @@ void testLogging()
 	assertGreaterThan(puts("Print to console test"), -1);
 	assertNull(startLogging(NULL));
 	assertNull(startLogging(""));
-	testLog *const logFile = startLogging(fileName);
+	testLog *logFile = startLogging(fileName);
 	assertNotNull(logFile);
 	// Assert that double-logging is not allowed
 	assertNull(startLogging(fileName));
 	stopLogging(NULL); // code coverage stuff.. this shouldn't affect the next line.
 	assertGreaterThan(puts(fileString), -1);
 	stopLogging(logFile);
+	logFile = NULL;
+	while (logFile == NULL)
+		logFile = genPtr();
 	stopLogging(logFile); // code coverage stuff.. this should be harmless.
 	FILE *const file = fopen(fileName, "r");
 	assertNotNull(file);
