@@ -254,14 +254,14 @@ void testAssertNotNull()
 
 void testAssertGreaterThan1() { assertGreaterThan(num32, num32); }
 void testAssertGreaterThan2() { assertGreaterThan(0, num32); }
-void testAssertGreaterThan3() { assertGreaterThan(num64, num64); }
-void testAssertGreaterThan4() { assertGreaterThan(0, num64); }
+void testAssertGreaterThan3() { assertGreaterThan64(num64, num64); }
+void testAssertGreaterThan4() { assertGreaterThan64(0, num64); }
 void testAssertGreaterThan()
 {
 	num32 = num64 = 0;
-	while (num32 == 0)
+	while (num32 <= 0)
 		num32 = genRanlux32(ranlux32);
-	while (num64 == 0)
+	while (num64 <= 0)
 		num64 = genRanlux64(ranlux64);
 	assertGreaterThan(num32, 0);
 	assertGreaterThan64(num64, 0);
@@ -273,14 +273,14 @@ void testAssertGreaterThan()
 
 void testAssertLessThan1() { assertLessThan(num32, num32); }
 void testAssertLessThan2() { assertLessThan(num32, 0); }
-void testAssertLessThan3() { assertLessThan(num64, num64); }
-void testAssertLessThan4() { assertLessThan(num64, 0); }
+void testAssertLessThan3() { assertLessThan64(num64, num64); }
+void testAssertLessThan4() { assertLessThan64(num64, 0); }
 void testAssertLessThan()
 {
 	num32 = num64 = 0;
-	while (num32 == 0)
+	while (num32 <= 0)
 		num32 = genRanlux32(ranlux32);
-	while (num64 == 0)
+	while (num64 <= 0)
 		num64 = genRanlux64(ranlux64);
 	assertLessThan(0, num32);
 	assertLessThan64(0, num64);
