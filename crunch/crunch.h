@@ -60,7 +60,7 @@
 #define __MACOS__
 #endif
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <stdio.h>
 
 typedef struct _test

@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "threading/threadShim.h"
-#include <crunch.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -26,10 +24,14 @@
 #include <unistd.h>
 #endif
 #include <string.h>
-#include "Core.h"
-#include "Logger.h"
-#include "StringFuncs.h"
+
+#include <threading/threadShim.h>
+#include <crunch.h>
 #include <ranlux.h>
+
+#include <Core.h>
+#include <Logger.h>
+#include <StringFuncs.h>
 
 typedef void (*failFn_t)();
 

@@ -1,4 +1,7 @@
 libCrunchTests = ['testArgsParser', 'testCrunch', 'testBad']
+if not c11Threading
+	libCrunchTests += 'testThreadShim'
+endif
 
 libCrunchPath = join_paths([meson.build_root(), libCrunch.outdir()])
 
@@ -14,6 +17,8 @@ foreach test : libCrunchTests
 	if test == 'testCrunch'
 		command += ['-I' + ranluxSrcDir, '-lstdc++']
 		inputs += [ranlux]
+	elif test == 'testThreadShim'
+		inputs += libCrunch.extract_objects('threading/threadShim.c')
 	endif
 
 	custom_target(

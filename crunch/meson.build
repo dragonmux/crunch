@@ -6,7 +6,7 @@ crunchSrcDir = meson.current_source_dir()
 crunchInc = include_directories('.')
 
 threadArgs = []
-if cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
+if c11Threading
 	threadArgs += ['-DUSE_C11_THREADING']
 else
 	libCrunchSrc += ['threading/threadShim.c']
