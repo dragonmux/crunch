@@ -94,7 +94,7 @@ matrix:
             - clang-8
             - python3.6
       if: branch != coverityScan
-    - compiler: clang-8.0
+    - compiler: clang-8
       env: CC=clang-8 CXX=clang++-8 COVERAGE=0
       addons:
         apt:
