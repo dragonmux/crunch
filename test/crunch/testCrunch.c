@@ -227,10 +227,9 @@ void testAssertNull1() { assertNull(ptr); }
 void testAssertNull2() { assertConstNull(ptr); }
 void testAssertNull()
 {
-	srand(time(NULL));
-	do
+	ptr = NULL;
+	while (ptr == NULL)
 		ptr = genPtr();
-	while (ptr == NULL);
 	assertNull(NULL);
 	assertConstNull(NULL);
 	tryShouldFail(testAssertNull1);
@@ -241,11 +240,9 @@ void testAssertNotNull1() { assertNotNull(NULL); }
 void testAssertNotNull2() { assertConstNotNull(NULL); }
 void testAssertNotNull()
 {
-	void *ptr;
-	srand(time(NULL));
-	do
+	ptr = NULL;
+	while (ptr == NULL)
 		ptr = genPtr();
-	while (ptr == NULL);
 	assertNotNull(ptr);
 	assertConstNotNull(ptr);
 	tryShouldFail(testAssertNotNull1);
