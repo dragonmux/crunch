@@ -22,18 +22,6 @@ cache:
 
 matrix:
   include:
-    - compiler: clang-4.0
-      env: CC=clang-4.0 CXX=clang++-4.0 COVERAGE=0
-      addons:
-        apt:
-          sources:
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-4.0 main'
-              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - deadsnakes
-          packages:
-            - clang-4.0
-            - python3.6
-      if: branch != coverityScan
     - compiler: clang-5.0
       env: CC=clang-5.0 CXX=clang++-5.0 COVERAGE=0
       addons:
