@@ -106,6 +106,30 @@ matrix:
             - clang-8
             - python3.6
       if: branch != coverityScan
+    - compiler: clang-9
+      env: CC=clang-9 CXX=clang++-9 GCOV='llvm-cov gcov'
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-9
+            - python3.6
+      if: branch != coverityScan
+    - compiler: clang-9
+      env: CC=clang-9 CXX=clang++-9 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
+              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+            - deadsnakes
+          packages:
+            - clang-9
+            - python3.6
+      if: branch != coverityScan
     - compiler: gcc-5
       env: CC=gcc-5 CXX=g++-5 COVERAGE=0
       addons:
