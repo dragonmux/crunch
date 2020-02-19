@@ -35,18 +35,6 @@ matrix:
             - python3.6
       if: branch != coverityScan
     - compiler: clang-6.0
-      env: CC=clang-6.0 CXX=clang++-6.0 GCOV='llvm-cov gcov'
-      addons:
-        apt:
-          sources:
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-6.0 main'
-              key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-            - deadsnakes
-          packages:
-            - clang-6.0
-            - python3.6
-      if: branch != coverityScan
-    - compiler: clang-6.0
       env: CC=clang-6.0 CXX=clang++-6.0 COVERAGE=0
       addons:
         apt:
