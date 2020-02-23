@@ -48,6 +48,9 @@ ranlux64_t *initRanlux64(const uint64_t seed);
 void freeRanlux64(ranlux64_t *const state);
 uint64_t genRanlux64(ranlux64_t *const state);
 
+// Misc type helpers
+double genDouble(ranlux64_t *generator);
+
 #ifdef __cplusplus
 }
 #endif

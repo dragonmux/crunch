@@ -13,12 +13,12 @@ ranluxSrcDir = meson.current_source_dir()
 
 objectMap = {
 	'testRanlux32': {'test': ['ranlux32.cxx'], 'name': 'ranlux32'},
-	'testRanlux64': {'test': ['ranlux64.cxx'], 'name': 'ranlux64'}
+	'testRanlux64': {'test': [], 'name': 'ranlux64'}
 }
 
 foreach test : ranluxTests
 	map = objectMap.get(test)
-	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx'])]
+	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx', 'ranlux64.cxx'])]
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.source_root(), '-L' + libCrunchppPath]
 
 	custom_target(
