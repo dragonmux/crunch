@@ -24,6 +24,7 @@
 #include <unistd.h>
 #endif
 #include <string.h>
+#include <float.h>
 
 #include <threading/threadShim.h>
 #include <crunch.h>
@@ -72,11 +73,6 @@ void *genPtr()
 	else
 		ptr = genRanlux64(ranlux64);
 	return (void *)ptr;
-}
-
-double genDbl()
-{
-	return ((double)rand()) / ((double)RAND_MAX);
 }
 
 /* Internal sacrificial thread for testing when assertions fail. */
@@ -148,21 +144,23 @@ void testAssertIntNotEqual()
 void testAssertDoubleEqual1() { assertDoubleEqual(0.0, 0.1); }
 void testAssertDoubleEqual()
 {
-	srand(time(NULL));
-	double num = genDbl();
+	const double num = genDouble(ranlux64);
 	assertDoubleEqual(0.0, 0.0);
 	assertDoubleEqual(num, num);
 	tryShouldFail(testAssertDoubleEqual1);
 }
+
+#define DELTA(result, expected) (result >= (expected - DBL_EPSILON) && result <= (expected + DBL_EPSILON))
 
 void testAssertDoubleNotEqual1() { assertDoubleNotEqual(0.0, 0.0); }
 void testAssertDoubleNotEqual2() { assertDoubleNotEqual(dblA, dblA); }
 void testAssertDoubleNotEqual3() { assertDoubleNotEqual(dblB, dblB); }
 void testAssertDoubleNotEqual()
 {
-	srand(time(NULL));
-	dblA = genDbl();
-	dblB = genDbl();
+	dblA = genDouble(ranlux64);
+	dblB = dblA;
+	while (DELTA(dblB, dblA))
+		dblB = genDouble(ranlux64);
 	assertDoubleNotEqual(dblA, dblB);
 	tryShouldFail(testAssertDoubleNotEqual1);
 	tryShouldFail(testAssertDoubleNotEqual2);
