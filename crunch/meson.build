@@ -17,7 +17,7 @@ libCrunch = shared_library(
 	libCrunchSrc,
 	name_prefix: '',
 	c_args: libArgs + threadArgs,
-	dependencies: [threading],
+	dependencies: [threading, libm],
 	version: meson.project_version(),
 	install: true
 )
