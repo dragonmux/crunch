@@ -16,18 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <inttypes.h>
+#include <string.h>
+#include <fenv.h>
+#include <float.h>
 #include "crunch.h"
 #include "Core.h"
 #include "Logger.h"
 #include "StringFuncs.h"
-#include <string.h>
-#include <inttypes.h>
 
 test *tests;
 uint32_t passes = 0, failures = 0;
 int32_t allocCount = -1;
-
-#define DOUBLE_DELTA	0.0000001
 
 #define ASSERTION_FAILURE(what, result, expected) \
 	logResult(RESULT_FAILURE, "Assertion failure: " what, expected, result);
@@ -113,24 +113,32 @@ void assertPtrNotEqual(void *result, void *expected)
 	}
 }
 
-#define DELTA(result, expected) (result >= (expected - DOUBLE_DELTA) && result <= (expected + DOUBLE_DELTA))
+#define DELTA(result, expected) (result >= (expected - DBL_EPSILON) && result <= (expected + DBL_EPSILON))
 
 void assertDoubleEqual(double result, double expected)
 {
+	fenv_t env;
+	feholdexcept(&env);
 	if (!DELTA(result, expected))
 	{
-		ASSERTION_ERROR("%f", result, expected);
+		ASSERTION_ERROR("%g", result, expected);
+		fesetenv(&env);
 		thrd_exit(THREAD_ERROR);
 	}
+	fesetenv(&env);
 }
 
 void assertDoubleNotEqual(double result, double expected)
 {
+	fenv_t env;
+	feholdexcept(&env);
 	if (DELTA(result, expected))
 	{
-		ASSERTION_ERROR("%f", result, expected);
+		ASSERTION_ERROR("%g", result, expected);
+		fesetenv(&env);
 		thrd_exit(THREAD_ERROR);
 	}
+	fesetenv(&env);
 }
 
 void assertStringEqual(const char *result, const char *expected)
