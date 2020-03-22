@@ -130,8 +130,10 @@ bool tryRegistration(void *testSuit) try
 }
 catch (std::bad_alloc &e)
 {
-	testPrintf("Error encountered while performing test registration: %s\n", e.what());
 	cxxTests.clear();
+	red();
+	testPrintf("Failed to allocate memory while performing test registration");
+	newline();
 	return false;
 }
 

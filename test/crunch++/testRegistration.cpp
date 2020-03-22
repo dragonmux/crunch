@@ -18,5 +18,5 @@
 
 #include <crunch++.h>
 
-CRUNCHpp_TEST void registerTests();
-void registerCXXTests() { throw std::bad_alloc(); }
+CRUNCHpp_TEST void registerCXXTests();
+void registerCXXTests() { throw std::bad_alloc{}; }
