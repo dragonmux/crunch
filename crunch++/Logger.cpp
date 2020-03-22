@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <substrate/utility>
 #include "Core.h"
 #include "Logger.h"
-#include "memory.hxx"
 #ifndef _WINDOWS
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -241,7 +241,7 @@ testLog *startLogging(const char *fileName)
 {
 	if (logger)
 		return nullptr;
-	auto logger_ = makeUnique<testLog>();
+	auto logger_ = substrate::make_unique<testLog>();
 	logger_->file = fopen(fileName, "w");
 	if (!logger_->file)
 		return nullptr;

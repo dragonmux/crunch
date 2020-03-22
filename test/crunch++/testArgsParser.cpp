@@ -18,7 +18,6 @@
 
 #include <crunch++.h>
 #include "ArgsParser.h"
-#include "memory.hxx"
 #include "StringFuncs.h"
 
 using rawStrPtr_t = const char *;

@@ -18,7 +18,7 @@
 
 #include <cstdint>
 #include <random>
-#include <crunch++/memory.hxx>
+#include <substrate/utility>
 #include "ranlux.h"
 
 struct ranlux32Base_t final
@@ -90,7 +90,7 @@ public:
 };
 
 ranlux32_t *initRanlux32(const uint32_t seed) try
-	{ return makeUnique<ranlux32_t>(seed).release(); }
+	{ return substrate::make_unique<ranlux32_t>(seed).release(); }
 catch (...)
 	{ return nullptr; }
 

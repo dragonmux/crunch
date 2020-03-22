@@ -2,7 +2,7 @@ ranlux = static_library(
 	'ranlux',
 	['ranlux32.cxx', 'ranlux64.cxx', 'helpers.cxx'],
 	pic: true,
-	include_directories: projectInclude,
+	include_directories: [projectInclude, substrate],
 	install: false,
 	build_by_default: true
 )

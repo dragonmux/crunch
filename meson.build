@@ -25,6 +25,7 @@ dl = cxx.find_library('dl', required: not isWindows)
 libm = cxx.find_library('m', required: not isWindows)
 c11Threading = cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
 projectInclude = include_directories('.')
+substrate = include_directories('substrate')
 
 if ['gcc', 'clang'].contains(cc.get_id()) and coverage and debug
 	add_project_arguments('--coverage', language: 'c')

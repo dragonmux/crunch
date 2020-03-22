@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <substrate/utility>
 #include "crunch++.h"
 #include "StringFuncs.h"
 #include <string.h>
@@ -36,7 +37,7 @@ std::unique_ptr<char []> vaFormatString(const char *format, va_list args) noexce
 	va_copy(lenArgs, args);
 	const size_t len = vsnprintf(NULL, 0, format, lenArgs) + 1;
 	va_end(lenArgs);
-	auto ret = makeUnique<char []>(len);
+	auto ret = substrate::make_unique<char []>(len);
 	if (!ret)
 		return nullptr;
 	vsprintf(ret.get(), format, args);

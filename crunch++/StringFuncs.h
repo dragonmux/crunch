@@ -19,8 +19,8 @@
 #ifndef __STRINGFUNCS_H__
 #define __STRINGFUNCS_H__
 
+#include <memory>
 #include "crunch++.h"
-#include "memory.hxx"
 
 CRUNCHpp_API const char *boolToString(bool value);
 CRUNCHpp_API std::unique_ptr<char []> formatString(const char *format, ...) noexcept;

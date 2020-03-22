@@ -11,6 +11,7 @@ libCrunchpp = shared_library(
 	name_prefix: '',
 	cpp_args: libArgs,
 	dependencies: [threading],
+	include_directories: substrate,
 	version: meson.project_version(),
 	install: true
 )
