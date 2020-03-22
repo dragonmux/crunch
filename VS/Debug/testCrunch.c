@@ -1,1 +1,1 @@
-../../crunch/testCrunch.c
+../../test/crunch/testCrunch.c
