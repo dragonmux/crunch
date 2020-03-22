@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstdlib>
+#include <cstring>
+#include <new>
 #include "crunch++.h"
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #include "Logger.h"
-#include <stdlib.h>
-#include <string.h>
-#include <new>
 
 const arg_t *args = nullptr;
 

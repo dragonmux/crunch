@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
+#include <cstdarg>
+#include <cstdio>
 #include <substrate/utility>
 #include "crunch++.h"
 #include "StringFuncs.h"
-#include <string.h>
-#include <stdarg.h>
-#include <stdio.h>
 
 const char *boolToString(bool value)
 {

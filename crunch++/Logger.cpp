@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstdio>
 #include <substrate/utility>
 #include "Core.h"
 #include "Logger.h"
@@ -27,7 +28,6 @@
 #include <io.h>
 #include <sys/locking.h>
 #endif
-#include <stdio.h>
 
 #ifndef _WINDOWS
 #define COL(val) val - 8

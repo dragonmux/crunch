@@ -49,7 +49,7 @@ char *dlerror()
 #include <crtdbg.h>
 #endif
 #include <exception>
-#include <stdlib.h>
+#include <cstdlib>
 
 using namespace std;
 
