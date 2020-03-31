@@ -118,15 +118,12 @@ bool getTests()
 
 bool tryRegistration(void *testSuite) try
 {
-	registerFn registerTests;
-	registerTests = reinterpret_cast<registerFn>(dlsym(testSuite, "registerCXXTests"));
-	if (!registerTests)
-	{
+	const registerFn registerTests = reinterpret_cast<registerFn>(dlsym(testSuite, "registerCXXTests"));
+	if (registerTests)
+		registerTests();
+	else
 		dlclose(testSuite);
-		return false;
-	}
-	registerTests();
-	return true;
+	return registerTests;
 }
 catch (std::bad_alloc &e)
 {
