@@ -118,7 +118,7 @@ bool getTests()
 
 bool tryRegistration(void *testSuite) try
 {
-	const registerFn registerTests = reinterpret_cast<registerFn>(dlsym(testSuite, "registerCXXTests"));
+	const registerFn registerTests = reinterpret_cast<registerFn>(dlsym(testSuite, "registerCXXTests")); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) lgtm[cpp/reinterpret-cast]
 	if (registerTests)
 		registerTests();
 	else
