@@ -116,13 +116,13 @@ bool getTests()
 	return !namedTests.empty();
 }
 
-bool tryRegistration(void *testSuit) try
+bool tryRegistration(void *testSuite) try
 {
 	registerFn registerTests;
-	registerTests = (registerFn)dlsym(testSuit, "registerCXXTests");
+	registerTests = (registerFn)dlsym(testSuite, "registerCXXTests");
 	if (!registerTests)
 	{
-		dlclose(testSuit);
+		dlclose(testSuite);
 		return false;
 	}
 	registerTests();
@@ -152,10 +152,10 @@ void runTests()
 	for (i = 0; i < numTests; i++)
 	{
 		auto testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value.data());
-		void *testSuit = dlopen(testLib.get(), RTLD_LAZY);
-		if (!testSuit || !tryRegistration(testSuit))
+		void *testSuite = dlopen(testLib.get(), RTLD_LAZY);
+		if (!testSuite || !tryRegistration(testSuite))
 		{
-			if (!testSuit)
+			if (!testSuite)
 			{
 				red();
 				testPrintf("Could not open test library: %s", dlerror());
