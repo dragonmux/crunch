@@ -119,7 +119,7 @@ bool getTests()
 bool tryRegistration(void *testSuite) try
 {
 	registerFn registerTests;
-	registerTests = (registerFn)dlsym(testSuite, "registerCXXTests");
+	registerTests = reinterpret_cast<registerFn>(dlsym(testSuite, "registerCXXTests"));
 	if (!registerTests)
 	{
 		dlclose(testSuite);
