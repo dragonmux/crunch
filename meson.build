@@ -6,9 +6,11 @@ project(
 		'cpp_std=c++11',
 		'warning_level=3',
 		'b_pch=false',
-		'buildtype=release'
+		'buildtype=release',
+		'b_lto=true'
 	],
-	version: '0.4.0'
+	version: '0.4.0',
+	meson_version: '>=0.52'
 )
 
 cc = meson.get_compiler('c')
