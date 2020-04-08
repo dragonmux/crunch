@@ -6,8 +6,8 @@ project(
 		'cpp_std=c++11',
 		'warning_level=3',
 		'b_pch=false',
-		'buildtype=release',
-		'b_lto=true'
+		#'b_lto=true',
+		'buildtype=release'
 	],
 	version: '0.4.0',
 	meson_version: '>=0.52'
