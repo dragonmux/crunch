@@ -217,3 +217,12 @@ If the two blocks have identicle contents, the assertion fails and prints a diag
 
 Each of these takes a boolean-converted value and checks it holds the value given by the function's name.
 If the value checked evaluates to something other than the desired boolean value, the assertion fails printing a diagnostic and aborting the test case.
+
+### Inequality Assertions
+
+* `assertGreaterThan` - Checks that `result` is greater than `expected`
+* `assertLessThan` - Checks that `result` is less than `expected`
+
+These are integer-only assertions for performing range and broad value checks, aka inequalities.
+Both assertions take two parameters in order: `result` and `expected`.
+On failure, these print a diagnostic and abort the test case.
