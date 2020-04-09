@@ -187,7 +187,7 @@ void assertEqual(const void *const result, const void *const expected, const siz
 ```
 
 This allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
-When the two memory blocks have different contents, the assertion fails and prints a diagnostic, aborting the test.
+When the two memory blocks have different contents, the assertion fails and prints a diagnostic, aborting the test case.
 
 ### Negative Equality Assertions
 
@@ -208,7 +208,7 @@ void assertNotEqual(const void *const result, const void *const expected, const 
 ```
 
 This allows for save comparison of two blocks of memory, as with `assertEqual`.
-If the two blocks have identicle contents, the assertion fails and prints a diagnostic, aborting the test.
+If the two blocks have identicle contents, the assertion fails and prints a diagnostic, aborting the test case.
 
 ### Boolean Equality Assertions
 
