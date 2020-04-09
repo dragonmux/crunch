@@ -6,7 +6,7 @@ Table of Contents
 	1. [Writing a Simple Test Suite](#writing-a-simple-test-suite)
 	2. [Writing a Test Case](#writing-a-test-case)
 	3. [Conditionally Skipping Tests and Suites](#conditionally-skipping-tests-and-suites)
-2. `crunch++` Assertions Reference
+2. [`crunch++` Assertions Reference](#crunch++-assertions-reference)
 3. Getting the Most Out of `crunchMake` for `crunch++` Suites
 
 ## Basic `crunch++` usage
