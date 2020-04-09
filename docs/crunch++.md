@@ -7,7 +7,7 @@ Table of Contents
 	2. [Writing a Test Case](#writing-a-test-case)
 	3. [Conditionally Skipping Tests and Suites](#conditionally-skipping-tests-and-suites)
 2. [`crunch++` Assertions Reference](#crunch-assertions-reference)
-3. Getting the Most Out of `crunchMake` for `crunch++` Suites
+3. [Getting the Most Out of `crunchMake` for `crunch++` Suites](getting-the-most-out-of-crunchmake-for-crunch-suites)
 
 ## Basic `crunch++` usage
 
@@ -226,3 +226,5 @@ If the value checked evaluates to something other than the desired boolean value
 These are integer-only assertions for performing range and broad value checks, aka inequalities.
 Both assertions take two parameters in order: `result` and `expected`.
 On failure, these print a diagnostic and abort the test case.
+
+## Getting the Most Out of `crunchMake` for `crunch++` Suites
