@@ -157,6 +157,17 @@ The equality assertions exist to remove the dependency on possibly overriden qua
 
 `crunch++` comes with two kinds of afirmative equality assertion - fundamental pointer traits and general value assertions - and two boolean equality assertions.
 
+Reference Table of Contents
+
+* [Positive Equality Assertions](#positive-equality-assertions)
+* [Negative Equality Assertions](#negative-equality-assertions)
+* [Boolean Equality Assertions](#boolean-equality-assertions)
+* [Inequality Assertions](#inequality-assertions)
+
+The pointer trait assertions provided work with `std::unique_ptr<>` out the box.
+
+The trivial value integer assertions work with mis-matched integers out the box.
+
 ### Positive Equality Assertions
 
 * `assertNull` - Checks that the provided pointer, regardless of const-ness, is equivilent to a nullptr.
