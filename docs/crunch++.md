@@ -150,3 +150,59 @@ Running tests in class 13testSkipSuite...
 Skipping: Intentionally skipping this suite                                          [ SKIP ]
 Total tests: 3,  Failures: 0,  Pass rate: 100.00%
 ```
+
+## `crunch++` Assertions Reference
+
+The equality assertions exist to remove the dependency on possibly overriden quality operators, which have the potential if themselves left untested to introduce errors and false assertion results into a test suite. This is especially true if your test requires a lot of external library headers.
+
+`crunch++` comes with two kinds of afirmative equality assertion - fundamental pointer traits and general value assertions - and two boolean equality assertions.
+
+### Positive Equality Assertions
+
+* `assertNull` - Checks that the provided pointer, regardless of const-ness, is equivilent to a nullptr.
+* `assertEqual` - Checks that two entities have the same value.
+
+`assertNull` takes one parameter, the pointer to check. It provides two overloads, one to handle non-const pointers and the other to handle const pointers.
+
+There are several forms of `assertEqual` check: Trivial value assertions for integers, C strings, characters, floating point values and direct address comparisons; and a more complex kind of assertion for validating memory contents.
+
+The trivial form of `assertEqual` takes two parameters - `result`, and `expected` - in that order.
+When the assertion fails, it print a diagnostic and aborts the test case.
+
+The complex form of `assertEqual` has the signature
+
+``` C++
+void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
+```
+
+This allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
+When the two memory blocks have different contents, the assertion fails and prints a diagnostic, aborting the test.
+
+### Negative Equality Assertions
+
+* `assertNotNull` - Checks that the provided pointer, regardless of const-ness is not equivilent to nullptr.
+* `assertNotEqual` - Checks that one entity's value is not the same as the other.
+
+`assertNotNull` takes one parameter, the pointer to check. It provides two overloads, on to handle non-const pointers and the other to handle const pointers.
+
+There are several forms of `assertNotEqual` check: Trivial value assertions for integers, C strings, characters, floating point values and direct address comparisons; and a more complex kind of assertion for validating memory contents.
+
+The trivial form of `assertNotEqual` takes two parameters - `result`, and `expected` - in that order.
+If the two values are the same, the assertion fails and prints a diagnostic, aborting the test case.
+
+The complex form of `assertNotEqual` has the signature
+
+``` C++
+void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
+```
+
+This allows for save comparison of two blocks of memory, as with `assertEqual`.
+If the two blocks have identicle contents, the assertion fails and prints a diagnostic, aborting the test.
+
+### Boolean Equality Assertions
+
+* `assertTrue`
+* `assertFalse`
+
+Each of these takes a boolean-converted value and checks it holds the value given by the function's name.
+If the value checked evaluates to something other than the desired boolean value, the assertion fails printing a diagnostic and aborting the test case.
