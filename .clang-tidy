@@ -1,0 +1,30 @@
+---
+Checks:              '*,-fuchsia-*,-google-*,-readability-else-after-return,-hicpp-braces-around-statements,-readability-braces-around-statements,-readability-implicit-bool-conversion,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-llvm-include-order,-readability-avoid-const-params-in-decls,-readability-named-parameter,-modernize-use-override,-hicpp-use-override,-llvm-header-guard,-hicpp-no-array-decay,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-misc-unconventional-assign-operator,-cppcoreguidelines-c-copy-assignment-signature,-hicpp-vararg,-readability-redundant-member-init,-modernize-use-default-member-init,-hicpp-explicit-conversions,-cppcoreguidelines-pro-type-vararg,-clang-diagnostic-c++17-compat-mangling'
+WarningsAsErrors: ''
+HeaderFilterRegex: 'crunch/.+'
+FormatStyle: 'none'
+AnalyzeTemporaryDtors: false
+CheckOptions:
+  - key:             cert-dcl16-c.NewSuffixes
+    value:           'L;LL;LU;LLU'
+  - key:             cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
+    value:           '0'
+  - key:             cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+    value:           '0'
+  - key:             cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value:           '1'
+  - key:             modernize-loop-convert.MaxCopySize
+    value:           '16'
+  - key:             modernize-loop-convert.MinConfidence
+    value:           reasonable
+  - key:             modernize-loop-convert.NamingStyle
+    value:           camelBack
+  - key:             modernize-pass-by-value.IncludeStyle
+    value:           llvm
+  - key:             modernize-replace-auto-ptr.IncludeStyle
+    value:           llvm
+  - key:             modernize-use-nullptr.NullMacros
+    value:           'NULL'
+  - key:             readability-braces-around-statements.ShortStatementLines
+    value:           '4'
+...
