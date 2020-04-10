@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2020 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,45 +43,45 @@ vector<string> linkArgs, tests;
 uint32_t numLinkArgs = 0;
 
 #ifndef _MSC_VER
-#define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
-#ifdef crunch_PREFIX
-#define INCLUDE_OPTS_EXTRA " -I" crunch_PREFIX "/include"
-#define LINK_OPTS_EXTRA " -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
-#define OPTS_EXTRA INCLUDE_OPTS_EXTRA LINK_OPTS_EXTRA
-#else
-#define INCLUDE_OPTS_EXTRA ""
-#define LINK_OPTS_EXTRA ""
-#define OPTS_EXTRA ""
-#endif
-#ifdef crunch_GUESSCOMPILER
-#ifdef __x86_64__
+#	define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
+#	ifdef crunch_PREFIX
+#		define INCLUDE_OPTS_EXTRA " -I" crunch_PREFIX "/include"
+#		define LINK_OPTS_EXTRA " -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
+#		define OPTS_EXTRA INCLUDE_OPTS_EXTRA LINK_OPTS_EXTRA
+#	else
+#		define INCLUDE_OPTS_EXTRA ""
+#		define LINK_OPTS_EXTRA ""
+#		define OPTS_EXTRA ""
+#	endif
+#	ifdef crunch_GUESSCOMPILER
+#		ifdef __x86_64__
 string cCompiler = "gcc -m64 -fPIC -DPIC "_s;
 string cxxCompiler = "g++ -m64 -fPIC -DPIC" OPTS_VIS " "_s;
-#else
+#		else
 string cCompiler = "gcc -m32 "_s;
 string cxxCompiler = "g++ -m32" OPTS_VIS " "_s;
-#endif
-#else
+#		endif
+#	else
 string cCompiler = crunch_GCC " "_s;
 string cxxCompiler = crunch_GXX OPTS_VIS " "_s;
-#endif
-#define OPTS	"-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s %s %s -o "
-#define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s %s %s -o "
-#define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s %s %s -o "
+#	endif
+#	define OPTS "-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s %s %s -o "
+#	define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s %s %s -o "
+#	define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s %s %s -o "
 const string libExt = ".so"_s;
 #else
-#ifdef _DEBUG
-#define COMPILE_OPTS_EXTRA "/Oi /D_DEBUG"
+#	ifdef _DEBUG
+#		define COMPILE_OPTS_EXTRA "/Oi /D_DEBUG"
 //" /Zi /FS"
-#define LINK_OPTS_EXTRA "/LDd /link /DEBUG"
-#else
-#define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
-#define LINK_OPTS_EXTRA "/LD /link"
-#endif
+#		define LINK_OPTS_EXTRA "/LDd /link /DEBUG"
+#	else
+#		define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
+#		define LINK_OPTS_EXTRA "/LD /link"
+#	endif
 string cCompiler = "cl"_s;
 string cxxCompiler = "cl"_s;
-#define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
-#define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
+#	define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
+#	define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
 const string libExt = ".tlib"_s;
 #endif
 
