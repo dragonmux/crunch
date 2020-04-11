@@ -7,8 +7,12 @@
 extern std::string inclDirFlags, libDirFlags, objs, libs;
 extern bool silent, quiet, pthread, codeCoverage, debugBuild;
 
+#ifndef _MSC_VER
 extern std::string cCompiler;
 extern std::string cxxCompiler;
+#endif
+
+extern const std::string libExt;
 
 extern bool isCXX(const std::string &file);
 extern std::string computeObjName(const std::string &file);

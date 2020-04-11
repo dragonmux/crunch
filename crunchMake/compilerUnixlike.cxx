@@ -1,6 +1,8 @@
 #include "crunchCompiler.hxx"
 #include <crunchMake.h>
 
+using std::literals::string_literals::operator ""s;
+
 #ifdef crunch_PREFIX
 static const auto includeOptsExtra{"-I"s + crunch_PREFIX "/include "s};
 static const auto linkOptsExtra{"-L"s + crunch_LIBDIR " -Wl,-rpath,"s + crunch_LIBDIR " "s};
@@ -11,8 +13,9 @@ static const auto linkOptsExtra{""s};
 
 std::string cCompiler{compilerCC " "s};
 std::string cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s};
+const std::string libExt{".so"s};
 
-inline std::string crunchLib(const bool isCXX)
+inline const std::string crunchLib(const bool isCXX)
 {
 	if (isCXX)
 		return "-lcrunch++ "s;
@@ -20,9 +23,9 @@ inline std::string crunchLib(const bool isCXX)
 		return "-lcrunch "s;
 }
 
-inline std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
-inline std::string debugFlags() { return debugBuild ? "-O0 -g "s : "-O2 "; }
-inline std::string threadingFlags() { return pthread ? ""s : "-pthread "s; }
+inline const std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
+inline const std::string debugFlags() { return debugBuild ? "-O0 -g "s : "-O2 "s; }
+inline const std::string threadingFlags() { return pthread ? ""s : "-pthread "s; }
 
 #if compilerIsClang
 int32_t compileTest(const std::string &test)
