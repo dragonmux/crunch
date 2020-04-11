@@ -43,24 +43,6 @@ vector<string> linkLibs, linkObjs;
 vector<string> linkArgs, tests;
 uint32_t numLinkArgs = 0;
 
-#ifndef _MSC_VER
-const string libExt = ".so"s;
-#else
-#	ifdef _DEBUG
-#		define COMPILE_OPTS_EXTRA "/Oi /D_DEBUG"
-//" /Zi /FS"
-#		define LINK_OPTS_EXTRA "/LDd /link /DEBUG"
-#	else
-#		define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
-#		define LINK_OPTS_EXTRA "/LD /link"
-#	endif
-string cCompiler = "cl"s;
-string cxxCompiler = "cl"s;
-#	define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
-#	define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
-const string libExt = ".tlib"s;
-#endif
-
 template<typename T> using removeReference = typename std::remove_reference<T>::type;
 template<typename type_t> constexpr type_t &&forward_(removeReference<type_t> &value) noexcept
 	{ return static_cast<type_t &&>(value); }
@@ -273,12 +255,12 @@ void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 string standardVersion(constParsedArg_t version)
 {
 	if (!version)
-		return "-std=c++11";
+		return "-std=c++11"s;
 	const auto str = version->value.data() + 5;
 	if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
 	{
 		testPrintf("Warning, standard version must be at least C++11");
-		return "-std=c++11";
+		return "-std=c++11"s;
 	}
 	return version->value;
 }
