@@ -3,11 +3,12 @@
 
 #include <string>
 
-inline std::string operator ""_s(const char *string, const std::size_t length)
-	{ return std::string{string, length}; }
+using std::literals::string_literals::operator ""s;
 
-#define crunch_GCC "@CC@"_s
-#define crunch_GXX "@CXX@"_s
-#define crunch_COMPILER "@COMPILER@"_s
+#define compilerCC "@CC@"s
+#define compilerCXX "@CXX@"s
+#define crunch_COMPILER "@COMPILER@"s
+
+#define compilerIsClang @IS_CLANG@
 
 #endif /*CRUNCH_MAKE__H*/

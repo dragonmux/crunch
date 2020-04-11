@@ -1,4 +1,7 @@
 crunchMakeSrc = ['crunchMake.cpp']
+if target_machine.system() != 'windows'
+	crunchMakeSrc += ['compilerUnixlike.cxx']
+endif
 
 crunchConfig = configuration_data()
 whichCC = cc.cmd_array()
@@ -15,6 +18,7 @@ whichCXX = ' '.join(whichCXX)
 crunchConfig.set('CC', whichCC)
 crunchConfig.set('CXX', whichCXX)
 crunchConfig.set('COMPILER', cxx.get_id())
+crunchConfig.set10('IS_CLANG', cxx.get_id() == 'clang')
 
 configure_file(
 	input: 'crunchMake.h.in',
@@ -31,6 +35,9 @@ crunchMake = executable(
 	cpp_args: [
 		'-Dcrunch_PREFIX="' + prefix + '"',
 		'-Dcrunch_LIBDIR="' + libdir + '"'
+	],
+	override_options: [
+		'cpp_std=c++14'
 	],
 	install: true,
 	install_rpath: libdir

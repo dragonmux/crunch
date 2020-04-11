@@ -9,8 +9,8 @@ static const auto includeOptsExtra{""s};
 static const auto linkOptsExtra{""s};
 #endif
 
-static const auto cCompiler{compilerCC " "s};
-static const auto cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s};
+std::string cCompiler{compilerCC " "s};
+std::string cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s};
 
 inline std::string crunchLib(const bool isCXX)
 {

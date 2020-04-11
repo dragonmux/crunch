@@ -32,6 +32,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include "crunchCompiler.hxx"
 #include <crunchMake.h>
 
 using namespace std;
@@ -43,32 +44,7 @@ vector<string> linkArgs, tests;
 uint32_t numLinkArgs = 0;
 
 #ifndef _MSC_VER
-#	define OPTS_VIS " -fvisibility=hidden -fvisibility-inlines-hidden"
-#	ifdef crunch_PREFIX
-#		define INCLUDE_OPTS_EXTRA " -I" crunch_PREFIX "/include"
-#		define LINK_OPTS_EXTRA " -L" crunch_LIBDIR " -Wl,-rpath," crunch_LIBDIR
-#		define OPTS_EXTRA INCLUDE_OPTS_EXTRA LINK_OPTS_EXTRA
-#	else
-#		define INCLUDE_OPTS_EXTRA ""
-#		define LINK_OPTS_EXTRA ""
-#		define OPTS_EXTRA ""
-#	endif
-#	ifdef crunch_GUESSCOMPILER
-#		ifdef __x86_64__
-string cCompiler = "gcc -m64 -fPIC -DPIC "_s;
-string cxxCompiler = "g++ -m64 -fPIC -DPIC" OPTS_VIS " "_s;
-#		else
-string cCompiler = "gcc -m32 "_s;
-string cxxCompiler = "g++ -m32" OPTS_VIS " "_s;
-#		endif
-#	else
-string cCompiler = crunch_GCC " "_s;
-string cxxCompiler = crunch_GXX OPTS_VIS " "_s;
-#	endif
-#	define OPTS "-shared" OPTS_EXTRA " %s%s%s%s%s-lcrunch%s %s %s -o "
-#	define COMPILE_OPTS "-c" INCLUDE_OPTS_EXTRA " %s %s %s -o "
-#	define LINK_OPTS "-shared " LINK_OPTS_EXTRA " %s%s%s%s-lcrunch%s %s %s -o "
-const string libExt = ".so"_s;
+const string libExt = ".so"s;
 #else
 #	ifdef _DEBUG
 #		define COMPILE_OPTS_EXTRA "/Oi /D_DEBUG"
@@ -78,11 +54,11 @@ const string libExt = ".so"_s;
 #		define COMPILE_OPTS_EXTRA "/Ox /Ob2 /Oi /Oy /GL"
 #		define LINK_OPTS_EXTRA "/LD /link"
 #	endif
-string cCompiler = "cl"_s;
-string cxxCompiler = "cl"_s;
+string cCompiler = "cl"s;
+string cxxCompiler = "cl"s;
 #	define COMPILE_OPTS COMPILE_OPTS_EXTRA " /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo %s%s"
 #	define LINK_OPTS "/Fe%s /Fo%s " LINK_OPTS_EXTRA " %slibcrunch%s.lib %s"
-const string libExt = ".tlib"_s;
+const string libExt = ".tlib"s;
 #endif
 
 template<typename T> using removeReference = typename std::remove_reference<T>::type;
@@ -229,14 +205,14 @@ string toO(const string &file)
 {
 	const size_t dotPos = file.find_last_of('.');
 	auto objFile = file.substr(0, dotPos);
-	return objFile += ".o"_s;
+	return objFile += ".o"s;
 }
 #else
 string toO(const string &file)
 {
 	const size_t dotPos = file.find_last_of('.');
 	auto objFile = file.substr(0, dotPos);
-	return objFile += ".obj"_s;
+	return objFile += ".obj"s;
 }
 #endif
 
@@ -312,78 +288,19 @@ void buildCXXString()
 	const auto standard = findArg(parsedArgs, "-std=", nullptr);
 	cxxCompiler += standardVersion(standard) + ' ';
 }
-
-int32_t compileGCC(const string &test)
-{
-	const bool mode = isCXX(test);
-	const string &compiler = mode ? cxxCompiler : cCompiler;
-	auto soFile = computeSOName(test);
-	auto compileString = format("%s %s " OPTS "%s"_s, compiler, test, inclDirFlags,
-		libDirFlags, objs, libs, codeCoverage ? "-lgcov " : "",  mode ? "++" : "",
-		debugBuild ? "-O0 -g" : "-O2", pthread ? "" : "-pthread", soFile);
-	if (!silent)
-	{
-		if (quiet)
-		{
-			auto displayString = format(" CCLD  %s => %s"_s, test, soFile);
-			puts(displayString.get());
-		}
-		else
-			puts(compileString.get());
-	}
-	return system(compileString.get());
-}
-
-int32_t compileClang(const string &test)
-{
-	const bool mode = isCXX(test);
-	const string &compiler = mode ? cxxCompiler : cCompiler;
-	auto oFile = computeObjName(test);
-	auto compileString = format("%s %s " COMPILE_OPTS "%s"_s, compiler, test,
-		inclDirFlags, debugBuild ? "-O0 -g" : "-O2", pthread ? "" : "-pthread", oFile);
-	if (!silent)
-	{
-		if (quiet)
-		{
-			auto displayString = format(" CC    %s => %s"_s, test, oFile);
-			puts(displayString.get());
-		}
-		else
-			puts(compileString.get());
-	}
-	int32_t ret = system(compileString.get());
-	if (ret)
-		return ret;
-
-	auto soFile = computeSOName(test);
-	auto linkString = format("%s %s " LINK_OPTS "%s"_s, compiler, oFile, libDirFlags, objs,
-		libs, codeCoverage ? "--coverage " : "", mode ? "++" : "", debugBuild ? "-O0 -g" : "-O2",
-		pthread ? "" : "-pthread", soFile);
-	if (!silent)
-	{
-		if (quiet)
-		{
-			auto displayString = format(" CCLD  %s => %s"_s, oFile, soFile);
-			puts(displayString.get());
-		}
-		else
-			puts(linkString.get());
-	}
-	return system(linkString.get());
-}
 #else
 int32_t compileMSVC(const string &test)
 {
 	const bool mode = isCXX(test);
 	auto soFile = computeSOName(test);
 	auto objFile = computeObjName(test);
-	auto compileString = format("cl %s " COMPILE_OPTS " " LINK_OPTS ""_s, test,
+	auto compileString = format("cl %s " COMPILE_OPTS " " LINK_OPTS ""s, test,
 		inclDirFlags, objs, soFile, objFile, libDirFlags, mode ? "++" : "", libs);
 	if (!silent)
 	{
 		if (quiet)
 		{
-			auto displayString = format(" CCLD  %s => %s"_s, test, soFile);
+			auto displayString = format(" CCLD  %s => %s"s, test, soFile);
 			puts(displayString.get());
 		}
 		else
@@ -429,10 +346,7 @@ int compileTests()
 		if (access(test.data(), R_OK) == 0 && validExt(test))
 		{
 #ifndef _MSC_VER
-			if (crunch_COMPILER == "clang"_s)
-				ret = compileClang(test);
-			else// if (crunch_COMPILER == "gcc"_s || crunch_COMPILER.empty())
-				ret = compileGCC(test);
+			ret = compileTest(test);
 #else
 			ret = compileMSVC(test);
 #endif

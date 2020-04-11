@@ -7,6 +7,9 @@
 extern std::string inclDirFlags, libDirFlags, objs, libs;
 extern bool silent, quiet, pthread, codeCoverage, debugBuild;
 
+extern std::string cCompiler;
+extern std::string cxxCompiler;
+
 extern bool isCXX(const std::string &file);
 extern std::string computeObjName(const std::string &file);
 extern std::string computeSOName(const std::string &file);
