@@ -66,7 +66,7 @@
 #	endif
 #endif
 
-class testsuit;
+class testsuite;
 
 struct cxxTest
 {
@@ -76,7 +76,7 @@ struct cxxTest
 
 struct cxxTestClass
 {
-	testsuit *testClass;
+	testsuite *testClass;
 	const char *testClassName;
 };
 
@@ -94,7 +94,7 @@ namespace crunch
 	template<typename T> struct isNumeric : std::integral_constant<bool, std::is_integral<T>::value && !isBoolean<T>::value> { };
 }
 
-class CRUNCH_MAYBE_VIS testsuit
+class CRUNCH_MAYBE_VIS testsuite
 {
 private:
 	template<typename T> using isNumeric = crunch::isNumeric<T>;
@@ -153,16 +153,18 @@ public:
 	CRUNCH_VIS void assertGreaterThan(const long result, const long expected);
 	CRUNCH_VIS void assertLessThan(const long result, const long expected);
 
-	CRUNCH_VIS testsuit();
+	CRUNCH_VIS testsuite();
 
 private:
-	static int testRunner(testsuit &unitClass, cxxUnitTest &test);
+	static int testRunner(testsuite &unitClass, cxxUnitTest &test);
 
 public:
-	CRUNCH_VIS virtual ~testsuit();
+	CRUNCH_VIS virtual ~testsuite();
 	virtual void registerTests() = 0;
 	CRUNCH_VIS void test();
 };
+
+class CRUNCH_DEPRECATE testsuit : public testsuite { };
 
 struct threadExit_t
 {
@@ -174,7 +176,7 @@ public:
 	CRUNCH_VIS operator int() const noexcept { return value; }
 };
 
-CRUNCHpp_API void crunchTestClass(testsuit *tests, const char *name);
+CRUNCHpp_API void crunchTestClass(testsuite *tests, const char *name);
 
 template<typename TestClass> void registerTestClasses()
 	{ crunchTestClass(new TestClass(), typeid(TestClass).name()); }

@@ -40,7 +40,7 @@ void newline()
 		testPrintf(" ");
 }
 
-int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
+int testsuite::testRunner(testsuite &unitClass, cxxUnitTest &test)
 {
 	if (isTTY)
 #ifndef _MSC_VER
@@ -84,7 +84,7 @@ int testsuit::testRunner(testsuit &unitClass, cxxUnitTest &test)
 	return 0;
 }
 
-void testsuit::test()
+void testsuite::test()
 {
 	for (auto &unitTest : tests)
 	{
@@ -98,5 +98,5 @@ void testsuit::test()
 	}
 }
 
-void crunchTestClass(testsuit *tests, const char *name)
+void crunchTestClass(testsuite *tests, const char *name)
 	{ cxxTests.emplace_back(cxxTestClass{tests, name}); }
