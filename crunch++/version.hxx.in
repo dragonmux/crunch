@@ -1,0 +1,38 @@
+/* version.hxx - program version information */
+@AUTOGEN_HEADER@
+#ifndef VERSION__HXX
+#define VERSION__HXX
+
+#include <string>
+
+namespace crunchpp
+{
+	inline std::string operator ""_s(const char *string, const std::size_t length)
+		{ return std::string{string, length}; }
+
+	static const auto version{"@VERSION@"_s};
+	static const auto compiler{"@COMPILER@"_s};
+	static const auto compilerVersion{"@COMPILER_VERSION@"_s};
+	static const auto system{"@TARGET_SYS@"_s};
+	static const auto arch{"@TARGET_ARCH@"_s};
+
+	static const auto help{
+		R"(crunch++ test running engine
+
+Usage:
+	crunch++ [-h|--help]
+	crunch++ [-v|--version]
+	crunch++ [--log file] TESTS
+
+Options:
+	-v, --version  Prints the version information for crunch
+	-h, --help     Prints this help message
+
+	--log          Tells the engine to log all test output to the file named
+
+This program is licensed under the LGPLv3+
+Report bugs using https://github.com/DX-MON/crunch/issues)"_s
+	};
+}
+
+#endif /*VERSION__HXX*/

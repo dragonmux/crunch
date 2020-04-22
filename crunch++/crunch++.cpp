@@ -50,12 +50,17 @@ char *dlerror()
 #endif
 #include <exception>
 #include <cstdlib>
+#include "version.hxx"
 
 using namespace std;
 
 const arg_t args[] =
 {
 	{"--log", 1, 1, 0},
+	{"--help", 0, 0, 0},
+	{"-h", 0, 0, 0},
+	{"--version", 0, 0, 0},
+	{"-v", 0, 0, 0},
 	{{}, 0, 0, 0}
 };
 
@@ -223,6 +228,23 @@ void runTests()
 void invalidHandler(const wchar_t *, const wchar_t *, const wchar_t *, const uint32_t, const uintptr_t) { }
 #endif
 
+bool handleVersionOrHelp()
+{
+	constParsedArg_t version{findArg(parsedArgs, "--version", nullptr)};
+	constParsedArg_t versionShort{findArg(parsedArgs, "-v", nullptr)};
+	constParsedArg_t help{findArg(parsedArgs, "--help", nullptr)};
+	constParsedArg_t helpShort{findArg(parsedArgs, "-h", nullptr)};
+
+	if (help || helpShort)
+		puts(crunchpp::help.data());
+	else if (version || versionShort)
+		testPrintf("crunch++ %s (%s %s %s-%s)\n", crunchpp::version.data(), crunchpp::compiler.data(),
+			crunchpp::compilerVersion.data(), crunchpp::system.data(), crunchpp::arch.data());
+	else
+		return false;
+	return true;
+}
+
 int main(int argc, char **argv)
 {
 #if _WINDOWS
@@ -232,7 +254,9 @@ int main(int argc, char **argv)
 #endif
 	registerArgs(args);
 	parsedArgs = parseArguments(argc, argv);
-	if (parsedArgs.empty() || !getTests())
+	if (!parsedArgs.empty() && handleVersionOrHelp())
+		return 0;
+	else if (parsedArgs.empty() || !getTests())
 	{
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
