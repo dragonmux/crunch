@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
 #ifndef CRUNCH_COMPILER__HXX
 #define CRUNCH_COMPILER__HXX
 
