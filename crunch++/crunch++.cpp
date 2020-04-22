@@ -74,15 +74,12 @@ struct freeDelete_t final
 {
 	void operator ()(void *const ptr) noexcept
 		{ std::free(ptr); } // NOLINT(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory,hicpp-no-malloc)
-
-	void operator ()(const void *const ptr) noexcept
-		{ std::free((void *)ptr); } // NOLINT(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory,hicpp-no-malloc)
 };
 
 parsedArgs_t parsedArgs;
 parsedRefArgs_t namedTests;
 size_t numTests = 0;
-std::unique_ptr<const char, freeDelete_t> workingDir = {};
+std::unique_ptr<char, freeDelete_t> workingDir = {};
 
 using registerFn = void (__cdecl *)();
 
@@ -150,9 +147,7 @@ catch (std::bad_alloc &e)
 
 void runTests()
 {
-	uint32_t i;
-	testLog *logFile = nullptr;
-
+	testLog *logFile{};
 	const auto logging = findArg(parsedArgs, "--log", nullptr);
 	if (logging)
 	{
@@ -160,7 +155,7 @@ void runTests()
 		loggingTests = true;
 	}
 
-	for (i = 0; i < numTests; i++)
+	for (size_t i = 0; i < numTests; i++)
 	{
 		auto testLib = formatString("%s/%s." LIBEXT, workingDir.get(), namedTests[i]->value.data());
 		void *testSuite = dlopen(testLib.get(), RTLD_LAZY);
