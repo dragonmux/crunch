@@ -2,7 +2,7 @@
 #ifndef ARGS_PARSER__H
 #define ARGS_PARSER__H
 
-#include <stdint.h>
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
