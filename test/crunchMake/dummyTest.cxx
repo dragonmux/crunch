@@ -18,7 +18,7 @@
 
 #include <crunch++.h>
 
-class dummy final : public testsuit
+class dummy final : public testsuite
 {
 public:
 	void registerTests() final { }
