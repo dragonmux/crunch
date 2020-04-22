@@ -24,7 +24,7 @@
 using ranlux64Base_t = subtract_with_borrow_engine<uint64_t, 64, 5, 62>;
 using ranlux64STL_t = std::discard_block_engine<ranlux64Base_t, 1303, 62>;
 
-struct ranlux64Test final : public testsuit
+struct ranlux64Test final : public testsuite
 {
 private:
 	uint64_t seed;
@@ -58,7 +58,7 @@ private:
 	}
 
 public:
-	void registerTests() final override
+	void registerTests() final
 	{
 		CXX_TEST(testConstruction)
 		CXX_TEST(testCorrectness)

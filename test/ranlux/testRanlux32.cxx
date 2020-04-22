@@ -23,7 +23,7 @@
 using ranlux32Base_t = std::subtract_with_carry_engine<uint32_t, 32, 3, 17>;
 using ranlux32STL_t = std::discard_block_engine<ranlux32Base_t, 389, 16>;
 
-struct ranlux32Test final : public testsuit
+struct ranlux32Test final : public testsuite
 {
 private:
 	uint32_t seed;
@@ -57,7 +57,7 @@ private:
 	}
 
 public:
-	void registerTests() final override
+	void registerTests() final
 	{
 		CXX_TEST(testConstruction)
 		CXX_TEST(testCorrectness)
