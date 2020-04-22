@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013-2019 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2020 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ using std::uniform_int_distribution;
 inline std::string operator ""_s(const char *string, const std::size_t length)
 	{ return std::string{string, length}; }
 
-class crunchTests final : public testsuit
+class crunchTests final : public testsuite
 {
 private:
 	const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
@@ -365,7 +365,7 @@ private:
 	}
 
 public:
-	void registerTests() final override
+	void registerTests() final
 	{
 		CXX_TEST(testAssertTrue)
 		CXX_TEST(testAssertFalse)
@@ -392,10 +392,10 @@ public:
 	}
 };
 
-class registrationTest final : public testsuit
+class registrationTest final : public testsuite
 {
 public:
-	void registerTests() final override
+	void registerTests() final
 		{ throw std::bad_alloc(); }
 };
 

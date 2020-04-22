@@ -21,11 +21,11 @@
 struct testException_t final : std::exception
 {
 public:
-	const char *what() const noexcept final override
+	const char *what() const noexcept final
 		{ return "Boo!"; }
 };
 
-class throwTest final : public testsuit
+class throwTest final : public testsuite
 {
 private:
 	void testSkip()
@@ -35,17 +35,17 @@ private:
 		{ throw testException_t(); }
 
 public:
-	void registerTests() final override
+	void registerTests() final
 	{
 		CXX_TEST(testSkip)
 		CXX_TEST(testThrow)
 	}
 };
 
-class registerExitTest : public testsuit
+class registerExitTest : public testsuite
 {
 public:
-	void registerTests() final override
+	void registerTests() final
 		{ throw threadExit_t{0}; }
 };
 

@@ -22,7 +22,7 @@
 
 using rawStrPtr_t = const char *;
 
-class testArgsParser : public testsuit
+class testArgsParser final : public testsuite
 {
 private:
 	void testNull()
@@ -159,7 +159,7 @@ private:
 	}
 
 public:
-	void registerTests()
+	void registerTests() final
 	{
 		CXX_TEST(testNull)
 		CXX_TEST(testEmpty)

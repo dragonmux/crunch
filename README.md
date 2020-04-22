@@ -27,7 +27,7 @@ An example use of crunch++ follows:
 #include <crunch++.h>
 
 // The following names are arbitrary unless noted otherwise
-class testSomething final : public testsuit
+class testSomething final : public testsuite
 {
 private:
 	void testMe()
@@ -38,7 +38,7 @@ private:
 public:
 	// This is a mandatory function that allows you to
 	// then register your individual tests to the framework
-	void registerTests() final override
+	void registerTests() final
 	{
 		CXX_TEST(testMe)
 	}

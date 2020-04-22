@@ -21,7 +21,7 @@ A valid, albeit empty, suite takes the following basic form:
 ``` C++
 #include <crunch++.h>
 
-class testSuite final : public testsuit
+class testSuite final : public testsuite
 {
 public:
 	void registerTests() final override { }
@@ -70,7 +70,7 @@ private:
 We also need to register the new test case using the registerTests function on the suite:
 
 ``` C++
-	void registerTests() final override
+	void registerTests() final
 	{
 		CXX_TEST(testCase)
 	}
@@ -115,10 +115,10 @@ Register the test:
 We can then define a second suite in the same file, add the following after the end of the first suite's class definition:
 
 ``` C++
-class testSkipSuite final : public testsuit
+class testSkipSuite final : public testsuite
 {
 public:
-	void registerTests() final override
+	void registerTests() final
 	{
 		skip("Intentionally skipping this suite");
 	}

@@ -35,7 +35,7 @@
 #define O_CLOEXEC O_BINARY
 #endif
 
-class loggerTests final : public testsuit
+class loggerTests final : public testsuite
 {
 private:
 	int nullFD = -1;
@@ -123,7 +123,7 @@ public:
 			fclose(ourLogger.stdout_);
 	}
 
-	void registerTests() final override
+	void registerTests() final
 	{
 #ifdef _WINDOWS
 		skip("This suite does not work on windows");
