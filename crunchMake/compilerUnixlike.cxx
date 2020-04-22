@@ -15,7 +15,7 @@ std::string cCompiler{compilerCC " "s};
 std::string cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s};
 const std::string libExt{".so"s};
 
-inline const std::string crunchLib(const bool isCXX)
+inline std::string crunchLib(const bool isCXX)
 {
 	if (isCXX)
 		return "-lcrunch++ "s;
@@ -23,9 +23,9 @@ inline const std::string crunchLib(const bool isCXX)
 		return "-lcrunch "s;
 }
 
-inline const std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
-inline const std::string debugFlags() { return debugBuild ? "-O0 -g "s : "-O2 "s; }
-inline const std::string threadingFlags() { return pthread ? ""s : "-pthread "s; }
+inline std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
+inline std::string debugFlags() { return debugBuild ? "-O0 -g "s : "-O2 "s; }
+inline std::string threadingFlags() { return pthread ? ""s : "-pthread "s; }
 
 #if compilerIsClang
 int32_t compileTest(const std::string &test)
