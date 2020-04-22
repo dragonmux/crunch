@@ -178,13 +178,13 @@ uint8_t getTests()
 	}
 }
 
-uint8_t tryRegistration(void *testSuit)
+uint8_t tryRegistration(void *testSuite)
 {
 	registerFn registerTests;
-	registerTests = (registerFn)dlsym(testSuit, "registerTests");
+	registerTests = (registerFn)dlsym(testSuite, "registerTests");
 	if (registerTests == NULL)
 	{
-		dlclose(testSuit);
+		dlclose(testSuite);
 		return FALSE;
 	}
 	registerTests();
@@ -212,11 +212,11 @@ int runTests()
 			noMemory();
 			return THREAD_ABORT;
 		}
-		void *testSuit = dlopen(testLib, RTLD_LAZY);
+		void *testSuite = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
-		if (testSuit == NULL || tryRegistration(testSuit) == FALSE)
+		if (testSuite == NULL || tryRegistration(testSuite) == FALSE)
 		{
-			if (testSuit == NULL)
+			if (testSuite == NULL)
 			{
 				if (isTTY != 0)
 #ifndef _MSC_VER
