@@ -153,7 +153,12 @@ private:
 	static int testRunner(testsuite &unitClass, cxxUnitTest &test);
 
 public:
+	testsuite(const testsuite &) = delete;
+	testsuite(testsuite &&) = delete;
 	CRUNCH_VIS virtual ~testsuite();
+	testsuite &operator =(const testsuite &) = delete;
+	testsuite &operator =(testsuite &&) = delete;
+
 	virtual void registerTests() = 0;
 	CRUNCH_VIS void test();
 };
