@@ -2,9 +2,9 @@
 #include <cstring>
 #include <cinttypes>
 #include "crunch++.h"
-#include "Core.h"
-#include "Logger.h"
-#include "StringFuncs.h"
+#include "core.hxx"
+#include "logger.hxx"
+#include "stringFuncs.hxx"
 
 uint32_t passes = 0, failures = 0;
 const double doubleDelta = 0.0000001;

@@ -3,9 +3,9 @@
 #include <cstring>
 #include <new>
 #include "crunch++.h"
-#include "ArgsParser.h"
-#include "StringFuncs.h"
-#include "Logger.h"
+#include "argsParser.hxx"
+#include "stringFuncs.hxx"
+#include "logger.hxx"
 
 const arg_t *args = nullptr;
 

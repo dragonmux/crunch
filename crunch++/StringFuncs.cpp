@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <substrate/utility>
 #include "crunch++.h"
-#include "StringFuncs.h"
+#include "stringFuncs.hxx"
 
 const char *boolToString(bool value)
 {

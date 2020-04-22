@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "crunch++.h"
-#include "Core.h"
-#include "Logger.h"
+#include "core.hxx"
+#include "logger.hxx"
 
 using namespace std;
 

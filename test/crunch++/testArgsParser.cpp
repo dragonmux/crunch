@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <crunch++.h>
-#include "ArgsParser.h"
-#include "StringFuncs.h"
+#include "argsParser.hxx"
+#include "stringFuncs.hxx"
 
 using rawStrPtr_t = const char *;
 

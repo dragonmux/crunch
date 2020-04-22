@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <crunch++.h>
-#include "Logger.h"
-#include "Core.h"
 #ifndef _WINDOWS
 #include <unistd.h>
 #else
@@ -9,6 +7,8 @@
 #endif
 #include <fcntl.h>
 #include <stdio.h>
+#include "logger.hxx"
+#include "core.hxx"
 
 #ifndef _WINDOWS
 #define DEV_NULL "/dev/null"

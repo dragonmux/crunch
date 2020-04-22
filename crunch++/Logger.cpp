@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <cstdio>
 #include <substrate/utility>
-#include "Core.h"
-#include "Logger.h"
 #ifndef _WINDOWS
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -11,6 +9,8 @@
 #include <io.h>
 #include <sys/locking.h>
 #endif
+#include "core.hxx"
+#include "logger.hxx"
 
 #ifndef _WINDOWS
 #define COL(val) val - 8

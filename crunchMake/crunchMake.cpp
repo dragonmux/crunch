@@ -16,10 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Core.h>
-#include <Logger.h>
-#include <ArgsParser.h>
-#include <StringFuncs.h>
 #include <string.h>
 #include <stdlib.h>
 #ifndef _MSC_VER
@@ -32,6 +28,10 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <core.hxx>
+#include <logger.hxx>
+#include <argsParser.hxx>
+#include <stringFuncs.hxx>
 #include "crunchCompiler.hxx"
 #include <crunchMake.h>
 

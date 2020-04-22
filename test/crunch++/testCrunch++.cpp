@@ -11,9 +11,9 @@
 #include <memory>
 #include <random>
 #include <functional>
-#include "Core.h"
-#include "StringFuncs.h"
-#include "Logger.h"
+#include "core.hxx"
+#include "stringFuncs.hxx"
+#include "logger.hxx"
 
 using std::unique_ptr;
 using std::default_random_engine;

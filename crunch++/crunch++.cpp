@@ -1,11 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <cstring>
 #include <cinttypes>
-#include "Core.h"
-#include "Logger.h"
-#include "ArgsParser.h"
-#include "StringFuncs.h"
-#include "crunch++.h"
 #ifndef _MSC_VER
 #include <dlfcn.h>
 #include <unistd.h>
@@ -33,6 +28,11 @@ char *dlerror()
 #endif
 #include <exception>
 #include <cstdlib>
+#include "core.hxx"
+#include "logger.hxx"
+#include "argsParser.hxx"
+#include "stringFuncs.hxx"
+#include "crunch++.h"
 #include "version.hxx"
 
 using namespace std;
