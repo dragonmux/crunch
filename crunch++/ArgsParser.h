@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef ARGS_PARSER_H
-#define ARGS_PARSER_H
+#ifndef ARGS_PARSER__H
+#define ARGS_PARSER__H
 
 #include <stdint.h>
 #include <memory>
@@ -59,4 +59,4 @@ CRUNCH_VIS bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedAr
 CRUNCH_VIS uint32_t checkParams(const uint32_t argc, const char *const *const argv,
 	const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
 
-#endif /* ARGS_PARSER_H */
+#endif /*ARGS_PARSER__H*/
