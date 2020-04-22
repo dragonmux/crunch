@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __CORE_H__
-#define __CORE_H__
+#ifndef CORE__H
+#define CORE__H
 
 #include "threading/threadShim.h"
 #include <stdint.h>
@@ -16,4 +16,4 @@ enum
 	THREAD_ABORT = 2
 };
 
-#endif /* __CORE_H__ */
+#endif /*CORE__H*/

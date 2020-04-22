@@ -119,4 +119,4 @@ CRUNCH_API int32_t allocCount;
 CRUNCH_API testLog *startLogging(const char *fileName);
 CRUNCH_API void stopLogging(testLog *logFile);
 
-#endif /* CRUNCH__H */
+#endif /*CRUNCH__H*/

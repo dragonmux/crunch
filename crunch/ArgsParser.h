@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef __ARGSPARSER_H__
-#define __ARGSPARSER_H__
+#ifndef ARGSPARSER__H
+#define ARGSPARSER__H
 
 #include <stdint.h>
 #include "crunch.h"
@@ -37,4 +37,4 @@ CRUNCH_API void *freeParsedArgs(parsedArgs_t parsedArgs);
 CRUNCH_VIS uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck);
 CRUNCH_VIS uint32_t checkParams(const uint32_t argc, const char *const *const argv, const uint32_t argPos, const arg_t *const argument, const arg_t *const args);
 
-#endif /* __ARGSPARSER_H__ */
+#endif /*ARGSPARSER__H*/
