@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013-2018 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2020 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,8 +23,8 @@
 #error "This is the C++ test harness header, use crunch.h for C"
 #endif
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 #include <thread>
 #include <vector>
 #include <type_traits>
@@ -34,27 +34,37 @@
 #include <exception>
 
 #ifdef _MSC_VER
-	#ifdef __crunch_lib__
-		#define CRUNCH_VIS	__declspec(dllexport)
-	#else
-		#define CRUNCH_VIS	__declspec(dllimport)
-	#endif
-	#define CRUNCH_API	extern "C" CRUNCH_VIS
-	#define CRUNCH_EXPORT		__declspec(dllexport)
-	#define CRUNCH_MAYBE_VIS
-	#define CRUNCHpp_TEST	extern "C" CRUNCH_EXPORT
+#	ifdef __crunch_lib__
+#		define CRUNCH_VIS	__declspec(dllexport)
+#	else
+#		define CRUNCH_VIS	__declspec(dllimport)
+#	endif
+#	define CRUNCH_API	extern "C" CRUNCH_VIS
+#	define CRUNCH_EXPORT		__declspec(dllexport)
+#	define CRUNCH_MAYBE_VIS
+#	define CRUNCHpp_TEST	extern "C" CRUNCH_EXPORT
 #else
-	#if __GNUC__ >= 4
-		#define CRUNCH_VIS __attribute__ ((visibility("default")))
-	#else
-		#define CRUNCH_VIS
-	#endif
-	#define CRUNCH_API	extern "C" CRUNCH_VIS
-	#define CRUNCH_EXPORT		CRUNCH_API
-	#define CRUNCH_MAYBE_VIS	CRUNCH_VIS
-	#define CRUNCHpp_TEST		CRUNCH_API
+#	if __GNUC__ >= 4
+#		define CRUNCH_VIS __attribute__ ((visibility("default")))
+#	else
+#		error "Your GCC is too old to use crunch++"
+#	endif
+#	define CRUNCH_API	extern "C" CRUNCH_VIS
+#	define CRUNCH_EXPORT		CRUNCH_API
+#	define CRUNCH_MAYBE_VIS	CRUNCH_VIS
+#	define CRUNCHpp_TEST		CRUNCH_API
 #endif
 #define CRUNCHpp_API	extern CRUNCH_VIS
+
+#if __cplusplus >= 201402L
+#	define CRUNCH_DEPRECATE [[deprecated]]
+#else
+#	ifdef _WINDOWS
+#		define CRUNCH_DEPRECATE __declspec(deprecated)
+#	else
+#		define CRUNCH_DEPRECATE __attribute__ ((deprecated))
+#	endif
+#endif
 
 class testsuit;
 
