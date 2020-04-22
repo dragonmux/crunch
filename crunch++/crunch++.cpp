@@ -28,6 +28,8 @@ char *dlerror()
 #endif
 #include <exception>
 #include <cstdlib>
+#include <utility>
+#include <substrate/utility>
 #include "core.hxx"
 #include "logger.hxx"
 #include "argsParser.hxx"
@@ -37,7 +39,36 @@ char *dlerror()
 
 using namespace std;
 
-const arg_t args[] =
+template<size_t... idx> struct indexSequence
+{
+	using value_type = std::size_t;
+	static constexpr size_t size() noexcept { return sizeof...(idx); }
+};
+
+template<size_t N> struct sequence_t
+{
+	template<size_t... sequence> static auto expand(const indexSequence<sequence...> &) ->
+		indexSequence<N, sequence...>;
+	template<typename seq> static auto next() -> decltype(expand(typename seq::sequence{}));
+	using sequence = decltype(next<sequence_t<N - 1>>());
+};
+
+template<> struct sequence_t<0> { using sequence = indexSequence<0>; };
+template<size_t N> using makeIndexSequence = typename sequence_t<N - 1>::sequence;
+
+template<typename T, size_t N, size_t... index> constexpr std::array<T, N>
+	makeArray_(T (&&elems)[N], indexSequence<index...>) // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays,hicpp-avoid-c-arrays)
+{
+	return {elems[index]...};
+}
+
+template<typename T, size_t N> constexpr std::array<T, N>
+	makeArray(T (&&elems)[N]) // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays,hicpp-avoid-c-arrays)
+{
+	return makeArray_(std::move(elems), makeIndexSequence<N>{});
+}
+
+const auto args{makeArray<arg_t>(
 {
 	{"--log", 1, 1, 0},
 	{"--help", 0, 0, 0},
@@ -45,7 +76,7 @@ const arg_t args[] =
 	{"--version", 0, 0, 0},
 	{"-v", 0, 0, 0},
 	{{}, 0, 0, 0}
-};
+})};
 
 #ifdef _MSC_VER
 const static auto libExt{"tlib"_s};
@@ -223,7 +254,7 @@ int main(int argc, char **argv)
 	_CrtSetReportMode(_CRT_ASSERT, 0);
 	_CrtSetReportMode(_CRT_ERROR, 0);
 #endif
-	registerArgs(args);
+	registerArgs(args.data());
 	parsedArgs = parseArguments(argc, argv);
 	if (!parsedArgs.empty() && handleVersionOrHelp())
 		return 0;

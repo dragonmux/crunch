@@ -42,6 +42,7 @@ crunchpp = executable(
 	crunchppSrc + [versionHeader],
 	link_with: [libCrunchpp],
 	dependencies: [threading, dl],
+	include_directories: substrate,
 	install: true,
 	install_rpath: libdir
 )
