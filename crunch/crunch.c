@@ -49,10 +49,15 @@ char *dlerror()
 
 #include <crtdbg.h>
 #endif
+#include "version.h"
 
 const arg_t crunchArgs[] =
 {
 	{"--log", 1, 1, 0},
+	{"--version", 0, 0, 0},
+	{"-v", 0, 0, 0},
+	{"--help", 0, 0, 0},
+	{"-h", 0, 0, 0},
 	{NULL, 0, 0, 0}
 };
 
@@ -273,6 +278,23 @@ void invalidHandler(const wchar_t *expr, const wchar_t *func, const wchar_t *fil
 }
 #endif
 
+uint8_t handleVersionOrHelp()
+{
+	constParsedArg_t version = findArg(parsedArgs, "--version", NULL);
+	constParsedArg_t versionShort = findArg(parsedArgs, "-v", NULL);
+	constParsedArg_t help = findArg(parsedArgs, "--help", NULL);
+	constParsedArg_t helpShort = findArg(parsedArgs, "-h", NULL);
+
+	if (help || helpShort)
+		puts(CRUNCH_HELP);
+	else if (version || versionShort)
+		testPrintf("crunch %s (%s %s %s-%s)\n", CRUNCH_VERSION, CRUNCH_COMPILER,
+			CRUNCH_COMPILER_VERSION, CRUNCH_SYSTEM, CRUNCH_ARCH);
+	else
+		return FALSE;
+	return TRUE;
+}
+
 void callFreeParsedArgs() { parsedArgs = freeParsedArgs(parsedArgs); }
 
 int main(int argc, char **argv)
@@ -284,7 +306,12 @@ int main(int argc, char **argv)
 #endif
 	registerArgs(crunchArgs);
 	parsedArgs = parseArguments(argc, (const char **)argv);
-	if (parsedArgs == NULL || getTests() == FALSE)
+	if (parsedArgs && handleVersionOrHelp())
+	{
+		callFreeParsedArgs();
+		return 0;
+	}
+	else if (!parsedArgs || !getTests())
 	{
 		callFreeParsedArgs();
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
@@ -295,7 +322,7 @@ int main(int argc, char **argv)
 	isTTY = isatty(STDOUT_FILENO);
 #else
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (console == NULL)
+	if (!console)
 	{
 		printf("Error: could not grab console!");
 		return 1;

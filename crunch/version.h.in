@@ -1,0 +1,24 @@
+/* version.h - program version information */
+@AUTOGEN_HEADER@
+#ifndef VERSION__H
+#define VERSION__H
+
+#define CRUNCH_VERSION "@VERSION@"
+#define CRUNCH_COMPILER "@COMPILER@"
+#define CRUNCH_COMPILER_VERSION "@COMPILER_VERSION@"
+#define CRUNCH_SYSTEM "@TARGET_SYS@"
+#define CRUNCH_ARCH "@TARGET_ARCH@"
+
+#define CRUNCH_HELP "crunch test running engine\n\n" \
+	"Usage:\n" \
+	"\tcrunch [-h|--help]\n" \
+	"\tcrunch [-v|--version]\n" \
+	"\tcrunch [--log file] TESTS\n\n" \
+	"Options:\n" \
+	"\t-v, --version  Prints the version information for crunch\n" \
+	"\t-h, --help     Prints this help message\n\n" \
+	"\t--log          Tells the engine to log all test output to the file named\n\n" \
+	"This program is licensed under the LGPLv3+\n" \
+	"Report bugs using https://github.com/DX-MON/crunch/issues"
+
+#endif /*VERSION__H*/
