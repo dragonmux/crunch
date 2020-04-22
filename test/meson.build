@@ -18,6 +18,7 @@ endif
 subdir('ranlux')
 subdir('crunch')
 subdir('crunch++')
+subdir('crunchMake')
 
 test(
 	'crunchMake-none',
