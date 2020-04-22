@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 #include "crunch++.h"
-#include <stdarg.h>
+#include <cstdarg>
 
 enum resultType
 {

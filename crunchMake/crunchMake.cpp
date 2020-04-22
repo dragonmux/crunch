@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 #ifndef _MSC_VER
 #include <unistd.h>
 #else
@@ -38,9 +38,9 @@
 using namespace std;
 
 parsedArgs_t parsedArgs;
-vector<string> inclDirs, libDirs;
-vector<string> linkLibs, linkObjs;
-vector<string> linkArgs, tests;
+std::vector<std::string> inclDirs, libDirs;
+std::vector<std::string> linkLibs, linkObjs;
+std::vector<std::string> linkArgs, tests;
 uint32_t numLinkArgs = 0;
 
 template<typename T> using removeReference = typename std::remove_reference<T>::type;
@@ -52,20 +52,20 @@ template<typename type_t> constexpr type_t &&forward_(removeReference<type_t> &&
 		"template argument subtituting type_t is an lvalue reference type");
 	return static_cast<type_t &&>(value);
 }
-const char *forward_(const string &value) noexcept { return value.data(); }
-const char *forward_(const unique_ptr<char []> &value) noexcept { return value.get(); }
-const char *forward_(const unique_ptr<const char []> &value) noexcept { return value.get(); }
-template<typename... values_t> inline unique_ptr<char []> format(const string &format, values_t &&... values) noexcept
-	{ return formatString(format.data(), forward_(values)...); }
+const char *forward_(const std::string &value) noexcept { return value.data(); }
+const char *forward_(const std::unique_ptr<char []> &value) noexcept { return value.get(); }
+const char *forward_(const std::unique_ptr<const char []> &value) noexcept { return value.get(); }
+template<typename... values_t> inline std::unique_ptr<char []> format(const std::string &format,
+	values_t &&... values) noexcept { return formatString(format.data(), forward_(values)...); }
 
-template<typename T, typename... values_t> constexpr array<T, sizeof...(values_t)> makeArray(values_t &&... values)
-	{ return {forward<values_t>(values)...}; }
+template<typename T, typename... values_t> constexpr std::array<T, sizeof...(values_t)>
+	makeArray(values_t &&... values) { return {forward<values_t>(values)...}; }
 
 const auto exts = makeArray<const char *>(".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx");
 const auto cxxExts = makeArray<const char *>(".cpp", ".cc", ".cxx");
 const auto objExts = makeArray<const char *>(".o", ".obj", ".a");
 
-string inclDirFlags, libDirFlags, objs, libs;
+std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 bool silent, quiet, pthread, codeCoverage, debugBuild;
 
 const arg_t args[] =
