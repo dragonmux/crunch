@@ -29,12 +29,12 @@ int32_t compileTest(const std::string &test)
 	const auto objFile{computeObjName(test)};
 	const auto compileString{"cl "s + test + " "s + compileOptsExtra + compileOpts +
 		inclDirFlags + objs + "/Fe"s + soFile + " /Fo"s + objFile + " "s +
-		linkOptsExtra + libDirFlags + crunchLib(mode) + libs;
+		linkOptsExtra + libDirFlags + crunchLib(mode) + libs};
 	if (!silent)
 	{
 		if (quiet)
 		{
-			const auto displayString{" CCLD  "s + test + " => "s + soFile;
+			const auto displayString{" CCLD  "s + test + " => "s + soFile};
 			puts(displayString.c_str());
 		}
 		else
