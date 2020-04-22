@@ -65,10 +65,19 @@ const arg_t args[] =
 #define LIBEXT "so"
 #endif
 
+struct freeDelete_t final
+{
+	void operator ()(void *const ptr) noexcept
+		{ std::free(ptr); } // NOLINT(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory,hicpp-no-malloc)
+
+	void operator ()(const void *const ptr) noexcept
+		{ std::free((void *)ptr); } // NOLINT(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory,hicpp-no-malloc)
+};
+
 parsedArgs_t parsedArgs;
 parsedRefArgs_t namedTests;
 size_t numTests = 0;
-const char *workingDir = nullptr;
+std::unique_ptr<const char, freeDelete_t> workingDir = {};
 
 using registerFn = void (__cdecl *)();
 
@@ -148,7 +157,7 @@ void runTests()
 
 	for (i = 0; i < numTests; i++)
 	{
-		auto testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value.data());
+		auto testLib = formatString("%s/%s." LIBEXT, workingDir.get(), namedTests[i]->value.data());
 		void *testSuite = dlopen(testLib.get(), RTLD_LAZY);
 		if (!testSuite || !tryRegistration(testSuite))
 		{
@@ -228,7 +237,7 @@ int main(int argc, char **argv)
 		testPrintf("Fatal error: There are no tests to run given on the command line!\n");
 		return 2;
 	}
-	workingDir = getcwd(nullptr, 0);
+	workingDir.reset(getcwd(nullptr, 0));
 #ifndef _MSC_VER
 	isTTY = isatty(STDOUT_FILENO);
 #else
@@ -242,10 +251,6 @@ int main(int argc, char **argv)
 #endif
 	try { runTests(); }
 	catch (threadExit_t &val)
-	{
-		free((void *)workingDir);
-		return val;
-	}
-	free((void *)workingDir);
+		{ return val; }
 	return failures ? 1 : 0;
 }
