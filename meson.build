@@ -7,7 +7,9 @@ project(
 		'warning_level=3',
 		'b_pch=false',
 		#'b_lto=true',
-		'buildtype=release'
+		'buildtype=release',
+		'b_ndebug=if-release',
+		'strip=true'
 	],
 	version: '1.0.0',
 	meson_version: '>=0.52'
