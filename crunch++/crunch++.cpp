@@ -33,7 +33,7 @@ char *dlerror()
 #include "argsParser.hxx"
 #include "stringFuncs.hxx"
 #include "crunch++.h"
-#include "version.hxx"
+#include <version.hxx>
 
 using namespace std;
 
@@ -131,7 +131,7 @@ catch (std::bad_alloc &e)
 void runTests()
 {
 	testLog *logFile{};
-	const auto logging = findArg(parsedArgs, "--log", nullptr);
+	const auto *const logging{findArg(parsedArgs, "--log", nullptr)};
 	if (logging)
 	{
 		logFile = startLogging(logging->params[0].data());
@@ -141,7 +141,7 @@ void runTests()
 	for (size_t i = 0; i < numTests; i++)
 	{
 		auto testLib = formatString("%s/%s.%s", workingDir.get(), namedTests[i]->value.data(), libExt.data());
-		auto testSuite{dlopen(testLib.get(), RTLD_LAZY)};
+		auto *testSuite{dlopen(testLib.get(), RTLD_LAZY)};
 		if (!testSuite || !tryRegistration(testSuite))
 		{
 			if (!testSuite)
