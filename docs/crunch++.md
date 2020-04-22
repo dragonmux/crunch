@@ -155,7 +155,7 @@ Total tests: 3,  Failures: 0,  Pass rate: 100.00%
 
 The equality assertions exist to remove the dependency on possibly overriden quality operators, which have the potential if themselves left untested to introduce errors and false assertion results into a test suite. This is especially true if your test requires a lot of external library headers.
 
-`crunch++` comes with two kinds of afirmative equality assertion - fundamental pointer traits and general value assertions - and two boolean equality assertions.
+`crunch++` comes with two kinds of affirmative equality assertion - fundamental pointer traits and general value assertions - and two boolean equality assertions.
 
 Reference Table of Contents
 
@@ -207,8 +207,8 @@ The complex form of `assertNotEqual` has the signature
 void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
 ```
 
-This allows for save comparison of two blocks of memory, as with `assertEqual`.
-If the two blocks have identicle contents, the assertion fails and prints a diagnostic, aborting the test case.
+This allows for safe comparison of two blocks of memory, as with `assertEqual`.
+If the two blocks have identical contents, the assertion fails and prints a diagnostic, aborting the test case.
 
 ### Boolean Equality Assertions
 
