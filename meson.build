@@ -9,7 +9,7 @@ project(
 		#'b_lto=true',
 		'buildtype=release'
 	],
-	version: '0.4.2',
+	version: '1.0.0',
 	meson_version: '>=0.52'
 )
 
