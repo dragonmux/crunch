@@ -183,14 +183,9 @@ void runTests()
 			newline();
 
 			try { test.testClass->registerTests(); }
-			catch (threadExit_t &)
-			{
-				delete test.testClass;
-				continue;
-			}
+			catch (threadExit_t &) { continue; }
 			catch (std::bad_alloc &)
 			{
-				delete test.testClass;
 				red();
 				testPrintf("Failed to allocate memory while registering suite");
 				newline();
@@ -201,14 +196,12 @@ void runTests()
 				{ test.testClass->test(); }
 			catch (threadExit_t &)
 			{
-				delete test.testClass;
 				cxxTests.clear();
 				printStats();
 				if (logging != nullptr)
 					stopLogging(logFile);
 				throw;
 			}
-			delete test.testClass;
 		}
 		cxxTests.clear();
 		cxxTests.shrink_to_fit();

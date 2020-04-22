@@ -98,5 +98,5 @@ void testsuite::test()
 	}
 }
 
-void crunchTestClass(testsuite *tests, const char *name)
-	{ cxxTests.emplace_back(cxxTestClass{tests, name}); }
+void crunchTestClass(std::unique_ptr<testsuite> &&tests, const char *name)
+	{ cxxTests.emplace_back(std::move(tests), name); }

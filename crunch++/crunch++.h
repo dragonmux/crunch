@@ -74,12 +74,6 @@ struct cxxTest
 	const char *testName;
 };
 
-struct cxxTestClass
-{
-	testsuite *testClass;
-	const char *testClassName;
-};
-
 struct cxxUnitTest
 {
 	std::thread testThread;
@@ -176,10 +170,37 @@ public:
 	CRUNCH_VIS operator int() const noexcept { return value; }
 };
 
-CRUNCHpp_API void crunchTestClass(testsuite *tests, const char *name);
+CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&tests, const char *name);
+
+namespace crunchpp
+{
+	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
+	template<typename T> using remove_extent_t = typename std::remove_extent<T>::type;
+
+	template<typename T> struct makeUnique_t { using uniqueType = std::unique_ptr<T>; };
+	template<typename T> struct makeUnique_t<T []> { using arrayType = std::unique_ptr<T []>; };
+	template<typename T, size_t N> struct makeUnique_t<T [N]> { struct invalidType { }; };
+
+	template<typename T, typename... args_t> inline typename makeUnique_t<T>::uniqueType
+		makeUnique(args_t &&...args)
+	{
+		using type_t = remove_const_t<T>;
+		return std::unique_ptr<T>{new type_t{std::forward<args_t>(args)...}};
+	}
+
+	template<typename T> inline typename makeUnique_t<T>::arrayType
+		makeUnique(const size_t num)
+	{
+		using type_t = remove_const_t<remove_extent_t<T>>;
+		return std::unique_ptr<T>{new type_t[num]{{}}};
+	}
+
+	template<typename T, typename... args_t> inline typename makeUnique_t<T>::invalidType
+		makeUnique(args_t &&...) noexcept = delete;
+}
 
 template<typename TestClass> void registerTestClasses()
-	{ crunchTestClass(new TestClass(), typeid(TestClass).name()); }
+	{ crunchTestClass(crunchpp::makeUnique<TestClass>(), typeid(TestClass).name()); }
 
 template<typename TestClass, typename ...TestClasses>
 typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()

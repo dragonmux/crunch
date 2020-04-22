@@ -1,6 +1,6 @@
 /*
  * This file is part of crunch
- * Copyright © 2013 Rachel Mant (dx-mon@users.sourceforge.net)
+ * Copyright © 2013-2020 Rachel Mant (dx-mon@users.sourceforge.net)
  *
  * crunch is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,17 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
+#include <utility>
 #include "crunch++.h"
+
+struct cxxTestClass final
+{
+	std::unique_ptr<testsuite> testClass;
+	const char *testClassName;
+
+	cxxTestClass(std::unique_ptr<testsuite> &&suite, const char *const name) :
+		testClass{std::move(suite)}, testClassName{name} { }
+};
 
 CRUNCHpp_API uint32_t passes, failures;
 CRUNCHpp_API bool loggingTests;
