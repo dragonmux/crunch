@@ -6,11 +6,11 @@
 
 #include <string>
 
+inline std::string operator ""_s(const char *string, const std::size_t length)
+	{ return std::string{string, length}; }
+
 namespace crunchpp
 {
-	inline std::string operator ""_s(const char *string, const std::size_t length)
-		{ return std::string{string, length}; }
-
 	static const auto version{"@VERSION@"_s};
 	static const auto compiler{"@COMPILER@"_s};
 	static const auto compilerVersion{"@COMPILER_VERSION@"_s};

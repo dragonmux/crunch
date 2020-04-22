@@ -48,9 +48,9 @@ const arg_t args[] =
 };
 
 #ifdef _MSC_VER
-#define LIBEXT "tlib"
+const static auto libExt{"tlib"_s};
 #else
-#define LIBEXT "so"
+const static auto libExt{"so"_s};
 #endif
 
 struct freeDelete_t final
@@ -140,7 +140,7 @@ void runTests()
 
 	for (size_t i = 0; i < numTests; i++)
 	{
-		auto testLib = formatString("%s/%s." LIBEXT, workingDir.get(), namedTests[i]->value.data());
+		auto testLib = formatString("%s/%s.%s", workingDir.get(), namedTests[i]->value.data(), libExt.data());
 		auto testSuite{dlopen(testLib.get(), RTLD_LAZY)};
 		if (!testSuite || !tryRegistration(testSuite))
 		{
