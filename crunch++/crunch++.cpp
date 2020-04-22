@@ -158,7 +158,7 @@ void runTests()
 	for (size_t i = 0; i < numTests; i++)
 	{
 		auto testLib = formatString("%s/%s." LIBEXT, workingDir.get(), namedTests[i]->value.data());
-		void *testSuite = dlopen(testLib.get(), RTLD_LAZY);
+		auto testSuite{dlopen(testLib.get(), RTLD_LAZY)};
 		if (!testSuite || !tryRegistration(testSuite))
 		{
 			if (!testSuite)

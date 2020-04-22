@@ -33,6 +33,6 @@ Options:
 This program is licensed under the LGPLv3+
 Report bugs using https://github.com/DX-MON/crunch/issues)"_s
 	};
-}
+} // namespace crunchpp
 
 #endif /*VERSION__HXX*/
