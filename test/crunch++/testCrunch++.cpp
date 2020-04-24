@@ -43,11 +43,14 @@ private:
 		fail("Expected threadExit_t exception not thrown");
 	}
 
-	inline void *genPtr() { return reinterpret_cast<void *>(ptrRng(rngGen)); }
+	inline void *genPtr()
+	{
+		return reinterpret_cast<void *>(ptrRng(rngGen)); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+	}
 
 public:
-	crunchTests() : dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX}, uintRng{0, UINT64_MAX},
-		ptrRng{INTPTR_MIN, INTPTR_MAX}
+	crunchTests() : rngGen{std::random_device{}()}, dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX},
+		uintRng{0, UINT64_MAX}, ptrRng{INTPTR_MIN, INTPTR_MAX}
 	{
 		std::random_device randDev{};
 		rngGen.seed(randDev());
