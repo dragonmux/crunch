@@ -264,16 +264,16 @@ private:
 		assertNotNull(ptr);
 		assertNotNull((const void *)ptr);
 		tryShouldFail([=]() { assertNotNull(static_cast<void *>(nullptr)); });
-		tryShouldFail([=]() { assertNotNull(static_cast<const void *const>(nullptr)); });
+		tryShouldFail([=]() { assertNotNull(static_cast<const void *>(nullptr)); });
 	}
 
 	void testAssertGreaterThan()
 	{
-		intptr_t value{};
+		uintptr_t value{};
 		do
-			value = ptrRng(rngGen);
+			value = static_cast<uintptr_t>(ptrRng(rngGen));
 		while (!value);
-		value &= ~(1U << (sizeof(intptr_t) - 1));
+		value &= ~(1U << (sizeof(intptr_t) - 1U));
 		assertGreaterThan(value, 0);
 		tryShouldFail([=]() { assertGreaterThan(value, value); });
 		tryShouldFail([=]() { assertGreaterThan(0, value); });
@@ -281,11 +281,11 @@ private:
 
 	void testAssertLessThan()
 	{
-		intptr_t value{};
+		uintptr_t value{};
 		do
-			value = ptrRng(rngGen);
+			value = static_cast<uintptr_t>(ptrRng(rngGen));
 		while (!value);
-		value &= ~(1U << (sizeof(intptr_t) - 1));
+		value &= ~(1U << (sizeof(intptr_t) - 1U));
 		assertLessThan(0, value);
 		tryShouldFail([=]() { assertLessThan(value, value); });
 		tryShouldFail([=]() { assertLessThan(value, 0); });
