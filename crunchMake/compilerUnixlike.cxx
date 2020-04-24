@@ -12,8 +12,8 @@ static const auto includeOptsExtra{""s}; // NOLINT(cert-err58-cpp)
 static const auto linkOptsExtra{""s}; // NOLINT(cert-err58-cpp)
 #endif
 
-std::string cCompiler{compilerCC " "s};
-std::string cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s};
+std::string cCompiler{compilerCC " "s}; // NOLINT(cert-err58-cpp)
+std::string cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s}; // NOLINT(cert-err58-cpp)
 const std::string libExt{".so"s}; // NOLINT(cert-err58-cpp)
 
 inline std::string crunchLib(const bool isCXX)
