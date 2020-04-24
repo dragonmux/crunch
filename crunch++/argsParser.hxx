@@ -10,7 +10,7 @@
 
 struct arg_t final
 {
-	const std::string value;
+	std::string value;
 	const uint32_t numMinParams;
 	const uint32_t numMaxParams;
 	const uint8_t flags;

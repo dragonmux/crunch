@@ -19,8 +19,6 @@ using std::unique_ptr;
 using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::uniform_int_distribution;
-inline std::string operator ""_s(const char *string, const std::size_t length)
-	{ return std::string{string, length}; }
 
 class crunchTests final : public testsuite
 {

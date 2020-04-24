@@ -41,11 +41,11 @@ using namespace std;
 
 const auto args{substrate::make_array<arg_t>(
 {
-	{"--log", 1, 1, 0},
-	{"--help", 0, 0, 0},
-	{"-h", 0, 0, 0},
-	{"--version", 0, 0, 0},
-	{"-v", 0, 0, 0},
+	{"--log"_s, 1, 1, 0},
+	{"--help"_s, 0, 0, 0},
+	{"-h"_s, 0, 0, 0},
+	{"--version"_s, 0, 0, 0},
+	{"-v"_s, 0, 0, 0},
 	{{}, 0, 0, 0}
 })};
 
