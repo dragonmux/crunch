@@ -164,10 +164,10 @@ void runTests()
 		for (auto &test : cxxTests)
 		{
 			magenta();
-			testPrintf("Running tests in class %s...", test.testClassName);
+			testPrintf("Running tests in class %s...", test.name());
 			newline();
 
-			try { test.testClass->registerTests(); }
+			try { test.suite()->registerTests(); }
 			catch (threadExit_t &) { continue; }
 			catch (std::bad_alloc &)
 			{
@@ -178,7 +178,7 @@ void runTests()
 			}
 
 			try
-				{ test.testClass->test(); }
+				{ test.suite()->test(); }
 			catch (threadExit_t &)
 			{
 				cxxTests.clear();

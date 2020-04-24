@@ -7,11 +7,16 @@
 
 struct cxxTestClass final
 {
-	std::unique_ptr<testsuite> testClass;
-	const char *testClassName;
+private:
+	std::unique_ptr<testsuite> suite_;
+	const char *name_;
 
+public:
 	cxxTestClass(std::unique_ptr<testsuite> &&suite, const char *const name) :
-		testClass{std::move(suite)}, testClassName{name} { }
+		suite_{std::move(suite)}, name_{name} { }
+
+	testsuite *suite() const noexcept { return suite_.get(); }
+	const char *name() const noexcept { return name_; }
 };
 
 CRUNCHpp_API uint32_t passes, failures;
