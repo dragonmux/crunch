@@ -44,8 +44,8 @@ using constParsedArg_t = const parsedArg_t *;
 using parsedArgs_t = std::vector<parsedArg_t>;
 using parsedRefArgs_t = std::vector<const parsedArg_t *>;
 
-#define ARG_REPEATABLE	1
-#define ARG_INCOMPLETE	2
+#define ARG_REPEATABLE	1U
+#define ARG_INCOMPLETE	2U
 
 CRUNCHpp_API void registerArgs(const arg_t *allowedArgs) noexcept;
 CRUNCHpp_API parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) noexcept;

@@ -15,7 +15,6 @@
 #include <stringFuncs.hxx>
 #include <logger.hxx>
 
-using std::unique_ptr;
 using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::uniform_int_distribution;

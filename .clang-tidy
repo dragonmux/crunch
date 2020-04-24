@@ -1,7 +1,7 @@
 ---
-Checks:              '*,-fuchsia-*,-google-*,-readability-else-after-return,-hicpp-braces-around-statements,-readability-braces-around-statements,-readability-implicit-bool-conversion,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-llvm-include-order,-readability-avoid-const-params-in-decls,-readability-named-parameter,-modernize-use-override,-hicpp-use-override,-llvm-header-guard,-hicpp-no-array-decay,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-misc-unconventional-assign-operator,-cppcoreguidelines-c-copy-assignment-signature,-hicpp-vararg,-readability-redundant-member-init,-modernize-use-default-member-init,-hicpp-explicit-conversions,-cppcoreguidelines-pro-type-vararg,-clang-diagnostic-c++17-compat-mangling,-modernize-use-trailing-return-type'
+Checks:              '*,-fuchsia-*,-google-*,-readability-else-after-return,-hicpp-braces-around-statements,-readability-braces-around-statements,-readability-implicit-bool-conversion,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-llvm-include-order,-readability-avoid-const-params-in-decls,-readability-named-parameter,-modernize-use-override,-hicpp-use-override,-llvm-header-guard,-hicpp-no-array-decay,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-misc-unconventional-assign-operator,-cppcoreguidelines-c-copy-assignment-signature,-hicpp-vararg,-readability-redundant-member-init,-modernize-use-default-member-init,-hicpp-explicit-conversions,-cppcoreguidelines-pro-type-vararg,-clang-diagnostic-c++17-compat-mangling,-modernize-use-trailing-return-type,-readability-magic-numbers,-cppcoreguidelines-avoid-magic-numbers'
 WarningsAsErrors: ''
-HeaderFilterRegex: 'crunch/.+'
+HeaderFilterRegex: 'crunch/crunch*/.+'
 FormatStyle: 'none'
 AnalyzeTemporaryDtors: false
 CheckOptions:

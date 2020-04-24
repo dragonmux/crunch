@@ -43,7 +43,7 @@ void registerArgs(const arg_t *allowedArgs) noexcept
 
 bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept
 {
-	for (auto &entry : parsedArgs)
+	for (const auto &entry : parsedArgs)
 	{
 		if (entry.value == toCheck.value)
 			return true;
@@ -55,7 +55,8 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 	const arg_t &argument, const arg_t *const args_) noexcept
 {
 	uint32_t n = 0;
-	const uint32_t min = argument.numMinParams, max = argument.numMaxParams;
+	const auto min{argument.numMinParams};
+	const auto max{argument.numMaxParams};
 	bool eoa = false;
 	for (uint32_t i = argPos; i < argc && n < max && !eoa; ++i)
 	{
@@ -76,16 +77,17 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 
 parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) noexcept try
 {
-	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
+	if (argc < 1 || (argc >> 31U) == 1 || !argv || !args)
 		return {};
 
 	parsedArgs_t result{};
 	result.reserve(argc);
 	for (uint32_t i = 1; i < argc; ++i)
 	{
-		bool found = false, skip = false;
-		auto argument = args;
-		parsedArg_t entry;
+		bool found{};
+		bool skip{};
+		const auto *argument{args};
+		parsedArg_t entry{};
 		while (!argument->value.empty())
 		{
 			found = argument->matches(argv[i]);
