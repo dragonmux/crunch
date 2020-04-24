@@ -148,7 +148,7 @@ public:
 
 class CRUNCH_DEPRECATE testsuit : public testsuite { };
 
-struct threadExit_t
+struct threadExit_t final : std::exception
 {
 private:
 	int value;
@@ -156,6 +156,7 @@ private:
 public:
 	threadExit_t(int exitValue) noexcept : value(exitValue) { }
 	CRUNCH_VIS operator int() const noexcept { return value; }
+	const char *what() const noexcept final { return "Test assertion failure, thread exiting"; }
 };
 
 CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&tests, const char *name);
