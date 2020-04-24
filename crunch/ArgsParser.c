@@ -13,7 +13,7 @@ const arg_t *args = NULL;
 
 void registerArgs(const arg_t *allowedArgs) { args = allowedArgs; }
 
-uint8_t checkAlreadyFound(const parsedArgs_t parsedArgs, const parsedArg_t *const toCheck)
+uint8_t checkAlreadyFound(const constParsedArgs_t parsedArgs, const parsedArg_t *const toCheck)
 {
 	for (uint32_t i = 0; parsedArgs[i] != NULL; i++)
 	{
@@ -27,7 +27,8 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 	const arg_t *const argument, const arg_t *const args_)
 {
 	uint32_t n = 0;
-	const uint32_t min = argument->numMinParams, max = argument->numMaxParams;
+	const uint32_t min = argument->numMinParams;
+	const uint32_t max = argument->numMaxParams;
 	uint8_t eoa = FALSE;
 	for (uint32_t i = argPos; i < argc && n < max && !eoa; ++i)
 	{
@@ -61,7 +62,7 @@ uint8_t freeParsedArg(parsedArg_t *parsedArg)
 	return TRUE;
 }
 
-void *freeParsedArgs(parsedArgs_t parsedArgs)
+void *freeParsedArgs(constParsedArgs_t parsedArgs)
 {
 	if (!parsedArgs)
 		return NULL;
@@ -71,9 +72,9 @@ void *freeParsedArgs(parsedArgs_t parsedArgs)
 	return NULL;
 }
 
-parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
+constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 {
-	if (argc < 1 || (argc >> 31) == 1 || !argv || !args)
+	if (argc < 1U || (argc >> 31U) == 1U || !argv || !args)
 		return NULL;
 
 	parsedArgs_t ret = malloc(sizeof(constParsedArg_t) * argc);
@@ -155,7 +156,7 @@ parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 	return result;
 }
 
-constParsedArg_t findArg(constParsedArg_t *const args_, const char *const value, const constParsedArg_t defaultVal)
+constParsedArg_t findArg(const constParsedArg_t *const args_, const char *const value, const constParsedArg_t defaultVal)
 {
 	if (!args_ || !value)
 		return defaultVal;

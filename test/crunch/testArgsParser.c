@@ -28,7 +28,7 @@ void testEmpty()
 	const arg_t args[1] = { {nullptr, 0, 0, 0} };
 
 	registerArgs(args);
-	parsedArgs_t parsedArgs = parseArguments(2, argv);
+	constParsedArgs_t parsedArgs = parseArguments(2, argv);
 	assertConstNotNull(parsedArgs);
 	assertConstNotNull(parsedArgs[0]);
 	assertConstNotNull(parsedArgs[0]->value);
@@ -54,7 +54,7 @@ void testIncomplete()
 		{nullptr, 0, 0, 0}
 	};
 
-	parsedArgs_t parsedArgs;
+	constParsedArgs_t parsedArgs = NULL;
 	registerArgs(args_1);
 
 	parsedArgs = parseArguments(2, argv_1);
@@ -90,29 +90,31 @@ void testInvalid()
 		{"--arg", 0, 0, 0},
 		{nullptr, 0, 0, 0}
 	};
-	parsedArgs_t parsedArgs;
-	parsedArg_t *parsedArg;
 
-	registerArgs(args);
-	parsedArgs = malloc(sizeof(constParsedArg_t) * 2);
-	assertConstNotNull(parsedArgs);
-	parsedArg = malloc(sizeof(parsedArg_t));
-	assertNotNull(parsedArg);
-	parsedArg->value = strdup("--arg");
-	parsedArgs[0] = parsedArg;
-	assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
-	free((void *)parsedArg->value);
-	free(parsedArg);
-	free((void *)parsedArgs);
+	{
+		registerArgs(args);
+		parsedArgs_t parsedArgs = malloc(sizeof(constParsedArg_t) * 2);
+		assertConstNotNull(parsedArgs);
+		parsedArg_t *parsedArg = malloc(sizeof(parsedArg_t));
+		assertNotNull(parsedArg);
+		parsedArg->value = strdup("--arg");
+		parsedArgs[0] = parsedArg;
+		assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
+		free((void *)parsedArg->value);
+		free(parsedArg);
+		free((void *)parsedArgs);
+	}
 
 	assertConstNull(findArg(nullptr, "", nullptr));
 
-	// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
-	parsedArgs = parseArguments(3, argv);
-	assertConstNotNull(parsedArgs);
-	assertConstNotNull(parsedArgs[0]);
-	assertConstNull(parsedArgs[1]);
-	freeParsedArgs(parsedArgs);
+	{
+		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
+		constParsedArgs_t parsedArgs = parseArguments(3, argv);
+		assertConstNotNull(parsedArgs);
+		assertConstNotNull(parsedArgs[0]);
+		assertConstNull(parsedArgs[1]);
+		freeParsedArgs(parsedArgs);
+	}
 
 	assertTrue(freeParsedArg(NULL));
 	assertNull(freeParsedArgs(NULL));
@@ -128,7 +130,7 @@ void testArgCounting()
 		{"-a", 1, 1, 0},
 		{nullptr, 0, 0, 0}
 	};
-	parsedArgs_t parsedArgs;
+	constParsedArgs_t parsedArgs = NULL;
 
 	registerArgs(args);
 	assertIntEqual(checkParams(5, argv_1, 2, &args[0], args), 1);

@@ -50,7 +50,7 @@ const arg_t crunchArgs[] =
 #define LIBEXT "so"
 #endif
 
-parsedArgs_t parsedArgs = NULL;
+constParsedArgs_t parsedArgs = NULL;
 parsedArgs_t namedTests = NULL;
 uint32_t numTests = 0;
 const char *workingDir = NULL;
