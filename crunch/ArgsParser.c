@@ -47,7 +47,7 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 	return n;
 }
 
-bool freeParsedArg(const parsedArg_t *parsedArg)
+void freeParsedArg(const parsedArg_t *parsedArg)
 {
 	if (parsedArg)
 	{
@@ -60,7 +60,6 @@ bool freeParsedArg(const parsedArg_t *parsedArg)
 		free((void *)parsedArg->value);
 		free((void *)parsedArg);
 	}
-	return true;
 }
 
 void *freeParsedArgs(constParsedArgs_t parsedArgs)
@@ -100,10 +99,11 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 			if (found)
 			{
 				argRet->value = strdup(argv[i]);
-				if (!(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret, argRet))
+				skip = !(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret, argRet);
+				if (skip)
 				{
 					testPrintf("Duplicate argument found: %s\n", argRet->value);
-					skip = freeParsedArg(argRet);
+					freeParsedArg(argRet);
 					break;
 				}
 				argRet->paramsFound = checkParams(argc, argv, i + 1, argument, args);
@@ -124,7 +124,10 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 					{
 						argRet->params[j] = strdup(argv[i + j + 1]);
 						if (!argRet->params[j])
-							return freeParsedArg(argRet), freeParsedArgs(ret);
+						{
+							freeParsedArg(argRet);
+							return freeParsedArgs(ret);
+						}
 					}
 				}
 				i += argRet->paramsFound;
@@ -134,7 +137,8 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 			else if (!(argument->flags & ARG_INCOMPLETE) && strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
 			{
 				printf("Badly formatted argument (%s)\n", argv[i]);
-				return freeParsedArg(argRet), freeParsedArgs(ret);
+				freeParsedArg(argRet);
+				return freeParsedArgs(ret);
 			}
 			++argument;
 		}
@@ -144,7 +148,10 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 		{
 			argRet->value = strdup(argv[i]);
 			if (!argRet->value)
-				return freeParsedArg(argRet), freeParsedArgs(ret);
+			{
+				freeParsedArg(argRet);
+				return freeParsedArgs(ret);
+			}
 			argRet->paramsFound = 0;
 			argRet->flags = argument->flags;
 		}

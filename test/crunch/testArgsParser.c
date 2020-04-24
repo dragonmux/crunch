@@ -116,7 +116,6 @@ void testInvalid()
 		freeParsedArgs(parsedArgs);
 	}
 
-	assertTrue(freeParsedArg(NULL));
 	assertNull(freeParsedArgs(NULL));
 }
 
