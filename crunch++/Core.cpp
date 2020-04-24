@@ -72,7 +72,7 @@ void testsuite::assertEqual(const int8_t result, const int8_t expected)
 	if (result != expected)
 	{
 		assertionError("%d", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -81,7 +81,7 @@ void testsuite::assertNotEqual(const int8_t result, const int8_t expected)
 	if (result == expected)
 	{
 		assertionError("%d", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -90,7 +90,7 @@ void testsuite::assertEqual(const uint8_t result, const uint8_t expected)
 	if (result != expected)
 	{
 		assertionError("%u", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -99,7 +99,7 @@ void testsuite::assertNotEqual(const uint8_t result, const uint8_t expected)
 	if (result == expected)
 	{
 		assertionError("%u", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -108,7 +108,7 @@ void testsuite::assertEqual(const int16_t result, const int16_t expected)
 	if (result != expected)
 	{
 		assertionError("%d", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -117,7 +117,7 @@ void testsuite::assertNotEqual(const int16_t result, const int16_t expected)
 	if (result == expected)
 	{
 		assertionError("%d", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -126,7 +126,7 @@ void testsuite::assertEqual(const uint16_t result, const uint16_t expected)
 	if (result != expected)
 	{
 		assertionError("%u", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -135,7 +135,7 @@ void testsuite::assertNotEqual(const uint16_t result, const uint16_t expected)
 	if (result == expected)
 	{
 		assertionError("%u", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -144,7 +144,7 @@ void testsuite::assertEqual(const int32_t result, const int32_t expected)
 	if (result != expected)
 	{
 		assertionError("%d", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -153,7 +153,7 @@ void testsuite::assertNotEqual(const int32_t result, const int32_t expected)
 	if (result == expected)
 	{
 		assertionError("%d", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -162,7 +162,7 @@ void testsuite::assertEqual(const uint32_t result, const uint32_t expected)
 	if (result != expected)
 	{
 		assertionError("%u", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -171,7 +171,7 @@ void testsuite::assertNotEqual(const uint32_t result, const uint32_t expected)
 	if (result == expected)
 	{
 		assertionError("%u", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -180,7 +180,7 @@ void testsuite::assertEqual(const int64_t result, const int64_t expected)
 	if (result != expected)
 	{
 		assertionError("%" PRId64, result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -189,7 +189,7 @@ void testsuite::assertNotEqual(const int64_t result, const int64_t expected)
 	if (result == expected)
 	{
 		assertionError("%" PRId64, result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -198,7 +198,7 @@ void testsuite::assertEqual(const uint64_t result, const uint64_t expected)
 	if (result != expected)
 	{
 		assertionError("%" PRIu64, result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -207,7 +207,7 @@ void testsuite::assertNotEqual(const uint64_t result, const uint64_t expected)
 	if (result == expected)
 	{
 		assertionError("%" PRIu64, result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -216,7 +216,7 @@ void testsuite::assertEqual(void *result, void *expected)
 	if (result != expected)
 	{
 		assertionError("%p", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -225,7 +225,7 @@ void testsuite::assertNotEqual(void *result, void *expected)
 	if (result == expected)
 	{
 		assertionError("%p", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -239,7 +239,7 @@ void testsuite::assertEqual(const double result, const double expected)
 	if (!delta(result, expected))
 	{
 		assertionError("%f", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -248,7 +248,7 @@ void testsuite::assertNotEqual(const double result, const double expected)
 	if (delta(result, expected))
 	{
 		assertionError("%f", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -257,7 +257,7 @@ void testsuite::assertEqual(const char *const result, const char *const expected
 	if (strcmp(result, expected) != 0)
 	{
 		assertionError("%s", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -266,7 +266,7 @@ void testsuite::assertNotEqual(const char *const result, const char *const expec
 	if (strcmp(result, expected) == 0)
 	{
 		assertionError("%s", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -275,7 +275,7 @@ void testsuite::assertEqual(const void *result, const void *expected, const size
 	if (memcmp(result, expected, expectedLength) != 0)
 	{
 		assertionFailure("buffers %p and %p do not match", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -284,7 +284,7 @@ void testsuite::assertNotEqual(const void *result, const void *expected, const s
 	if (memcmp(result, expected, expectedLength) == 0)
 	{
 		assertionFailure("buffers %p and %p match", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -293,7 +293,7 @@ void testsuite::assertNull(void *result)
 	if (result != nullptr)
 	{
 		assertionError("%p", result, nullptr);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -302,7 +302,7 @@ void testsuite::assertNotNull(void *result)
 	if (result == nullptr)
 	{
 		assertionError("%p", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -311,7 +311,7 @@ void testsuite::assertNull(const void *const result)
 	if (result != nullptr)
 	{
 		assertionError("%p", result, nullptr);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -320,7 +320,7 @@ void testsuite::assertNotNull(const void *const result)
 	if (result == nullptr)
 	{
 		assertionError("%p", result);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -329,7 +329,7 @@ void testsuite::assertGreaterThan(const long result, const long expected)
 	if (result <= expected)
 	{
 		assertionFailure("%ld was not greater than %ld", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -338,6 +338,6 @@ void testsuite::assertLessThan(const long result, const long expected)
 	if (result >= expected)
 	{
 		assertionFailure("%ld was not less than %ld", result, expected);
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
