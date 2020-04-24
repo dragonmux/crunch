@@ -16,8 +16,6 @@ bool arg_t::matches(const char *const str) const noexcept
 	return !strcmp(value.data(), str);
 }
 
-parsedArg_t::parsedArg_t() : value{}, paramsFound{0}, params{}, flags{0}, minLength{0} { }
-
 bool parsedArg_t::matches(const char *const str) const noexcept
 	{ return matches(str, strlen(str)); }
 

@@ -28,8 +28,8 @@ struct parsedArg_t final
 	uint8_t flags;
 	size_t minLength;
 
-	CRUNCH_VIS parsedArg_t();
-	parsedArg_t(parsedArg_t &&arg) : parsedArg_t{} { swap(arg); }
+	parsedArg_t() noexcept : value{}, paramsFound{0}, params{}, flags{0}, minLength{0} { }
+	parsedArg_t(parsedArg_t &&arg) noexcept : parsedArg_t{} { swap(arg); }
 	void operator =(parsedArg_t &&arg) noexcept { swap(arg); }
 
 	bool matches(const char *const str, const size_t length) const noexcept;
