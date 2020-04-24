@@ -39,7 +39,7 @@ char *dlerror()
 
 using namespace std;
 
-const auto args{substrate::make_array<arg_t>(
+const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
 {
 	{"--log"_s, 1, 1, 0},
 	{"--help"_s, 0, 0, 0},
@@ -50,9 +50,9 @@ const auto args{substrate::make_array<arg_t>(
 })};
 
 #ifdef _MSC_VER
-const static auto libExt{"tlib"_s};
+const static auto libExt{"tlib"_s}; // NOLINT(cert-err58-cpp)
 #else
-const static auto libExt{"so"_s};
+const static auto libExt{"so"_s}; // NOLINT(cert-err58-cpp)
 #endif
 
 struct freeDelete_t final
