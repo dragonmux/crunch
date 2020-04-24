@@ -47,7 +47,7 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 	return n;
 }
 
-uint8_t freeParsedArg(parsedArg_t *parsedArg)
+uint8_t freeParsedArg(const parsedArg_t *parsedArg)
 {
 	if (!parsedArg)
 		return TRUE;
@@ -58,7 +58,7 @@ uint8_t freeParsedArg(parsedArg_t *parsedArg)
 		free((void *)parsedArg->params);
 	}
 	free((void *)parsedArg->value);
-	free(parsedArg);
+	free((void *)parsedArg);
 	return TRUE;
 }
 
@@ -67,7 +67,7 @@ void *freeParsedArgs(constParsedArgs_t parsedArgs)
 	if (!parsedArgs)
 		return NULL;
 	for (uint32_t i = 0; parsedArgs[i]; ++i)
-		freeParsedArg((void *)parsedArgs[i]);
+		freeParsedArg(parsedArgs[i]);
 	free((void *)parsedArgs);
 	return NULL;
 }

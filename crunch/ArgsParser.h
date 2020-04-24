@@ -33,7 +33,7 @@ CRUNCH_API constParsedArgs_t parseArguments(const uint32_t argc, const char *con
 CRUNCH_API constParsedArg_t findArg(const constParsedArg_t *const args, const char *const value,
 	const constParsedArg_t defaultVal);
 CRUNCH_API const arg_t *findArgInArgs(const char *const value);
-CRUNCH_API uint8_t freeParsedArg(parsedArg_t *parsedArg);
+CRUNCH_API uint8_t freeParsedArg(const parsedArg_t *parsedArg);
 CRUNCH_API void *freeParsedArgs(constParsedArgs_t parsedArgs);
 
 CRUNCH_VIS uint8_t checkAlreadyFound(const constParsedArgs_t parsedArgs, const parsedArg_t *const toCheck);
