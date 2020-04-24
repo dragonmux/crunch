@@ -13,13 +13,6 @@
 #include "logger.hxx"
 
 #ifndef _WINDOWS
-#define COL(val) val - 8
-#else
-#define COL(val) int16_t(val - 9)
-#endif
-#define WCOL(val) val - 2
-
-#ifndef _WINDOWS
 	#define TTY	"/dev/tty"
 #else
 	#define TTY	"CON"
@@ -29,16 +22,16 @@ HANDLE console;
 testLog *logger = nullptr;
 bool isTTY = true;
 
-int getColumns()
+int16_t getColumns()
 {
 #ifndef _WINDOWS
 	struct winsize win{};
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-	return !win.ws_col ? 80 : win.ws_col;
+	return (!win.ws_col ? 80 : win.ws_col) - 8;
 #else
 	CONSOLE_SCREEN_BUFFER_INFO window{};
 	GetConsoleScreenBufferInfo(console, &window);
-	return !window.dwSize.X ? 80 : window.dwSize.X;
+	return (!window.dwSize.X ? 80 : window.dwSize.X) - 8;
 #endif
 }
 
@@ -77,7 +70,7 @@ void normal()
 void echoOk()
 {
 	if (isTTY)
-		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
+		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, getColumns());
 	else
 		printOk();
 	++passes;
@@ -86,7 +79,7 @@ void echoOk()
 void echoFailure()
 {
 	if (isTTY)
-		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
+		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, getColumns());
 	else
 		printFailure();
 	++failures;
@@ -95,7 +88,7 @@ void echoFailure()
 void echoSkip()
 {
 	if (isTTY)
-		testPrintf(" " SET_COL BRACKET "[" WARNING " SKIP " BRACKET "]" NEWLINE, COL(getColumns()));
+		testPrintf(" " SET_COL BRACKET "[" WARNING " SKIP " BRACKET "]" NEWLINE, getColumns());
 	else
 		printSkip();
 	++passes;
@@ -117,7 +110,7 @@ void echoOk()
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
 		cursor.dwCursorPosition.Y--;
-		cursor.dwCursorPosition.X = COL(getColumns());
+		cursor.dwCursorPosition.X = getColumns();
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");
@@ -139,7 +132,7 @@ void echoFailure()
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.X = COL(getColumns());
+		cursor.dwCursorPosition.X = getColumns();
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");
@@ -161,7 +154,7 @@ void echoSkip()
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cursor;
 		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.X = COL(getColumns());
+		cursor.dwCursorPosition.X = getColumns();
 		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 		testPrintf("[");

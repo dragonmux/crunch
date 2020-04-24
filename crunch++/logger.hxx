@@ -33,7 +33,7 @@ CRUNCHpp_API testLog *logger;
 
 CRUNCHpp_API size_t vaTestPrintf(const char *format, va_list args);
 CRUNCHpp_API size_t testPrintf(const char *format, ...);
-CRUNCHpp_API int getColumns();
+CRUNCHpp_API int16_t getColumns();
 CRUNCHpp_API void echoAborted();
 CRUNCHpp_API void logResult(resultType type, const char *message, ...);
 CRUNCHpp_API void newline();
@@ -47,7 +47,7 @@ CRUNCHpp_API void newline();
 #define INFO COLOUR("1;36")
 
 #define CURS_UP "\x1B[1A"
-#define SET_COL "\x1B[%dG"
+#define SET_COL "\x1B[%hiG"
 
 #define NEWLINE NORMAL "\n"
 

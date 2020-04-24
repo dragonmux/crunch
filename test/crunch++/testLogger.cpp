@@ -29,7 +29,7 @@ private:
 	{
 		logger = &ourLogger;
 		assertEqual(dup2(nullFD, STDOUT_FILENO), STDOUT_FILENO);
-		assertEqual(getColumns(), 80);
+		assertEqual(getColumns(), 72);
 		assertEqual(dup2(stdoutFD, STDOUT_FILENO), STDOUT_FILENO);
 		logger = nullptr;
 	}
