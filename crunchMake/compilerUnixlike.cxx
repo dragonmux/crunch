@@ -24,11 +24,12 @@ inline std::string crunchLib(const bool isCXX)
 		return "-lcrunch "s;
 }
 
-inline std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
 inline std::string debugFlags() { return debugBuild ? "-O0 -g "s : "-O2 "s; }
 inline std::string threadingFlags() { return pthread ? ""s : "-pthread "s; }
 
 #if compilerIsClang
+inline std::string coverageFlags() { return codeCoverage ? "--coverage "s : ""s; }
+
 int32_t compileTest(const std::string &test)
 {
 	const bool mode{isCXX(test)};
@@ -67,6 +68,8 @@ int32_t compileTest(const std::string &test)
 	return system(linkString.c_str());
 }
 #else
+inline std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
+
 int32_t compileTest(const std::string &test)
 {
 	const bool mode{isCXX(test)};
