@@ -22,8 +22,8 @@ using std::uniform_int_distribution;
 class crunchTests final : public testsuite
 {
 private:
-	const char *const testStr1 = "abcdefghijklmnopqrstuvwxyz";
-	const char *const testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	constexpr static const char *testStr1 = "abcdefghijklmnopqrstuvwxyz";
+	constexpr static const char *testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	default_random_engine rngGen;
 	uniform_real_distribution<double> dblRng;
