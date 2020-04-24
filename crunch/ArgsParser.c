@@ -110,7 +110,8 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 				if (argRet->paramsFound == (uint32_t)-1)
 				{
 					printf("Not enough parameters given for argument %s\n", argv[i]);
-					return freeParsedArg(argRet), freeParsedArgs(ret);
+					freeParsedArg(argRet);
+					return freeParsedArgs(ret);
 				}
 				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
 				if (argRet->paramsFound)
