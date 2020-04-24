@@ -12,11 +12,14 @@ test *tests;
 uint32_t passes = 0, failures = 0;
 int32_t allocCount = -1;
 
-#define ASSERTION_FAILURE(what, result, expected) \
-	logResult(RESULT_FAILURE, "Assertion failure: " what, expected, result);
+#define ASSERTION_FAILURE(what, ...) \
+	logResult(RESULT_FAILURE, "Assertion failure: " what, __VA_ARGS__);
 
 #define ASSERTION_ERROR(params, result, expected) \
 	ASSERTION_FAILURE("expected " params ", got " params, result, expected);
+
+#define ASSERTION_ERROR_NEGATIVE(params, result) \
+	ASSERTION_FAILURE("did not expect " params, result);
 
 void fail(const char *reason)
 {
@@ -55,7 +58,7 @@ void assertIntNotEqual(int32_t result, int32_t expected)
 {
 	if (result == expected)
 	{
-		ASSERTION_ERROR("%d", result, expected);
+		ASSERTION_ERROR_NEGATIVE("%d", result);
 		thrd_exit(THREAD_ERROR);
 	}
 }
@@ -73,7 +76,7 @@ void assertInt64NotEqual(int64_t result, int64_t expected)
 {
 	if (result == expected)
 	{
-		ASSERTION_ERROR("%" PRId64, result, expected);
+		ASSERTION_ERROR_NEGATIVE("%" PRId64, result);
 		thrd_exit(THREAD_ERROR);
 	}
 }
@@ -91,7 +94,7 @@ void assertPtrNotEqual(void *result, void *expected)
 {
 	if (result == expected)
 	{
-		ASSERTION_ERROR("%p", result, expected);
+		ASSERTION_ERROR_NEGATIVE("%p", result);
 		thrd_exit(THREAD_ERROR);
 	}
 }
@@ -117,7 +120,7 @@ void assertDoubleNotEqual(double result, double expected)
 	feholdexcept(&env);
 	if (DELTA(result, expected))
 	{
-		ASSERTION_ERROR("%g", result, expected);
+		ASSERTION_ERROR_NEGATIVE("%g", result);
 		fesetenv(&env);
 		thrd_exit(THREAD_ERROR);
 	}
@@ -137,7 +140,7 @@ void assertStringNotEqual(const char *result, const char *expected)
 {
 	if (strcmp(result, expected) == 0)
 	{
-		ASSERTION_ERROR("%s", result, expected);
+		ASSERTION_ERROR_NEGATIVE("%s", result);
 		thrd_exit(THREAD_ERROR);
 	}
 }
@@ -182,7 +185,7 @@ void assertConstNull(const void *const result)
 {
 	if (result != NULL)
 	{
-		ASSERTION_ERROR("%p", result, NULL);
+		ASSERTION_ERROR_NEGATIVE("%p", result);
 		thrd_exit(THREAD_ERROR);
 	}
 }
@@ -191,7 +194,7 @@ void assertConstNotNull(const void *const result)
 {
 	if (result == NULL)
 	{
-		ASSERTION_ERROR("%p", result, NULL);
+		ASSERTION_ERROR_NEGATIVE("%p", result);
 		thrd_exit(THREAD_ERROR);
 	}
 }
