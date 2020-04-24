@@ -336,7 +336,7 @@ private:
 	{
 		tryShouldFail([=]() { fail("This is only a test"); });
 		// This next line tests that the rest of the test is skipped but intentionally makes it so the runner sees success.
-		throw threadExit_t(0);
+		throw threadExit_t{0};
 	}
 
 	void testAbort()

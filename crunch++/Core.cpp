@@ -40,13 +40,13 @@ testsuite::~testsuite() noexcept = default;
 void testsuite::fail(const char *const reason)
 {
 	logResult(RESULT_FAILURE, "Failure: %s", reason);
-	throw threadExit_t(1);
+	throw threadExit_t{1};
 }
 
 void testsuite::skip(const char *const reason)
 {
 	logResult(RESULT_SKIP, "Skipping: %s", reason);
-	throw threadExit_t(1);
+	throw threadExit_t{1};
 }
 
 void testsuite::assertTrue(const bool value)
@@ -54,7 +54,7 @@ void testsuite::assertTrue(const bool value)
 	if (!value)
 	{
 		assertionError("%s", boolToString(value), "true");
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
@@ -63,7 +63,7 @@ void testsuite::assertFalse(const bool value)
 	if (value)
 	{
 		assertionError("%s", boolToString(value), "false");
-		throw threadExit_t(1);
+		throw threadExit_t{1};
 	}
 }
 
