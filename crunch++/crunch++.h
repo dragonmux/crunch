@@ -130,7 +130,7 @@ public:
 	CRUNCH_VIS void assertGreaterThan(const long result, const long expected);
 	CRUNCH_VIS void assertLessThan(const long result, const long expected);
 
-	CRUNCH_VIS testsuite();
+	CRUNCH_VIS testsuite() noexcept;
 
 private:
 	static int testRunner(testsuite &unitClass, cxxUnitTest &test);
@@ -138,7 +138,7 @@ private:
 public:
 	testsuite(const testsuite &) = delete;
 	testsuite(testsuite &&) = delete;
-	CRUNCH_VIS virtual ~testsuite();
+	CRUNCH_VIS virtual ~testsuite() noexcept;
 	testsuite &operator =(const testsuite &) = delete;
 	testsuite &operator =(testsuite &&) = delete;
 

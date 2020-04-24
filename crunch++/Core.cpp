@@ -34,8 +34,8 @@ void assertionError(const char *params, T result)
 	assertionFailure(what.get(), result, result);
 }
 
-testsuite::testsuite() { }
-testsuite::~testsuite() { }
+testsuite::testsuite() noexcept = default;
+testsuite::~testsuite() noexcept = default;
 
 void testsuite::fail(const char *const reason)
 {
