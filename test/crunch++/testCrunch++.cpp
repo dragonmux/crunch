@@ -71,10 +71,10 @@ private:
 
 	void testAssertIntEqual()
 	{
-		int8_t num8 = int8_t(intRng(rngGen));
-		int16_t num16 = int16_t(intRng(rngGen));
-		int32_t num32 = int32_t(intRng(rngGen));
-		int64_t num64 = intRng(rngGen);
+		auto num8{static_cast<int8_t>(intRng(rngGen))};
+		auto num16{static_cast<int16_t>(intRng(rngGen))};
+		auto num32{static_cast<int32_t>(intRng(rngGen))};
+		auto num64{intRng(rngGen)};
 
 		assertEqual(num8, num8);
 		assertEqual(num16, num16);
@@ -133,10 +133,10 @@ private:
 
 	void testAssertUintEqual()
 	{
-		uint8_t num8 = uint8_t(uintRng(rngGen));
-		uint16_t num16 = uint16_t(uintRng(rngGen));
-		uint32_t num32 = uint32_t(uintRng(rngGen));
-		uint64_t num64 = uintRng(rngGen);
+		auto num8{static_cast<uint8_t>(uintRng(rngGen))};
+		auto num16{static_cast<uint16_t>(uintRng(rngGen))};
+		auto num32{static_cast<uint32_t>(uintRng(rngGen))};
+		auto num64{uintRng(rngGen)};
 
 		assertEqual(num8, num8);
 		assertEqual(num16, num16);
@@ -250,9 +250,9 @@ private:
 		assertNull(static_cast<void *>(nullptr));
 		assertNull(static_cast<const void *>(nullptr));
 		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr1)); });
-		tryShouldFail([=]() { assertNull(const_cast<const char *const>(testStr1)); });
+		tryShouldFail([=]() { assertNull(testStr1); });
 		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr2)); });
-		tryShouldFail([=]() { assertNull(const_cast<const char *const>(testStr2)); });
+		tryShouldFail([=]() { assertNull(testStr2); });
 	}
 
 	void testAssertNotNull()
