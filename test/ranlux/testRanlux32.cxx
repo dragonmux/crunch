@@ -34,7 +34,7 @@ public:
 private:
 	void testConstruction()
 	{
-		auto state{initRanlux32(seed)};
+		auto *state{initRanlux32(seed)};
 		assertNotNull(state);
 		freeRanlux32(state);
 	}
@@ -42,7 +42,7 @@ private:
 	void testCorrectness()
 	{
 		ranlux32STL_t stdRanlux{seed};
-		auto crunchRanlux{initRanlux32(seed)};
+		auto *crunchRanlux{initRanlux32(seed)};
 		assertNotNull(crunchRanlux);
 
 		// Check the first 65536 numbers from the two impls are equal..

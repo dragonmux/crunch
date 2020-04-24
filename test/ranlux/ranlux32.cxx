@@ -50,7 +50,7 @@ public:
 		if (shortIndex < 0)
 			shortIndex += longLag;
 
-		uint32_t newX{x[shortIndex] - x[p] - carry};
+		const uint32_t newX{x[shortIndex] - x[p] - carry};
 		carry = x[shortIndex] < x[p] + carry;
 		x[p] = newX;
 		if (++p >= longLag)
