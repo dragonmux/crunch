@@ -10,11 +10,13 @@
 
 struct arg_t final
 {
-	std::string value;
-	const uint32_t numMinParams;
-	const uint32_t numMaxParams;
-	const uint8_t flags;
+	std::string value{};
+	const uint32_t numMinParams{};
+	const uint32_t numMaxParams{};
+	const uint8_t flags{};
 
+	arg_t(std::string &&value_, const uint32_t minParams, const uint32_t maxParams, const uint8_t flags_) :
+		value{std::move(value_)}, numMinParams{minParams}, numMaxParams{maxParams}, flags{flags_} { }
 	CRUNCH_VIS bool matches(const char *const str) const noexcept;
 };
 
@@ -22,13 +24,13 @@ struct parsedArg_t final
 {
 	//using strPtr_t = std::unique_ptr<const char []>;
 
-	std::string value;
-	uint32_t paramsFound;
-	std::vector<std::string> params;
-	uint8_t flags;
-	size_t minLength;
+	std::string value{};
+	uint32_t paramsFound{0};
+	std::vector<std::string> params{};
+	uint8_t flags{0};
+	size_t minLength{0};
 
-	parsedArg_t() noexcept : value{}, paramsFound{0}, params{}, flags{0}, minLength{0} { }
+	parsedArg_t() noexcept = default;
 	parsedArg_t(parsedArg_t &&arg) noexcept : parsedArg_t{} { swap(arg); }
 	void operator =(parsedArg_t &&arg) noexcept { swap(arg); }
 
