@@ -14,7 +14,7 @@ uint64_t randomSeed64()
 	if (sizeof(std::random_device::result_type) >= 64)
 		return randDev();
 	else
-		return (uint64_t{randDev()} << 32) | randDev();
+		return (uint64_t{randDev()} << 32U) | randDev();
 }
 
 double genDouble(ranlux64_t *generator)
