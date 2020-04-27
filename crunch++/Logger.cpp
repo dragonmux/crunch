@@ -215,7 +215,7 @@ testLog *startLogging(const char *fileName)
 	if (logger)
 		return nullptr;
 	auto logger_ = substrate::make_unique<testLog>();
-	logger_->file = fopen(fileName, "w");
+	logger_->file = fopen(fileName, "w"); // NOLINT(cppcoreguidelines-owning-memory)
 	if (!logger_->file)
 		return nullptr;
 	logger_->realStdout = stdout;
@@ -257,6 +257,6 @@ void stopLogging(testLog *loggerPtr)
 //	locking(fileno(logger_->file), LK_UNLCK, -1);
 #endif
 	logger = nullptr;
-	fclose(logger_->stdout_);
-	fclose(logger_->file);
+	fclose(logger_->stdout_); // NOLINT(cppcoreguidelines-owning-memory)
+	fclose(logger_->file); // NOLINT(cppcoreguidelines-owning-memory)
 }
