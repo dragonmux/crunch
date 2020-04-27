@@ -171,7 +171,7 @@ namespace crunch
 			const std::function<void ()> &function() const noexcept { return testFunc; }
 		};
 
-		CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
+		CRUNCHpp_API void registerTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
 	}
 
 	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
@@ -200,7 +200,7 @@ namespace crunch
 }
 
 template<typename TestClass> void registerTestClasses()
-	{ crunch::internal::crunchTestClass(crunch::makeUnique<TestClass>(), typeid(TestClass).name()); }
+	{ crunch::internal::registerTestClass(crunch::makeUnique<TestClass>(), typeid(TestClass).name()); }
 
 template<typename TestClass, typename ...TestClasses>
 typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()
