@@ -51,18 +51,28 @@
 
 namespace crunch
 {
-	namespace internal { struct cxxTest; }
+	namespace internal
+	{
+		struct cxxTest;
 
-	template<typename T> struct isBoolean : std::false_type { };
-	template<> struct isBoolean<bool> : std::true_type { };
+		template<typename T> struct isBoolean : std::false_type { };
+		template<> struct isBoolean<bool> : std::true_type { };
 
-	template<typename T> struct isNumeric : std::integral_constant<bool, std::is_integral<T>::value && !isBoolean<T>::value> { };
+		template<typename T> struct isNumeric : std::integral_constant<bool,
+			std::is_integral<T>::value && !isBoolean<T>::value> { };
+
+		template<typename T, typename U> struct areDifferentIntegers : std::integral_constant<bool,
+			isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value> { };
+
+		template<bool B, typename T = void> using enableIf = typename std::enable_if<B, T>::type;
+	}
 }
 
 class CRUNCH_MAYBE_VIS testsuite
 {
 private:
-	template<typename T> using isNumeric = crunch::isNumeric<T>;
+	template<typename T, typename U> using areDifferentIntegers = crunch::internal::areDifferentIntegers<T, U>;
+	template<bool B, typename T = void> using enableIf = crunch::internal::enableIf<B, T>;
 	std::vector<std::exception_ptr> exceptions;
 	std::vector<crunch::internal::cxxTest> tests;
 
@@ -88,7 +98,7 @@ public:
 	CRUNCH_VIS void assertEqual(double result, double expected);
 	CRUNCH_VIS void assertEqual(const char *const result, const char *const expected);
 	CRUNCH_VIS void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
-	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
+	template<typename T, typename U, typename = enableIf<areDifferentIntegers<T, U>::value>>
 		void assertEqual(const T a, const U b) { assertEqual(a, T(b)); }
 
 	CRUNCH_VIS void assertNotEqual(const int8_t result, const int8_t expected);
@@ -103,7 +113,7 @@ public:
 	CRUNCH_VIS void assertNotEqual(double result, double expected);
 	CRUNCH_VIS void assertNotEqual(const char *const result, const char *const expected);
 	CRUNCH_VIS void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
-	template<typename T, typename U, typename = typename std::enable_if<isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value>::type>
+	template<typename T, typename U, typename = enableIf<areDifferentIntegers<T, U>::value>>
 		void assertNotEqual(const T a, const U b) { assertNotEqual(a, T(b)); }
 
 	CRUNCH_VIS void assertNull(void *result);
