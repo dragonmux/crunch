@@ -222,9 +222,9 @@ namespace crunch
 	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
 	template<typename T> using remove_extent_t = typename std::remove_extent<T>::type;
 
-	template<typename T> struct makeUnique_t { using uniqueType = std::unique_ptr<T>; };
-	template<typename T> struct makeUnique_t<T []> { using arrayType = std::unique_ptr<T []>; };
-	template<typename T, size_t N> struct makeUnique_t<T [N]> { struct invalidType { }; };
+	template<typename T> struct makeUnique_t { using uniqueType = std::unique_ptr<T>; }; // NOLINT
+	template<typename T> struct makeUnique_t<T []> { using arrayType = std::unique_ptr<T []>; }; // NOLINT
+	template<typename T, size_t N> struct makeUnique_t<T [N]> { struct invalidType { }; }; // NOLINT
 
 	template<typename T, typename... args_t> inline typename makeUnique_t<T>::uniqueType
 		makeUnique(args_t &&...args)
