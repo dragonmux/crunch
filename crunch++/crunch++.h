@@ -92,6 +92,8 @@ class CRUNCH_MAYBE_VIS testsuite
 private:
 	template<typename T, typename U> using areDifferentIntegers = crunch::internal::areDifferentIntegers<T, U>;
 	template<bool B, typename T = void> using enableIf = crunch::internal::enableIf<B, T>;
+	using stringView = crunch::internal::stringView;
+
 	std::vector<std::exception_ptr> exceptions;
 	std::vector<crunch::internal::cxxTest> tests;
 
@@ -117,8 +119,16 @@ public:
 	CRUNCH_VIS void assertEqual(double result, double expected);
 	CRUNCH_VIS void assertEqual(const char *const result, const char *const expected);
 	CRUNCH_VIS void assertEqual(const void *const result, const void *const expected, const size_t expectedLength);
+
 	template<typename T, typename U, typename = enableIf<areDifferentIntegers<T, U>::value>>
 		void assertEqual(const T a, const U b) { assertEqual(a, T(b)); }
+
+	void assertEqual(const std::string &result, const std::string &expected)
+		{ assertEqual(stringView{result.c_str(), result.length()}, stringView{expected.c_str(), expected.length()}); }
+#if __cplusplus >= 201703L
+	void assertEqual(const std::string_view &result, const std::string_view &expected)
+		{ assertEqual(stringView{result.data(), result.length()}, stringView{expected.data(), expected.length()}); }
+#endif
 
 	CRUNCH_VIS void assertNotEqual(const int8_t result, const int8_t expected);
 	CRUNCH_VIS void assertNotEqual(const uint8_t result, const uint8_t expected);
@@ -132,8 +142,16 @@ public:
 	CRUNCH_VIS void assertNotEqual(double result, double expected);
 	CRUNCH_VIS void assertNotEqual(const char *const result, const char *const expected);
 	CRUNCH_VIS void assertNotEqual(const void *const result, const void *const expected, const size_t expectedLength);
+
 	template<typename T, typename U, typename = enableIf<areDifferentIntegers<T, U>::value>>
 		void assertNotEqual(const T a, const U b) { assertNotEqual(a, T(b)); }
+
+	void assertNotEqual(const std::string &result, const std::string &expected)
+		{ assertNotEqual(stringView{result.c_str(), result.length()}, stringView{expected.c_str(), expected.length()}); }
+#if __cplusplus >= 201703L
+	void assertNotEqual(const std::string_view &result, const std::string_view &expected)
+		{ assertNotEqual(stringView{result.data(), result.length()}, stringView{expected.data(), expected.length()}); }
+#endif
 
 	CRUNCH_VIS void assertNull(void *result);
 	CRUNCH_VIS void assertNotNull(void *result);
@@ -151,6 +169,8 @@ public:
 
 private:
 	static int32_t testRunner(testsuite &unitClass, crunch::internal::cxxTest &test);
+	CRUNCH_VIS void assertEqual(const stringView result, const stringView expected);
+	CRUNCH_VIS void assertNotEqual(const stringView result, const stringView expected);
 
 public:
 	testsuite(const testsuite &) = delete;

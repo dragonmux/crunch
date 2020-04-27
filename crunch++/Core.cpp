@@ -270,6 +270,24 @@ void testsuite::assertNotEqual(const char *const result, const char *const expec
 	}
 }
 
+void testsuite::assertEqual(const stringView result, const stringView expected)
+{
+	if (result.length() != expected.length() || std::memcmp(result.data(), expected.data(), expected.length()) != 0)
+	{
+		assertionError("%s", result.data(), expected.data());
+		throw threadExit_t{1};
+	}
+}
+
+void testsuite::assertNotEqual(const stringView result, const stringView expected)
+{
+	if (result.length() == expected.length() && std::memcmp(result.data(), expected.data(), expected.length()) == 0)
+	{
+		assertionError("%s", result.data());
+		throw threadExit_t{1};
+	}
+}
+
 void testsuite::assertEqual(const void *result, const void *expected, const size_t expectedLength)
 {
 	if (std::memcmp(result, expected, expectedLength) != 0)
