@@ -15,6 +15,10 @@
 #include <functional>
 #include <memory>
 #include <exception>
+#include <string>
+#if __cplusplus >= 201703L
+#include <string_view>
+#endif
 
 #ifdef _MSC_VER
 #	ifdef __crunch_lib__
@@ -65,6 +69,21 @@ namespace crunch
 			isNumeric<T>::value && isNumeric<U>::value && !std::is_same<T, U>::value> { };
 
 		template<bool B, typename T = void> using enableIf = typename std::enable_if<B, T>::type;
+
+		struct stringView final
+		{
+		private:
+			std::size_t length_;
+			const char *data_;
+
+		public:
+			constexpr stringView() noexcept : length_{0}, data_{nullptr} {}
+			constexpr explicit stringView(const char *const data, const std::size_t length) noexcept :
+				length_{length}, data_{data} { }
+			constexpr const char *data() const noexcept { return data_; }
+			constexpr std::size_t size() const noexcept { return length_; }
+			constexpr std::size_t length() const noexcept { return length_; }
+		};
 	}
 }
 
