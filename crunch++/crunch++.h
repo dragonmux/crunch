@@ -49,13 +49,12 @@
 #	endif
 #endif
 
-struct cxxUnitTest;
-
 namespace crunch
 {
 	namespace internal
 	{
 		struct cxxTest;
+		struct cxxUnitTest;
 	}
 
 	template<typename T> struct isBoolean : std::false_type { };
@@ -126,7 +125,7 @@ public:
 	CRUNCH_VIS testsuite() noexcept;
 
 private:
-	static int testRunner(testsuite &unitClass, cxxUnitTest &test);
+	static int testRunner(testsuite &unitClass, crunch::internal::cxxUnitTest &test);
 
 public:
 	testsuite(const testsuite &) = delete;

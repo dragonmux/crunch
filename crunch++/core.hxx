@@ -19,11 +19,17 @@ public:
 	const char *name() const noexcept { return name_; }
 };
 
-struct cxxUnitTest final
+namespace crunch
 {
-	std::thread testThread;
-	crunch::internal::cxxTest theTest;
-};
+	namespace internal
+	{
+		struct cxxUnitTest final
+		{
+			std::thread testThread;
+			cxxTest theTest;
+		};
+	}
+}
 
 CRUNCHpp_API uint32_t passes, failures;
 CRUNCHpp_API bool loggingTests;

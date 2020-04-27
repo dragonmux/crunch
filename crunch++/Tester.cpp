@@ -23,7 +23,7 @@ void newline()
 		testPrintf(" ");
 }
 
-int testsuite::testRunner(testsuite &unitClass, cxxUnitTest &test)
+int testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxUnitTest &test)
 {
 	if (isTTY)
 #ifndef _MSC_VER
@@ -71,7 +71,7 @@ void testsuite::test()
 {
 	for (auto &unitTest : tests)
 	{
-		cxxUnitTest test;
+		crunch::internal::cxxUnitTest test{};
 		int retVal = 2;
 		test.theTest = unitTest;
 		test.testThread = thread([&, this]{ retVal = testRunner(*this, test); });
