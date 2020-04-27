@@ -188,15 +188,15 @@ private:
 
 	void testAssertDoubleEqual()
 	{
-		double num = dblRng(rngGen);
+		const auto num{dblRng(rngGen)};
 		assertEqual(num, num);
 		tryShouldFail([=]() { assertEqual(0.0, 0.1); });
 	}
 
 	void testAssertDoubleNotEqual()
 	{
-		double numA = dblRng(rngGen);
-		double numB = dblRng(rngGen);
+		const auto numA{dblRng(rngGen)};
+		auto numB{dblRng(rngGen)};
 		while (numA == numB)
 			numB = dblRng(rngGen);
 		assertNotEqual(numA, numB);
@@ -206,7 +206,7 @@ private:
 
 	void testAssertPtrEqual()
 	{
-		void *ptr = genPtr();
+		auto ptr{genPtr()};
 		assertEqual(ptr, ptr);
 		while (!ptr)
 			ptr = genPtr();
@@ -315,8 +315,8 @@ private:
 
 	void testLogging()
 	{
-		const std::string fileName{"test.log"_s};
-		const std::string fileString{"Print to file test"_s};
+		const auto fileName{"test.log"_s};
+		const auto fileString{"Print to file test"_s};
 		assertGreaterThan(puts("Print to console test"), -1);
 		assertNull(startLogging(nullptr));
 		assertNull(startLogging(""));
