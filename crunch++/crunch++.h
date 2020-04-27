@@ -203,7 +203,7 @@ typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestCla
 	registerTestClasses<TestClasses...>();
 }
 
-#define CXX_TEST(name) tests.emplace_back(cxxTest{[this](){ this->name(); }, #name});
+#define CXX_TEST(name) registerTest([this](){ this->name(); }, #name);
 
 struct testLog;
 
