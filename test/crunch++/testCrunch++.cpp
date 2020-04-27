@@ -293,7 +293,7 @@ private:
 	{
 		uintptr_t value{};
 		do
-			value = static_cast<uintptr_t>(ptrRng(rngGen));
+			value = ptrRng(rngGen);
 		while (!value);
 		value &= ~(1U << (sizeof(intptr_t) - 1U));
 		assertGreaterThan(value, 0);
@@ -305,7 +305,7 @@ private:
 	{
 		uintptr_t value{};
 		do
-			value = static_cast<uintptr_t>(ptrRng(rngGen));
+			value = ptrRng(rngGen);
 		while (!value);
 		value &= ~(1U << (sizeof(intptr_t) - 1U));
 		assertLessThan(0, value);
