@@ -31,11 +31,11 @@ int testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxUnitTest &t
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
-	testPrintf("%s...", test.theTest.name());
+	testPrintf("%s...", test.unitTest().name());
 	newline();
 	try
 	{
-		const auto &unitTest = test.theTest;
+		const auto &unitTest = test.unitTest();
 		unitTest.function()();
 	}
 	catch (threadExit_t &val)
@@ -71,9 +71,8 @@ void testsuite::test()
 {
 	for (auto &unitTest : tests)
 	{
-		crunch::internal::cxxUnitTest test{};
+		crunch::internal::cxxUnitTest test{unitTest};
 		int retVal = 2;
-		test.theTest = unitTest;
 		test.testThread = thread([&, this]{ retVal = testRunner(*this, test); });
 		test.testThread.join();
 		if (retVal == 2)
