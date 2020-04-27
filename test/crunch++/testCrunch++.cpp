@@ -18,18 +18,29 @@
 using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::uniform_int_distribution;
+using crunch::internal::stringView;
+
+constexpr inline stringView operator ""_sv(const char *const str, std::size_t len) noexcept
+    { return stringView{str, len}; }
 
 class crunchTests final : public testsuite
 {
 private:
-	constexpr static const char *testStr1 = "abcdefghijklmnopqrstuvwxyz";
-	constexpr static const char *testStr2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	constexpr static auto testStr1{"abcdefghijklmnopqrstuvwxyz"_sv};
+	constexpr static auto testStr2{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"_sv};
+
+#if __cplusplus >= 201703L
+	constexpr static std::string_view testStdStringView1{testStr1.data(), testStr1.length()};
+	constexpr static std::string_view testStdStringView2{testStr2.data(), testStr2.length()};
+#endif
 
 	default_random_engine rngGen;
 	uniform_real_distribution<double> dblRng;
 	uniform_int_distribution<int64_t> intRng;
 	uniform_int_distribution<uint64_t> uintRng;
 	uniform_int_distribution<intptr_t> ptrRng;
+	std::string testStdString1{testStr1.data()};
+	std::string testStdString2{testStr2.data()};
 
 	void tryShouldFail(const std::function<void()> &test)
 	{
@@ -219,40 +230,56 @@ private:
 
 	void testAssertStrEqual()
 	{
-		assertEqual(testStr1, testStr1);
-		assertEqual(testStr2, testStr2);
-		tryShouldFail([=]() { assertEqual(testStr1, testStr2); });
+		assertEqual(testStr1.data(), testStr1.data());
+		assertEqual(testStr2.data(), testStr2.data());
+		tryShouldFail([=]() { assertEqual(testStr1.data(), testStr2.data()); });
+		assertEqual(testStdString1, testStdString1);
+		assertEqual(testStdString2, testStdString2);
+		tryShouldFail([=]() { assertEqual(testStdString1, testStdString2); });
+#if __cplusplus >= 201703L
+		assertEqual(testStdStringView1, testStdStringView1);
+		assertEqual(testStdStringView2, testStdStringView2);
+		tryShouldFail([=]() { assertEqual(testStdStringView1, testStdStringView2); });
+#endif
 	}
 
 	void testAssertStrNotEqual()
 	{
-		assertNotEqual(testStr1, testStr2);
-		tryShouldFail([=]() { assertNotEqual(testStr1, testStr1); });
-		tryShouldFail([=]() { assertNotEqual(testStr2, testStr2); });
+		assertNotEqual(testStr1.data(), testStr2.data());
+		tryShouldFail([=]() { assertNotEqual(testStr1.data(), testStr1.data()); });
+		tryShouldFail([=]() { assertNotEqual(testStr2.data(), testStr2.data()); });
+		assertNotEqual(testStdString1, testStdString2);
+		tryShouldFail([=]() { assertNotEqual(testStdString1, testStdString1); });
+		tryShouldFail([=]() { assertNotEqual(testStdString2, testStdString2); });
+#if __cplusplus >= 201703L
+		assertNotEqual(testStdStringView1, testStdStringView2);
+		tryShouldFail([=]() { assertNotEqual(testStdStringView1, testStdStringView1); });
+		tryShouldFail([=]() { assertNotEqual(testStdStringView2, testStdStringView2); });
+#endif
 	}
 
 	void testAssertMemEqual()
 	{
-		assertEqual(testStr1, testStr1, 27);
-		assertEqual(testStr2, testStr2, 27);
-		tryShouldFail([=]() { assertEqual(testStr1, testStr2, 27); });
+		assertEqual(testStr1.data(), testStr1.data(), 27);
+		assertEqual(testStr2.data(), testStr2.data(), 27);
+		tryShouldFail([=]() { assertEqual(testStr1.data(), testStr2.data(), 27); });
 	}
 
 	void testAssertMemNotEqual()
 	{
-		assertNotEqual(testStr1, testStr2, 27);
-		tryShouldFail([=]() { assertNotEqual(testStr1, testStr1, 27); });
-		tryShouldFail([=]() { assertNotEqual(testStr2, testStr2, 27); });
+		assertNotEqual(testStr1.data(), testStr2.data(), 27);
+		tryShouldFail([=]() { assertNotEqual(testStr1.data(), testStr1.data(), 27); });
+		tryShouldFail([=]() { assertNotEqual(testStr2.data(), testStr2.data(), 27); });
 	}
 
 	void testAssertNull()
 	{
 		assertNull(static_cast<void *>(nullptr));
 		assertNull(static_cast<const void *>(nullptr));
-		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr1)); });
-		tryShouldFail([=]() { assertNull(testStr1); });
-		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr2)); });
-		tryShouldFail([=]() { assertNull(testStr2); });
+		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr1.data())); });
+		tryShouldFail([=]() { assertNull(testStr1.data()); });
+		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr2.data())); });
+		tryShouldFail([=]() { assertNull(testStr2.data()); });
 	}
 
 	void testAssertNotNull()
