@@ -31,12 +31,12 @@ int testsuite::testRunner(testsuite &unitClass, cxxUnitTest &test)
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
-	testPrintf("%s...", test.theTest.testName);
+	testPrintf("%s...", test.theTest.name());
 	newline();
 	try
 	{
 		cxxTest &unitTest = test.theTest;
-		unitTest.testFunc();
+		unitTest.function()();
 	}
 	catch (threadExit_t &val)
 	{
@@ -80,6 +80,17 @@ void testsuite::test()
 			echoAborted();
 	}
 }
+
+cxxTest::cxxTest(std::function<void ()> &&func, const char *const name) noexcept :
+	testFunc{std::move(func)}, testName{name} { }
+
+bool testsuite::registerTest(std::function<void ()> &&func, const char *const name) try
+{
+	tests.emplace_back(std::move(func), name);
+	return true;
+}
+catch (std::exception &)
+	{ return false; }
 
 void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name)
 	{ cxxTests.emplace_back(std::move(suite), name); }

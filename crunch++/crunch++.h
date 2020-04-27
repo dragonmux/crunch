@@ -49,12 +49,7 @@
 #	endif
 #endif
 
-struct cxxTest
-{
-	std::function<void ()> testFunc;
-	const char *testName;
-};
-
+struct cxxTest;
 struct cxxUnitTest;
 
 namespace crunch
@@ -73,8 +68,8 @@ private:
 
 protected:
 	std::vector<cxxTest> tests;
+	CRUNCH_VIS bool registerTest(std::function<void ()> &&func, const char *const name);
 
-	// XXX: Fixme.. this had to be added for some tests chained from a main test class
 public:
 	CRUNCH_VIS void fail(const char *const reason);
 	CRUNCH_VIS void skip(const char *const reason);
@@ -154,6 +149,22 @@ public:
 };
 
 CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
+
+struct CRUNCH_MAYBE_VIS cxxTest
+{
+private:
+	std::function<void ()> testFunc;
+	const char *testName;
+
+public:
+	cxxTest() noexcept = default;
+	CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
+	cxxTest(const cxxTest &) = default;
+	cxxTest &operator =(const cxxTest &) = default;
+
+	const char *name() const noexcept { return testName; }
+	const std::function<void ()> &function() const noexcept { return testFunc; }
+};
 
 namespace crunchpp
 {
