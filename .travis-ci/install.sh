@@ -17,7 +17,7 @@ if [ "$TRAVIS_OS_NAME" == "windows" ]; then
 else
 	if [ ! -e $HOME/.local/bin/meson ]; then
 		wget https://bootstrap.pypa.io/get-pip.py
-		python3.6 get-pip.py --user
+		python3.7 get-pip.py --user
 		pip3 install --user meson
 		rm get-pip.py
 	fi
