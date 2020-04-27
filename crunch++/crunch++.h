@@ -84,8 +84,8 @@ namespace crunch
 			constexpr std::size_t size() const noexcept { return length_; }
 			constexpr std::size_t length() const noexcept { return length_; }
 		};
-	}
-}
+	} // namespace internal
+} // namespace crunch
 
 class CRUNCH_MAYBE_VIS testsuite
 {
@@ -242,7 +242,7 @@ namespace crunch
 
 	template<typename T, typename... args_t> inline typename makeUnique_t<T>::invalidType
 		makeUnique(args_t &&...) noexcept = delete;
-}
+} // namespace crunch
 
 template<typename TestClass> void registerTestClasses()
 	{ crunch::internal::registerTestClass(crunch::makeUnique<TestClass>(), typeid(TestClass).name()); }
