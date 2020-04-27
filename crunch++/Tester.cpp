@@ -81,8 +81,17 @@ void testsuite::test()
 			}, std::ref(*this), std::ref(unitTest), std::move(resultPromise)
 		};
 		testThread.join();
-		if (result.get() == 2)
+		try
+		{
+			if (result.get() == 2)
+				echoAborted();
+		}
+		catch (...)
+		{
+			logResult(RESULT_FAILURE, "Failure: Exception caught by crunch++ outside test");
+			--failures;
 			echoAborted();
+		}
 	}
 }
 
