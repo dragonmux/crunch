@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
+#include <future>
 #include "crunch++.h"
 #include "core.hxx"
 #include "logger.hxx"
@@ -23,7 +24,7 @@ void newline()
 		testPrintf(" ");
 }
 
-int testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxUnitTest &test)
+int32_t testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxTest &unitTest)
 {
 	if (isTTY)
 #ifndef _MSC_VER
@@ -31,13 +32,10 @@ int testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxUnitTest &t
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
-	testPrintf("%s...", test.unitTest().name());
+	testPrintf("%s...", unitTest.name());
 	newline();
 	try
-	{
-		const auto &unitTest = test.unitTest();
-		unitTest.function()();
-	}
+		{ unitTest.function()(); }
 	catch (threadExit_t &val)
 	{
 		// Did the test switch logging on?
@@ -71,11 +69,19 @@ void testsuite::test()
 {
 	for (auto &unitTest : tests)
 	{
-		crunch::internal::cxxUnitTest test{unitTest};
-		int retVal = 2;
-		test.testThread = thread([&, this]{ retVal = testRunner(*this, test); });
-		test.testThread.join();
-		if (retVal == 2)
+		std::promise<int32_t> resultPromise{};
+		auto result = resultPromise.get_future();
+		std::thread testThread{
+			[](testsuite &suite, crunch::internal::cxxTest &test, std::promise<int32_t> result)
+			{
+				try
+					{ result.set_value(testRunner(suite, test)); }
+				catch (...)
+					{ result.set_exception(std::current_exception()); }
+			}, std::ref(*this), std::ref(unitTest), std::move(resultPromise)
+		};
+		testThread.join();
+		if (result.get() == 2)
 			echoAborted();
 	}
 }

@@ -51,11 +51,7 @@
 
 namespace crunch
 {
-	namespace internal
-	{
-		struct cxxTest;
-		struct cxxUnitTest;
-	}
+	namespace internal { struct cxxTest; }
 
 	template<typename T> struct isBoolean : std::false_type { };
 	template<> struct isBoolean<bool> : std::true_type { };
@@ -125,7 +121,7 @@ public:
 	CRUNCH_VIS testsuite() noexcept;
 
 private:
-	static int testRunner(testsuite &unitClass, crunch::internal::cxxUnitTest &test);
+	static int32_t testRunner(testsuite &unitClass, crunch::internal::cxxTest &test);
 
 public:
 	testsuite(const testsuite &) = delete;

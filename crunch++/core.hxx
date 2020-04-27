@@ -19,21 +19,6 @@ public:
 	const char *name() const noexcept { return name_; }
 };
 
-namespace crunch
-{
-	namespace internal
-	{
-		struct cxxUnitTest final
-		{
-			const cxxTest *theTest;
-			std::thread testThread;
-
-			cxxUnitTest(const cxxTest &test) noexcept : theTest{&test}, testThread{} { }
-			const cxxTest &unitTest() const noexcept { return *theTest; }
-		};
-	}
-}
-
 CRUNCHpp_API uint32_t passes, failures;
 CRUNCHpp_API bool loggingTests;
 CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
