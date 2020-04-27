@@ -254,7 +254,7 @@ void testsuite::assertNotEqual(const double result, const double expected)
 
 void testsuite::assertEqual(const char *const result, const char *const expected)
 {
-	if (strcmp(result, expected) != 0)
+	if (std::strcmp(result, expected) != 0)
 	{
 		assertionError("%s", result, expected);
 		throw threadExit_t{1};
@@ -263,7 +263,7 @@ void testsuite::assertEqual(const char *const result, const char *const expected
 
 void testsuite::assertNotEqual(const char *const result, const char *const expected)
 {
-	if (strcmp(result, expected) == 0)
+	if (std::strcmp(result, expected) == 0)
 	{
 		assertionError("%s", result);
 		throw threadExit_t{1};
@@ -272,7 +272,7 @@ void testsuite::assertNotEqual(const char *const result, const char *const expec
 
 void testsuite::assertEqual(const void *result, const void *expected, const size_t expectedLength)
 {
-	if (memcmp(result, expected, expectedLength) != 0)
+	if (std::memcmp(result, expected, expectedLength) != 0)
 	{
 		assertionFailure("buffers %p and %p do not match", result, expected);
 		throw threadExit_t{1};
@@ -281,7 +281,7 @@ void testsuite::assertEqual(const void *result, const void *expected, const size
 
 void testsuite::assertNotEqual(const void *result, const void *expected, const size_t expectedLength)
 {
-	if (memcmp(result, expected, expectedLength) == 0)
+	if (std::memcmp(result, expected, expectedLength) == 0)
 	{
 		assertionFailure("buffers %p and %p match", result, expected);
 		throw threadExit_t{1};
