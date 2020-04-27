@@ -203,8 +203,8 @@ namespace crunch
 		struct CRUNCH_MAYBE_VIS cxxTest
 		{
 		private:
-			std::function<void ()> testFunc;
-			const char *testName;
+			std::function<void ()> testFunc{};
+			const char *testName{nullptr};
 
 		public:
 			cxxTest() noexcept = default;
