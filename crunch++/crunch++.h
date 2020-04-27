@@ -151,8 +151,6 @@ public:
 	const char *what() const noexcept final { return "Test assertion failure, thread exiting"; }
 };
 
-CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
-
 namespace crunch
 {
 	namespace internal
@@ -172,6 +170,8 @@ namespace crunch
 			const char *name() const noexcept { return testName; }
 			const std::function<void ()> &function() const noexcept { return testFunc; }
 		};
+
+		CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
 	}
 
 	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
@@ -200,7 +200,7 @@ namespace crunch
 }
 
 template<typename TestClass> void registerTestClasses()
-	{ crunchTestClass(crunch::makeUnique<TestClass>(), typeid(TestClass).name()); }
+	{ crunch::internal::crunchTestClass(crunch::makeUnique<TestClass>(), typeid(TestClass).name()); }
 
 template<typename TestClass, typename ...TestClasses>
 typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()

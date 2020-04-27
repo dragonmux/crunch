@@ -87,6 +87,9 @@ namespace crunch
 	{
 		cxxTest::cxxTest(std::function<void ()> &&func, const char *const name) noexcept :
 			testFunc{std::move(func)}, testName{name} { }
+
+		void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name)
+			{ cxxTests.emplace_back(std::move(suite), name); }
 	}
 }
 
@@ -97,6 +100,3 @@ bool testsuite::registerTest(std::function<void ()> &&func, const char *const na
 }
 catch (std::exception &)
 	{ return false; }
-
-void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name)
-	{ cxxTests.emplace_back(std::move(suite), name); }
