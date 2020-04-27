@@ -34,11 +34,11 @@ private:
 	constexpr static std::string_view testStdStringView2{testStr2.data(), testStr2.length()};
 #endif
 
-	default_random_engine rngGen;
-	uniform_real_distribution<double> dblRng;
-	uniform_int_distribution<int64_t> intRng;
-	uniform_int_distribution<uint64_t> uintRng;
-	uniform_int_distribution<intptr_t> ptrRng;
+	default_random_engine rngGen{std::random_device{}()};
+	uniform_real_distribution<double> dblRng{-1.0, 1.0};
+	uniform_int_distribution<int64_t> intRng{INT64_MIN, INT64_MAX};
+	uniform_int_distribution<uint64_t> uintRng{0, UINT64_MAX};
+	uniform_int_distribution<uintptr_t> ptrRng{0, UINTPTR_MAX};
 	std::string testStdString1{testStr1.data()};
 	std::string testStdString2{testStr2.data()};
 
@@ -60,12 +60,7 @@ private:
 	}
 
 public:
-	crunchTests() : rngGen{std::random_device{}()}, dblRng{-1.0, 1.0}, intRng{INT64_MIN, INT64_MAX},
-		uintRng{0, UINT64_MAX}, ptrRng{INTPTR_MIN, INTPTR_MAX}
-	{
-		std::random_device randDev{};
-		rngGen.seed(randDev());
-	}
+	crunchTests() = default;
 
 private:
 	void testAssertTrue()
