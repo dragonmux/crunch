@@ -80,6 +80,14 @@ void testsuite::test()
 	}
 }
 
+bool testsuite::registerTest(std::function<void ()> &&func, const char *const name) try
+{
+	tests.emplace_back(std::move(func), name);
+	return true;
+}
+catch (std::exception &)
+	{ return false; }
+
 namespace crunch
 {
 	namespace internal
@@ -91,11 +99,3 @@ namespace crunch
 			{ cxxTests.emplace_back(std::move(suite), name); }
 	}
 }
-
-bool testsuite::registerTest(std::function<void ()> &&func, const char *const name) try
-{
-	tests.emplace_back(std::move(func), name);
-	return true;
-}
-catch (std::exception &)
-	{ return false; }
