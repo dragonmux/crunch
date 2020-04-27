@@ -51,7 +51,7 @@
 
 struct cxxTest
 {
-	std::function<void()> testFunc;
+	std::function<void ()> testFunc;
 	const char *testName;
 };
 
@@ -153,7 +153,7 @@ public:
 	const char *what() const noexcept final { return "Test assertion failure, thread exiting"; }
 };
 
-CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&tests, const char *name);
+CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
 
 namespace crunchpp
 {
