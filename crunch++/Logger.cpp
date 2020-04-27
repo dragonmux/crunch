@@ -12,10 +12,7 @@
 #include "core.hxx"
 #include "logger.hxx"
 
-#ifndef _WINDOWS
-	#define TTY	"/dev/tty"
-#else
-	#define TTY	"CON"
+#ifdef _WINDOWS
 HANDLE console;
 #endif
 
