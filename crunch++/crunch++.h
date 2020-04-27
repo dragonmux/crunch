@@ -49,19 +49,13 @@
 #	endif
 #endif
 
-class testsuite;
-
 struct cxxTest
 {
 	std::function<void()> testFunc;
 	const char *testName;
 };
 
-struct cxxUnitTest
-{
-	std::thread testThread;
-	cxxTest theTest;
-};
+struct cxxUnitTest;
 
 namespace crunch
 {
