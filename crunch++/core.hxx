@@ -22,7 +22,7 @@ public:
 struct cxxUnitTest final
 {
 	std::thread testThread;
-	cxxTest theTest;
+	crunch::internal::cxxTest theTest;
 };
 
 CRUNCHpp_API uint32_t passes, failures;

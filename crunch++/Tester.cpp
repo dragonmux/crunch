@@ -35,7 +35,7 @@ int testsuite::testRunner(testsuite &unitClass, cxxUnitTest &test)
 	newline();
 	try
 	{
-		cxxTest &unitTest = test.theTest;
+		const auto &unitTest = test.theTest;
 		unitTest.function()();
 	}
 	catch (threadExit_t &val)
@@ -81,8 +81,14 @@ void testsuite::test()
 	}
 }
 
-cxxTest::cxxTest(std::function<void ()> &&func, const char *const name) noexcept :
-	testFunc{std::move(func)}, testName{name} { }
+namespace crunch
+{
+	namespace internal
+	{
+		cxxTest::cxxTest(std::function<void ()> &&func, const char *const name) noexcept :
+			testFunc{std::move(func)}, testName{name} { }
+	}
+}
 
 bool testsuite::registerTest(std::function<void ()> &&func, const char *const name) try
 {

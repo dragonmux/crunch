@@ -49,11 +49,15 @@
 #	endif
 #endif
 
-struct cxxTest;
 struct cxxUnitTest;
 
 namespace crunch
 {
+	namespace internal
+	{
+		struct cxxTest;
+	}
+
 	template<typename T> struct isBoolean : std::false_type { };
 	template<> struct isBoolean<bool> : std::true_type { };
 
@@ -65,9 +69,9 @@ class CRUNCH_MAYBE_VIS testsuite
 private:
 	template<typename T> using isNumeric = crunch::isNumeric<T>;
 	std::vector<std::exception_ptr> exceptions;
+	std::vector<crunch::internal::cxxTest> tests;
 
 protected:
-	std::vector<cxxTest> tests;
 	CRUNCH_VIS bool registerTest(std::function<void ()> &&func, const char *const name);
 
 public:
@@ -150,24 +154,27 @@ public:
 
 CRUNCHpp_API void crunchTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
 
-struct CRUNCH_MAYBE_VIS cxxTest
-{
-private:
-	std::function<void ()> testFunc;
-	const char *testName;
-
-public:
-	cxxTest() noexcept = default;
-	CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
-	cxxTest(const cxxTest &) = default;
-	cxxTest &operator =(const cxxTest &) = default;
-
-	const char *name() const noexcept { return testName; }
-	const std::function<void ()> &function() const noexcept { return testFunc; }
-};
-
 namespace crunch
 {
+	namespace internal
+	{
+		struct CRUNCH_MAYBE_VIS cxxTest
+		{
+		private:
+			std::function<void ()> testFunc;
+			const char *testName;
+
+		public:
+			cxxTest() noexcept = default;
+			CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
+			cxxTest(const cxxTest &) = default;
+			cxxTest &operator =(const cxxTest &) = default;
+
+			const char *name() const noexcept { return testName; }
+			const std::function<void ()> &function() const noexcept { return testFunc; }
+		};
+	}
+
 	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
 	template<typename T> using remove_extent_t = typename std::remove_extent<T>::type;
 
