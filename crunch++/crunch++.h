@@ -166,7 +166,7 @@ public:
 	const std::function<void ()> &function() const noexcept { return testFunc; }
 };
 
-namespace crunchpp
+namespace crunch
 {
 	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
 	template<typename T> using remove_extent_t = typename std::remove_extent<T>::type;
@@ -194,7 +194,7 @@ namespace crunchpp
 }
 
 template<typename TestClass> void registerTestClasses()
-	{ crunchTestClass(crunchpp::makeUnique<TestClass>(), typeid(TestClass).name()); }
+	{ crunchTestClass(crunch::makeUnique<TestClass>(), typeid(TestClass).name()); }
 
 template<typename TestClass, typename ...TestClasses>
 typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestClasses()
