@@ -249,7 +249,7 @@ namespace crunch
 		struct CRUNCH_MAYBE_VIS cxxTest
 		{
 		private:
-			std::function<void ()> testFunc{};
+			std::function<void ()> testFunc{nullptr};
 			const char *testName{nullptr};
 
 		public:
