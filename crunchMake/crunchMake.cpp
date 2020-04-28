@@ -37,14 +37,14 @@ template<typename type_t> constexpr type_t &&forward_(removeReference<type_t> &&
 	return static_cast<type_t &&>(value);
 }
 const char *forward_(const std::string &value) noexcept { return value.data(); }
-const char *forward_(const std::unique_ptr<char []> &value) noexcept { return value.get(); }
-const char *forward_(const std::unique_ptr<const char []> &value) noexcept { return value.get(); }
-template<typename... values_t> inline std::unique_ptr<char []> format(const std::string &format,
+const char *forward_(const std::unique_ptr<char []> &value) noexcept { return value.get(); } // NOLINT
+const char *forward_(const std::unique_ptr<const char []> &value) noexcept { return value.get(); } // NOLINT
+template<typename... values_t> inline std::unique_ptr<char []> format(const std::string &format, // NOLINT
 	values_t &&... values) noexcept { return formatString(format.data(), forward_(values)...); }
 
-const auto exts{substrate::make_array<const char *>({".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"})};
-const auto cxxExts{substrate::make_array<const char *>({".cpp", ".cc", ".cxx"})};
-const auto objExts{substrate::make_array<const char *>({".o", ".obj", ".a"})};
+const auto exts{substrate::make_array<const char *>({".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"})}; // NOLINT(cert-err58-cpp)
+const auto cxxExts{substrate::make_array<const char *>({".cpp", ".cc", ".cxx"})}; // NOLINT(cert-err58-cpp)
+const auto objExts{substrate::make_array<const char *>({".o", ".obj", ".a"})}; // NOLINT(cert-err58-cpp)
 
 std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 bool silent, quiet, pthread, codeCoverage, debugBuild;
