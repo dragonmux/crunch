@@ -19,6 +19,7 @@
 #include <stringFuncs.hxx>
 #include "crunchCompiler.hxx"
 #include <crunchMake.h>
+#include <version.hxx>
 
 parsedArgs_t parsedArgs;
 std::vector<std::string> inclDirs, libDirs;
@@ -50,6 +51,10 @@ bool silent, quiet, pthread, codeCoverage, debugBuild;
 
 const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
 {
+	{"--help"_s, 0, 0, 0},
+	{"-h"_s, 0, 0, 0},
+	{"--version"_s, 0, 0, 0},
+	{"-v"_s, 0, 0, 0},
 	{"-l"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-I"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
 	{"-D"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
@@ -321,11 +326,30 @@ int compileTests()
 	return ret;
 }
 
+bool handleVersionOrHelp()
+{
+	constParsedArg_t version{findArg(parsedArgs, "--version", nullptr)};
+	constParsedArg_t versionShort{findArg(parsedArgs, "-v", nullptr)};
+	constParsedArg_t help{findArg(parsedArgs, "--help", nullptr)};
+	constParsedArg_t helpShort{findArg(parsedArgs, "-h", nullptr)};
+
+	if (help || helpShort)
+		puts(crunchpp::help.data());
+	else if (version || versionShort)
+		testPrintf("crunchMake %s (%s %s %s-%s)\n", crunchpp::version.data(), crunchpp::compiler.data(),
+			crunchpp::compilerVersion.data(), crunchpp::system.data(), crunchpp::arch.data());
+	else
+		return false;
+	return true;
+}
+
 int main(int argc, char **argv)
 {
 	registerArgs(args.data());
 	parsedArgs = parseArguments(argc, argv);
-	if (parsedArgs.empty() || !getTests())
+	if (!parsedArgs.empty() && handleVersionOrHelp())
+		return 0;
+	else if (parsedArgs.empty() || !getTests())
 	{
 		testPrintf("Fatal error: There are no source files to build given on the command line!\n");
 		return 2;
