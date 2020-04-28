@@ -20,8 +20,6 @@
 #include "crunchCompiler.hxx"
 #include <crunchMake.h>
 
-using namespace std;
-
 parsedArgs_t parsedArgs;
 std::vector<std::string> inclDirs, libDirs;
 std::vector<std::string> linkLibs, linkObjs;
