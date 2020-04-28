@@ -19,9 +19,7 @@ using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::uniform_int_distribution;
 using crunch::internal::stringView;
-
-constexpr inline stringView operator ""_sv(const char *const str, std::size_t len) noexcept
-    { return stringView{str, len}; }
+using crunch::operator ""_sv;
 
 class crunchTests final : public testsuite
 {
