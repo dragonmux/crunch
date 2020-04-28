@@ -20,6 +20,7 @@ cxx = meson.get_compiler('cpp')
 threading = dependency('threads')
 pkgconfig = import('pkgconfig')
 
+sanitizer = get_option('b_sanitize')
 coverage = get_option('b_coverage')
 debug = get_option('debug')
 prefix = get_option('prefix')

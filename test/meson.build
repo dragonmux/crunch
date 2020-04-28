@@ -15,6 +15,10 @@ if cxx.get_id() != 'msvc'
 	commandExtra += ['-z', 'defs']
 endif
 
+if sanitizer != 'none'
+	commandExtra += ['-fsanitize=' + sanitizer]
+endif
+
 subdir('ranlux')
 subdir('crunch')
 subdir('crunch++')
