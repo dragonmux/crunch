@@ -156,7 +156,9 @@ bool validExt(const std::string &file)
 
 bool isCXX(const char *const file)
 {
-	const char *dot = strrchr(file, '.');
+	const auto *const dot{std::strrchr(file, '.')};
+	if (!dot)
+		return false;
 	for (auto &ext : cxxExts)
 		if (std::strcmp(dot, ext) == 0)
 			return true;
