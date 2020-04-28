@@ -149,7 +149,7 @@ bool validExt(const char *const file)
 	const auto *const dot{std::strrchr(file, '.')};
 	if (dot == nullptr)
 		return false;
-	for (auto &ext : exts)
+	for (const auto &ext : exts)
 		if (std::strcmp(dot, ext) == 0)
 			return true;
 	return false;
@@ -162,7 +162,7 @@ bool isCXX(const char *const file)
 	const auto *const dot{std::strrchr(file, '.')};
 	if (!dot)
 		return false;
-	for (auto &ext : cxxExts)
+	for (const auto &ext : cxxExts)
 		if (std::strcmp(dot, ext) == 0)
 			return true;
 	return false;
@@ -181,12 +181,12 @@ std::string toO(const std::string &file)
 #endif
 }
 
-std::string toO(const std::unique_ptr<const char []> &file)
+std::string toO(const std::unique_ptr<const char []> &file) // NOLINT
 	{ return toO(file.get()); }
 
 std::string computeObjName(const std::string &file)
 {
-	const auto output{findArg(parsedArgs, "-o", nullptr)};
+	const auto *const output{findArg(parsedArgs, "-o", nullptr)};
 	if (output)
 		return toO(output->params[0]);
 	return toO(file);
@@ -201,7 +201,7 @@ std::string toSO(const std::string &file)
 
 std::string computeSOName(const std::string &file)
 {
-	const auto output{findArg(parsedArgs, "-o", nullptr)};
+	const auto *const output{findArg(parsedArgs, "-o", nullptr)};
 	if (output)
 		return output->params[0];
 	return toSO(file);
@@ -250,7 +250,7 @@ std::string standardVersion(constParsedArg_t version)
 
 void buildCXXString()
 {
-	const auto standard = findArg(parsedArgs, "-std=", nullptr);
+	const auto *const standard{findArg(parsedArgs, "-std=", nullptr)};
 	cxxCompiler += standardVersion(standard) + ' ';
 }
 #else
@@ -277,7 +277,7 @@ int32_t compileMSVC(const std::string &test)
 
 void handleSanitizers()
 {
-	const auto sanitizer = findArg(parsedArgs, "-fsanitize=", nullptr);
+	const auto *const sanitizer{findArg(parsedArgs, "-fsanitize=", nullptr)};
 	if (!sanitizer)
 		return;
 	cCompiler += sanitizer->value + ' ';
@@ -295,7 +295,7 @@ int compileTests()
 	buildCXXString();
 #endif
 	testLog *logFile = nullptr;
-	const auto logParam = findArg(parsedArgs, "--log", nullptr);
+	const auto *const logParam{findArg(parsedArgs, "--log", nullptr)};
 	const auto logging = bool(logParam);
 	if (logging)
 		logFile = startLogging(logParam->params[0].data());
