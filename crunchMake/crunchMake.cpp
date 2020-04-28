@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <numeric>
 #include <substrate/utility>
 #include <core.hxx>
 #include <logger.hxx>
@@ -206,10 +207,10 @@ std::string computeSOName(const std::string &file)
 
 inline std::string argsToString(const std::vector<std::string> &var)
 {
-	string ret{""};
-	for (const auto &value : var)
-		ret += value + ' ';
-	return ret;
+	return std::accumulate(var.begin(), var.end(), std::string{},
+		[](const std::string &result, const std::string &value)
+			{ return result + value + ' '; }
+	);
 }
 
 #ifdef _MSC_VER
