@@ -80,7 +80,7 @@ bool isObj(const char *file)
 	const auto *const dot{std::strrchr(file, '.')};
 	if (!dot)
 		return false;
-	for (auto &ext : objExts)
+	for (const auto &ext : objExts)
 		if (std::strcmp(dot, ext) == 0)
 			return true;
 	return false;
@@ -96,7 +96,7 @@ bool getTests()
 		if (!findArgInArgs(value.data()) && !isObj(value))
 			tests.emplace_back(value);
 	}
-	return tests.size();
+	return !tests.empty();
 }
 
 inline void getLinkFunc(std::vector<std::string> &var, const char *find)
