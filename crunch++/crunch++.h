@@ -73,8 +73,8 @@ namespace crunch
 		struct stringView final
 		{
 		private:
-			std::size_t length_;
-			const char *data_;
+			std::size_t length_{0};
+			const char *data_{nullptr};
 
 			std::size_t check_(const std::size_t pos) const
 			{
@@ -100,7 +100,9 @@ namespace crunch
 			}
 
 		public:
-			constexpr stringView() noexcept : length_{0}, data_{nullptr} {}
+			constexpr stringView() noexcept = default;
+			constexpr stringView(const stringView &) noexcept = default;
+			constexpr stringView(stringView &&) noexcept = default;
 			constexpr explicit stringView(const char *const data, const std::size_t length) noexcept :
 				length_{length}, data_{data} { }
 			constexpr const char *data() const noexcept { return data_; }
@@ -131,6 +133,12 @@ namespace crunch
 			constexpr static std::size_t npos = static_cast<std::size_t>(-1);
 		};
 	} // namespace internal
+
+	inline namespace literals
+	{
+		constexpr inline crunch::internal::stringView operator ""_sv(const char *const str,
+			std::size_t len) noexcept { return crunch::internal::stringView{str, len}; }
+	}
 } // namespace crunch
 
 class CRUNCH_MAYBE_VIS testsuite
