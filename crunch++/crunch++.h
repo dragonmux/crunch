@@ -76,6 +76,29 @@ namespace crunch
 			std::size_t length_;
 			const char *data_;
 
+			std::size_t check_(const std::size_t pos) const
+			{
+				if (pos > length_)
+					throw std::out_of_range{"crunch::internal::stringView: pos outside view"};
+				return pos;
+			}
+
+			constexpr std::size_t clamp_(const std::size_t offset, const std::size_t length) const
+				{ return length > length_ - offset ? length_ - offset : length; }
+
+#if __cplusplus >= 201402L
+			constexpr
+#endif
+			static const char *find_(const char *const str, const std::size_t len, const char c) noexcept
+			{
+				for (std::size_t i{0}; i < len; ++i)
+				{
+					if (str[i] == c)
+						return str + i;
+				}
+				return nullptr;
+			}
+
 		public:
 			constexpr stringView() noexcept : length_{0}, data_{nullptr} {}
 			constexpr explicit stringView(const char *const data, const std::size_t length) noexcept :
@@ -83,6 +106,29 @@ namespace crunch
 			constexpr const char *data() const noexcept { return data_; }
 			constexpr std::size_t size() const noexcept { return length_; }
 			constexpr std::size_t length() const noexcept { return length_; }
+
+#if __cplusplus >= 202002L
+			constexpr
+#endif
+			std::string substr(const std::size_t pos = 0, const std::size_t n = npos) const
+				{ return {data_ + check_(pos), clamp_(pos, n)}; }
+
+#if __cplusplus >= 201402L
+			constexpr
+#endif
+			std::size_t find(const char c, const std::size_t pos = 0) const noexcept
+			{
+				if (pos < length_)
+				{
+					const auto length{length_ - pos};
+					const auto *const result{find_(data_ + pos, length, c)};
+					if (result)
+						return result - data_;
+				}
+				return npos;
+			}
+
+			constexpr static std::size_t npos = static_cast<std::size_t>(-1);
 		};
 	} // namespace internal
 } // namespace crunch
