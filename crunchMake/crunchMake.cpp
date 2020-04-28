@@ -95,7 +95,7 @@ bool getTests()
 	return tests.size();
 }
 
-inline void getLinkFunc(vector<string> &var, const char *find)
+inline void getLinkFunc(std::vector<std::string> &var, const char *find)
 {
 	for (const auto &parsedArg : parsedArgs)
 	{
@@ -141,73 +141,68 @@ void getLinkArgs()
 	}
 }
 
-bool validExt(const char *file)
+bool validExt(const char *const file)
 {
-	const char *dot = strrchr(file, '.');
+	const auto *const dot{std::strrchr(file, '.')};
 	if (dot == nullptr)
 		return false;
 	for (auto &ext : exts)
-		if (strcmp(dot, ext) == 0)
+		if (std::strcmp(dot, ext) == 0)
 			return true;
 	return false;
 }
-bool validExt(const string &file)
+bool validExt(const std::string &file)
 	{ return validExt(file.data()); }
 
-bool isCXX(const char *file)
+bool isCXX(const char *const file)
 {
 	const char *dot = strrchr(file, '.');
 	for (auto &ext : cxxExts)
-		if (strcmp(dot, ext) == 0)
+		if (std::strcmp(dot, ext) == 0)
 			return true;
 	return false;
 }
-bool isCXX(const string &file)
+bool isCXX(const std::string &file)
 	{ return isCXX(file.data()); }
 
+std::string toO(const std::string &file)
+{
+	const auto dotPos{file.find_last_of('.')};
+	auto objFile{file.substr(0, dotPos)};
 #ifndef _MSC_VER
-string toO(const string &file)
-{
-	const size_t dotPos = file.find_last_of('.');
-	auto objFile = file.substr(0, dotPos);
 	return objFile += ".o"s;
-}
 #else
-string toO(const string &file)
-{
-	const size_t dotPos = file.find_last_of('.');
-	auto objFile = file.substr(0, dotPos);
 	return objFile += ".obj"s;
-}
 #endif
+}
 
-string toO(const unique_ptr<const char []> &file)
+std::string toO(const std::unique_ptr<const char []> &file)
 	{ return toO(file.get()); }
 
-string computeObjName(const string &file)
+std::string computeObjName(const std::string &file)
 {
-	const auto output = findArg(parsedArgs, "-o", nullptr);
+	const auto output{findArg(parsedArgs, "-o", nullptr)};
 	if (output)
 		return toO(output->params[0]);
 	return toO(file);
 }
 
-string toSO(const string &file)
+std::string toSO(const std::string &file)
 {
-	const size_t dotPos = file.find_last_of('.');
-	auto soFile = file.substr(0, dotPos);
+	const auto dotPos{file.find_last_of('.')};
+	auto soFile{file.substr(0, dotPos)};
 	return soFile += libExt;
 }
 
-string computeSOName(const string &file)
+std::string computeSOName(const std::string &file)
 {
-	const auto output = findArg(parsedArgs, "-o", nullptr);
+	const auto output{findArg(parsedArgs, "-o", nullptr)};
 	if (output)
 		return output->params[0];
 	return toSO(file);
 }
 
-inline string argsToString(const vector<string> &var)
+inline std::string argsToString(const std::vector<std::string> &var)
 {
 	string ret{""};
 	for (const auto &value : var)
@@ -218,7 +213,7 @@ inline string argsToString(const vector<string> &var)
 #ifdef _MSC_VER
 string convertLibDirs()
 {
-	string ret{""};
+	std::string ret{};
 	for (const auto &value : libDirs)
 		ret += "-libpath:" + value.substr(2) + ' ';
 	return ret;
@@ -235,11 +230,11 @@ void objsToString() { objs = argsToString(linkObjs); }
 void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 
 #ifndef _MSC_VER
-string standardVersion(constParsedArg_t version)
+std::string standardVersion(constParsedArg_t version)
 {
 	if (!version)
 		return "-std=c++11"s;
-	const auto str = version->value.data() + 5;
+	const auto *const str = version->value.data() + 5;
 	if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
 	{
 		testPrintf("Warning, standard version must be at least C++11");
@@ -254,7 +249,7 @@ void buildCXXString()
 	cxxCompiler += standardVersion(standard) + ' ';
 }
 #else
-int32_t compileMSVC(const string &test)
+int32_t compileMSVC(const std::string &test)
 {
 	const bool mode = isCXX(test);
 	auto soFile = computeSOName(test);
@@ -296,7 +291,7 @@ int compileTests()
 #endif
 	testLog *logFile = nullptr;
 	const auto logParam = findArg(parsedArgs, "--log", nullptr);
-	const bool logging = bool(logParam);
+	const auto logging = bool(logParam);
 	if (logging)
 		logFile = startLogging(logParam->params[0].data());
 	if (!silent)
@@ -328,7 +323,7 @@ int compileTests()
 
 int main(int argc, char **argv)
 {
-	registerArgs(args);
+	registerArgs(args.data());
 	parsedArgs = parseArguments(argc, argv);
 	if (parsedArgs.empty() || !getTests())
 	{
