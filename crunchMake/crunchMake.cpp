@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <substrate/utility>
 #include <core.hxx>
 #include <logger.hxx>
 #include <argsParser.hxx>
@@ -41,12 +42,9 @@ const char *forward_(const std::unique_ptr<const char []> &value) noexcept { ret
 template<typename... values_t> inline std::unique_ptr<char []> format(const std::string &format,
 	values_t &&... values) noexcept { return formatString(format.data(), forward_(values)...); }
 
-template<typename T, typename... values_t> constexpr std::array<T, sizeof...(values_t)>
-	makeArray(values_t &&... values) { return {forward<values_t>(values)...}; }
-
-const auto exts = makeArray<const char *>(".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx");
-const auto cxxExts = makeArray<const char *>(".cpp", ".cc", ".cxx");
-const auto objExts = makeArray<const char *>(".o", ".obj", ".a");
+const auto exts{substrate::make_array<const char *>({".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"})};
+const auto cxxExts{substrate::make_array<const char *>({".cpp", ".cc", ".cxx"})};
+const auto objExts{substrate::make_array<const char *>({".o", ".obj", ".a"})};
 
 std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 bool silent, quiet, pthread, codeCoverage, debugBuild;
