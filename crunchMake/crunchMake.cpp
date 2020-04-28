@@ -49,27 +49,27 @@ const auto objExts{substrate::make_array<const char *>({".o", ".obj", ".a"})};
 std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 bool silent, quiet, pthread, codeCoverage, debugBuild;
 
-const arg_t args[] =
+const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
 {
-	{"-l", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
-	{"-I", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
-	{"-D", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
-	{"-L", 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
-	{"-o", 1, 1, 0},
-	{"--log", 1, 1, 0},
-	{"--silent", 0, 0, 0},
-	{"-s", 0, 0, 0},
-	{"--quiet", 0, 0, 0},
-	{"-q", 0, 0, 0},
-	{"-pthread", 0, 0, 0},
-	{"-Wl", 0, 0, ARG_INCOMPLETE},
-	{"-std=", 0, 0, ARG_INCOMPLETE},
-	{"-z", 1, 1, ARG_REPEATABLE},
-	{"--coverage", 0, 0, 0},
-	{"--debug", 0, 0, 0},
-	{"-fsanitize=", 0, 0, ARG_INCOMPLETE},
+	{"-l"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-I"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-D"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-L"_s, 0, 0, ARG_REPEATABLE | ARG_INCOMPLETE},
+	{"-o"_s, 1, 1, 0},
+	{"--log"_s, 1, 1, 0},
+	{"--silent"_s, 0, 0, 0},
+	{"-s"_s, 0, 0, 0},
+	{"--quiet"_s, 0, 0, 0},
+	{"-q"_s, 0, 0, 0},
+	{"-pthread"_s, 0, 0, 0},
+	{"-Wl"_s, 0, 0, ARG_INCOMPLETE},
+	{"-std="_s, 0, 0, ARG_INCOMPLETE},
+	{"-z"_s, 1, 1, ARG_REPEATABLE},
+	{"--coverage"_s, 0, 0, 0},
+	{"--debug"_s, 0, 0, 0},
+	{"-fsanitize="_s, 0, 0, ARG_INCOMPLETE},
 	{{}, 0, 0, 0}
-};
+})};
 
 bool isObj(const char *file)
 {
