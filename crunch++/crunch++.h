@@ -45,12 +45,14 @@
 
 #if __cplusplus >= 201402L
 #	define CRUNCH_DEPRECATE [[deprecated]]
+#	define CRUNCH_CXX14_CONSTEXPR constexpr
 #else
 #	ifdef _WINDOWS
 #		define CRUNCH_DEPRECATE __declspec(deprecated)
 #	else
 #		define CRUNCH_DEPRECATE __attribute__ ((deprecated))
 #	endif
+#	define CRUNCH_CXX14_CONSTEXPR
 #endif
 
 namespace crunch
@@ -86,10 +88,8 @@ namespace crunch
 			constexpr std::size_t clamp_(const std::size_t offset, const std::size_t length) const
 				{ return length > length_ - offset ? length_ - offset : length; }
 
-#if __cplusplus >= 201402L
-			constexpr
-#endif
-			static const char *find_(const char *const str, const std::size_t len, const char c) noexcept
+			CRUNCH_CXX14_CONSTEXPR static const char *find_(const char *const str, const std::size_t len,
+				const char c) noexcept
 			{
 				for (std::size_t i{0}; i < len; ++i)
 				{
@@ -115,10 +115,7 @@ namespace crunch
 			std::string substr(const std::size_t pos = 0, const std::size_t n = npos) const
 				{ return {data_ + check_(pos), clamp_(pos, n)}; }
 
-#if __cplusplus >= 201402L
-			constexpr
-#endif
-			std::size_t find(const char c, const std::size_t pos = 0) const noexcept
+			CRUNCH_CXX14_CONSTEXPR std::size_t find(const char c, const std::size_t pos = 0) const noexcept
 			{
 				if (pos < length_)
 				{
