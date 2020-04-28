@@ -31,7 +31,7 @@ configure_file(
 crunchMake = executable(
 	'crunchMake',
 	crunchMakeSrc,
-	include_directories: [crunchppInc],
+	include_directories: [crunchppInc, substrate],
 	link_with: [libCrunchpp],
 	dependencies: [threading],
 	cpp_args: [
