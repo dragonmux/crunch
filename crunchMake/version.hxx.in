@@ -1,0 +1,71 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+/* version.hxx - program version information */
+@AUTOGEN_HEADER@
+#ifndef VERSION__HXX
+#define VERSION__HXX
+
+#include <string>
+#include <stringFuncs.hxx>
+
+namespace crunchpp
+{
+	static const auto version{"@VERSION@"_s};
+	static const auto compiler{"@COMPILER@"_s};
+	static const auto compilerVersion{"@COMPILER_VERSION@"_s};
+	static const auto system{"@TARGET_SYS@"_s};
+	static const auto arch{"@TARGET_ARCH@"_s};
+
+	static const auto help{
+		R"(crunchMake test builder
+
+Usage:
+	crunchMake [-h|--help]
+	crunchMake [-v|--version]
+	crunchMake [options] FILES
+
+Options:
+	-v, --version  Prints the version information for crunch
+	-h, --help     Prints this help message
+
+  Compiler support
+	-llibrary      Adds `library` to the compiler library linking set
+	-Idir          Adds `dir` to the compiler include search path
+	-Dmacro        Adds `macro` to the compiler's macro predefinitions
+	-Ldir          Adds `dir` to the compiler library search path
+	-o file        Use `file` for the output test library
+	-pthread       Specify that you wish to build and link against pthreads
+	-Wloption      Adds `option` to the compiler-handled linker options
+	-std=standard  Sets the C or C++ standard to `standard`.
+	                   In C++ mode, the minimimum supported standard is C++11.
+	                   In C mode, the minimum supported standard is C89.
+	                   This option must be specified in the form of either
+	                   cNN or c++NN where NN is the version number to use.
+	-z keyword     Specifies direct linker options - the exact meaning and
+	                   options available depend on your compiler's specific linker.
+	--coverage     Enables linking against code that has been code-coverage enabled
+	--debug        Specifies that you wish the test to be built in debug mode
+	                   crunchMake defaults to building tests with level 2
+	                   (or equivilent) optimisations.
+	-fsanitize=sanitizers
+	               Enable the comma separated list of sanitizers `sanitizers`
+	                   on the test being built
+
+  Utility output options
+	--log          Tells the engine to log all test output to the file named
+	-s, --silent   Silences all output from crunchMake, leaving only compiler
+	                   output on stdout and stderr
+	-q, --quiet    Reduces output from crunchMake to kernel Makefile like output
+	                   such as ' CCLD  test.cxx => test.so'
+	By default, the utility will verbosely dump the full compiler invocations
+	    it is running same as typical `make` style utilities.
+
+	The files given on the crunchMake command line are gathered together and passed as
+	inputs to the compiler. This allows you to specify multiple TUs and additional
+	object files to be compiled and linked to the suite to produce a complete library
+
+This program is licensed under the LGPLv3+
+Report bugs using https://github.com/DX-MON/crunch/issues)"_s
+	};
+} // namespace crunchpp
+
+#endif /*VERSION__HXX*/

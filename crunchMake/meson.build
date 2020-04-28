@@ -28,9 +28,22 @@ configure_file(
 	configuration: crunchConfig
 )
 
+versionHeaderSrc = configure_file(
+	configuration: config,
+	input: 'version.hxx.in',
+	output: 'version.hxx.in'
+)
+
+versionHeader = vcs_tag(
+	input: versionHeaderSrc,
+	output: 'version.hxx',
+	replace_string: '@VERSION@',
+	fallback: 'v@0@'.format(meson.project_version())
+)
+
 crunchMake = executable(
 	'crunchMake',
-	crunchMakeSrc,
+	crunchMakeSrc + [versionHeader],
 	include_directories: [crunchppInc, substrate],
 	link_with: [libCrunchpp],
 	dependencies: [threading],
