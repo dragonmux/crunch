@@ -21,6 +21,7 @@
 #include <crunchMake.h>
 #include <version.hxx>
 
+using crunch::internal::stringView;
 parsedArgs_t parsedArgs;
 std::vector<std::string> inclDirs, libDirs;
 std::vector<std::string> linkLibs, linkObjs;
@@ -280,8 +281,19 @@ void handleSanitizers()
 	const auto *const sanitizer{findArg(parsedArgs, "-fsanitize=", nullptr)};
 	if (!sanitizer)
 		return;
-	cCompiler += sanitizer->value + ' ';
-	cxxCompiler += sanitizer->value + ' ';
+	const stringView sanitizers{sanitizer->value.data() + 11, sanitizer->value.length() - 11};
+	for (size_t offset{}; offset < sanitizers.length();)
+	{
+		const auto length{[](const stringView &value, const size_t offset) noexcept
+		{
+			const auto result{value.find(',', offset)};
+			return (result == stringView::npos ? value.length() : result) - offset;
+		}(sanitizers, offset)};
+		const auto option{"-fsanitize="_s + sanitizers.substr(offset, length) + ' '};
+		cCompiler += option;
+		cxxCompiler += option;
+		offset += length + 1;
+	}
 }
 
 int compileTests()
