@@ -123,13 +123,13 @@ void getLinkObjs()
 	}
 }
 
-inline string argToString(const parsedArg_t &arg)
+inline std::string argToString(const parsedArg_t &arg)
 {
-	string ret{arg.value};
-	ret += ' ';
+	auto result{arg.value};
+	result += ' ';
 	for (uint32_t i = 0; i < arg.paramsFound; ++i)
-		ret += arg.params[i] + ' ';
-	return ret;
+		result += arg.params[i] + ' ';
+	return result;
 }
 
 void getLinkArgs()
