@@ -23,6 +23,7 @@
 #include <version.hxx>
 
 using crunch::internal::stringView;
+using crunch::operator ""_sv;
 parsedArgs_t parsedArgs;
 std::vector<std::string> inclDirs, libDirs;
 std::vector<std::string> linkLibs, linkObjs;
@@ -44,9 +45,11 @@ const char *forward_(const std::unique_ptr<const char []> &value) noexcept { ret
 template<typename... values_t> inline std::unique_ptr<char []> format(const std::string &format, // NOLINT
 	values_t &&... values) noexcept { return formatString(format.data(), forward_(values)...); }
 
-const auto exts{substrate::make_array<const char *>({".c", ".cpp", ".cc", ".cxx", ".i", ".s", ".S", ".sx"})}; // NOLINT(cert-err58-cpp)
-const auto cxxExts{substrate::make_array<const char *>({".cpp", ".cc", ".cxx"})}; // NOLINT(cert-err58-cpp)
-const auto objExts{substrate::make_array<const char *>({".o", ".obj", ".a"})}; // NOLINT(cert-err58-cpp)
+constexpr static auto exts{substrate::make_array<stringView>({
+	".c"_sv, ".cpp"_sv, ".cc"_sv, ".cxx"_sv, ".i"_sv, ".s"_sv, ".S"_sv, ".sx"_sv, ".asm"_sv
+})};
+constexpr static auto cxxExts{substrate::make_array<stringView>({".cpp"_sv, ".cc"_sv, ".cxx"_sv})};
+constexpr static auto objExts{substrate::make_array<stringView>({".o"_sv, ".obj"_sv, ".a"_sv})};
 
 std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 bool silent, quiet, pthread, codeCoverage, debugBuild;
@@ -77,14 +80,14 @@ const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
 	{{}, 0, 0, 0}
 })};
 
-template<size_t N> bool checkExt(const std::string &file, const std::array<const char *, N> &exts) noexcept
+template<size_t N> constexpr bool checkExt(const std::string &file, const std::array<stringView, N> &exts) noexcept
 {
 	constexpr auto npos{std::string::npos};
 	const auto dot{file.rfind('.')};
 	if (dot == npos)
 		return false;
 	return std::find_if(exts.begin(), exts.end(),
-		[=](const char *ext) { return file.compare(dot, npos, ext) == 0; }
+		[=](const stringView ext) { return file.compare(dot, npos, ext.data(), ext.length()) == 0; }
 	) != exts.end();
 }
 
