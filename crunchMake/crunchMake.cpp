@@ -73,13 +73,15 @@ const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
 
 bool isObj(const char *file)
 {
-	const char *dot = strrchr(file, '.');
+	const auto *const dot{std::strrchr(file, '.')};
+	if (!dot)
+		return false;
 	for (auto &ext : objExts)
-		if (strcmp(dot, ext) == 0)
+		if (std::strcmp(dot, ext) == 0)
 			return true;
 	return false;
 }
-bool isObj(const string &file)
+bool isObj(const std::string &file)
 	{ return isObj(file.data()); }
 
 bool getTests()
