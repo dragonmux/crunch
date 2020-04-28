@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <algorithm>
 #include <numeric>
 #include <substrate/utility>
 #include <core.hxx>
@@ -76,18 +77,23 @@ const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
 	{{}, 0, 0, 0}
 })};
 
-bool isObj(const char *file)
+template<size_t N> bool checkExt(const std::string &file, const std::array<const char *, N> &exts) noexcept
 {
-	const auto *const dot{std::strrchr(file, '.')};
-	if (!dot)
+	constexpr auto npos{std::string::npos};
+	const auto dot{file.rfind('.')};
+	if (dot == npos)
 		return false;
-	for (const auto &ext : objExts)
-		if (std::strcmp(dot, ext) == 0)
-			return true;
-	return false;
+	return std::find_if(exts.begin(), exts.end(),
+		[=](const char *ext) { return file.compare(dot, npos, ext) == 0; }
+	) != exts.end();
 }
+
+bool validExt(const std::string &file)
+	{ return checkExt(file, exts); }
+bool isCXX(const std::string &file)
+	{ return checkExt(file, cxxExts); }
 bool isObj(const std::string &file)
-	{ return isObj(file.data()); }
+	{ return checkExt(file, objExts); }
 
 bool getTests()
 {
@@ -144,32 +150,6 @@ void getLinkArgs()
 			linkArgs.emplace_back(argToString(parsedArg));
 	}
 }
-
-bool validExt(const char *const file)
-{
-	const auto *const dot{std::strrchr(file, '.')};
-	if (dot == nullptr)
-		return false;
-	for (const auto &ext : exts)
-		if (std::strcmp(dot, ext) == 0)
-			return true;
-	return false;
-}
-bool validExt(const std::string &file)
-	{ return validExt(file.data()); }
-
-bool isCXX(const char *const file)
-{
-	const auto *const dot{std::strrchr(file, '.')};
-	if (!dot)
-		return false;
-	for (const auto &ext : cxxExts)
-		if (std::strcmp(dot, ext) == 0)
-			return true;
-	return false;
-}
-bool isCXX(const std::string &file)
-	{ return isCXX(file.data()); }
 
 std::string toO(const std::string &file)
 {
