@@ -83,15 +83,15 @@ private:
 
 	void testInvalid() try
 	{
-		constexpr rawStrPtr_t argv[3] = {"test", "--arg", "--arg"};
-		constexpr arg_t args[2] =
+		constexpr auto argv{substrate::make_array<rawStrPtr_t>({"test", "--arg", "--arg"})};
+		constexpr auto args{substrate::make_array<arg_t>(
 		{
 			{"--arg"_sv, 0, 0, 0},
 			{{}, 0, 0, 0}
-		};
+		})};
 		parsedArgs_t parsedArgs{1};
 
-		registerArgs(args);
+		registerArgs(args.data());
 		assertFalse(parsedArgs.empty());
 		parsedArg_t &parsedArg = parsedArgs[0];
 		parsedArg.value = "--arg";
@@ -101,7 +101,7 @@ private:
 
 		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
 		startLogging("/dev/null");
-		parsedArgs = parseArguments(3, argv);
+		parsedArgs = parseArguments(3, argv.data());
 		assertFalse(parsedArgs.empty());
 		assertEqual(parsedArgs.size(), 1);
 	}
@@ -110,28 +110,28 @@ private:
 
 	void testArgCounting()
 	{
-		constexpr rawStrPtr_t argv_1[5] = {"test", "-o", "test", "-a", "-o"};
-		constexpr rawStrPtr_t argv_2[5] = {"test", "-o", "test", "me", "please"};
-		constexpr arg_t args[3] =
+		constexpr auto argv_1{substrate::make_array<rawStrPtr_t>({"test", "-o", "test", "-a", "-o"})};
+		constexpr auto argv_2{substrate::make_array<rawStrPtr_t>({"test", "-o", "test", "me", "please"})};
+		constexpr auto args{substrate::make_array<arg_t>(
 		{
 			{"-o"_sv, 0, 2, 0},
 			{"-a"_sv, 1, 1, 0},
 			{{}, 0, 0, 0}
-		};
+		})};
 		parsedArgs_t parsedArgs{};
 
-		registerArgs(args);
-		assertEqual(checkParams(5, argv_1, 2, args[0], args), 1);
-		assertEqual(checkParams(5, argv_1, 4, args[1], args), -1);
-		assertEqual(checkParams(5, argv_1, 5, args[0], args), 0);
-		assertEqual(checkParams(5, argv_2, 2, args[0], args), 2);
+		registerArgs(args.data());
+		assertEqual(checkParams(5, argv_1.data(), 2, args[0], args.data()), 1);
+		assertEqual(checkParams(5, argv_1.data(), 4, args[1], args.data()), -1);
+		assertEqual(checkParams(5, argv_1.data(), 5, args[0], args.data()), 0);
+		assertEqual(checkParams(5, argv_2.data(), 2, args[0], args.data()), 2);
 
 		auto *log{startLogging("/dev/null")};
-		parsedArgs = parseArguments(5, argv_1);
+		parsedArgs = parseArguments(5, argv_1.data());
 		stopLogging(log);
 		assertTrue(parsedArgs.empty());
 
-		parsedArgs = parseArguments(5, argv_2);
+		parsedArgs = parseArguments(5, argv_2.data());
 		assertFalse(parsedArgs.empty());
 		assertEqual(parsedArgs.size(), 2);
 		assertFalse(parsedArgs[0].value.empty());
