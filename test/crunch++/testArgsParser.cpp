@@ -3,6 +3,7 @@
 #include "argsParser.hxx"
 #include "stringFuncs.hxx"
 
+using namespace crunch;
 using rawStrPtr_t = const char *;
 
 class testArgsParser final : public testsuite
@@ -40,16 +41,16 @@ private:
 
 	void testIncomplete()
 	{
-		const rawStrPtr_t argv_1[2] = {"test", "--arg="};
-		const rawStrPtr_t argv_2[2] = {"test", "--arg=test"};
-		const arg_t args_1[2] =
+		constexpr rawStrPtr_t argv_1[2] = {"test", "--arg="};
+		constexpr rawStrPtr_t argv_2[2] = {"test", "--arg=test"};
+		constexpr arg_t args_1[2] =
 		{
-			{"--arg=", 0, 0, ARG_INCOMPLETE},
+			{"--arg="_sv, 0, 0, ARG_INCOMPLETE},
 			{{}, 0, 0, 0}
 		};
-		const arg_t args_2[2] =
+		constexpr arg_t args_2[2] =
 		{
-			{"--arg", 0, 0, 0},
+			{"--arg"_sv, 0, 0, 0},
 			{{}, 0, 0, 0}
 		};
 
@@ -81,10 +82,10 @@ private:
 
 	void testInvalid() try
 	{
-		const rawStrPtr_t argv[3] = {"test", "--arg", "--arg"};
-		const arg_t args[2] =
+		constexpr rawStrPtr_t argv[3] = {"test", "--arg", "--arg"};
+		constexpr arg_t args[2] =
 		{
-			{"--arg", 0, 0, 0},
+			{"--arg"_sv, 0, 0, 0},
 			{{}, 0, 0, 0}
 		};
 		parsedArgs_t parsedArgs{1};
@@ -108,12 +109,12 @@ private:
 
 	void testArgCounting()
 	{
-		const rawStrPtr_t argv_1[5] = {"test", "-o", "test", "-a", "-o"};
-		const rawStrPtr_t argv_2[5] = {"test", "-o", "test", "me", "please"};
-		const arg_t args[3] =
+		constexpr rawStrPtr_t argv_1[5] = {"test", "-o", "test", "-a", "-o"};
+		constexpr rawStrPtr_t argv_2[5] = {"test", "-o", "test", "me", "please"};
+		constexpr arg_t args[3] =
 		{
-			{"-o", 0, 2, 0},
-			{"-a", 1, 1, 0},
+			{"-o"_sv, 0, 2, 0},
+			{"-a"_sv, 1, 1, 0},
 			{{}, 0, 0, 0}
 		};
 		parsedArgs_t parsedArgs;
