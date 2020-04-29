@@ -18,7 +18,6 @@
 using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::uniform_int_distribution;
-using crunch::internal::stringView;
 using crunch::operator ""_sv;
 
 class crunchTests final : public testsuite
@@ -204,7 +203,7 @@ private:
 
 	void testAssertPtrEqual()
 	{
-		auto ptr{genPtr()};
+		auto *ptr{genPtr()};
 		assertEqual(ptr, ptr);
 		while (!ptr)
 			ptr = genPtr();
