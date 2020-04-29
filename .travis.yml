@@ -27,12 +27,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-5.0
             - python3.7
       if: branch != coverityScan
@@ -41,12 +39,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-6.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-6.0
             - python3.7
       if: branch != coverityScan
@@ -55,12 +51,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-7
             - python3.7
       if: branch != coverityScan
@@ -69,12 +63,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-7
             - python3.7
       if: branch != coverityScan
@@ -83,12 +75,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-8
             - python3.7
       if: branch != coverityScan
@@ -97,12 +87,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-8
             - python3.7
       if: branch != coverityScan
@@ -111,12 +99,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-9
             - python3.7
       if: branch != coverityScan
@@ -125,12 +111,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-9
             - python3.7
       if: branch != coverityScan
@@ -139,12 +123,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-10
             - python3.7
       if: branch != coverityScan
@@ -153,12 +135,10 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
-            - binutils
             - clang-10
             - python3.7
       if: branch != coverityScan
@@ -167,11 +147,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-5
             - python3.7
       if: branch != coverityScan
@@ -180,11 +158,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-6
             - python3.7
       if: branch != coverityScan
@@ -193,11 +169,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-7
             - python3.7
       if: branch != coverityScan
@@ -206,11 +180,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-7
             - python3.7
       if: branch != coverityScan
@@ -219,11 +191,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-8
             - python3.7
       if: branch != coverityScan
@@ -232,11 +202,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-8
             - python3.7
       if: branch != coverityScan
@@ -245,11 +213,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-9
             - python3.7
       if: branch != coverityScan
@@ -258,11 +224,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-9
             - python3.7
       if: branch != coverityScan
@@ -282,11 +246,9 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
-            - binutils
             - g++-9
             - python3.7
         coverity_scan:
