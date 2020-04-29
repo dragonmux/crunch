@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
+#include <substrate/utility>
 #include <crunch++.h>
 #include "argsParser.hxx"
 #include "stringFuncs.hxx"
@@ -11,16 +12,16 @@ class testArgsParser final : public testsuite
 private:
 	void testNull()
 	{
-		const rawStrPtr_t argv[2] = {"test", "--dummy"};
+		constexpr auto argv{substrate::make_array<rawStrPtr_t>({"test", "--dummy"})};
 
 		registerArgs(nullptr);
 		assertTrue(parseArguments(0, nullptr).empty());
 		assertTrue(parseArguments(1, nullptr).empty());
 		assertTrue(parseArguments(2, nullptr).empty());
-		assertTrue(parseArguments(1, argv).empty());
-		assertTrue(parseArguments(2, argv).empty());
+		assertTrue(parseArguments(1, argv.data()).empty());
+		assertTrue(parseArguments(2, argv.data()).empty());
 		assertTrue(parseArguments(uint32_t(-1), nullptr).empty());
-		assertTrue(parseArguments(uint32_t(-1), argv).empty());
+		assertTrue(parseArguments(uint32_t(-1), argv.data()).empty());
 	}
 
 	void testEmpty()
@@ -117,7 +118,7 @@ private:
 			{"-a"_sv, 1, 1, 0},
 			{{}, 0, 0, 0}
 		};
-		parsedArgs_t parsedArgs;
+		parsedArgs_t parsedArgs{};
 
 		registerArgs(args);
 		assertEqual(checkParams(5, argv_1, 2, args[0], args), 1);
@@ -125,7 +126,7 @@ private:
 		assertEqual(checkParams(5, argv_1, 5, args[0], args), 0);
 		assertEqual(checkParams(5, argv_2, 2, args[0], args), 2);
 
-		auto log = startLogging("/dev/null");
+		auto *log{startLogging("/dev/null")};
 		parsedArgs = parseArguments(5, argv_1);
 		stopLogging(log);
 		assertTrue(parsedArgs.empty());
