@@ -119,7 +119,7 @@ namespace crunch
 					break;
 				}
 				else if ((argument->flags & ARG_INCOMPLETE) &&
-					strncmp(argument->value.data(), argv[i], argument->value.length()) == 0)
+					!argument->value.compare(0, arg.length(), arg))
 				{
 					printf("Badly formatted argument (%s)\n", argv[i]);
 					return {};
