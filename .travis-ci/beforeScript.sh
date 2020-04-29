@@ -13,6 +13,7 @@ codecov()
 
 [ "$TRAVIS_OS_NAME" == "windows" -a "$CC" == "clang" ] && EXTRA_OPTS="-Dcpp_std=c++14" || EXTRA_OPTS=""
 [ $COVERAGE -ne 0 ] && EXTRA_OPTS="$EXTRA_OPTS --buildtype=debug -Db_sanitize=undefined"
+[ $COVERAGE -ne 0 -a "${CC}" != "${CC#clang}" ] && EXTRA_OPTS="$EXTRA_OPTS -Db_lundef=false"
 
 if [ "$TRAVIS_OS_NAME" != "windows" -o "$CC" == "clang" ]; then
 	meson build --prefix=$HOME/.local -Db_coverage=`codecov` $EXTRA_OPTS
