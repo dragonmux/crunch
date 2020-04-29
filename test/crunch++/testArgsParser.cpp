@@ -94,10 +94,10 @@ private:
 		registerArgs(args.data());
 		assertFalse(parsedArgs.empty());
 		parsedArg_t &parsedArg = parsedArgs[0];
-		parsedArg.value = "--arg";
+		parsedArg.value = "--arg"_sv;
 		assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
 
-		assertNull(findArg({}, "", nullptr));
+		assertNull(findArg({}, ""_sv, nullptr));
 
 		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
 		startLogging("/dev/null");

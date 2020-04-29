@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cstring>
 #include "crunch++.h"
 
 namespace crunch
@@ -18,16 +19,16 @@ namespace crunch
 		const uint8_t flags{};
 
 		constexpr arg_t() noexcept { }
-		constexpr arg_t(const internal::stringView value_, const uint32_t minParams, const uint32_t maxParams,
+		constexpr arg_t(const internal::stringView &value_, const uint32_t minParams, const uint32_t maxParams,
 			const uint8_t flags_) : value{value_}, numMinParams{minParams}, numMaxParams{maxParams}, flags{flags_} { }
-		CRUNCH_VIS bool matches(const char *const str) const noexcept;
+		CRUNCH_VIS bool matches(const internal::stringView &str) const noexcept;
 	};
 
 	struct parsedArg_t final
 	{
 		//using strPtr_t = std::unique_ptr<const char []>;
 
-		std::string value{};
+		internal::stringView value{};
 		uint32_t paramsFound{0};
 		std::vector<std::string> params{};
 		uint8_t flags{0};
@@ -37,8 +38,7 @@ namespace crunch
 		parsedArg_t(parsedArg_t &&arg) noexcept : parsedArg_t{} { swap(arg); }
 		void operator =(parsedArg_t &&arg) noexcept { swap(arg); }
 
-		bool matches(const char *const str, const size_t length) const noexcept;
-		CRUNCH_VIS bool matches(const char *const str) const noexcept;
+		CRUNCH_VIS bool matches(const internal::stringView &str) const noexcept;
 		CRUNCH_VIS void swap(parsedArg_t &arg) noexcept;
 
 		parsedArg_t(const parsedArg_t &) = delete;
@@ -54,11 +54,13 @@ namespace crunch
 
 	CRUNCHpp_API void registerArgs(const arg_t *allowedArgs) noexcept;
 	CRUNCHpp_API parsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv) noexcept;
-	CRUNCHpp_API const parsedArg_t *findArg(const parsedArgs_t &args, const char *const value,
-		const parsedArg_t *defaultVal);
-	CRUNCHpp_API const arg_t *findArgInArgs(const char *const value);
-	inline const arg_t *findArgInArgs(const std::unique_ptr<const char []> &value) { return findArgInArgs(value.get()); }
-	inline const arg_t *findArgInArgs(const std::string &value) { return findArgInArgs(value.data()); }
+	CRUNCHpp_API const parsedArg_t *findArg(const parsedArgs_t &args_, const internal::stringView &value,
+		const parsedArg_t *defaultValue);
+	CRUNCHpp_API const arg_t *findArgInArgs(const internal::stringView &value);
+	inline const arg_t *findArgInArgs(const std::unique_ptr<const char []> &value)
+		{ return findArgInArgs(internal::stringView{value.get(), std::strlen(value.get())}); }
+	inline const arg_t *findArgInArgs(const std::string &value)
+		{ return findArgInArgs(internal::stringView{value.data(), value.length()}); }
 
 	CRUNCHpp_API bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept;
 	CRUNCHpp_API uint32_t checkParams(const uint32_t argc, const char *const *const argv,

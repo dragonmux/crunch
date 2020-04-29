@@ -106,7 +106,7 @@ namespace crunch
 		for (const auto &parsedArg : parsedArgs)
 		{
 			// this might be as simple as (!parsedArg.minLength) now
-			if (!findArgInArgs(parsedArg.value.data()))
+			if (!findArgInArgs(parsedArg.value))
 				namedTests.push_back(&parsedArg);
 		}
 		namedTests.shrink_to_fit();
@@ -135,7 +135,7 @@ namespace crunch
 	void runTests()
 	{
 		testLog *logFile{};
-		const auto *const logging{findArg(parsedArgs, "--log", nullptr)};
+		const auto *const logging{findArg(parsedArgs, "--log"_sv, nullptr)};
 		if (logging)
 		{
 			logFile = startLogging(logging->params[0].data());
@@ -205,10 +205,10 @@ namespace crunch
 
 	bool handleVersionOrHelp()
 	{
-		constParsedArg_t version{findArg(parsedArgs, "--version", nullptr)};
-		constParsedArg_t versionShort{findArg(parsedArgs, "-v", nullptr)};
-		constParsedArg_t help{findArg(parsedArgs, "--help", nullptr)};
-		constParsedArg_t helpShort{findArg(parsedArgs, "-h", nullptr)};
+		constParsedArg_t version{findArg(parsedArgs, "--version"_sv, nullptr)};
+		constParsedArg_t versionShort{findArg(parsedArgs, "-v"_sv, nullptr)};
+		constParsedArg_t help{findArg(parsedArgs, "--help"_sv, nullptr)};
+		constParsedArg_t helpShort{findArg(parsedArgs, "-h"_sv, nullptr)};
 
 		if (help || helpShort)
 			puts(crunchpp::help.data());

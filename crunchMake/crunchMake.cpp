@@ -106,7 +106,7 @@ namespace crunch
 		for (const auto &parsedArg : parsedArgs)
 		{
 			const auto &value = parsedArg.value;
-			if (!findArgInArgs(value.data()) && !isObj(value))
+			if (!findArgInArgs(value) && !isObj(value))
 				tests.emplace_back(value);
 		}
 		return !tests.empty();
@@ -118,7 +118,7 @@ namespace crunch
 		{
 			const auto &value = parsedArg.value;
 			if (strncmp(value.data(), find, 2) == 0)
-				var.emplace_back(value);
+				var.emplace_back(value.toString());
 		}
 	}
 
@@ -135,14 +135,14 @@ namespace crunch
 		for (const auto &parsedArg : parsedArgs)
 		{
 			const auto &value = parsedArg.value;
-			if (!findArgInArgs(value.data()) && isObj(value))
-				linkObjs.emplace_back(value);
+			if (!findArgInArgs(value) && isObj(value))
+				linkObjs.emplace_back(value.toString());
 		}
 	}
 
 	inline std::string argToString(const parsedArg_t &arg)
 	{
-		auto result{arg.value + ' '};
+		auto result{arg.value.toString() + ' '};
 		for (uint32_t i = 0; i < arg.paramsFound; ++i)
 			result += arg.params[i] + ' ';
 		return result;
@@ -152,7 +152,7 @@ namespace crunch
 	{
 		for (const auto &parsedArg : parsedArgs)
 		{
-			if (parsedArg.matches("-z"))
+			if (parsedArg.matches("-z"_sv))
 				linkArgs.emplace_back(argToString(parsedArg));
 		}
 	}
@@ -173,7 +173,7 @@ namespace crunch
 
 	std::string computeObjName(const std::string &file)
 	{
-		const auto *const output{findArg(parsedArgs, "-o", nullptr)};
+		const auto *const output{findArg(parsedArgs, "-o"_sv, nullptr)};
 		if (output)
 			return toO(output->params[0]);
 		return toO(file);
@@ -188,7 +188,7 @@ namespace crunch
 
 	std::string computeSOName(const std::string &file)
 	{
-		const auto *const output{findArg(parsedArgs, "-o", nullptr)};
+		const auto *const output{findArg(parsedArgs, "-o"_sv, nullptr)};
 		if (output)
 			return output->params[0];
 		return toSO(file);
@@ -222,23 +222,23 @@ namespace crunch
 	void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 
 #ifndef _MSC_VER
-	std::string standardVersion(constParsedArg_t version)
+	internal::stringView standardVersion(constParsedArg_t version)
 	{
 		if (!version)
-			return "-std=c++11"s;
+			return "-std=c++11"_sv;
 		const auto *const str = version->value.data() + 5;
 		if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
 		{
 			testPrintf("Warning, standard version must be at least C++11");
-			return "-std=c++11"s;
+			return "-std=c++11"_sv;
 		}
 		return version->value;
 	}
 
 	void buildCXXString()
 	{
-		const auto *const standard{findArg(parsedArgs, "-std=", nullptr)};
-		cxxCompiler += standardVersion(standard) + ' ';
+		const auto *const standard{findArg(parsedArgs, "-std="_sv, nullptr)};
+		cxxCompiler += standardVersion(standard).toString() + ' ';
 	}
 #else
 	int32_t compileMSVC(const std::string &test)
@@ -264,7 +264,7 @@ namespace crunch
 
 	void handleSanitizers()
 	{
-		const auto *const sanitizer{findArg(parsedArgs, "-fsanitize=", nullptr)};
+		const auto *const sanitizer{findArg(parsedArgs, "-fsanitize="_sv, nullptr)};
 		if (!sanitizer)
 			return;
 		const stringView sanitizers{sanitizer->value.data() + 11, sanitizer->value.length() - 11};
@@ -275,7 +275,7 @@ namespace crunch
 				const auto result{value.find(',', offset)};
 				return (result == stringView::npos ? value.length() : result) - offset;
 			}(sanitizers, offset)};
-			const auto option{"-fsanitize="_s + sanitizers.substr(offset, length) + ' '};
+			const auto option{"-fsanitize="_s + sanitizers.substr(offset, length).toString() + ' '};
 			cCompiler += option;
 			cxxCompiler += option;
 			offset += length + 1;
@@ -293,14 +293,14 @@ namespace crunch
 		buildCXXString();
 	#endif
 		testLog *logFile = nullptr;
-		const auto *const logParam{findArg(parsedArgs, "--log", nullptr)};
+		const auto *const logParam{findArg(parsedArgs, "--log"_sv, nullptr)};
 		const auto logging = bool(logParam);
 		if (logging)
 			logFile = startLogging(logParam->params[0].data());
 		if (!silent)
-			silent = bool(findArg(parsedArgs, "-s", nullptr));
+			silent = bool(findArg(parsedArgs, "-s"_sv, nullptr));
 		if (!quiet)
-			quiet = bool(findArg(parsedArgs, "-q", nullptr));
+			quiet = bool(findArg(parsedArgs, "-q"_sv, nullptr));
 
 		handleSanitizers();
 
@@ -309,9 +309,9 @@ namespace crunch
 			if (access(test.data(), R_OK) == 0 && validExt(test))
 			{
 	#ifndef _MSC_VER
-				ret = compileTest(test);
+				ret = compileTest(test.toString());
 	#else
-				ret = compileMSVC(test);
+				ret = compileMSVC(test.toString());
 	#endif
 				if (ret)
 					break;
@@ -326,10 +326,10 @@ namespace crunch
 
 	bool handleVersionOrHelp()
 	{
-		constParsedArg_t version{findArg(parsedArgs, "--version", nullptr)};
-		constParsedArg_t versionShort{findArg(parsedArgs, "-v", nullptr)};
-		constParsedArg_t help{findArg(parsedArgs, "--help", nullptr)};
-		constParsedArg_t helpShort{findArg(parsedArgs, "-h", nullptr)};
+		constParsedArg_t version{findArg(parsedArgs, "--version"_sv, nullptr)};
+		constParsedArg_t versionShort{findArg(parsedArgs, "-v"_sv, nullptr)};
+		constParsedArg_t help{findArg(parsedArgs, "--help"_sv, nullptr)};
+		constParsedArg_t helpShort{findArg(parsedArgs, "-h"_sv, nullptr)};
 
 		if (help || helpShort)
 			puts(crunchpp::help.data());
@@ -357,11 +357,11 @@ namespace crunch
 		getLinkLibs();
 		getLinkObjs();
 		getLinkArgs();
-		silent = bool(findArg(parsedArgs, "--silent", nullptr));
-		quiet = bool(findArg(parsedArgs, "--quiet", nullptr));
-		pthread = bool(findArg(parsedArgs, "-pthread", nullptr));
-		codeCoverage = bool(findArg(parsedArgs, "--coverage", nullptr));
-		debugBuild = bool(findArg(parsedArgs, "--debug", nullptr));
+		silent = bool(findArg(parsedArgs, "--silent"_sv, nullptr));
+		quiet = bool(findArg(parsedArgs, "--quiet"_sv, nullptr));
+		pthread = bool(findArg(parsedArgs, "-pthread"_sv, nullptr));
+		codeCoverage = bool(findArg(parsedArgs, "--coverage"_sv, nullptr));
+		debugBuild = bool(findArg(parsedArgs, "--debug"_sv, nullptr));
 		return compileTests();
 	}
 } // namespace crunch
