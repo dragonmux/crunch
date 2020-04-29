@@ -26,11 +26,11 @@ private:
 
 	void testEmpty()
 	{
-		const rawStrPtr_t argv[2] = {"test", "--dummy"};
-		const arg_t args[1] = {{{}, 0, 0, 0}};
+		constexpr auto argv{substrate::make_array<rawStrPtr_t>({"test", "--dummy"})};
+		constexpr auto args{substrate::make_array<arg_t>({{{}, 0, 0, 0}})};
 
-		registerArgs(args);
-		parsedArgs_t parsedArgs = parseArguments(2, argv);
+		registerArgs(args.data());
+		parsedArgs_t parsedArgs = parseArguments(2, argv.data());
 		assertFalse(parsedArgs.empty());
 		assertEqual(parsedArgs.size(), 1);
 		assertFalse(parsedArgs[0].value.empty());
@@ -42,23 +42,23 @@ private:
 
 	void testIncomplete()
 	{
-		constexpr rawStrPtr_t argv_1[2] = {"test", "--arg="};
-		constexpr rawStrPtr_t argv_2[2] = {"test", "--arg=test"};
-		constexpr arg_t args_1[2] =
+		constexpr auto argv_1{substrate::make_array<rawStrPtr_t>({"test", "--arg="})};
+		constexpr auto argv_2{substrate::make_array<rawStrPtr_t>({"test", "--arg=test"})};
+		constexpr auto args_1{substrate::make_array<arg_t>(
 		{
 			{"--arg="_sv, 0, 0, ARG_INCOMPLETE},
 			{{}, 0, 0, 0}
-		};
-		constexpr arg_t args_2[2] =
+		})};
+		constexpr auto args_2{substrate::make_array<arg_t>(
 		{
 			{"--arg"_sv, 0, 0, 0},
 			{{}, 0, 0, 0}
-		};
+		})};
 
 		parsedArgs_t parsedArgs;
-		registerArgs(args_1);
+		registerArgs(args_1.data());
 
-		parsedArgs = parseArguments(2, argv_1);
+		parsedArgs = parseArguments(2, argv_1.data());
 		assertFalse(parsedArgs.empty());
 		assertEqual(parsedArgs.size(), 1);
 		assertFalse(parsedArgs[0].value.empty());
@@ -67,7 +67,7 @@ private:
 		assertEqual(parsedArgs[0].flags, ARG_INCOMPLETE);
 		assertTrue(parsedArgs[0].params.empty());
 
-		parsedArgs = parseArguments(2, argv_2);
+		parsedArgs = parseArguments(2, argv_2.data());
 		assertFalse(parsedArgs.empty());
 		assertEqual(parsedArgs.size(), 1);
 		assertFalse(parsedArgs[0].value.empty());
@@ -76,9 +76,9 @@ private:
 		assertTrue(parsedArgs[0].params.empty());
 
 		startLogging("/dev/null");
-		registerArgs(args_2);
-		assertFalse(parseArguments(2, argv_1).empty());
-		assertFalse(parseArguments(2, argv_2).empty());
+		registerArgs(args_2.data());
+		assertFalse(parseArguments(2, argv_1.data()).empty());
+		assertFalse(parseArguments(2, argv_2.data()).empty());
 	}
 
 	void testInvalid() try
