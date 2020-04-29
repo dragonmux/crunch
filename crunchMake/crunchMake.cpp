@@ -56,7 +56,7 @@ namespace crunch
 	std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 	bool silent, quiet, pthread, codeCoverage, debugBuild;
 
-	const auto args{substrate::make_array<arg_t>( // NOLINT(cert-err58-cpp)
+	constexpr static auto args{substrate::make_array<arg_t>(
 	{
 		{"--help"_sv, 0, 0, 0},
 		{"-h"_sv, 0, 0, 0},
