@@ -259,7 +259,7 @@ namespace crunch
 			const char *testName{nullptr};
 
 		public:
-			cxxTest() noexcept = default;
+			cxxTest() noexcept { }
 			CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
 			cxxTest(const cxxTest &) = default;
 			cxxTest &operator =(const cxxTest &) = default;
