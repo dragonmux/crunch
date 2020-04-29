@@ -43,7 +43,13 @@
 #endif
 #define CRUNCHpp_API	extern CRUNCH_VIS
 
-#if __cplusplus >= 201402L
+#if defined(__has_cpp_attribute)
+#	define CRUNCH_HAS_CPP_ATTRIBUTE(attr) __has_cpp_attribute(attr)
+#else
+#	define CRUNCH_HAS_CPP_ATTRIBUTE(attr) 1
+#endif
+
+#if __cplusplus >= 201402L && CRUNCH_HAS_CPP_ATTRIBUTE(deprecated)
 #	define CRUNCH_DEPRECATE [[deprecated]]
 #	define CRUNCH_CXX14_CONSTEXPR constexpr
 #	define CRUNCH_CXX14_CONSTEXPR_INLINE CRUNCH_CXX14_CONSTEXPR
@@ -57,7 +63,7 @@
 #	define CRUNCH_CXX14_CONSTEXPR_INLINE inline
 #endif
 
-#if __has_cpp_attribute(nodiscard) || __cplusplus >= 201402L
+#if __cplusplus >= 201703L && CRUNCH_HAS_CPP_ATTRIBUTE(nodiscard)
 #	define CRUNCH_NO_DISCARD(x) [[nodiscard]] x
 #elif defined(__GNUC__)
 #	define CRUNCH_NO_DISCARD(x) x __attribute__((warn_unused_result))
