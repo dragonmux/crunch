@@ -88,7 +88,7 @@ namespace crunch
 			std::size_t length_{0};
 			const char *data_{nullptr};
 
-			CRUNCH_CXX14_CONSTEXPR std::size_t check_(const std::size_t pos) const
+			std::size_t check_(const std::size_t pos) const
 			{
 				if (pos > length_)
 					throw std::out_of_range{"crunch::internal::stringView: pos outside view"};
@@ -137,8 +137,8 @@ namespace crunch
 			CRUNCH_NO_DISCARD(constexpr bool empty() const noexcept) { return size() == 0; }
 			CRUNCH_NO_DISCARD(std::string toString() const noexcept) { return {data_, length_}; }
 
-			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR stringView substr(const std::size_t pos = 0,
-				const std::size_t n = npos) const) { return stringView{data_ + check_(pos), clamp_(pos, n)}; }
+			CRUNCH_NO_DISCARD(stringView substr(const std::size_t pos = 0, const std::size_t n = npos) const)
+				{ return stringView{data_ + check_(pos), clamp_(pos, n)}; }
 
 			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::size_t find(const char c,
 				const std::size_t pos = 0) const noexcept)
@@ -175,8 +175,8 @@ namespace crunch
 				return size() - str.size();
 			}
 
-			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::ptrdiff_t compare(const std::size_t pos,
-				const std::size_t n, const stringView &str) const) { return substr(pos, n).compare(str); }
+			CRUNCH_NO_DISCARD(std::ptrdiff_t compare(const std::size_t pos, const std::size_t n,
+				const stringView &str) const) { return substr(pos, n).compare(str); }
 
 			CRUNCH_CXX14_CONSTEXPR void swap(stringView &other) noexcept
 			{
