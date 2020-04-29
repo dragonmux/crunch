@@ -27,6 +27,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -40,6 +41,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-6.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -53,6 +55,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -66,6 +69,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -79,6 +83,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -92,6 +97,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -105,6 +111,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -118,6 +125,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -131,6 +139,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -144,6 +153,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
@@ -157,6 +167,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -169,6 +180,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -181,6 +193,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -193,6 +206,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -205,6 +219,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -217,6 +232,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -229,6 +245,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -241,6 +258,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
@@ -264,6 +282,7 @@ matrix:
       addons:
         apt:
           sources:
+            - sourceline: 'ppa:jonathonf/gcc'
             - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
