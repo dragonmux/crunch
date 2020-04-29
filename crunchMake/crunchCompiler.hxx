@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <string>
+#include <crunch++.h>
 
 namespace crunch
 {
@@ -17,7 +18,7 @@ namespace crunch
 
 	extern const std::string libExt;
 
-	extern bool isCXX(const std::string &file);
+	extern bool isCXX(const internal::stringView &file);
 	extern std::string computeObjName(const std::string &file);
 	extern std::string computeSOName(const std::string &file);
 

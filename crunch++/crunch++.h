@@ -46,6 +46,7 @@
 #if __cplusplus >= 201402L
 #	define CRUNCH_DEPRECATE [[deprecated]]
 #	define CRUNCH_CXX14_CONSTEXPR constexpr
+#	define CRUNCH_CXX14_CONSTEXPR_INLINE CRUNCH_CXX14_CONSTEXPR
 #else
 #	ifdef _WINDOWS
 #		define CRUNCH_DEPRECATE __declspec(deprecated)
@@ -53,6 +54,15 @@
 #		define CRUNCH_DEPRECATE __attribute__ ((deprecated))
 #	endif
 #	define CRUNCH_CXX14_CONSTEXPR
+#	define CRUNCH_CXX14_CONSTEXPR_INLINE inline
+#endif
+
+#if __has_cpp_attribute(nodiscard) || __cplusplus >= 201402L
+#	define CRUNCH_NO_DISCARD(x) [[nodiscard]] x
+#elif defined(__GNUC__)
+#	define CRUNCH_NO_DISCARD(x) x __attribute__((warn_unused_result))
+#else
+#	define CRUNCH_NO_DISCARD(x) x
 #endif
 
 namespace crunch
@@ -78,7 +88,7 @@ namespace crunch
 			std::size_t length_{0};
 			const char *data_{nullptr};
 
-			std::size_t check_(const std::size_t pos) const
+			CRUNCH_CXX14_CONSTEXPR std::size_t check_(const std::size_t pos) const
 			{
 				if (pos > length_)
 					throw std::out_of_range{"crunch::internal::stringView: pos outside view"};
@@ -99,24 +109,39 @@ namespace crunch
 				return nullptr;
 			}
 
+			CRUNCH_CXX14_CONSTEXPR static std::ptrdiff_t compare_(const char *const s1,
+				const char *const s2, const std::size_t len) noexcept
+			{
+				for (std::size_t i{0}; i < len; ++i)
+				{
+					if (s1[i] < s2[i])
+						return -1;
+					else if (s1[i] > s2[i])
+						return 1;
+				}
+				return 0;
+			}
+
 		public:
 			constexpr stringView() noexcept = default;
 			constexpr stringView(const stringView &) noexcept = default;
 			constexpr stringView(stringView &&) noexcept = default;
 			constexpr explicit stringView(const char *const data, const std::size_t length) noexcept :
 				length_{length}, data_{data} { }
-			constexpr const char *data() const noexcept { return data_; }
-			constexpr std::size_t size() const noexcept { return length_; }
-			constexpr std::size_t length() const noexcept { return length_; }
-			constexpr bool empty() const noexcept { return size() == 0; }
+			stringView(const std::string &str) noexcept : length_{str.length()}, data_{str.data()} { }
+			stringView &operator =(const stringView &) noexcept = default;
+			stringView &operator =(stringView &&) noexcept = default;
+			CRUNCH_NO_DISCARD(constexpr const char *data()) const noexcept { return data_; }
+			CRUNCH_NO_DISCARD(constexpr std::size_t size()) const noexcept { return length_; }
+			CRUNCH_NO_DISCARD(constexpr std::size_t length()) const noexcept { return length_; }
+			CRUNCH_NO_DISCARD(constexpr bool empty()) const noexcept { return size() == 0; }
+			CRUNCH_NO_DISCARD(std::string toString()) const noexcept { return {data_, length_}; }
 
-#if __cplusplus >= 202002L
-			constexpr
-#endif
-			std::string substr(const std::size_t pos = 0, const std::size_t n = npos) const
-				{ return {data_ + check_(pos), clamp_(pos, n)}; }
+			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR stringView substr(const std::size_t pos = 0,
+				const std::size_t n = npos)) const { return stringView{data_ + check_(pos), clamp_(pos, n)}; }
 
-			CRUNCH_CXX14_CONSTEXPR std::size_t find(const char c, const std::size_t pos = 0) const noexcept
+			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::size_t find(const char c,
+				const std::size_t pos = 0)) const noexcept
 			{
 				if (pos < length_)
 				{
@@ -128,8 +153,43 @@ namespace crunch
 				return npos;
 			}
 
-			constexpr static std::size_t npos = static_cast<std::size_t>(-1);
+			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::size_t rfind(const char c,
+				const std::size_t pos = npos)) const noexcept
+			{
+				if (length_)
+				{
+					auto idx{length_ > pos ? pos + 1 : length_};
+					while (idx-- > 0)
+					{
+						if (data_[idx] == c)
+							return idx;
+					}
+				}
+				return npos;
+			}
+
+			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::ptrdiff_t compare(const stringView &str)) const noexcept
+			{
+				if (size() == str.size())
+					return compare_(data(), str.data(), size());
+				return size() - str.size();
+			}
+
+			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::ptrdiff_t compare(const std::size_t pos,
+				const std::size_t n, const stringView &str)) const { return substr(pos, n).compare(str); }
+
+			CRUNCH_CXX14_CONSTEXPR void swap(stringView &other) noexcept
+			{
+				auto tmp{*this};
+				*this = other;
+				other = tmp;
+			}
+
+			constexpr static auto npos{static_cast<std::size_t>(-1)};
 		};
+
+		CRUNCH_CXX14_CONSTEXPR_INLINE bool operator ==(const stringView &lhs, const stringView &rhs) noexcept
+			{ return lhs.compare(rhs) == 0; }
 	} // namespace internal
 
 	inline namespace literals

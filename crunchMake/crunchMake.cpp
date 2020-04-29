@@ -29,7 +29,8 @@ namespace crunch
 	parsedArgs_t parsedArgs;
 	std::vector<std::string> inclDirs, libDirs;
 	std::vector<std::string> linkLibs, linkObjs;
-	std::vector<std::string> linkArgs, tests;
+	std::vector<std::string> linkArgs;
+	std::vector<internal::stringView> tests;
 	uint32_t numLinkArgs = 0;
 
 	template<typename T> using removeReference = typename std::remove_reference<T>::type;
@@ -82,22 +83,22 @@ namespace crunch
 		{{}, 0, 0, 0}
 	})};
 
-	template<size_t N> constexpr bool checkExt(const std::string &file, const std::array<stringView, N> &exts) noexcept
+	template<size_t N> constexpr bool checkExt(const internal::stringView &file, const std::array<stringView, N> &exts) noexcept
 	{
-		constexpr auto npos{std::string::npos};
+		constexpr auto npos{internal::stringView::npos};
 		const auto dot{file.rfind('.')};
 		if (dot == npos)
 			return false;
 		return std::find_if(exts.begin(), exts.end(),
-			[=](const stringView ext) { return file.compare(dot, npos, ext.data(), ext.length()) == 0; }
+			[=](const stringView ext) { return file.compare(dot, npos, ext) == 0; }
 		) != exts.end();
 	}
 
-	constexpr bool validExt(const std::string &file)
+	constexpr bool validExt(const internal::stringView &file)
 		{ return checkExt(file, exts); }
-	bool isCXX(const std::string &file)
+	bool isCXX(const internal::stringView &file)
 		{ return checkExt(file, cxxExts); }
-	constexpr bool isObj(const std::string &file)
+	constexpr bool isObj(const internal::stringView &file)
 		{ return checkExt(file, objExts); }
 
 	bool getTests()
