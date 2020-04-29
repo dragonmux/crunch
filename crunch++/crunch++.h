@@ -108,6 +108,7 @@ namespace crunch
 			constexpr const char *data() const noexcept { return data_; }
 			constexpr std::size_t size() const noexcept { return length_; }
 			constexpr std::size_t length() const noexcept { return length_; }
+			constexpr bool empty() const noexcept { return size() == 0; }
 
 #if __cplusplus >= 202002L
 			constexpr
