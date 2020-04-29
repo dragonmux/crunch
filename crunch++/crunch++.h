@@ -131,17 +131,17 @@ namespace crunch
 			stringView(const std::string &str) noexcept : length_{str.length()}, data_{str.data()} { }
 			stringView &operator =(const stringView &) noexcept = default;
 			stringView &operator =(stringView &&) noexcept = default;
-			CRUNCH_NO_DISCARD(constexpr const char *data()) const noexcept { return data_; }
-			CRUNCH_NO_DISCARD(constexpr std::size_t size()) const noexcept { return length_; }
-			CRUNCH_NO_DISCARD(constexpr std::size_t length()) const noexcept { return length_; }
-			CRUNCH_NO_DISCARD(constexpr bool empty()) const noexcept { return size() == 0; }
-			CRUNCH_NO_DISCARD(std::string toString()) const noexcept { return {data_, length_}; }
+			CRUNCH_NO_DISCARD(constexpr const char *data() const noexcept) { return data_; }
+			CRUNCH_NO_DISCARD(constexpr std::size_t size() const noexcept) { return length_; }
+			CRUNCH_NO_DISCARD(constexpr std::size_t length() const noexcept) { return length_; }
+			CRUNCH_NO_DISCARD(constexpr bool empty() const noexcept) { return size() == 0; }
+			CRUNCH_NO_DISCARD(std::string toString() const noexcept) { return {data_, length_}; }
 
 			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR stringView substr(const std::size_t pos = 0,
-				const std::size_t n = npos)) const { return stringView{data_ + check_(pos), clamp_(pos, n)}; }
+				const std::size_t n = npos) const) { return stringView{data_ + check_(pos), clamp_(pos, n)}; }
 
 			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::size_t find(const char c,
-				const std::size_t pos = 0)) const noexcept
+				const std::size_t pos = 0) const noexcept)
 			{
 				if (pos < length_)
 				{
