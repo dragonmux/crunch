@@ -11,7 +11,7 @@ endif
 if debug
 	commandExtra += ['--debug']
 endif
-if cxx.get_id() != 'msvc'
+if cxx.get_id() != 'msvc' and noUndefined
 	commandExtra += ['-z', 'defs']
 endif
 

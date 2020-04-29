@@ -22,6 +22,7 @@ pkgconfig = import('pkgconfig')
 
 sanitizer = get_option('b_sanitize')
 coverage = get_option('b_coverage')
+noUndefined = get_option('b_lundef')
 debug = get_option('debug')
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
@@ -32,6 +33,10 @@ c11Threading = cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('th
 projectInclude = include_directories('.')
 substrate = include_directories('substrate')
 substrateDir = meson.current_source_dir() + '/substrate'
+
+if cxx.get_id() == 'clang' and sanitizer.contains('undefined')
+	assert(not noUndefined, 'Cannot combine b_lundef=true and b_sanitize=undefined')
+endif
 
 if ['gcc', 'clang'].contains(cc.get_id()) and coverage and debug
 	add_project_arguments('--coverage', language: 'c')
