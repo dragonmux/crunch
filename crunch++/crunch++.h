@@ -154,7 +154,7 @@ namespace crunch
 			}
 
 			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::size_t rfind(const char c,
-				const std::size_t pos = npos)) const noexcept
+				const std::size_t pos = npos) const noexcept)
 			{
 				if (length_)
 				{
@@ -168,7 +168,7 @@ namespace crunch
 				return npos;
 			}
 
-			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::ptrdiff_t compare(const stringView &str)) const noexcept
+			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::ptrdiff_t compare(const stringView &str) const noexcept)
 			{
 				if (size() == str.size())
 					return compare_(data(), str.data(), size());
@@ -176,7 +176,7 @@ namespace crunch
 			}
 
 			CRUNCH_NO_DISCARD(CRUNCH_CXX14_CONSTEXPR std::ptrdiff_t compare(const std::size_t pos,
-				const std::size_t n, const stringView &str)) const { return substr(pos, n).compare(str); }
+				const std::size_t n, const stringView &str) const) { return substr(pos, n).compare(str); }
 
 			CRUNCH_CXX14_CONSTEXPR void swap(stringView &other) noexcept
 			{
