@@ -12,8 +12,8 @@ extern "C"
 
 // Implemented based on https://github.com/boostorg/random/issues/57
 
-typedef struct ranlux32_t ranlux32_t;
-typedef struct ranlux64_t ranlux64_t;
+typedef struct ranlux32_t ranlux32_t; // NOLINT(modernize-use-using)
+typedef struct ranlux64_t ranlux64_t; // NOLINT(modernize-use-using)
 
 // Seed value readers
 uint32_t randomSeed32();

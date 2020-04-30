@@ -317,7 +317,7 @@ private:
 		assertGreaterThan(puts("Print to console test"), -1);
 		assertNull(startLogging(nullptr));
 		assertNull(startLogging(""));
-		auto *const logFile = startLogging(fileName.data());
+		auto *const logFile{startLogging(fileName.data())};
 		assertNotNull(logFile);
 		// Checks that trying to begin logging while already logging causes the framework to ignore the second request
 		assertNull(startLogging(fileName.data()));
@@ -326,7 +326,7 @@ private:
 		stopLogging(logFile);
 		stopLogging(logFile); // code coverage stuff.. this should be harmless.
 #ifndef _WINDOWS
-		auto *const file = fopen(fileName.data(), "r"); // NOLINT(cppcoreguidelines-owning-memory)
+		auto *const file{fopen(fileName.data(), "r")}; // NOLINT(cppcoreguidelines-owning-memory)
 		assertNotNull(file);
 		struct stat fileStat{};
 		assertEqual(fstat(fileno(file), &fileStat), 0);

@@ -3,20 +3,21 @@
 #define TEST_ENGINES__HXX
 
 #include <limits>
+#include <cstddef>
 
 namespace impl
 {
-	template<typename UIntType, size_t w, bool = w < static_cast<size_t>
+	template<typename UIntType, std::size_t w, bool = w < static_cast<std::size_t>
 		(std::numeric_limits<UIntType>::digits)>
 	struct shift { static const UIntType value = 0; };
 
-	template<typename UIntType, size_t w> struct shift<UIntType, w, true>
+	template<typename UIntType, std::size_t w> struct shift<UIntType, w, true>
 		{ static const UIntType value = UIntType{1U} << w; };
 }
 
 // This is a copy of std::subtract_with_carry_engine, modified to swap
 // the short and long lags in the variate computation step.
-template<typename UIntType, size_t w, size_t s, size_t r>
+template<typename UIntType, std::size_t w, std::size_t s, std::size_t r>
 class subtract_with_borrow_engine
 {
 	static_assert(std::is_unsigned<UIntType>::value,
@@ -30,9 +31,9 @@ public:
 	using result_type = UIntType;
 
 	// parameter values
-	static constexpr size_t word_size = w;
-	static constexpr size_t short_lag = s;
-	static constexpr size_t long_lag = r;
+	static constexpr std::size_t word_size = w;
+	static constexpr std::size_t short_lag = s;
+	static constexpr std::size_t long_lag = r;
 	static constexpr result_type default_seed = 19780503u;
 
 	subtract_with_borrow_engine() : subtract_with_borrow_engine{default_seed} {}
@@ -43,13 +44,13 @@ public:
 		std::linear_congruential_engine<result_type, 40014u, 0u, 2147483563u>
 			lcg{value == 0u ? default_seed : value};
 
-		const size_t n = (w + 31) / 32;
+		const std::size_t n = (w + 31) / 32;
 
-		for (size_t i = 0; i < long_lag; ++i)
+		for (std::size_t i = 0; i < long_lag; ++i)
 		{
 			UIntType sum = 0u;
 			UIntType factor = 1u;
-			for (size_t __j = 0; __j < n; ++__j)
+			for (std::size_t j = 0; j < n; ++j)
 			{
 				sum += (lcg() & 0xFFFFFFFFU) * factor;
 				factor *= impl::shift<UIntType, 32>::value;
@@ -100,7 +101,7 @@ private:
 	/// The state of the generator.  This is a ring buffer.
 	UIntType x[long_lag];
 	UIntType carry;		///< The carry
-	size_t p;			///< Current index of x(i - r).
+	std::size_t p;			///< Current index of x(i - r).
 };
 
 #endif /*TEST_ENGINES__HXX*/
