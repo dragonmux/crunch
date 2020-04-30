@@ -57,14 +57,10 @@ namespace crunch
 	CRUNCHpp_API const parsedArg_t *findArg(const parsedArgs_t &args_, const internal::stringView &value,
 		const parsedArg_t *defaultValue);
 	CRUNCHpp_API const arg_t *findArgInArgs(const internal::stringView &value);
-	inline const arg_t *findArgInArgs(const std::unique_ptr<const char []> &value)
-		{ return findArgInArgs(internal::stringView{value.get(), std::strlen(value.get())}); }
-	inline const arg_t *findArgInArgs(const std::string &value)
-		{ return findArgInArgs(internal::stringView{value.data(), value.length()}); }
 
 	CRUNCHpp_API bool checkAlreadyFound(const parsedArgs_t &parsedArgs, const parsedArg_t &toCheck) noexcept;
 	CRUNCHpp_API uint32_t checkParams(const uint32_t argc, const char *const *const argv,
 		const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
-}
+} // namespace crunch
 
 #endif /*ARGS_PARSER__H*/
