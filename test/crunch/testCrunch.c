@@ -133,7 +133,7 @@ void testAssertDoubleEqual()
 	tryShouldFail(testAssertDoubleEqual1);
 }
 
-#define DELTA(result, expected) (result >= ((expected) - DBL_EPSILON) && (result) <= ((expected) + DBL_EPSILON))
+#define DELTA(result, expected) ((result) >= ((expected) - DBL_EPSILON) && (result) <= ((expected) + DBL_EPSILON))
 
 void testAssertDoubleNotEqual1() { assertDoubleNotEqual(0.0, 0.0); }
 void testAssertDoubleNotEqual2() { assertDoubleNotEqual(dblA, dblA); }

@@ -165,8 +165,7 @@ uint8_t getTests()
 
 uint8_t tryRegistration(void *testSuite)
 {
-	registerFn registerTests;
-	registerTests = (registerFn)dlsym(testSuite, "registerTests");
+	const registerFn registerTests = (registerFn)dlsym(testSuite, "registerTests");
 	if (registerTests == NULL)
 	{
 		dlclose(testSuite);
@@ -231,7 +230,7 @@ int runTests()
 		while (currTest->testFunc)
 		{
 			int retVal = THREAD_ABORT;
-			thrd_t testThread;
+			thrd_t testThread = THRD_INIT;
 			thrd_create(&testThread, testRunner, currTest);
 			thrd_join(testThread, &retVal);
 			allocCount = -1;

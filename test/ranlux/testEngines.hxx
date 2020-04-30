@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <random>
+#include <array>
 
 namespace impl
 {
@@ -24,8 +25,7 @@ class subtract_with_borrow_engine
 {
 	static_assert(std::is_unsigned<UIntType>::value,
 		"result_type must be an unsigned integral type");
-	static_assert(0u < s && s < r,
-		"0 < s < r");
+	static_assert(0U < s && s < r, "0 < s < r");
 	static_assert(w == std::numeric_limits<UIntType>::digits,
 		"template argument substituting w out of bounds");
 
@@ -45,7 +45,7 @@ public:
 	void seed(UIntType value = defaultSeed)
 	{
 		std::linear_congruential_engine<UIntType, 40014U, 0U, 2147483563U>
-			lcg{value == 0u ? defaultSeed : value};
+			lcg{value == 0U ? defaultSeed : value};
 
 		for (std::size_t i = 0; i < longLag; ++i)
 		{
@@ -100,9 +100,9 @@ public:
 
 private:
 	/// The state of the generator.  This is a ring buffer.
-	UIntType x[longLag];
-	UIntType carry;		///< The carry
-	std::size_t p;			///< Current index of x(i - r).
+	std::array<UIntType, longLag> x{};
+	UIntType carry{}; ///< The carry
+	std::size_t p{}; ///< Current index of x(i - r).
 };
 
 #endif /*TEST_ENGINES__HXX*/

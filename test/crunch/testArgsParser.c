@@ -25,7 +25,7 @@ void testNull()
 void testEmpty()
 {
 	const char *const argv[2] = {"test", "--dummy"};
-	const arg_t args[1] = { {nullptr, 0, 0, 0} };
+	const arg_t args[1] = {{nullptr, 0, 0, 0}};
 
 	registerArgs(args);
 	constParsedArgs_t parsedArgs = parseArguments(2, argv);

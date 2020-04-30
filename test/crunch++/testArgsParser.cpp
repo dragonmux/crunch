@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <substrate/utility>
 #include <crunch++.h>
-#include "argsParser.hxx"
-#include "stringFuncs.hxx"
+#include <argsParser.hxx>
+#include <stringFuncs.hxx>
 
 using namespace crunch;
 using rawStrPtr_t = const char *;
@@ -30,7 +30,7 @@ private:
 		constexpr auto args{substrate::make_array<arg_t>({{{}, 0, 0, 0}})};
 
 		registerArgs(args.data());
-		parsedArgs_t parsedArgs = parseArguments(2, argv.data());
+		parsedArgs_t parsedArgs{parseArguments(2, argv.data())};
 		assertFalse(parsedArgs.empty());
 		assertEqual(parsedArgs.size(), 1);
 		assertFalse(parsedArgs[0].value.empty());
@@ -55,7 +55,7 @@ private:
 			{{}, 0, 0, 0}
 		})};
 
-		parsedArgs_t parsedArgs;
+		parsedArgs_t parsedArgs{};
 		registerArgs(args_1.data());
 
 		parsedArgs = parseArguments(2, argv_1.data());
@@ -93,7 +93,7 @@ private:
 
 		registerArgs(args.data());
 		assertFalse(parsedArgs.empty());
-		parsedArg_t &parsedArg = parsedArgs[0];
+		parsedArg_t &parsedArg{parsedArgs[0]};
 		parsedArg.value = "--arg"_sv;
 		assertTrue(checkAlreadyFound(parsedArgs, parsedArg));
 

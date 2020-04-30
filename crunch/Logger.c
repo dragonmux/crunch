@@ -16,11 +16,10 @@
 #include <stdio.h>
 
 #ifndef _MSC_VER
-#define COL(val) val - 8
+#define COL(val) ((val) - 8)
 #else
-#define COL(val) (uint16_t)(val - 9)
+#define COL(val) (uint16_t)((val) - 9)
 #endif
-#define WCOL(val) val - 2
 
 #ifdef _MSC_VER
 	#define TTY	"CON"
@@ -61,10 +60,9 @@ size_t vaTestPrintf(const char *format, va_list args)
 
 size_t testPrintf(const char *format, ...)
 {
-	size_t ret;
 	va_list args;
 	va_start(args, format);
-	ret = vaTestPrintf(format, args);
+	const size_t ret = vaTestPrintf(format, args);
 	va_end(args);
 	return ret;
 }
