@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: LGPL-3.0-or-later
 from argparse import ArgumentParser
 from subprocess import run, PIPE
 from sys import exit
 from os import unlink
 
-parser = ArgumentParser(description = 'Light-weight wrapper around crunchMake to ' +
-	'assert the output matches expectation')
+parser = ArgumentParser(
+	description = 'Light-weight wrapper around crunchMake to assert the output matches expectation',
+	allow_abbrev = False
+)
 parser.add_argument('-c', required = True, type = str, metavar = 'crunchMake',
 	help = 'Path to crunchMake to use')
 parser.add_argument('-q', action = 'store_true', help = 'Use quiet mode?')
