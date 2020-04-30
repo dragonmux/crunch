@@ -1,0 +1,30 @@
+# Maintainer: Rachel Mant <dx-mon@users.sourceforge.net>
+
+pkgname=crunch
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="crunch your code. Crunch is a unit testing framework written for C and C++."
+arch=('x86_64' 'i386' 'aarch64')
+license=('LGPL3')
+url="https://github.com/DX-MON/crunch"
+depends=()
+makedepends=('python' 'ninja' 'meson')
+provides=('crunch++')
+source=("https://github.com/DX-MON/crunch/releases/v${pkgver}/${pkgname}-${pkgver}.tar.xz"{,.asc})
+sha256sums=('7a672d070d7c0a0ca4b328c9efc4f286ea3cdb23c82e8b4d860d77726a8072a1' 'SKIP')
+validpgpkeys=(
+	'5E30DFF73626CA96F83DDF5E0137BA904EBDB4CD' # "Rachel Mant <dx-mon@users.sourceforge.net>"
+)
+
+build()
+{
+	cd ${pkgname}-${pkgver}
+	meson build --prefix=/usr
+	ninja -C build
+}
+
+package()
+{
+	cd ${pkgname}-${pkgver}
+	DESTDIR="${pkgdir}" ninja -C build install
+}
