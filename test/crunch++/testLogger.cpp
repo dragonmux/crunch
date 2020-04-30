@@ -6,14 +6,16 @@
 #include <io.h>
 #endif
 #include <fcntl.h>
-#include <stdio.h>
+#include <cstdio>
 #include "logger.hxx"
 #include "core.hxx"
 
+using crunch::literals::operator ""_sv;
+
 #ifndef _WINDOWS
-#define DEV_NULL "/dev/null"
+constexpr static auto devNull{"/dev/null"_sv};
 #else
-#define DEV_NULL "NUL"
+constexpr static auto devNull{"NUL"_sv};
 #define STDOUT_FILENO fileno(stdout)
 #define O_CLOEXEC O_BINARY
 #endif
@@ -21,7 +23,8 @@
 class loggerTests final : public testsuite
 {
 private:
-	int nullFD = -1;
+	// NOLINTNEXTLINE(cppcoreguidelines-owning-memory,hicpp-signed-bitwise)
+	int nullFD{open(devNull.data(), O_RDONLY | O_CLOEXEC)};
 	int stdoutFD = -1;
 	testLog ourLogger;
 
@@ -95,15 +98,19 @@ private:
 	}
 
 public:
-	loggerTests() noexcept : nullFD{open(DEV_NULL, O_RDONLY | O_CLOEXEC)}, stdoutFD{dup(STDOUT_FILENO)},
+	loggerTests() noexcept : stdoutFD{dup(STDOUT_FILENO)},
 		ourLogger{nullptr, stdoutFD != -1 ? fdopen(stdoutFD, "w") : nullptr, nullptr, 0} { }
+	loggerTests(const loggerTests &) = delete;
+	loggerTests(loggerTests &&) = delete;
+	loggerTests &operator =(const loggerTests &) = delete;
+	loggerTests &operator =(loggerTests &&) = delete;
 
-	~loggerTests() noexcept
+	~loggerTests() noexcept final
 	{
 		close(nullFD);
 		close(stdoutFD);
 		if (ourLogger.stdout_)
-			fclose(ourLogger.stdout_);
+			fclose(ourLogger.stdout_); // NOLINT(cppcoreguidelines-owning-memory)
 	}
 
 	void registerTests() final
