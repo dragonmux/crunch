@@ -326,13 +326,24 @@ namespace crunch
 			const char *testName{nullptr};
 
 		public:
-			cxxTest() noexcept { }
+			// clang 5 has a bad time with this if we don't define it this way.
+			cxxTest() noexcept { } // NOLINT(modernize-use-equals-default
 			CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
 			cxxTest(const cxxTest &) = default;
+			cxxTest(cxxTest &&) = default;
+			~cxxTest() noexcept = default;
 			cxxTest &operator =(const cxxTest &) = default;
+			cxxTest &operator =(cxxTest &&) = default;
 
 			const char *name() const noexcept { return testName; }
 			const std::function<void ()> &function() const noexcept { return testFunc; }
+
+			void swap(cxxTest &other) noexcept
+			{
+				auto tmp{*this};
+				*this = other;
+				other = tmp;
+			}
 		};
 
 		CRUNCHpp_API void registerTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
