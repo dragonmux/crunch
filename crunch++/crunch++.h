@@ -310,7 +310,7 @@ private:
 	int value;
 
 public:
-	threadExit_t(int exitValue) noexcept : value(exitValue) { }
+	threadExit_t(int exitValue) noexcept : std::exception{}, value{exitValue} { }
 	CRUNCH_VIS operator int() const noexcept { return value; }
 	const char *what() const noexcept final { return "Test assertion failure, thread exiting"; }
 };
