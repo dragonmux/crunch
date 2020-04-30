@@ -4,6 +4,13 @@
 #include <errno.h>
 #include <stdint.h>
 
+#ifdef PTHREAD_CREATE_JOINABLE
+#undef PTHREAD_CREATE_JOINABLE
+#endif
+#ifdef PTHREAD_SCOPE_PROCESS
+#undef PTHREAD_SCOPE_PROCESS
+#endif
+
 typedef void *(*pthread_start_t)(void *);
 
 int thrd_err_map(const int result)
@@ -27,7 +34,7 @@ int thrd_create(thrd_t *thr, thrd_start_t func, void *arg)
 {
 	if (!thr)
 		return thrd_error;
-	pthread_attr_t threadAttrs;
+	pthread_attr_t threadAttrs = {};
 	pthread_attr_init(&threadAttrs);
 	pthread_attr_setdetachstate(&threadAttrs, PTHREAD_CREATE_JOINABLE);
 	pthread_attr_setscope(&threadAttrs, PTHREAD_SCOPE_PROCESS);

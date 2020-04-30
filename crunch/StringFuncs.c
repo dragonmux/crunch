@@ -8,21 +8,19 @@
 
 const char *boolToString(uint8_t value)
 {
-	if (value == FALSE)
-		return "false";
-	else
+	if (value)
 		return "true";
+	else
+		return "false";
 }
 
 char *formatString(const char *format, ...)
 {
-	int len;
-	char *ret;
 	va_list args;
 	va_start(args, format);
-	len = vsnprintf(NULL, 0, format, args);
+	const int len = vsnprintf(NULL, 0, format, args);
 	va_end(args);
-	ret = (char *)malloc(len + 1);
+	char *const ret = (char *)malloc(len + 1);
 	if (!ret)
 		return NULL;
 	va_start(args, format);

@@ -50,7 +50,7 @@ void teardown()
 
 void *genPtr()
 {
-	uintptr_t ptr;
+	uintptr_t ptr = 0;
 	if (sizeof(void *) <= 32)
 		ptr = genRanlux32(ranlux32);
 	else
@@ -65,7 +65,7 @@ int goatThread(void *test)
 void tryShouldFail(const failFn_t test)
 {
 	int retVal = 0;
-	thrd_t testThread;
+	thrd_t testThread = THRD_INIT;
 
 	thrd_create(&testThread, goatThread, test);
 	thrd_join(testThread, &retVal);
@@ -133,7 +133,7 @@ void testAssertDoubleEqual()
 	tryShouldFail(testAssertDoubleEqual1);
 }
 
-#define DELTA(result, expected) (result >= (expected - DBL_EPSILON) && result <= (expected + DBL_EPSILON))
+#define DELTA(result, expected) (result >= ((expected) - DBL_EPSILON) && (result) <= ((expected) + DBL_EPSILON))
 
 void testAssertDoubleNotEqual1() { assertDoubleNotEqual(0.0, 0.0); }
 void testAssertDoubleNotEqual2() { assertDoubleNotEqual(dblA, dblA); }

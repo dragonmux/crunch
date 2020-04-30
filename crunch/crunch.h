@@ -62,7 +62,7 @@ CRUNCH_EXPORT void registerTests() \
 	{ name, #name },
 
 #define END_REGISTER_TESTS() \
-		{ NULL } \
+		{ NULL, NULL } \
 	}; \
 	tests = (test *)__tests; \
 }
