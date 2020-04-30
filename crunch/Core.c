@@ -100,7 +100,7 @@ void assertPtrNotEqual(void *result, void *expected)
 	}
 }
 
-#define DELTA(result, expected) (result >= (expected - DBL_EPSILON) && result <= (expected + DBL_EPSILON))
+#define DELTA(result, expected) ((result) >= ((expected) - DBL_EPSILON) && (result) <= ((expected) + DBL_EPSILON))
 
 void assertDoubleEqual(double result, double expected)
 {

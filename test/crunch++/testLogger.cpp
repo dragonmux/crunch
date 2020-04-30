@@ -7,8 +7,8 @@
 #endif
 #include <fcntl.h>
 #include <cstdio>
-#include "logger.hxx"
-#include "core.hxx"
+#include <logger.hxx>
+#include <core.hxx>
 
 using crunch::literals::operator ""_sv;
 
