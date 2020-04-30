@@ -212,7 +212,7 @@ namespace crunch
 	{
 		std::string ret{};
 		for (const auto &value : libDirs)
-			ret += "-libpath:" + value.substr(2) + ' ';
+			ret += "-libpath:" + value.substr(2).toString() + ' ';
 		return ret;
 	}
 #endif
@@ -244,26 +244,6 @@ namespace crunch
 	{
 		const auto *const standard{findArg(parsedArgs, "-std="_sv, nullptr)};
 		cxxCompiler += standardVersion(standard).toString() + ' ';
-	}
-#else
-	int32_t compileMSVC(const std::string &test)
-	{
-		const bool mode = isCXX(test);
-		auto soFile = computeSOName(test);
-		auto objFile = computeObjName(test);
-		auto compileString = format("cl %s " COMPILE_OPTS " " LINK_OPTS ""s, test,
-			inclDirFlags, objs, soFile, objFile, libDirFlags, mode ? "++" : "", libs);
-		if (!silent)
-		{
-			if (quiet)
-			{
-				auto displayString = format(" CCLD  %s => %s"s, test, soFile);
-				puts(displayString.get());
-			}
-			else
-				puts(compileString.get());
-		}
-		return system(compileString.get());
 	}
 #endif
 
@@ -313,11 +293,7 @@ namespace crunch
 		{
 			if (access(test.data(), R_OK) == 0 && validExt(test))
 			{
-	#ifndef _MSC_VER
 				ret = compileTest(test.toString());
-	#else
-				ret = compileMSVC(test.toString());
-	#endif
 				if (ret)
 					break;
 			}
