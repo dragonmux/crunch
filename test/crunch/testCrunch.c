@@ -318,7 +318,7 @@ void testAbort()
 	tryShouldFail(testAbort1);
 }
 
-#ifndef NO_ALLOC_TEST
+#if !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 void testAllocs()
 {
 	allocCount = 0;
@@ -351,7 +351,7 @@ BEGIN_REGISTER_TESTS()
 	TEST(testLogging)
 	TEST(testFail)
 	TEST(testAbort)
-#ifndef NO_ALLOC_TEST
+#if !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 	TEST(testAllocs)
 #endif
 	TEST(teardown)

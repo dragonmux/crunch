@@ -153,7 +153,7 @@ void testArgCounting()
 	freeParsedArgs(parsedArgs);
 }
 
-#ifndef NO_ALLOC_TEST
+#if !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 void testAllocs()
 {
 	const arg_t args[3] =
@@ -201,7 +201,7 @@ BEGIN_REGISTER_TESTS()
 	TEST(testIncomplete)
 	TEST(testInvalid)
 	TEST(testArgCounting)
-#ifndef NO_ALLOC_TEST
+#if !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 	TEST(testAllocs)
 #endif
 END_REGISTER_TESTS()

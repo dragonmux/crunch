@@ -62,7 +62,7 @@ typedef void (__cdecl *registerFn)();
 void noMemory()
 	{ puts("**** crunch Fatal ****\nCould not allocate enough memory!\n**** crunch Fatal ****"); }
 
-#ifndef _WINDOWS
+#if !defined(_WINDOWS) && !defined(CRUNCH_ASAN)
 typedef void *(*malloc_t)(size_t);
 malloc_t malloc_ = NULL;
 

@@ -21,7 +21,7 @@ foreach test : libCrunchTests
 
 	custom_target(
 		'crunch-' + test,
-		command: command + commandExtra,
+		command: command + crunchSanitizer + commandExtra,
 		input: inputs,
 		output: test + testExt,
 		depends: libCrunch,
