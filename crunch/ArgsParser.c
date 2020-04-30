@@ -92,7 +92,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 		if (!argRet)
 			return freeParsedArgs(ret);
 		memset(argRet, 0, sizeof(parsedArg_t));
-		while (argument->value != NULL)
+		while (argument->value)
 		{
 			found = strcmp(argument->value, argv[i]) == 0 || ((argument->flags & ARG_INCOMPLETE) &&
 				strncmp(argument->value, argv[i], strlen(argument->value)) == 0);
@@ -134,7 +134,8 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 				argRet->flags = argument->flags;
 				break;
 			}
-			else if (!(argument->flags & ARG_INCOMPLETE) && strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
+			else if (!(argument->flags & ARG_INCOMPLETE) &&
+				strncmp(argument->value, argv[i], strlen(argument->value)) == 0)
 			{
 				printf("Badly formatted argument (%s)\n", argv[i]);
 				freeParsedArg(argRet);
