@@ -135,6 +135,7 @@ namespace crunch
 			constexpr explicit stringView(const char *const data, const std::size_t length) noexcept :
 				length_{length}, data_{data} { }
 			stringView(const std::string &str) noexcept : length_{str.length()}, data_{str.data()} { }
+			~stringView() noexcept = default;
 			stringView &operator =(const stringView &) noexcept = default;
 			stringView &operator =(stringView &&) noexcept = default;
 			CRUNCH_NO_DISCARD(constexpr const char *data() const noexcept) { return data_; }
