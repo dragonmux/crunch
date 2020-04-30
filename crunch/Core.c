@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
+#include <stdint.h>
 #include <inttypes.h>
 #include <string.h>
 #include <fenv.h>

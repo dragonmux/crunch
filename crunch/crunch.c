@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "threading/threadShim.h"
 #include <stdio.h>
+#include <stdint.h>
 #include <inttypes.h>
 #include "Core.h"
 #include "Logger.h"
