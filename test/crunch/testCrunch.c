@@ -65,7 +65,7 @@ int goatThread(void *test)
 void tryShouldFail(const failFn_t test)
 {
 	int retVal = 0;
-	thrd_t testThread = THRD_INIT;
+	thrd_t testThread; // NOLINT
 
 	thrd_create(&testThread, goatThread, test);
 	thrd_join(testThread, &retVal);

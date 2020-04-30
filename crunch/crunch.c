@@ -230,7 +230,7 @@ int runTests()
 		while (currTest->testFunc)
 		{
 			int retVal = THREAD_ABORT;
-			thrd_t testThread = THRD_INIT;
+			thrd_t testThread; // NOLINT
 			thrd_create(&testThread, testRunner, currTest);
 			thrd_join(testThread, &retVal);
 			allocCount = -1;

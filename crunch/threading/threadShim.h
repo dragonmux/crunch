@@ -12,11 +12,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 typedef HANDLE thrd_t;
-#define THRD_INIT NULL
 #else
 #include <pthread.h>
 typedef pthread_t thrd_t;
-#define THRD_INIT 0
 #endif
 #include <crunch.h>
 
