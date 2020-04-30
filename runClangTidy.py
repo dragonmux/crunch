@@ -29,10 +29,14 @@ def gatherFiles():
 		for file in fileGlob:
 			yield file
 
+extraArgs = [
+	'--extra-arg=-UUSE_C11_THREADING'
+]
+
 futures = []
 returncode = 0
 with ThreadPoolExecutor() as pool:
 	for file in gatherFiles():
-		futures.append(pool.submit(run, ['clang-tidy', '-p', args.buildPath, file]))
+		futures.append(pool.submit(run, ['clang-tidy'] + extraArgs + ['-p', args.buildPath, file]))
 	returncode = max((future.result().returncode for future in futures))
 exit(returncode)
