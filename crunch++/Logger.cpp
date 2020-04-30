@@ -32,21 +32,20 @@ int16_t getColumns()
 #endif
 }
 
-size_t vaTestPrintf(const char *format, va_list args)
+std::size_t vaTestPrintf(const char *format, va_list args)
 {
-	const auto ret = vfprintf(logger ? logger->stdout_ : stdout, format, args);
+	const auto ret{vfprintf(logger ? logger->stdout_ : stdout, format, args)};
 	fflush(logger ? logger->stdout_ : stdout);
 	return ret;
 }
 
-size_t testPrintf(const char *format, ...)
+std::size_t testPrintf(const char *format, ...) // NOLINT
 {
-	size_t ret;
 	va_list args;
 	va_start(args, format);
-	ret = vaTestPrintf(format, args);
+	const auto result{vaTestPrintf(format, args)};
 	va_end(args);
-	return ret;
+	return result;
 }
 
 void printOk() { testPrintf(" [  OK  ]\n"); }
@@ -185,15 +184,16 @@ void echoAborted()
 }
 #endif
 
-void logResult(resultType type, const char *message, ...)
+void logResult(resultType type, const char *message, ...) // NOLINT
 {
-	va_list args;
-
 	if (isTTY)
 		normal();
+
+	va_list args;
 	va_start(args, message);
 	vaTestPrintf(message, args);
 	va_end(args);
+
 	switch (type)
 	{
 		case RESULT_SUCCESS:
