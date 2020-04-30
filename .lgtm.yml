@@ -8,5 +8,4 @@ extraction:
         - meson build
     index:
       build_command:
-        - cd build
-        - ninja
+        - ninja -C build
