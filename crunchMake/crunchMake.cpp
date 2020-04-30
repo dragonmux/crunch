@@ -27,8 +27,8 @@ namespace crunch
 	using internal::stringView;
 
 	parsedArgs_t parsedArgs;
-	std::vector<std::string> inclDirs, libDirs;
-	std::vector<std::string> linkLibs, linkObjs;
+	std::vector<internal::stringView> inclDirs, libDirs;
+	std::vector<internal::stringView> linkLibs, linkObjs;
 	std::vector<std::string> linkArgs;
 	std::vector<internal::stringView> tests;
 	uint32_t numLinkArgs = 0;
@@ -112,13 +112,13 @@ namespace crunch
 		return !tests.empty();
 	}
 
-	inline void getLinkFunc(std::vector<std::string> &var, const char *find)
+	inline void getLinkFunc(std::vector<internal::stringView> &var, const char *find)
 	{
 		for (const auto &parsedArg : parsedArgs)
 		{
 			const auto &value = parsedArg.value;
 			if (strncmp(value.data(), find, 2) == 0)
-				var.emplace_back(value.toString());
+				var.emplace_back(value);
 		}
 	}
 
@@ -136,7 +136,7 @@ namespace crunch
 		{
 			const auto &value = parsedArg.value;
 			if (!findArgInArgs(value) && isObj(value))
-				linkObjs.emplace_back(value.toString());
+				linkObjs.emplace_back(value);
 		}
 	}
 
@@ -168,9 +168,6 @@ namespace crunch
 #endif
 	}
 
-	std::string toO(const std::unique_ptr<const char []> &file) // NOLINT
-		{ return toO(file.get()); }
-
 	std::string computeObjName(const std::string &file)
 	{
 		const auto *const output{findArg(parsedArgs, "-o"_sv, nullptr)};
@@ -192,6 +189,14 @@ namespace crunch
 		if (output)
 			return output->params[0];
 		return toSO(file);
+	}
+
+	inline std::string argsToString(const std::vector<internal::stringView> &var)
+	{
+		return std::accumulate(var.begin(), var.end(), std::string{},
+			[](const std::string &result, const internal::stringView &value)
+				{ return result + value.toString() + ' '; }
+		);
 	}
 
 	inline std::string argsToString(const std::vector<std::string> &var)
