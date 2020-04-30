@@ -8,26 +8,26 @@
 
 const char *boolToString(bool value)
 {
-	if (value == false)
-		return "false";
-	else
+	if (value)
 		return "true";
+	else
+		return "false";
 }
 
-std::unique_ptr<char []> vaFormatString(const char *format, va_list args) noexcept
+std::unique_ptr<char []> vaFormatString(const char *format, va_list args) noexcept // NOLINT
 {
 	va_list lenArgs;
 	va_copy(lenArgs, args);
-	const size_t len = vsnprintf(NULL, 0, format, lenArgs) + 1;
+	const size_t len = vsnprintf(nullptr, 0, format, lenArgs) + 1;
 	va_end(lenArgs);
-	auto ret = substrate::make_unique<char []>(len);
+	auto ret{substrate::make_unique_nothrow<char []>(len)};
 	if (!ret)
 		return nullptr;
 	vsprintf(ret.get(), format, args);
 	return ret;
 }
 
-std::unique_ptr<char []> formatString(const char *format, ...) noexcept
+std::unique_ptr<char []> formatString(const char *format, ...) noexcept // NOLINT
 {
 	va_list args;
 	va_start(args, format);
