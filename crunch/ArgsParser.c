@@ -58,8 +58,8 @@ void freeParsedArg(const parsedArg_t *parsedArg)
 			free((void *)parsedArg->params);
 		}
 		free((void *)parsedArg->value);
-		free((void *)parsedArg);
 	}
+	free((void *)parsedArg);
 }
 
 void *freeParsedArgs(constParsedArgs_t parsedArgs)
