@@ -31,42 +31,41 @@ public:
 	using result_type = UIntType;
 
 	// parameter values
-	static constexpr std::size_t word_size = w;
-	static constexpr std::size_t short_lag = s;
-	static constexpr std::size_t long_lag = r;
-	static constexpr result_type default_seed = 19780503u;
+	constexpr static std::size_t wordSize{w};
+	constexpr static std::size_t shortLag{s};
+	constexpr static std::size_t longLag{r};
+	constexpr static result_type defaultSeed{19780503U};
+	constexpr static std::size_t wordLongCount{(wordSize + 31) / 32};
 
-	subtract_with_borrow_engine() : subtract_with_borrow_engine{default_seed} {}
+	subtract_with_borrow_engine() : subtract_with_borrow_engine{defaultSeed} {}
 	explicit subtract_with_borrow_engine(result_type value) { seed(value); }
 
-	void seed(result_type value = default_seed)
+	void seed(result_type value = defaultSeed)
 	{
-		std::linear_congruential_engine<result_type, 40014u, 0u, 2147483563u>
-			lcg{value == 0u ? default_seed : value};
+		std::linear_congruential_engine<result_type, 40014U, 0U, 2147483563U>
+			lcg{value == 0u ? defaultSeed : value};
 
-		const std::size_t n = (w + 31) / 32;
-
-		for (std::size_t i = 0; i < long_lag; ++i)
+		for (std::size_t i = 0; i < longLag; ++i)
 		{
-			UIntType sum = 0u;
-			UIntType factor = 1u;
-			for (std::size_t j = 0; j < n; ++j)
+			UIntType sum{0U};
+			UIntType factor{1U};
+			for (std::size_t j = 0; j < wordLongCount; ++j)
 			{
 				sum += (lcg() & 0xFFFFFFFFU) * factor;
 				factor *= impl::shift<UIntType, 32>::value;
 			}
 			x[i] = sum;
 		}
-		carry = (x[long_lag - 1] == 0) ? 1 : 0;
+		carry = (x[longLag - 1] == 0) ? 1 : 0;
 		p = 0;
 	}
 
 	result_type operator()()
 	{
 		// Derive short lag index from current index.
-		long ps = p - short_lag;
+		long ps = p - shortLag;
 		if (ps < 0)
-			ps += long_lag;
+			ps += longLag;
 
 		// Calculate new x(i) without overflow or division.
 		// NB: Thanks to the requirements for _UIntType, x[p] + carry
@@ -85,21 +84,21 @@ public:
 		x[p] = xi;
 
 		// Adjust current index to loop around in ring buffer.
-		if (++p >= long_lag)
+		if (++p >= longLag)
 			p = 0;
 
 		return xi;
 	}
 
-	void discard(unsigned long long __z)
+	void discard(uint64_t amount)
 	{
-		for (; __z != 0ULL; --__z)
+		for (; amount; --amount)
 			(*this)();
 	}
 
 private:
 	/// The state of the generator.  This is a ring buffer.
-	UIntType x[long_lag];
+	UIntType x[longLag];
 	UIntType carry;		///< The carry
 	std::size_t p;			///< Current index of x(i - r).
 };
