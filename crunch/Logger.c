@@ -202,7 +202,7 @@ void logResult(resultType type, const char *message, ...)
 
 testLog *startLogging(const char *fileName)
 {
-	if (logger)
+	if (logger || !fileName)
 		return NULL;
 	testLog *logger_ = malloc(sizeof(testLog));
 	if (!logger_)

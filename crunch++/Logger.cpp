@@ -212,7 +212,7 @@ void logResult(resultType type, const char *message, ...) // NOLINT
 
 testLog *startLogging(const char *fileName)
 {
-	if (logger)
+	if (logger || !fileName)
 		return nullptr;
 	auto logger_ = substrate::make_unique<testLog>();
 	logger_->file = fopen(fileName, "w"); // NOLINT(cppcoreguidelines-owning-memory)
