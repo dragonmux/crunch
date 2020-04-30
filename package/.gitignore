@@ -1,0 +1,4 @@
+*.tar.xz
+*.asc
+*.sig
+*.sha256sum
