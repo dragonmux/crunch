@@ -18,7 +18,8 @@ namespace crunch
 		const uint32_t numMaxParams{};
 		const uint8_t flags{};
 
-		constexpr arg_t() noexcept { }
+		// clang 5 has a bad time with this if we don't define it this way.
+		constexpr arg_t() noexcept { } // NOLINT(modernize-use-equals-default
 		constexpr arg_t(const internal::stringView &value_, const uint32_t minParams, const uint32_t maxParams,
 			const uint8_t flags_) : value{value_}, numMinParams{minParams}, numMaxParams{maxParams}, flags{flags_} { }
 		CRUNCH_VIS bool matches(const internal::stringView &str) const noexcept;
@@ -34,7 +35,8 @@ namespace crunch
 		uint8_t flags{0};
 		size_t minLength{0};
 
-		parsedArg_t() noexcept { }
+		// clang 5 has a bad time with this if we don't define it this way.
+		parsedArg_t() noexcept { } // NOLINT(modernize-use-equals-default
 		parsedArg_t(parsedArg_t &&arg) noexcept : parsedArg_t{} { swap(arg); }
 		void operator =(parsedArg_t &&arg) noexcept { swap(arg); }
 

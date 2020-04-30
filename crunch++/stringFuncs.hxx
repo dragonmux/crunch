@@ -7,7 +7,7 @@
 #include "crunch++.h"
 
 CRUNCHpp_API const char *boolToString(bool value);
-CRUNCHpp_API std::unique_ptr<char []> formatString(const char *format, ...) noexcept;
+CRUNCHpp_API std::unique_ptr<char []> formatString(const char *format, ...) noexcept; // NOLINT
 
 inline std::string operator ""_s(const char *string, const std::size_t length)
 	{ return std::string{string, length}; }
