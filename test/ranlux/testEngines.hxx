@@ -3,7 +3,9 @@
 #define TEST_ENGINES__HXX
 
 #include <limits>
+#include <cstdint>
 #include <cstddef>
+#include <random>
 
 namespace impl
 {
@@ -38,11 +40,11 @@ public:
 	constexpr static std::size_t wordLongCount{(wordSize + 31) / 32};
 
 	subtract_with_borrow_engine() : subtract_with_borrow_engine{defaultSeed} {}
-	explicit subtract_with_borrow_engine(result_type value) { seed(value); }
+	explicit subtract_with_borrow_engine(UIntType value) { seed(value); }
 
-	void seed(result_type value = defaultSeed)
+	void seed(UIntType value = defaultSeed)
 	{
-		std::linear_congruential_engine<result_type, 40014U, 0U, 2147483563U>
+		std::linear_congruential_engine<UIntType, 40014U, 0U, 2147483563U>
 			lcg{value == 0u ? defaultSeed : value};
 
 		for (std::size_t i = 0; i < longLag; ++i)
@@ -60,7 +62,7 @@ public:
 		p = 0;
 	}
 
-	result_type operator()()
+	UIntType operator()()
 	{
 		// Derive short lag index from current index.
 		int64_t ps = p - shortLag;

@@ -127,8 +127,8 @@ void printStats()
 
 uint8_t getTests()
 {
-	uint32_t i, j, n;
-	for (n = 0; parsedArgs[n] != NULL; n++);
+	uint32_t n = 0;
+	for (; parsedArgs[n] != NULL; n++);
 	namedTests = malloc(sizeof(constParsedArg_t) * (n + 1));
 	if (!namedTests)
 	{
@@ -136,7 +136,8 @@ uint8_t getTests()
 		return FALSE;
 	}
 
-	for (j = 0, i = 0; i < n; i++)
+	uint32_t j = 0;
+	for (uint32_t i = 0; i < n; i++)
 	{
 		if (findArgInArgs(parsedArgs[i]->value) == NULL)
 		{
@@ -177,10 +178,7 @@ uint8_t tryRegistration(void *testSuite)
 
 int runTests()
 {
-	uint32_t i;
-	test *currTest;
 	testLog *logFile = NULL;
-
 	constParsedArg_t logging = findArg(parsedArgs, "--log", NULL);
 	if (logging)
 	{
@@ -188,7 +186,7 @@ int runTests()
 		loggingTests = 1;
 	}
 
-	for (i = 0; i < numTests; i++)
+	for (uint32_t i = 0; i < numTests; i++)
 	{
 		char *testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value);
 		if (!testLib)
@@ -229,7 +227,7 @@ int runTests()
 #endif
 		testPrintf("Running test suit %s...", namedTests[i]->value);
 		newline();
-		currTest = tests;
+		test *currTest = tests;
 		while (currTest->testFunc)
 		{
 			int retVal = THREAD_ABORT;
