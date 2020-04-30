@@ -63,14 +63,14 @@ public:
 	result_type operator()()
 	{
 		// Derive short lag index from current index.
-		long ps = p - shortLag;
+		int64_t ps = p - shortLag;
 		if (ps < 0)
 			ps += longLag;
 
 		// Calculate new x(i) without overflow or division.
 		// NB: Thanks to the requirements for _UIntType, x[p] + carry
 		// cannot overflow.
-		UIntType xi;
+		UIntType xi{};
 		if (x[p] >= x[ps] + carry)
 		{
 			xi = x[p] - x[ps] - carry;
