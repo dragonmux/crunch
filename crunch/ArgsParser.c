@@ -47,7 +47,7 @@ uint32_t checkParams(const uint32_t argc, const char *const *const argv, const u
 	return n;
 }
 
-void freeParsedArg(const parsedArg_t *parsedArg)
+void freeParsedArg(parsedArg_t *parsedArg)
 {
 	if (parsedArg)
 	{
@@ -55,23 +55,26 @@ void freeParsedArg(const parsedArg_t *parsedArg)
 		{
 			for (uint32_t i = 0; i < parsedArg->paramsFound; ++i)
 				free((void *)parsedArg->params[i]);
-			free((void *)parsedArg->params);
 		}
+		free((void *)parsedArg->params);
 		free((void *)parsedArg->value);
 	}
-	free((void *)parsedArg);
+	free(parsedArg);
 }
 
-void *freeParsedArgs(constParsedArgs_t parsedArgs)
+void *freeParsedArgs_(parsedArgs_t parsedArgs)
 {
 	if (parsedArgs)
 	{
 		for (uint32_t i = 0; parsedArgs[i]; ++i)
-			freeParsedArg(parsedArgs[i]);
-		free((void *)parsedArgs);
+			freeParsedArg((parsedArg_t *)parsedArgs[i]);
 	}
+	free(parsedArgs);
 	return NULL;
 }
+
+void *freeParsedArgs(constParsedArgs_t parsedArgs)
+	{ return freeParsedArgs_((parsedArgs_t)parsedArgs); }
 
 constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const argv)
 {
@@ -90,7 +93,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 		const arg_t *argument = args;
 		parsedArg_t *argRet = malloc(sizeof(parsedArg_t));
 		if (!argRet)
-			return freeParsedArgs(ret);
+			return freeParsedArgs_(ret);
 		memset(argRet, 0, sizeof(parsedArg_t));
 		while (argument->value)
 		{
@@ -111,14 +114,17 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 				{
 					printf("Not enough parameters given for argument %s\n", argv[i]);
 					freeParsedArg(argRet);
-					return freeParsedArgs(ret);
+					return freeParsedArgs_(ret);
 				}
 				// Only allocate for the params if there are any found, otherwise let the pointer dwell as nullptr.
 				if (argRet->paramsFound)
 				{
 					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
 					if (!argRet->params)
-						return freeParsedArg(argRet), freeParsedArgs(ret);
+					{
+						freeParsedArg(argRet);
+						return freeParsedArgs_(ret);
+					}
 					memset((void *)argRet->params, 0, sizeof(char *) * argRet->paramsFound);
 					for (uint32_t j = 0; j < argRet->paramsFound; ++j)
 					{
@@ -126,7 +132,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 						if (!argRet->params[j])
 						{
 							freeParsedArg(argRet);
-							return freeParsedArgs(ret);
+							return freeParsedArgs_(ret);
 						}
 					}
 				}
@@ -139,7 +145,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 			{
 				printf("Badly formatted argument (%s)\n", argv[i]);
 				freeParsedArg(argRet);
-				return freeParsedArgs(ret);
+				return freeParsedArgs_(ret);
 			}
 			++argument;
 		}
@@ -151,7 +157,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 			if (!argRet->value)
 			{
 				freeParsedArg(argRet);
-				return freeParsedArgs(ret);
+				return freeParsedArgs_(ret);
 			}
 			argRet->paramsFound = 0;
 			argRet->flags = argument->flags;
@@ -161,7 +167,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 	/* Shrink as appropriate */
 	parsedArgs_t result = malloc(sizeof(constParsedArg_t) * (n + 1));
 	if (!result)
-		return freeParsedArgs(ret);
+		return freeParsedArgs_(ret);
 	memcpy((void *)result, ret, sizeof(constParsedArg_t) * n);
 	free((void *)ret);
 	result[n] = NULL;
