@@ -1,6 +1,7 @@
 extraction:
   cpp:
     after_prepare:
+      - PATH="$HOME/.local/bin:$PATH"
       - pip3 install --upgrade setuptools wheel
       - pip3 install --upgrade meson
     configure:
