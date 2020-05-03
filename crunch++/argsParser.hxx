@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef ARGS_PARSER__H
-#define ARGS_PARSER__H
+#ifndef ARGS_PARSER__HXX
+#define ARGS_PARSER__HXX
 
 #include <cstdint>
 #include <memory>
@@ -67,4 +67,4 @@ namespace crunch
 		const uint32_t argPos, const arg_t &argument, const arg_t *const args) noexcept;
 } // namespace crunch
 
-#endif /*ARGS_PARSER__H*/
+#endif /*ARGS_PARSER__HXX*/

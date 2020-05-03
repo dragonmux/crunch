@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef CORE__H
-#define CORE__H
+#ifndef CORE__HXX
+#define CORE__HXX
 
 #include <utility>
 #include "crunch++.h"
@@ -36,4 +36,4 @@ CRUNCHpp_API uint32_t passes, failures;
 CRUNCHpp_API bool loggingTests;
 CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
 
-#endif /*CORE__H*/
+#endif /*CORE__HXX*/

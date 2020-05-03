@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef LOGGER__H
-#define LOGGER__H
+#ifndef LOGGER__HXX
+#define LOGGER__HXX
 
 #ifdef _MSC_VER
 #define WIN32_LEAN_AND_MEAN
@@ -51,4 +51,4 @@ CRUNCHpp_API void newline();
 
 #define NEWLINE NORMAL "\n"
 
-#endif /*LOGGER__H*/
+#endif /*LOGGER__HXX*/

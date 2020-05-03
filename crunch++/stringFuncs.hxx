@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef STRINGFUNCS__H
-#define STRINGFUNCS__H
+#ifndef STRINGFUNCS__HXX
+#define STRINGFUNCS__HXX
 
 #include <memory>
 #include <string>
@@ -19,4 +19,4 @@ CRUNCHpp_API std::unique_ptr<char []> formatString(const char *format, ...) noex
 inline std::string operator ""_s(const char *string, const std::size_t length)
 	{ return std::string{string, length}; }
 
-#endif /*STRINGFUNCS__H*/
+#endif /*STRINGFUNCS__HXX*/
