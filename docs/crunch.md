@@ -159,6 +159,17 @@ When the two memory blocks have the same contents, the assertion fails and print
 * `assertFalse`
 
 Each of these takes a truth value and checks it holds the value given by the function's name.
-If the value checked evaluates to something other than the desired boolean value, the assertion fails printing a diagnostic and aborting the test case.
+If the value checked evaluates to something other than the desired boolean value, the assertion fails printing a diagnostic and aborting the test case.diagnostic and aborting the test case.
+
+### Inequality Assertions
+
+* `assertGreaterThan` - Checks that `result` is greater than `expected`
+* `assertGreaterThan64` - 64-bit variant which checks that `result` is greater than `expected`
+* `assertLessThan` - Checks that `result` is less than `expected`
+* `assertLessThan64` - 64-bit variant which checks that `result` is less than `expected`
+
+These are integer-only assertions for performing range and broad value checks, aka inequalities.
+These assertions take two parameters in order: `result` and `expected`.
+On failure, these print a diagnostic and abort the test case.
 
 ## Getting the Most Out of `crunchMake` for `crunch` Suites
