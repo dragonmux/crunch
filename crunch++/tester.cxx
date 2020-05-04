@@ -4,25 +4,37 @@
 #include "core.hxx"
 #include "logger.hxx"
 
-using namespace std;
-
-bool loggingTests = false;
-std::vector<cxxTestClass> cxxTests;
-
-void newline()
+namespace crunch
 {
-	if (isTTY)
-#ifdef _MSC_VER
+	bool loggingTests = false;
+	std::vector<cxxTestClass> cxxTests;
+
+	void newline()
 	{
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
-	}
+		if (isTTY)
+#ifdef _MSC_VER
+		{
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			testPrintf("\n");
+		}
 #else
-		testPrintf(NEWLINE);
+			testPrintf(NEWLINE);
 #endif
-	else
-		testPrintf(" ");
+		else
+			testPrintf(" ");
+	}
 }
+
+using crunch::loggingTests;
+using crunch::isTTY;
+using crunch::testPrintf;
+using crunch::newline;
+using crunch::logger;
+using crunch::logResult;
+using crunch::RESULT_SUCCESS;
+using crunch::RESULT_FAILURE;
+using crunch::failures;
+using crunch::echoAborted;
 
 int32_t testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxTest &unitTest)
 {
@@ -46,7 +58,7 @@ int32_t testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxTest &u
 	}
 	catch (...)
 	{
-		unitClass.exceptions.emplace_back(current_exception());
+		unitClass.exceptions.emplace_back(std::current_exception());
 		// Did the test switch logging on?
 		if (!loggingTests && logger)
 			// Yes, switch it back off again

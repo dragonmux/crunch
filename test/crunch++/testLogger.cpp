@@ -11,6 +11,16 @@
 #include <core.hxx>
 
 using crunch::literals::operator ""_sv;
+using crunch::logger;
+using crunch::getColumns;
+using crunch::isTTY;
+using crunch::logResult;
+using crunch::RESULT_SUCCESS;
+using crunch::RESULT_FAILURE;
+using crunch::RESULT_SKIP;
+using crunch::RESULT_ABORT;
+using crunch::passes;
+using crunch::failures;
 
 #ifndef _WINDOWS
 constexpr static auto devNull{"/dev/null"_sv};
@@ -26,7 +36,7 @@ private:
 	// NOLINTNEXTLINE(cppcoreguidelines-owning-memory,hicpp-signed-bitwise)
 	int nullFD{open(devNull.data(), O_RDONLY | O_CLOEXEC)};
 	int stdoutFD = -1;
-	testLog ourLogger;
+	crunch::testLog ourLogger;
 
 	void testColumns()
 	{

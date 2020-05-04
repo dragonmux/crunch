@@ -19,6 +19,9 @@ using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::uniform_int_distribution;
 using crunch::operator ""_sv;
+using crunch::logResult;
+using crunch::RESULT_ABORT;
+using crunch::failures;
 
 class crunchTests final : public testsuite
 {
@@ -266,11 +269,8 @@ private:
 
 	void testAssertNull()
 	{
-		assertNull(static_cast<void *>(nullptr));
-		assertNull(static_cast<const void *>(nullptr));
-		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr1.data())); });
+		assertNull(nullptr);
 		tryShouldFail([=]() { assertNull(testStr1.data()); });
-		tryShouldFail([=]() { assertNull(const_cast<char *>(testStr2.data())); });
 		tryShouldFail([=]() { assertNull(testStr2.data()); });
 	}
 
@@ -281,9 +281,7 @@ private:
 			ptr = genPtr();
 		while (!ptr);
 		assertNotNull(ptr);
-		assertNotNull((const void *)ptr);
-		tryShouldFail([=]() { assertNotNull(static_cast<void *>(nullptr)); });
-		tryShouldFail([=]() { assertNotNull(static_cast<const void *>(nullptr)); });
+		tryShouldFail([=]() { assertNotNull(nullptr); });
 	}
 
 	void testAssertGreaterThan()

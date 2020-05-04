@@ -6,33 +6,43 @@
 #include "logger.hxx"
 #include "stringFuncs.hxx"
 
-uint32_t passes = 0, failures = 0;
-const double doubleDelta = 0.0000001;
+constexpr static double doubleDelta = 0.0000001;
 
-template<typename T>
-void assertionFailure(const char *what, T result, T expected)
+namespace crunch
 {
-	auto mesg = formatString("Assertion failure: %s", what);
-	logResult(RESULT_FAILURE, mesg.get(), result, expected);
+	uint32_t passes = 0, failures = 0;
+
+	template<typename T>
+	void assertionFailure(const char *what, T result, T expected)
+	{
+		auto mesg = formatString("Assertion failure: %s", what);
+		logResult(RESULT_FAILURE, mesg.get(), result, expected);
+	}
+
+	template<typename T>
+	void assertionError(const char *params, T result, T expected)
+	{
+		auto what = formatString("expected %s, got %s", params, params);
+		assertionFailure(what.get(), expected, result);
+	}
+
+	template<typename T>
+	void assertionError(const char *params, T result, std::nullptr_t)
+		{ return assertionError(params, result, T(nullptr)); }
+
+	template<typename T>
+	void assertionError(const char *params, T result)
+	{
+		auto what = formatString("did not expect %s", params);
+		assertionFailure(what.get(), result, result);
+	}
 }
 
-template<typename T>
-void assertionError(const char *params, T result, T expected)
-{
-	auto what = formatString("expected %s, got %s", params, params);
-	assertionFailure(what.get(), expected, result);
-}
-
-template<typename T>
-void assertionError(const char *params, T result, std::nullptr_t)
-	{ return assertionError(params, result, T(nullptr)); }
-
-template<typename T>
-void assertionError(const char *params, T result)
-{
-	auto what = formatString("did not expect %s", params);
-	assertionFailure(what.get(), result, result);
-}
+using crunch::assertionFailure;
+using crunch::assertionError;
+using crunch::logResult;
+using crunch::RESULT_FAILURE;
+using crunch::RESULT_SKIP;
 
 testsuite::testsuite() noexcept = default;
 testsuite::~testsuite() noexcept = default;

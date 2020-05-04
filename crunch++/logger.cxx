@@ -12,209 +12,214 @@
 #include "core.hxx"
 #include "logger.hxx"
 
+namespace crunch
+{
 #ifdef _WINDOWS
-HANDLE console;
+	HANDLE console;
 #endif
 
-testLog *logger = nullptr;
-bool isTTY = true;
+	testLog *logger = nullptr;
+	bool isTTY = true;
 
-int16_t getColumns()
-{
+	int16_t getColumns()
+	{
 #ifndef _WINDOWS
-	struct winsize win{};
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-	return (!win.ws_col ? 80 : win.ws_col) - 8;
+		struct winsize win{};
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
+		return (!win.ws_col ? 80 : win.ws_col) - 8;
 #else
-	CONSOLE_SCREEN_BUFFER_INFO window{};
-	GetConsoleScreenBufferInfo(console, &window);
-	return (!window.dwSize.X ? 80 : window.dwSize.X) - 8;
+		CONSOLE_SCREEN_BUFFER_INFO window{};
+		GetConsoleScreenBufferInfo(console, &window);
+		return (!window.dwSize.X ? 80 : window.dwSize.X) - 8;
 #endif
-}
+	}
 
-std::size_t vaTestPrintf(const char *format, va_list args)
-{
-	const auto ret{vfprintf(logger ? logger->stdout_ : stdout, format, args)};
-	fflush(logger ? logger->stdout_ : stdout);
-	return ret;
-}
+	std::size_t vaTestPrintf(const char *format, va_list args)
+	{
+		const auto ret{vfprintf(logger ? logger->stdout_ : stdout, format, args)};
+		fflush(logger ? logger->stdout_ : stdout);
+		return ret;
+	}
 
-std::size_t testPrintf(const char *format, ...) // NOLINT
-{
-	va_list args;
-	va_start(args, format);
-	const auto result{vaTestPrintf(format, args)};
-	va_end(args);
-	return result;
-}
+	std::size_t testPrintf(const char *format, ...) // NOLINT
+	{
+		va_list args;
+		va_start(args, format);
+		const auto result{vaTestPrintf(format, args)};
+		va_end(args);
+		return result;
+	}
 
-void printOk() { testPrintf(" [  OK  ]\n"); }
-void printFailure() { testPrintf(" [ FAIL ]\n"); }
-void printSkip() { testPrintf(" [ SKIP ]\n"); }
-void printAborted() { testPrintf("[ **** ABORTED **** ]\n"); }
+	void printOk() { testPrintf(" [  OK  ]\n"); }
+	void printFailure() { testPrintf(" [ FAIL ]\n"); }
+	void printSkip() { testPrintf(" [ SKIP ]\n"); }
+	void printAborted() { testPrintf("[ **** ABORTED **** ]\n"); }
 
-void normal()
-{
+	void normal()
+	{
 #ifndef _WINDOWS
-	testPrintf(NORMAL);
+		testPrintf(NORMAL);
 #else
-	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 #endif
-}
+	}
 
 #ifndef _WINDOWS
-void echoOk()
-{
-	if (isTTY)
-		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, getColumns());
-	else
-		printOk();
-	++passes;
-}
+	void echoOk()
+	{
+		if (isTTY)
+			testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, getColumns());
+		else
+			printOk();
+		++passes;
+	}
 
-void echoFailure()
-{
-	if (isTTY)
-		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, getColumns());
-	else
-		printFailure();
-	++failures;
-}
+	void echoFailure()
+	{
+		if (isTTY)
+			testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, getColumns());
+		else
+			printFailure();
+		++failures;
+	}
 
-void echoSkip()
-{
-	if (isTTY)
-		testPrintf(" " SET_COL BRACKET "[" WARNING " SKIP " BRACKET "]" NEWLINE, getColumns());
-	else
-		printSkip();
-	++passes;
-}
+	void echoSkip()
+	{
+		if (isTTY)
+			testPrintf(" " SET_COL BRACKET "[" WARNING " SKIP " BRACKET "]" NEWLINE, getColumns());
+		else
+			printSkip();
+		++passes;
+	}
 
-void echoAborted()
-{
-	if (isTTY)
-		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
-	else
-		printAborted();
-	throw threadExit_t(2);
-}
+	void echoAborted()
+	{
+		if (isTTY)
+			testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
+		else
+			printAborted();
+		throw threadExit_t(2);
+	}
 #else
-void echoOk()
-{
-	if (isTTY)
+	void echoOk()
 	{
-		CONSOLE_SCREEN_BUFFER_INFO cursor;
-		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.Y--;
-		cursor.dwCursorPosition.X = getColumns();
-		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("[");
-		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-		testPrintf("  OK  ");
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("]");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
+		if (isTTY)
+		{
+			CONSOLE_SCREEN_BUFFER_INFO cursor;
+			GetConsoleScreenBufferInfo(console, &cursor);
+			cursor.dwCursorPosition.Y--;
+			cursor.dwCursorPosition.X = getColumns();
+			SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("[");
+			SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			testPrintf("  OK  ");
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("]");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			testPrintf("\n");
+		}
+		else
+			printOk();
+		passes++;
 	}
-	else
-		printOk();
-	passes++;
-}
 
-void echoFailure()
-{
-	if (isTTY)
+	void echoFailure()
 	{
-		CONSOLE_SCREEN_BUFFER_INFO cursor;
-		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.X = getColumns();
-		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("[");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-		testPrintf(" FAIL ");
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("]");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
+		if (isTTY)
+		{
+			CONSOLE_SCREEN_BUFFER_INFO cursor;
+			GetConsoleScreenBufferInfo(console, &cursor);
+			cursor.dwCursorPosition.X = getColumns();
+			SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("[");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+			testPrintf(" FAIL ");
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("]");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			testPrintf("\n");
+		}
+		else
+			printFailure();
+		failures++;
 	}
-	else
-		printFailure();
-	failures++;
-}
 
-void echoSkip()
-{
-	if (isTTY)
+	void echoSkip()
 	{
-		CONSOLE_SCREEN_BUFFER_INFO cursor;
-		GetConsoleScreenBufferInfo(console, &cursor);
-		cursor.dwCursorPosition.X = getColumns();
-		SetConsoleCursorPosition(console, cursor.dwCursorPosition);
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("[");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-		testPrintf(" SKIP ");
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("]");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
+		if (isTTY)
+		{
+			CONSOLE_SCREEN_BUFFER_INFO cursor;
+			GetConsoleScreenBufferInfo(console, &cursor);
+			cursor.dwCursorPosition.X = getColumns();
+			SetConsoleCursorPosition(console, cursor.dwCursorPosition);
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("[");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			testPrintf(" SKIP ");
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("]");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			testPrintf("\n");
+		}
+		else
+			printSkip();
 	}
-	else
-		printSkip();
-}
 
-void echoAborted()
-{
-	if (isTTY)
+	void echoAborted()
 	{
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("[");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-		testPrintf(" **** ABORTED **** ");
-		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-		testPrintf("]");
-		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		testPrintf("\n");
+		if (isTTY)
+		{
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("[");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+			testPrintf(" **** ABORTED **** ");
+			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			testPrintf("]");
+			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			testPrintf("\n");
+		}
+		else
+			printAborted();
+		throw threadExit_t(2);
 	}
-	else
-		printAborted();
-	throw threadExit_t(2);
-}
 #endif
 
-void logResult(resultType type, const char *message, ...) // NOLINT
-{
-	if (isTTY)
-		normal();
-
-	va_list args;
-	va_start(args, message);
-	vaTestPrintf(message, args);
-	va_end(args);
-
-	switch (type)
+	void logResult(resultType type, const char *message, ...) // NOLINT
 	{
-		case RESULT_SUCCESS:
-			echoOk();
-			break;
-		case RESULT_FAILURE:
-			echoFailure();
-			break;
-		case RESULT_SKIP:
-			echoSkip();
-			break;
-		default:
-			echoAborted();
+		if (isTTY)
+			normal();
+
+		va_list args;
+		va_start(args, message);
+		vaTestPrintf(message, args);
+		va_end(args);
+
+		switch (type)
+		{
+			case RESULT_SUCCESS:
+				echoOk();
+				break;
+			case RESULT_FAILURE:
+				echoFailure();
+				break;
+			case RESULT_SKIP:
+				echoSkip();
+				break;
+			default:
+				echoAborted();
+		}
 	}
 }
 
-testLog *startLogging(const char *fileName)
+using crunch::logger;
+
+crunch::testLog *startLogging(const char *fileName)
 {
 	if (logger || !fileName)
 		return nullptr;
-	auto logger_ = substrate::make_unique<testLog>();
+	auto logger_ = substrate::make_unique<crunch::testLog>();
 	logger_->file = fopen(fileName, "w"); // NOLINT(cppcoreguidelines-owning-memory)
 	if (!logger_->file)
 		return nullptr;
@@ -243,11 +248,11 @@ testLog *startLogging(const char *fileName)
 	return logger;
 }
 
-void stopLogging(testLog *loggerPtr)
+void stopLogging(crunch::testLog *loggerPtr)
 {
 	if (!loggerPtr || loggerPtr != logger)
 		return;
-	std::unique_ptr<testLog> logger_{loggerPtr};
+	std::unique_ptr<crunch::testLog> logger_{loggerPtr};
 #ifndef _MSC_VER
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);

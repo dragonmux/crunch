@@ -384,10 +384,13 @@ typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestCla
 
 #define CXX_TEST(name) registerTest([this](){ this->name(); }, #name);
 
-struct testLog;
+namespace crunch
+{
+	struct testLog;
+}
 
-CRUNCHpp_API testLog *startLogging(const char *fileName);
-CRUNCHpp_API void stopLogging(testLog *logger);
+CRUNCHpp_API crunch::testLog *startLogging(const char *fileName);
+CRUNCHpp_API void stopLogging(crunch::testLog *logger);
 
 /* Give systems that don't have other calling conventions a dud definition of __cdecl */
 #ifndef _WINDOWS
