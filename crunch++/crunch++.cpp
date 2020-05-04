@@ -68,7 +68,7 @@ namespace crunch
 	size_t numTests = 0;
 	std::unique_ptr<char, freeDelete_t> workingDir = {};
 
-	using registerFn = void (__cdecl *)();
+	using registerFn = void (*)();
 
 	void red()
 	{

@@ -389,13 +389,4 @@ namespace crunch { struct testLog; }
 CRUNCHpp_API crunch::testLog *startLogging(const char *fileName);
 CRUNCHpp_API void stopLogging(crunch::testLog *logger);
 
-/* Give systems that don't have other calling conventions a dud definition of __cdecl */
-#ifndef _WINDOWS
-#define __cdecl
-#else
-#ifdef __GNUC__
-#define __cdecl __attribute__((cdecl))
-#endif
-#endif
-
 #endif /*CRUNCHpp__H*/
