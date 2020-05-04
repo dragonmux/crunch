@@ -164,7 +164,7 @@ void assertMemNotEqual(const void *result, const void *expected, const size_t ex
 	}
 }
 
-void assertNull(void *result)
+void assertNull(const void *const result)
 {
 	if (result != NULL)
 	{
@@ -173,25 +173,7 @@ void assertNull(void *result)
 	}
 }
 
-void assertNotNull(void *result)
-{
-	if (result == NULL)
-	{
-		ASSERTION_ERROR("%p", result, NULL);
-		thrd_exit(THREAD_ERROR);
-	}
-}
-
-void assertConstNull(const void *const result)
-{
-	if (result != NULL)
-	{
-		ASSERTION_ERROR_NEGATIVE("%p", result);
-		thrd_exit(THREAD_ERROR);
-	}
-}
-
-void assertConstNotNull(const void *const result)
+void assertNotNull(const void *const result)
 {
 	if (result == NULL)
 	{

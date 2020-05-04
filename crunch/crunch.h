@@ -30,6 +30,12 @@
 	#define CRUNCH_EXPORT		CRUNCH_API
 #endif
 
+#if defined(__GNUC__)
+#	define CRUNCH_DEPRECATE __attribute__ ((deprecated))
+#elif defined(_MSC_VER)
+#	define CRUNCH_DEPRECATE __declspec(deprecated)
+#endif
+
 /* Give systems that don't have other calling conventions a dud definition of __cdecl */
 #ifndef _WINDOWS
 #define __cdecl
@@ -103,10 +109,10 @@ CRUNCH_API void assertDoubleNotEqual(double result, double expected);
 CRUNCH_API void assertStringNotEqual(const char *result, const char *expected);
 CRUNCH_API void assertMemNotEqual(const void *result, const void *expected, const size_t expectedLength);
 
-CRUNCH_API void assertNull(void *result);
-CRUNCH_API void assertNotNull(void *result);
-CRUNCH_API void assertConstNull(const void *const result);
-CRUNCH_API void assertConstNotNull(const void *const result);
+CRUNCH_API void assertNull(const void *const result);
+CRUNCH_API void assertNotNull(const void *const result);
+CRUNCH_DEPRECATE inline void assertConstNull(const void *const result) { assertNull(result); }
+CRUNCH_DEPRECATE inline void assertConstNotNull(const void *const result) { assertNotNull(result); }
 
 CRUNCH_API void assertGreaterThan(int32_t result, int32_t expected);
 CRUNCH_API void assertGreaterThan64(int64_t result, int64_t expected);
