@@ -129,9 +129,9 @@ In all cases, if the two numbers are not equal, then the assertion fails with a 
 
 `assertPtrEqual` validates that two pointers point to the same place. When they do not, this prints a diagnostic and fails, aborting the test case.
 
-`assertNull` and `assertConstNull` validate that a pointer is `NULL`. One variant is for non-const pointer and the other for const.
+`assertNull` and `assertConstNull` validate that a pointer is `NULL`.
 
-NOTE: `assertConstNull` vs `assertNull` is rather historical and this interface will change to only one const-accepting form as compilers will add const, but not subtract.
+NOTE: `assertConstNull` vs `assertNull` is rather historical and `assertConstNull` is deprecated and subject to removal in the next major release.
 
 #### Memory Equality
 
@@ -166,9 +166,9 @@ In all cases, if the two numbers are equal then the assertion fails with a diagn
 
 `assertPtrNotEqual` validates that two pointers do not point to the same place. When they do, this prints a diagnostic and fails, aborting the test case.
 
-`assertNotNull` and `assertConstNotNull` validate that a pointer is not `NULL`. One variant is for non-const pointer and the other for const.
+`assertNotNull` and `assertConstNotNull` validate that a pointer is not `NULL`.
 
-NOTE: `assertConstNotNull` vs `assertNotNull` is rather historical and this interface will change to only one const-accepting form as compilers will add const, but not subtract.
+NOTE: `assertConstNotNull` vs `assertNotNull` is rather historical and `assertConstNotNull` is deprecated and subject to removal in the next major release.
 
 #### Memory Inequality
 
