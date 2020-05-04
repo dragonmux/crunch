@@ -129,6 +129,10 @@ In all cases, if the two numbers are not equal, then the assertion fails with a 
 
 `assertPtrEqual` validates that two pointers point to the same place. When they do not, this prints a diagnostic and fails, aborting the test case.
 
+`assertNull` and `assertConstNull` validate that a pointer is `NULL`. One variant is for non-const pointer and the other for const.
+
+NOTE: `assertConstNull` vs `assertNull` is rather historical and this interface will change to only one const-accepting form as compilers will add const, but not subtract.
+
 #### Memory Equality
 
 `assertMemEqual` validates that the memory pointed to by two pointers has the same contents as each other.
@@ -160,8 +164,13 @@ In all cases, if the two numbers are equal then the assertion fails with a diagn
 
 #### Pointer Inequality
 
-There are two forms of pointer-based assertions.
-`assertPtrNotEqual` which validates that two pointers do not point to the same place, and `assertMemNotEqual` which validates that the memory pointed to by two pointers does not have the same contents as one another.
+`assertPtrNotEqual` validates that two pointers do not point to the same place. When they do, this prints a diagnostic and fails, aborting the test case.
+
+`assertNotNull` and `assertConstNotNull` validate that a pointer is not `NULL`. One variant is for non-const pointer and the other for const.
+
+NOTE: `assertConstNotNull` vs `assertNotNull` is rather historical and this interface will change to only one const-accepting form as compilers will add const, but not subtract.
+
+#### Memory Inequality
 
 `assertMemEqual` allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
 When the two memory blocks have the same contents, the assertion fails and prints a diagnostic, aborting the test case.
