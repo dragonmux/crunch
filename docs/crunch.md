@@ -99,6 +99,7 @@ Reference Table of Contents
 
 There are two boolean assertions - assertTrue and assertFalse.
 These take an expression evaluating to a truth value, and perform an assertion that the expression is either true or false (respectively).
+If the expression evalutes wrongly, then the assertion fails with a diagnostic, and aborts the test.
 
 #### Integer Equality
 
@@ -109,5 +110,53 @@ If the integers you wish to assert are smaller than this, these are still the fu
 
 assertInt64Equal and assertUint64Equal perform integer assertions of larger, 64-bit integers - both signed an unsigned, respectively.
 These exist as C still "promotes" larger integers down to `int`, which is bad news for 64-bit numbers that are typically implemented using a type such as `long long`.
+
+In all cases, if the two numbers are not equal, then the assertion fails with a diagnostic, and aborts the test.
+
+#### Floating Point Equality
+
+assertDoubleEqual asserts that two floating point numbers, possibly promoted floats, are equal. When they are not equal, this prints a diagnostic and fails, aborting the test.
+
+#### String Equality
+
+assertStringEqual asserts that two NUL terminated strings are equal. When they are not equal, this prints a diagnostic and fails, aborting the test.
+
+#### Pointer Equality
+
+There are two forms of pointer-based assertions.
+assertPtrEqual which validates that two pointers point to the same place, and assertMemEqual which validates that the memory pointed to by two pointers has the same contents as each other.
+
+assertMemEqual allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
+When the two memory blocks do not have different contents, the assertion fails and prints a diagnostic, aborting the test case.
+
+### Negative Equality Assertions
+
+#### Integer Inequality
+
+There are several integer assertions for signed and unsigned at a couple of major sizes.
+
+assertIntNotEqual and assertUintNotEqual perform standard integer assertions for signed and unsigned integers, respectively.
+If the integers you wish to assert are smaller than this, these are still the functions to use as C's integer promotions will automatically bump the numbers up to this size by default.
+
+assertInt64NotEqual and assertUint64NotEqual perform integer assertions of larger, 64-bit integers - both signed an unsigned, respectively.
+These exist as C still "promotes" larger integers down to `int`, which is bad news for 64-bit numbers that are typically implemented using a type such as `long long`.
+
+In all cases, if the two numbers are equal then the assertion fails with a diagnostic, and aborts the test.
+
+#### Floating Point Inequality
+
+assertDoubleNotEqual asserts that two floating point numbers, possibly promoted floats, are not equal. When they are equal, this prints a diagnostic and fails, aborting the test.
+
+#### String Inequality
+
+assertStringNotEqual asserts that two NUL terminated strings are not equal. When they are equal, this prints a diagnostic and fails, aborting the test.
+
+#### Pointer Inequality
+
+There are two forms of pointer-based assertions.
+assertPtrNotEqual which validates that two pointers do not point to the same place, and assertMemNotEqual which validates that the memory pointed to by two pointers does not have the same contents as one another.
+
+assertMemEqual allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
+When the two memory blocks have the same contents, the assertion fails and prints a diagnostic, aborting the test case.
 
 ## Getting the Most Out of `crunchMake` for `crunch` Suites
