@@ -13,13 +13,13 @@ void testNull()
 	const char *argv[2] = {"test", "--dummy"};
 
 	registerArgs(nullptr);
-	assertConstNull(parseArguments(0, nullptr));
-	assertConstNull(parseArguments(1, nullptr));
-	assertConstNull(parseArguments(2, nullptr));
-	assertConstNull(parseArguments(1, argv));
-	assertConstNull(parseArguments(2, argv));
-	assertConstNull(parseArguments((uint32_t)-1, nullptr));
-	assertConstNull(parseArguments((uint32_t)-1, argv));
+	assertNull(parseArguments(0, nullptr));
+	assertNull(parseArguments(1, nullptr));
+	assertNull(parseArguments(2, nullptr));
+	assertNull(parseArguments(1, argv));
+	assertNull(parseArguments(2, argv));
+	assertNull(parseArguments((uint32_t)-1, nullptr));
+	assertNull(parseArguments((uint32_t)-1, argv));
 }
 
 void testEmpty()
@@ -29,13 +29,13 @@ void testEmpty()
 
 	registerArgs(args);
 	constParsedArgs_t parsedArgs = parseArguments(2, argv);
-	assertConstNotNull(parsedArgs);
-	assertConstNotNull(parsedArgs[0]);
-	assertConstNotNull(parsedArgs[0]->value);
+	assertNotNull(parsedArgs);
+	assertNotNull(parsedArgs[0]);
+	assertNotNull(parsedArgs[0]->value);
 	assertStringEqual(parsedArgs[0]->value, "--dummy");
 	assertIntEqual(parsedArgs[0]->paramsFound, 0);
 	assertIntEqual(parsedArgs[0]->flags, 0);
-	assertConstNull(parsedArgs[0]->params);
+	assertNull(parsedArgs[0]->params);
 	freeParsedArgs(parsedArgs);
 }
 
@@ -58,28 +58,28 @@ void testIncomplete()
 	registerArgs(args_1);
 
 	parsedArgs = parseArguments(2, argv_1);
-	assertConstNotNull(parsedArgs);
-	assertConstNotNull(parsedArgs[0]);
-	assertConstNotNull(parsedArgs[0]->value);
+	assertNotNull(parsedArgs);
+	assertNotNull(parsedArgs[0]);
+	assertNotNull(parsedArgs[0]->value);
 	assertStringEqual(parsedArgs[0]->value, "--arg=");
 	assertIntEqual(parsedArgs[0]->paramsFound, 0);
 	assertIntEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
-	assertConstNull(parsedArgs[0]->params);
+	assertNull(parsedArgs[0]->params);
 	freeParsedArgs(parsedArgs);
 
 	parsedArgs = parseArguments(2, argv_2);
-	assertConstNotNull(parsedArgs);
-	assertConstNotNull(parsedArgs[0]);
-	assertConstNotNull(parsedArgs[0]->value);
+	assertNotNull(parsedArgs);
+	assertNotNull(parsedArgs[0]);
+	assertNotNull(parsedArgs[0]->value);
 	assertStringEqual(parsedArgs[0]->value, "--arg=test");
 	assertIntEqual(parsedArgs[0]->flags, ARG_INCOMPLETE);
-	assertConstNull(parsedArgs[0]->params);
+	assertNull(parsedArgs[0]->params);
 	freeParsedArgs(parsedArgs);
 
 	startLogging("/dev/null");
 	registerArgs(args_2);
-	assertConstNull(parseArguments(2, argv_1));
-	assertConstNull(parseArguments(2, argv_2));
+	assertNull(parseArguments(2, argv_1));
+	assertNull(parseArguments(2, argv_2));
 }
 
 void testInvalid()
@@ -94,7 +94,7 @@ void testInvalid()
 	{
 		registerArgs(args);
 		parsedArgs_t parsedArgs = malloc(sizeof(constParsedArg_t) * 2);
-		assertConstNotNull(parsedArgs);
+		assertNotNull(parsedArgs);
 		parsedArg_t *parsedArg = malloc(sizeof(parsedArg_t));
 		assertNotNull(parsedArg);
 		parsedArg->value = strdup("--arg");
@@ -105,14 +105,14 @@ void testInvalid()
 		free((void *)parsedArgs);
 	}
 
-	assertConstNull(findArg(nullptr, "", nullptr));
+	assertNull(findArg(nullptr, "", nullptr));
 
 	{
 		// This checks that duplicate parameters work correctly by dropping the second copy of the parameter
 		constParsedArgs_t parsedArgs = parseArguments(3, argv);
-		assertConstNotNull(parsedArgs);
-		assertConstNotNull(parsedArgs[0]);
-		assertConstNull(parsedArgs[1]);
+		assertNotNull(parsedArgs);
+		assertNotNull(parsedArgs[0]);
+		assertNull(parsedArgs[1]);
 		freeParsedArgs(parsedArgs);
 	}
 
@@ -138,16 +138,16 @@ void testArgCounting()
 	assertIntEqual(checkParams(5, argv_2, 2, &args[0], args), 2);
 
 	parsedArgs = parseArguments(5, argv_1);
-	assertConstNull(parsedArgs);
+	assertNull(parsedArgs);
 
 	parsedArgs = parseArguments(5, argv_2);
-	assertConstNotNull(parsedArgs);
-	assertConstNotNull(parsedArgs[0]);
-	assertConstNotNull(parsedArgs[0]->value);
+	assertNotNull(parsedArgs);
+	assertNotNull(parsedArgs[0]);
+	assertNotNull(parsedArgs[0]->value);
 	assertStringEqual(parsedArgs[0]->value, "-o");
 	assertIntEqual(parsedArgs[0]->paramsFound, 2);
-	assertConstNotNull(parsedArgs[0]->params[0]);
-	assertConstNotNull(parsedArgs[0]->params[1]);
+	assertNotNull(parsedArgs[0]->params[0]);
+	assertNotNull(parsedArgs[0]->params[1]);
 	assertStringEqual(parsedArgs[0]->params[0], "test");
 	assertStringEqual(parsedArgs[0]->params[1], "me");
 	freeParsedArgs(parsedArgs);
@@ -175,7 +175,7 @@ void testAllocs()
 	assertIntEqual(allocCount, -1);
 	/*puts("Testing arg strdup alloc fail");
 	allocCount = 2;
-	assertConstNotNull(parseArguments(7, argv));
+	assertNotNull(parseArguments(7, argv));
 	assertIntEqual(allocCount, -1);*/
 	puts("Testing params alloc fail");
 	allocCount = 3;
@@ -183,7 +183,7 @@ void testAllocs()
 	assertIntEqual(allocCount, -1);
 	/*puts("Testing opt strdup alloc fail");
 	allocCount = 4;
-	assertConstNotNull(parseArguments(7, argv));
+	assertNotNull(parseArguments(7, argv));
 	assertIntEqual(allocCount, -1);
 	puts("Testing overall alloc fail");*/
 	allocCount = 7;

@@ -207,29 +207,23 @@ void testAssertMemNotEqual()
 }
 
 void testAssertNull1() { assertNull(ptr); }
-void testAssertNull2() { assertConstNull(ptr); }
 void testAssertNull()
 {
 	ptr = NULL;
 	while (ptr == NULL)
 		ptr = genPtr();
 	assertNull(NULL);
-	assertConstNull(NULL);
 	tryShouldFail(testAssertNull1);
-	tryShouldFail(testAssertNull2);
 }
 
 void testAssertNotNull1() { assertNotNull(NULL); }
-void testAssertNotNull2() { assertConstNotNull(NULL); }
 void testAssertNotNull()
 {
 	ptr = NULL;
 	while (ptr == NULL)
 		ptr = genPtr();
 	assertNotNull(ptr);
-	assertConstNotNull(ptr);
 	tryShouldFail(testAssertNotNull1);
-	tryShouldFail(testAssertNotNull2);
 }
 
 void testAssertGreaterThan1() { assertGreaterThan(num32, num32); }
