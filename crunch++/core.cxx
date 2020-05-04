@@ -306,24 +306,6 @@ void testsuite::assertNotEqual(const void *result, const void *expected, const s
 	}
 }
 
-void testsuite::assertNull(void *result)
-{
-	if (result != nullptr)
-	{
-		assertionError("%p", result, nullptr);
-		throw threadExit_t{1};
-	}
-}
-
-void testsuite::assertNotNull(void *result)
-{
-	if (result == nullptr)
-	{
-		assertionError("%p", result);
-		throw threadExit_t{1};
-	}
-}
-
 void testsuite::assertNull(const void *const result)
 {
 	if (result != nullptr)

@@ -272,8 +272,6 @@ public:
 		{ assertNotEqual(stringView{result.data(), result.length()}, stringView{expected.data(), expected.length()}); }
 #endif
 
-	CRUNCH_VIS void assertNull(void *result);
-	CRUNCH_VIS void assertNotNull(void *result);
 	CRUNCH_VIS void assertNull(const void *const result);
 	CRUNCH_VIS void assertNotNull(const void *const result);
 	template<typename T> void assertNull(std::unique_ptr<T> &result) { assertNull(result.get()); }
