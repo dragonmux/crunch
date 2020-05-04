@@ -111,8 +111,8 @@ CRUNCH_API void assertMemNotEqual(const void *result, const void *expected, cons
 
 CRUNCH_API void assertNull(const void *const result);
 CRUNCH_API void assertNotNull(const void *const result);
-CRUNCH_DEPRECATE inline void assertConstNull(const void *const result) { assertNull(result); }
-CRUNCH_DEPRECATE inline void assertConstNotNull(const void *const result) { assertNotNull(result); }
+CRUNCH_DEPRECATE static inline void assertConstNull(const void *const result) { assertNull(result); }
+CRUNCH_DEPRECATE static inline void assertConstNotNull(const void *const result) { assertNotNull(result); }
 
 CRUNCH_API void assertGreaterThan(int32_t result, int32_t expected);
 CRUNCH_API void assertGreaterThan64(int64_t result, int64_t expected);
