@@ -51,6 +51,8 @@ Building on the previous section, we can easily expand this stub suite to contai
 Before the BEGIN_REGISTER_TESTS() block, we can declare a function that takes no arguments and returns nothing. Additionally, the function may call any code it likes, can make test assertions and any code it calls can too if it includes the crunch header:
 
 ``` C
+#include <stdbool.h>
+
 void testCase()
 {
 	assertNull(NULL);
@@ -64,4 +66,16 @@ We also need to register the new test case using the registerTests function on t
 BEGIN_REGISTER_TESTS()
 	TEST(testCase)
 END_REGISTER_TESTS()
+```
+
+With this added, rebuild and re-run the test suite:
+
+``` shell
+$ crunchMake test.c
+cc -fPIC -DPIC  test.c -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch -O2 -pthread -o test.so
+
+$ crunch test
+Running test suit test...
+testCase...                                                                          [  OK  ]
+Total tests: 1,  Failures: 0,  Pass rate: 100.00%
 ```
