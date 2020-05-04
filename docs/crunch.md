@@ -89,7 +89,17 @@ Total tests: 1,  Failures: 0,  Pass rate: 100.00%
 Reference Table of Contents
 
 * [Positive Equality Assertions](#positive-equality-assertions)
+  * [Integer Equality](#integer-equality)
+  * [Floating Point Equality](#floating-point-equality)
+  * [String Equality](#string-equality)
+  * [Pointer Equality](#pointer-equality)
+  * [Memory Equality](#memory-equality)
 * [Negative Equality Assertions](#negative-equality-assertions)
+  * [Integer Inequality](#integer-inequality)
+  * [Floating Point Inequality](#floating-point-inequality)
+  * [String Inequality](#string-inequality)
+  * [Pointer Inequality](#pointer-inequality)
+  * [Memory Inequality](#memory-inequality)
 * [Boolean Equality Assertions](#boolean-equality-assertions)
 * [Inequality Assertions](#inequality-assertions)
 
