@@ -175,7 +175,7 @@ The trivial value integer assertions work with mis-matched integers out the box.
 * `assertNull` - Checks that the provided pointer, regardless of const-ness, is equivilent to a nullptr.
 * `assertEqual` - Checks that two entities have the same value.
 
-`assertNull` takes one parameter, the pointer to check. It provides two overloads, one to handle non-const pointers and the other to handle const pointers.
+`assertNull` takes one parameter, the pointer to check. If this parameter is not `nullptr`, the assertion fails and prints a diagnostic, aborting the test case.
 
 There are several forms of `assertEqual` check: Trivial value assertions for integers, C strings, STL strings, STL string views, characters, floating point values and direct address comparisons; and a more complex kind of assertion for validating arbitrary memory contents.
 
@@ -196,7 +196,7 @@ When the two memory blocks have different contents, the assertion fails and prin
 * `assertNotNull` - Checks that the provided pointer, regardless of const-ness is not equivilent to nullptr.
 * `assertNotEqual` - Checks that one entity's value is not the same as the other.
 
-`assertNotNull` takes one parameter, the pointer to check. It provides two overloads, on to handle non-const pointers and the other to handle const pointers.
+`assertNotNull` takes one parameter, the pointer to check. If this parameter is `nullptr`, the assertion fails and prints a diagnostic, aborting the test case.
 
 There are several forms of `assertNotEqual` check: Trivial value assertions for integers, C strings, STL strings, STL string views, characters, floating point values and direct address comparisons; and a more complex kind of assertion for validating arbitrary memory contents.
 
