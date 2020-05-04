@@ -11,6 +11,8 @@ Table of Contents
 
 ## Basic `crunch++` usage
 
+NOTE: In this release, `testsuit` is a historical and deprecated alias of `testsuite`, prefer `testsuite`.
+
 ### Writing a Simple Test Suite
 
 A `crunch++` test suite is a C++ file compiled using `crunchMake`.
