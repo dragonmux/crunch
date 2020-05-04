@@ -327,7 +327,7 @@ namespace crunch
 
 		public:
 			// clang 5 has a bad time with this if we don't define it this way.
-			cxxTest() noexcept { } // NOLINT(modernize-use-equals-default
+			cxxTest() noexcept { } // NOLINT(modernize-use-equals-default)
 			CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
 			cxxTest(const cxxTest &) = default;
 			cxxTest(cxxTest &&) = default;
