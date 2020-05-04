@@ -95,12 +95,6 @@ Reference Table of Contents
 
 ### Positive Equality Assertions
 
-#### Boolean Equality
-
-There are two boolean assertions - assertTrue and assertFalse.
-These take an expression evaluating to a truth value, and perform an assertion that the expression is either true or false (respectively).
-If the expression evalutes wrongly, then the assertion fails with a diagnostic, and aborts the test.
-
 #### Integer Equality
 
 There are several integer assertions for signed and unsigned at a couple of major sizes.
@@ -158,5 +152,13 @@ assertPtrNotEqual which validates that two pointers do not point to the same pla
 
 assertMemEqual allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
 When the two memory blocks have the same contents, the assertion fails and prints a diagnostic, aborting the test case.
+
+### Boolean Equality Assertions
+
+* `assertTrue`
+* `assertFalse`
+
+Each of these takes a truth value and checks it holds the value given by the function's name.
+If the value checked evaluates to something other than the desired boolean value, the assertion fails printing a diagnostic and aborting the test case.
 
 ## Getting the Most Out of `crunchMake` for `crunch` Suites
