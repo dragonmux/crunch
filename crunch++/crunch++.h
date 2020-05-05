@@ -26,10 +26,9 @@
 #	else
 #		define CRUNCH_VIS	__declspec(dllimport)
 #	endif
-#	define CRUNCH_API	extern "C" CRUNCH_VIS
-#	define CRUNCH_EXPORT		__declspec(dllexport)
+#	define CRUNCH_API extern "C" CRUNCH_VIS
+#	define CRUNCHpp_EXPORT extern "C" __declspec(dllexport)
 #	define CRUNCH_MAYBE_VIS
-#	define CRUNCHpp_TEST	extern "C" CRUNCH_EXPORT
 #else
 #	if __GNUC__ >= 4
 #		define CRUNCH_VIS __attribute__ ((visibility("default")))
@@ -37,9 +36,8 @@
 #		error "Your GCC is too old to use crunch++"
 #	endif
 #	define CRUNCH_API	extern "C" CRUNCH_VIS
-#	define CRUNCH_EXPORT		CRUNCH_API
+#	define CRUNCHpp_EXPORT		CRUNCH_API
 #	define CRUNCH_MAYBE_VIS	CRUNCH_VIS
-#	define CRUNCHpp_TEST		CRUNCH_API
 #endif
 #define CRUNCHpp_API	extern CRUNCH_VIS
 
@@ -382,7 +380,15 @@ typename std::enable_if<sizeof...(TestClasses) != 0, void>::type registerTestCla
 	registerTestClasses<TestClasses...>();
 }
 
-#define CXX_TEST(name) registerTest([this](){ this->name(); }, #name);
+#define CRUNCHpp_TEST(name) registerTest([this](){ this->name(); }, #name);
+#define CXX_TEST(name) CRUNCHpp_TEST(name)
+
+#define CRUNCHpp_TESTS(...) \
+CRUNCHpp_EXPORT void registerCXXTests(); \
+void registerCXXTests() \
+{ \
+	registerTestClasses<__VA_ARGS__>(); \
+}
 
 namespace crunch { struct testLog; }
 

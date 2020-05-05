@@ -43,13 +43,9 @@ private:
 public:
 	void registerTests() final
 	{
-		CXX_TEST(testConstruction)
-		CXX_TEST(testCorrectness)
+		CRUNCHpp_TEST(testConstruction)
+		CRUNCHpp_TEST(testCorrectness)
 	}
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests()
-{
-	registerTestClasses<ranlux64Test>();
-}
+CRUNCHpp_TESTS(ranlux64Test)

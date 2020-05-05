@@ -20,8 +20,8 @@ private:
 public:
 	void registerTests() final
 	{
-		CXX_TEST(testSkip)
-		CXX_TEST(testThrow)
+		CRUNCHpp_TEST(testSkip)
+		CRUNCHpp_TEST(testThrow)
 	}
 };
 
@@ -32,8 +32,4 @@ public:
 		{ throw threadExit_t{0}; }
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests()
-{
-	registerTestClasses<registerExitTest, throwTest>();
-}
+CRUNCHpp_TESTS(registerExitTest, throwTest)

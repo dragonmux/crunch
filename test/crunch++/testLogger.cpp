@@ -130,16 +130,12 @@ public:
 #endif
 		if (nullFD == -1 || stdoutFD == -1)
 			skip("Unable to open null device for tests");
-		CXX_TEST(testColumns)
-		CXX_TEST(testSuccess)
-		CXX_TEST(testFailure)
-		CXX_TEST(testSkip)
-		CXX_TEST(testAbort)
+		CRUNCHpp_TEST(testColumns)
+		CRUNCHpp_TEST(testSuccess)
+		CRUNCHpp_TEST(testFailure)
+		CRUNCHpp_TEST(testSkip)
+		CRUNCHpp_TEST(testAbort)
 	}
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests()
-{
-	registerTestClasses<loggerTests>();
-}
+CRUNCHpp_TESTS(loggerTests)

@@ -7,8 +7,4 @@ public:
 	void registerTests() final { }
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests()
-{
-	registerTestClasses<dummy>();
-}
+CRUNCHpp_TESTS(dummy)

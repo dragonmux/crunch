@@ -367,28 +367,28 @@ private:
 public:
 	void registerTests() final
 	{
-		CXX_TEST(testAssertTrue)
-		CXX_TEST(testAssertFalse)
-		CXX_TEST(testAssertIntEqual)
-		CXX_TEST(testAssertIntNotEqual)
-		CXX_TEST(testAssertUintEqual)
-		CXX_TEST(testAssertUintNotEqual)
-		CXX_TEST(testAssertDoubleEqual)
-		CXX_TEST(testAssertDoubleNotEqual)
-		CXX_TEST(testAssertPtrEqual)
-		CXX_TEST(testAssertPtrNotEqual)
-		CXX_TEST(testAssertStrEqual)
-		CXX_TEST(testAssertStrNotEqual)
-		CXX_TEST(testAssertMemEqual)
-		CXX_TEST(testAssertMemNotEqual)
-		CXX_TEST(testAssertNull)
-		CXX_TEST(testAssertNotNull)
-		CXX_TEST(testAssertGreaterThan)
-		CXX_TEST(testAssertLessThan)
-		CXX_TEST(testLogging)
-		CXX_TEST(testBoolConv)
-		CXX_TEST(testFail)
-		CXX_TEST(testAbort)
+		CRUNCHpp_TEST(testAssertTrue)
+		CRUNCHpp_TEST(testAssertFalse)
+		CRUNCHpp_TEST(testAssertIntEqual)
+		CRUNCHpp_TEST(testAssertIntNotEqual)
+		CRUNCHpp_TEST(testAssertUintEqual)
+		CRUNCHpp_TEST(testAssertUintNotEqual)
+		CRUNCHpp_TEST(testAssertDoubleEqual)
+		CRUNCHpp_TEST(testAssertDoubleNotEqual)
+		CRUNCHpp_TEST(testAssertPtrEqual)
+		CRUNCHpp_TEST(testAssertPtrNotEqual)
+		CRUNCHpp_TEST(testAssertStrEqual)
+		CRUNCHpp_TEST(testAssertStrNotEqual)
+		CRUNCHpp_TEST(testAssertMemEqual)
+		CRUNCHpp_TEST(testAssertMemNotEqual)
+		CRUNCHpp_TEST(testAssertNull)
+		CRUNCHpp_TEST(testAssertNotNull)
+		CRUNCHpp_TEST(testAssertGreaterThan)
+		CRUNCHpp_TEST(testAssertLessThan)
+		CRUNCHpp_TEST(testLogging)
+		CRUNCHpp_TEST(testBoolConv)
+		CRUNCHpp_TEST(testFail)
+		CRUNCHpp_TEST(testAbort)
 	}
 };
 
@@ -399,8 +399,4 @@ public:
 		{ throw std::bad_alloc(); }
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests()
-{
-	registerTestClasses<crunchTests, registrationTest>();
-}
+CRUNCHpp_TESTS(crunchTests, registrationTest)

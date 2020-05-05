@@ -146,16 +146,12 @@ private:
 public:
 	void registerTests() final
 	{
-		CXX_TEST(testNull)
-		CXX_TEST(testEmpty)
-		CXX_TEST(testIncomplete)
-		CXX_TEST(testInvalid)
-		CXX_TEST(testArgCounting)
+		CRUNCHpp_TEST(testNull)
+		CRUNCHpp_TEST(testEmpty)
+		CRUNCHpp_TEST(testIncomplete)
+		CRUNCHpp_TEST(testInvalid)
+		CRUNCHpp_TEST(testArgCounting)
 	}
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests()
-{
-	registerTestClasses<testArgsParser>();
-}
+CRUNCHpp_TESTS(testArgsParser)
