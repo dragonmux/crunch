@@ -24,8 +24,9 @@ popd
 rm coverity.tar.gz
 popd
 
-TOOL_BASE=/tmp/coverity-scan-analysis
 TOOL_DIR=`find $TOOL_BASE -type d -name 'cov-analysis*'`
 export PATH=$TOOL_DIR/bin:$PATH
 
 cov-configure --template --comptype gcc --compiler gcc-9
+
+unset TOOL_ARCHIVE TOOL_BASE TOOL_URL TOOL_DIR

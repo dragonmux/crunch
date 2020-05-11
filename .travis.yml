@@ -272,7 +272,7 @@ matrix:
             - g++-9
             - python3.7
       before_install:
-        - .travis-ci/installCoverity.sh
+        - . .travis-ci/installCoverity.sh
       before_script:
         - meson build --prefix=$HOME/.local
         - meson setup --prefix=$HOME/.local build-substrate substrate
