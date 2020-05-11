@@ -171,8 +171,11 @@ dt
 		margin: 0;
 	}
 
-	nav
+	ul
 	{
+		margin: 0;
+		padding: 0;
+
 		li
 		{
 			list-style: none;
@@ -191,6 +194,21 @@ dt
 
 			&.fork a { color: #593; }
 			&.fork a:hover { color: #7B5; }
+
+			&.title
+			{
+				display: block;
+				padding: 10px 15px;
+				padding-left: 20px;
+			}
+
+			&.downloads a::before
+			{
+				display: inline-block;
+				font-family: 'Font Awesome 5 Free';
+				font-weight: 900;
+				content: "\f105";
+			}
 		}
 	}
 }
