@@ -232,7 +232,11 @@ section
 			margin-top: -10px;
 
 			&.left { float: left; }
-			&.right { float: right; }
+			&.right
+			{
+				float: right;
+				text-align: right;
+			}
 		}
 
 	}
