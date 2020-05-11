@@ -1,3 +1,9 @@
 safe: true
 theme: jekyll-theme-midnight
 markdown: kramdown
+gems:
+  - jekyll-font-awesome-sass
+
+show_downloads: true
+font-awesome:
+  assets: true
