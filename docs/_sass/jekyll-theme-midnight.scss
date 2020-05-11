@@ -1,5 +1,5 @@
-$fa-font-path: "fonts/font-awesome/";
-@import "font-awesome";
+$fa-font-path: "fonts/font-awesome";
+@import 'font-awesome';
 
 @import "normalize";
 @import "fonts";
@@ -202,12 +202,14 @@ dt
 				padding-left: 20px;
 			}
 
+			&.downloads a { display: inline-block; }
 			&.downloads a::before
 			{
 				display: inline-block;
 				font-family: 'Font Awesome 5 Free';
 				font-weight: 900;
 				content: "\f105";
+				margin-right: 10px;
 			}
 		}
 	}
