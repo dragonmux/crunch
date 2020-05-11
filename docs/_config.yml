@@ -1,7 +1,7 @@
 safe: true
 theme: jekyll-theme-midnight
 markdown: kramdown
-gems:
+plugins:
   - jekyll-font-awesome-sass
 
 show_downloads: true
