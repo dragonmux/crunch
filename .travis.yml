@@ -271,18 +271,23 @@ matrix:
           packages:
             - g++-9
             - python3.7
-        coverity_scan:
-          project:
-            name: "DX-MON/crunch"
-            description: "crunch your code. Crunch is a unit testing framework written for C and C++."
-          notification_email: dx-mon@users.sourceforge.net
-          build_command_prepend: "meson build --prefix=$HOME/.local"
-          build_command: "ninja -C build"
-          branch_pattern: coverityScan
       before_install:
         - .travis-ci/installCoverity.sh
       before_script:
-      script: touch build
+        - meson build --prefix=$HOME/.local
+        - meson setup --prefix=$HOME/.local build-substrate substrate
+      script:
+        - cov-build --dir cov-int ninja -C build-substrate
+        - cov-build --dir cov-int ninja -C build
+      after_script:
+        - VERSION=`meson introspect build --projectinfo | jq -r '.["version"]'`-`git rev-parse --short HEAD`
+        - tar cJf crunch.tar.xz cov-int
+        - curl --form token=${COVERITY_SCAN_TOKEN} \
+            --form email=dx-mon@users.sourceforge.net \
+            --form file=@crunch.tar.xz \
+            --form version=$VERSION \
+            --form description="crunch your code. Crunch is a unit testing framework written for C and C++." \
+            https://scan.coverity.com/builds?project=${COVERITY_PROJECT_NAME}
       after_failure: cat cov-int/build-log.txt
       if: branch = coverityScan
 
