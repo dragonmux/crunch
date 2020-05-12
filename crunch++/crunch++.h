@@ -190,7 +190,7 @@ namespace crunch
 				other = tmp;
 			}
 
-			constexpr static auto npos{static_cast<std::size_t>(-1)};
+			constexpr static auto npos = static_cast<std::size_t>(-1);
 		};
 
 		CRUNCH_CXX14_CONSTEXPR_INLINE bool operator ==(const stringView &lhs, const stringView &rhs) noexcept
