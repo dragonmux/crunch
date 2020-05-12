@@ -213,9 +213,11 @@ dt
 				display: inline-block;
 				font-family: 'Font Awesome 5 Free';
 				font-weight: 900;
-				content: "\f105";
 				margin-right: 10px;
 			}
+
+			&.downloads.archive a::before { content: "\f1c6"; }
+			&.downloads.package a::before { content: "\f472"; }
 		}
 	}
 }
