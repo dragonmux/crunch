@@ -12,14 +12,12 @@ group :jekyll_plugins do
 	gem "jekyll-optional-front-matter"
 	gem "jekyll-default-layout"
 	gem "jekyll-seo-tag"
-	gem "jekyll-assets"
 	gem "jekyll-font-awesome-sass"
 end
 
 gem "font-awesome-sass"
 gem "kramdown"
 gem "rouge"
-gem "sprockets", "~> 3.7"
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.

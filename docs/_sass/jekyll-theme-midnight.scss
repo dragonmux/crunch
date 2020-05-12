@@ -1,5 +1,7 @@
-$fa-font-path: "fonts/font-awesome";
-@import 'font-awesome';
+@charset "utf-8";
+
+$fa-font-path: "/assets/fonts/font-awesome";
+@import "font-awesome";
 
 @import "normalize";
 @import "fonts";

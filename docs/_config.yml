@@ -1,9 +1,12 @@
-safe: true
+safe: false
+incremental: true
 theme: jekyll-theme-midnight
 markdown: kramdown
 plugins:
   - jekyll-font-awesome-sass
 
 show_downloads: true
+sass:
+  style: compressed
 font-awesome:
   assets: true
