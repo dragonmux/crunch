@@ -275,9 +275,7 @@ matrix:
         - . .travis-ci/installCoverity.sh
       before_script:
         - meson build --prefix=$HOME/.local
-        - meson setup --prefix=$HOME/.local build-substrate substrate
       script:
-        - cov-build --dir cov-int ninja -C build-substrate
         - cov-build --dir cov-int ninja -C build
       after_script:
         - VERSION=`meson introspect build --projectinfo | jq -r '.["version"]'`-`git rev-parse --short HEAD`
