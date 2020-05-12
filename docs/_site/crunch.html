@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>crunch User Guide | crunch</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="crunch User Guide" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="crunch your code. Crunch is a unit testing framework written for C and C++." />
+<meta property="og:description" content="crunch your code. Crunch is a unit testing framework written for C and C++." />
+<meta property="og:site_name" content="crunch" />
+<script type="application/ld+json">
+{"@type":"WebPage","description":"crunch your code. Crunch is a unit testing framework written for C and C++.","headline":"crunch User Guide","url":"/crunch.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link rel="stylesheet" href="/assets/css/style.css?v=c257ced7b550ca4c46fda5946fca488fce59ae4f">
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+		<script src="/assets/js/respond.js"></script>
+		<!--[if lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<!--[if lt IE 8]>
+		<link rel="stylesheet" href="/assets/css/ie.css">
+		<![endif]-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	</head>
+	<body>
+		<nav class="sidebar nav">
+			<h1>crunch</h1>
+			<ul>
+				<li class="link"><a href="/">Introduction</a></li>
+				<li class="link"><a href="/build-and-install">Build and Install</a></li>
+				<li class="link"><a href="/crunch">crunch User Guide</a></li>
+				<li class="link"><a href="/crunch++">crunch++ User Guide</a></li>
+				<li class="fork"><a href="https://github.com/DX-MON/crunch">View On GitHub</a></li>
+			
+				<li class="title">Downloads</li>
+				<li class="downloads">
+					<a href="https://github.com/DX-MON/crunch/releases">Releases</a>
+				</li>
+				<li class="downloads">
+					<a href="https://github.com/DX-MON/crunch/zipball/master">Development Zip</a>
+				</li>
+				<li class="downloads">
+					<a href="https://github.com/DX-MON/crunch/tarball/master">Development Tarball</a>
+				</li>
+			
+			</ul>
+		</nav><!-- end header -->
+
+		<div class="wrapper">
+			<section>
+			
+			
+
+				<h1 id="crunch-user-guide"><code class="highlighter-rouge">crunch</code> User Guide</h1>
+
+<p>Table of Contents</p>
+
+<ol>
+  <li><a href="#basic-crunch-usage">Basic <code class="highlighter-rouge">crunch</code> Usage</a>
+    <ol>
+      <li><a href="#writing-a-simple-test-suite">Writing a Simple Test Suite</a></li>
+      <li><a href="#writing-a-test-case">Writing a Test Case</a></li>
+    </ol>
+  </li>
+  <li><a href="#crunch-assertions-reference"><code class="highlighter-rouge">crunch</code> Assertions Reference</a></li>
+  <li><a href="getting-the-most-out-of-crunchmake-for-crunch-suites">Getting the Most Out of <code class="highlighter-rouge">crunchMake</code> for <code class="highlighter-rouge">crunch</code> Suites</a></li>
+</ol>
+
+<h2 id="basic-crunch-usage">Basic <code class="highlighter-rouge">crunch++</code> usage</h2>
+
+<h3 id="writing-a-simple-test-suite">Writing a Simple Test Suite</h3>
+
+<p>A <code class="highlighter-rouge">crunch</code> test suite is a C file compiled using <code class="highlighter-rouge">crunchMake</code>.
+<code class="highlighter-rouge">crunchMake</code> will automatically build the suite against <code class="highlighter-rouge">crunch</code> when it detects the C file extension .c.</p>
+
+<p>Please note, for this purpose, ‘.C’ is also considered a C extension as the utility considers this equal to .c on account of DOS, FAT32 and other case-insensitive file systems historically and generally found in use.</p>
+
+<p>A valid, albeit empty, suite takes the following basic form:</p>
+
+<pre><code class="language-C">#include &lt;crunch.h&gt;
+
+BEGIN_REGISTER_TESTS()
+END_REGISTER_TESTS()
+</code></pre>
+
+<p>With this, your suite should build and link, and <code class="highlighter-rouge">crunch</code> should detect the presense of a valid suite in the resulting library and be able to run it.</p>
+
+<p>To test this, save the above snippet as <code class="highlighter-rouge">test.c</code>, and run the following:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crunchMake test.c
+crunch <span class="nb">test</span>
+</code></pre></div></div>
+
+<p>The result should be:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>crunchMake test.c
+cc <span class="nt">-fPIC</span> <span class="nt">-DPIC</span>  test.c <span class="nt">-shared</span> <span class="nt">-I</span>/usr/include <span class="nt">-L</span>/usr/lib <span class="nt">-Wl</span>,-rpath,/usr/lib <span class="nt">-lcrunch</span> <span class="nt">-O2</span> <span class="nt">-pthread</span> <span class="nt">-o</span> test.so
+
+<span class="nv">$ </span>crunch <span class="nb">test
+</span>Running <span class="nb">test </span>suit test...
+Total tests: 0,  Failures: 0,  Pass rate: <span class="nt">--</span>
+</code></pre></div></div>
+
+<h3 id="writing-a-test-case">Writing a Test Case</h3>
+
+<p>Building on the previous section, we can easily expand this stub suite to contain a test with a simple assertion.</p>
+
+<p>Before the BEGIN_REGISTER_TESTS() block, we can declare a function that takes no arguments and returns nothing. Additionally, the function may call any code it likes, can make test assertions and any code it calls can too if it includes the crunch header:</p>
+
+<pre><code class="language-C">#include &lt;stdbool.h&gt;
+
+void testCase()
+{
+	assertNull(NULL);
+	assertTrue(true);
+}
+</code></pre>
+
+<p>We also need to register the new test case using the registerTests function on the suite:</p>
+
+<pre><code class="language-C">BEGIN_REGISTER_TESTS()
+	TEST(testCase)
+END_REGISTER_TESTS()
+</code></pre>
+
+<p>With this added, rebuild and re-run the test suite:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>crunchMake test.c
+cc <span class="nt">-fPIC</span> <span class="nt">-DPIC</span>  test.c <span class="nt">-shared</span> <span class="nt">-I</span>/usr/include <span class="nt">-L</span>/usr/lib <span class="nt">-Wl</span>,-rpath,/usr/lib <span class="nt">-lcrunch</span> <span class="nt">-O2</span> <span class="nt">-pthread</span> <span class="nt">-o</span> test.so
+
+<span class="nv">$ </span>crunch <span class="nb">test
+</span>Running <span class="nb">test </span>suit test...
+testCase...                                                                          <span class="o">[</span>  OK  <span class="o">]</span>
+Total tests: 1,  Failures: 0,  Pass rate: 100.00%
+</code></pre></div></div>
+
+<h2 id="crunch-assertions-reference"><code class="highlighter-rouge">crunch</code> Assertions Reference</h2>
+
+<p><code class="highlighter-rouge">crunch</code> comes with two kinds of affirmative equality assertion - fundamental pointer traits and general value assertions - and two boolean equality assertions.</p>
+
+<p>Reference Table of Contents</p>
+
+<ul>
+  <li><a href="#positive-equality-assertions">Positive Equality Assertions</a>
+    <ul>
+      <li><a href="#integer-equality">Integer Equality</a></li>
+      <li><a href="#floating-point-equality">Floating Point Equality</a></li>
+      <li><a href="#string-equality">String Equality</a></li>
+      <li><a href="#pointer-equality">Pointer Equality</a></li>
+      <li><a href="#memory-equality">Memory Equality</a></li>
+    </ul>
+  </li>
+  <li><a href="#negative-equality-assertions">Negative Equality Assertions</a>
+    <ul>
+      <li><a href="#integer-inequality">Integer Inequality</a></li>
+      <li><a href="#floating-point-inequality">Floating Point Inequality</a></li>
+      <li><a href="#string-inequality">String Inequality</a></li>
+      <li><a href="#pointer-inequality">Pointer Inequality</a></li>
+      <li><a href="#memory-inequality">Memory Inequality</a></li>
+    </ul>
+  </li>
+  <li><a href="#boolean-equality-assertions">Boolean Equality Assertions</a></li>
+  <li><a href="#inequality-assertions">Inequality Assertions</a></li>
+</ul>
+
+<h3 id="positive-equality-assertions">Positive Equality Assertions</h3>
+
+<h4 id="integer-equality">Integer Equality</h4>
+
+<p>There are several integer assertions for signed and unsigned at a couple of major sizes.</p>
+
+<p><code class="highlighter-rouge">assertIntEqual</code> and <code class="highlighter-rouge">assertUintEqual</code> perform standard integer assertions for signed and unsigned integers, respectively.
+If the integers you wish to assert are smaller than this, these are still the functions to use as C’s integer promotions will automatically bump the numbers up to this size by default.</p>
+
+<p><code class="highlighter-rouge">assertInt64Equal</code> and <code class="highlighter-rouge">assertUint64Equal</code> perform integer assertions of larger, 64-bit integers - both signed an unsigned, respectively.
+These exist as C still “promotes” larger integers down to <code class="highlighter-rouge">int</code>, which is bad news for 64-bit numbers that are typically implemented using a type such as <code class="highlighter-rouge">long long</code>.</p>
+
+<p>In all cases, if the two numbers are not equal, then the assertion fails with a diagnostic, and aborts the test case.</p>
+
+<h4 id="floating-point-equality">Floating Point Equality</h4>
+
+<p><code class="highlighter-rouge">assertDoubleEqual</code> asserts that two floating point numbers, possibly promoted floats, are equal. When they are not equal, this prints a diagnostic and fails, aborting the test case.</p>
+
+<h4 id="string-equality">String Equality</h4>
+
+<p><code class="highlighter-rouge">assertStringEqual</code> asserts that two NUL terminated strings are equal. When they are not equal, this prints a diagnostic and fails, aborting the test case.</p>
+
+<h4 id="pointer-equality">Pointer Equality</h4>
+
+<p><code class="highlighter-rouge">assertPtrEqual</code> validates that two pointers point to the same place. When they do not, this prints a diagnostic and fails, aborting the test case.</p>
+
+<p><code class="highlighter-rouge">assertNull</code> and <code class="highlighter-rouge">assertConstNull</code> validate that a pointer is <code class="highlighter-rouge">NULL</code>.</p>
+
+<p>NOTE: <code class="highlighter-rouge">assertConstNull</code> vs <code class="highlighter-rouge">assertNull</code> is rather historical and <code class="highlighter-rouge">assertConstNull</code> is deprecated and subject to removal in the next major release.</p>
+
+<h4 id="memory-equality">Memory Equality</h4>
+
+<p><code class="highlighter-rouge">assertMemEqual</code> validates that the memory pointed to by two pointers has the same contents as each other.</p>
+
+<p><code class="highlighter-rouge">assertMemEqual</code> allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
+When the two memory blocks do not have different contents, the assertion fails and prints a diagnostic, aborting the test case.</p>
+
+<h3 id="negative-equality-assertions">Negative Equality Assertions</h3>
+
+<h4 id="integer-inequality">Integer Inequality</h4>
+
+<p>There are several integer assertions for signed and unsigned at a couple of major sizes.</p>
+
+<p><code class="highlighter-rouge">assertIntNotEqual</code> and <code class="highlighter-rouge">assertUintNotEqual</code> perform standard integer assertions for signed and unsigned integers, respectively.
+If the integers you wish to assert are smaller than this, these are still the functions to use as C’s integer promotions will automatically bump the numbers up to this size by default.</p>
+
+<p><code class="highlighter-rouge">assertInt64NotEqual</code> and <code class="highlighter-rouge">assertUint64NotEqual</code> perform integer assertions of larger, 64-bit integers - both signed an unsigned, respectively.
+These exist as C still “promotes” larger integers down to <code class="highlighter-rouge">int</code>, which is bad news for 64-bit numbers that are typically implemented using a type such as <code class="highlighter-rouge">long long</code>.</p>
+
+<p>In all cases, if the two numbers are equal then the assertion fails with a diagnostic, and aborts the test.</p>
+
+<h4 id="floating-point-inequality">Floating Point Inequality</h4>
+
+<p><code class="highlighter-rouge">assertDoubleNotEqual</code> asserts that two floating point numbers, possibly promoted floats, are not equal. When they are equal, this prints a diagnostic and fails, aborting the test.</p>
+
+<h4 id="string-inequality">String Inequality</h4>
+
+<p><code class="highlighter-rouge">assertStringNotEqual</code> asserts that two NUL terminated strings are not equal. When they are equal, this prints a diagnostic and fails, aborting the test.</p>
+
+<h4 id="pointer-inequality">Pointer Inequality</h4>
+
+<p><code class="highlighter-rouge">assertPtrNotEqual</code> validates that two pointers do not point to the same place. When they do, this prints a diagnostic and fails, aborting the test case.</p>
+
+<p><code class="highlighter-rouge">assertNotNull</code> and <code class="highlighter-rouge">assertConstNotNull</code> validate that a pointer is not <code class="highlighter-rouge">NULL</code>.</p>
+
+<p>NOTE: <code class="highlighter-rouge">assertConstNotNull</code> vs <code class="highlighter-rouge">assertNotNull</code> is rather historical and <code class="highlighter-rouge">assertConstNotNull</code> is deprecated and subject to removal in the next major release.</p>
+
+<h4 id="memory-inequality">Memory Inequality</h4>
+
+<p><code class="highlighter-rouge">assertMemEqual</code> allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
+When the two memory blocks have the same contents, the assertion fails and prints a diagnostic, aborting the test case.</p>
+
+<h3 id="boolean-equality-assertions">Boolean Equality Assertions</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">assertTrue</code></li>
+  <li><code class="highlighter-rouge">assertFalse</code></li>
+</ul>
+
+<p>Each of these takes a truth value and checks it holds the value given by the function’s name.
+If the value checked evaluates to something other than the desired boolean value, the assertion fails printing a diagnostic and aborting the test case.diagnostic and aborting the test case.</p>
+
+<h3 id="inequality-assertions">Inequality Assertions</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">assertGreaterThan</code> - Checks that <code class="highlighter-rouge">result</code> is greater than <code class="highlighter-rouge">expected</code></li>
+  <li><code class="highlighter-rouge">assertGreaterThan64</code> - 64-bit variant which checks that <code class="highlighter-rouge">result</code> is greater than <code class="highlighter-rouge">expected</code></li>
+  <li><code class="highlighter-rouge">assertLessThan</code> - Checks that <code class="highlighter-rouge">result</code> is less than <code class="highlighter-rouge">expected</code></li>
+  <li><code class="highlighter-rouge">assertLessThan64</code> - 64-bit variant which checks that <code class="highlighter-rouge">result</code> is less than <code class="highlighter-rouge">expected</code></li>
+</ul>
+
+<p>These are integer-only assertions for performing range and broad value checks, aka inequalities.
+These assertions take two parameters in order: <code class="highlighter-rouge">result</code> and <code class="highlighter-rouge">expected</code>.
+On failure, these print a diagnostic and abort the test case.</p>
+
+<h2 id="getting-the-most-out-of-crunchmake-for-crunch-suites">Getting the Most Out of <code class="highlighter-rouge">crunchMake</code> for <code class="highlighter-rouge">crunch</code> Suites</h2>
+
+
+			</section>
+		</div>
+	</body>
+</html>
