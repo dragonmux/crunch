@@ -27,6 +27,9 @@ popd
 TOOL_DIR=`find $TOOL_BASE -type d -name 'cov-analysis*'`
 export PATH=$TOOL_DIR/bin:$PATH
 
+rm -rf $TOOL_DIR/../config/template-*
+rm -f $TOOL_DIR/../config/coverity_config.xml
+
 cov-configure --template --comptype gcc --compiler gcc-9
 
 unset TOOL_ARCHIVE TOOL_BASE TOOL_URL TOOL_DIR
