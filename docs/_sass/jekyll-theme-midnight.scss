@@ -96,6 +96,7 @@ code
 
 pre
 {
+	padding:8px 15px;
 	background: #191919;
 	border-radius: 2px;
 	border:1px solid #121212;
@@ -108,8 +109,8 @@ pre
 		color: #efefef;
 		text-shadow: 0px 1px 0px #000;
 		margin: 0;
+		padding: 0;
 		font-size: inherit;
-		padding: inherit;
 	}
 }
 
