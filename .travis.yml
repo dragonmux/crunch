@@ -280,12 +280,13 @@ matrix:
       after_script:
         - VERSION=`meson introspect build --projectinfo | jq -r '.["version"]'`-`git rev-parse --short HEAD`
         - tar cJf crunch.tar.xz cov-int
-        - curl --form token=${COVERITY_SCAN_TOKEN} \
+        - |
+          curl --form token=${COVERITY_SCAN_TOKEN} \
             --form email=dx-mon@users.sourceforge.net \
             --form file=@crunch.tar.xz \
             --form version=$VERSION \
             --form description="crunch your code. Crunch is a unit testing framework written for C and C++." \
-            https://scan.coverity.com/builds?project=${COVERITY_PROJECT_NAME}
+            https://scan.coverity.com/builds?project=DX-MON%2Fcrunch
       after_failure: cat cov-int/build-log.txt
       if: branch = coverityScan
 
