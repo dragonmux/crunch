@@ -94,8 +94,10 @@ namespace crunch
 
 			std::size_t check_(const std::size_t pos) const
 			{
-				if (pos > length_)
+				if (pos > length_ && length_)
 					throw std::out_of_range{"crunch::internal::stringView: pos outside view"};
+				else if (!length_)
+					return length_;
 				return pos;
 			}
 
