@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+cp crunch-1.0.0.tar.xz crunch_1.0.0.orig.tar.xz
+tar xJf crunch_1.0.0.orig.tar.xz
+
+cp -a debian crunch-1.0.0
+cd crunch-1.0.0
+debuild -us -uc -d
+
+cd ..
+rm -rf crunch-1.0.0
+rm -f crunch_1.0.0.orig.tar.xz crunch_1.0.0-1_amd64.build crunch_1.0.0_amd64.build crunch_1.0.0-1_amd64.buildinfo crunch_1.0.0-1_amd64.changes

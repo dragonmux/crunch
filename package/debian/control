@@ -1,0 +1,12 @@
+Source: crunch
+Maintainer: Rachel Mant <dx-mon@users.sourceforge.net>
+Section: devel
+Priority: optional
+Standards-Version: 4.3.0
+Build-Depends: debhelper (>= 10), meson, ninja
+
+Package: crunch
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: crunch your code.
+ Crunch is a unit testing framework written for C and C++.
