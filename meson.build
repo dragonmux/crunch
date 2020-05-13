@@ -69,6 +69,7 @@ endif
 subdir('crunch')
 subdir('crunch++')
 subdir('crunchMake')
+subdir('man')
 subdir('test')
 
 runClangTidy = find_program('runClangTidy.py')
