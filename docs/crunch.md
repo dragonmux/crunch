@@ -200,7 +200,7 @@ On failure, these print a diagnostic and abort the test case.
 
 It provides transparency for many compiler options, and platform- and compiler-specific translations for the rest.
 
-The important translated options when building crunch suites are:
+The important translated options when building `crunch` suites are:
 
 * `--coverage` - This option enables the compiler-specific code coverage options for the build for when you
   do a code-coverage enabled build of your project

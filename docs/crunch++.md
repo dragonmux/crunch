@@ -7,7 +7,7 @@ Table of Contents
 	2. [Writing a Test Case](#writing-a-test-case)
 	3. [Conditionally Skipping Tests and Suites](#conditionally-skipping-tests-and-suites)
 2. [`crunch++` Assertions Reference](#crunch-assertions-reference)
-3. [Getting the Most Out of `crunchMake` for `crunch++` Suites](getting-the-most-out-of-crunchmake-for-crunch-suites)
+3. [Getting the Most Out of `crunchMake` for `crunch++` Suites](#getting-the-most-out-of-crunchmake-for-crunch-suites)
 
 ## Basic `crunch++` usage
 
@@ -230,3 +230,17 @@ Both assertions take two parameters in order: `result` and `expected`.
 On failure, these print a diagnostic and abort the test case.
 
 ## Getting the Most Out of `crunchMake` for `crunch++` Suites
+
+`crunchMake` is a tool that aims to ensure a working build of your tests without having to worry about exactly where crunch++ is installed or how it was built.
+
+It provides transparency for many compiler options, and platform- and compiler-specific translations for the rest.
+
+The important translated options when building `crunch++` suites are:
+
+* `--coverage` - This option enables the compiler-specific code coverage options for the build for when you
+  do a code-coverage enabled build of your project
+* `--debug` - This option enables debugging information on the test suite to allow setting breakpoints in
+  the tests and inspecting state. Example usage of such a build: `gdb --args crunch++ testSuite`
+
+`crunchMake` will automatically feed the compiler with the visibility options `-fvisbility-inlines-hidden` and
+`-fvisibility=hidden` on GCC-like compilers.
