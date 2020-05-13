@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+rpmdev-setuptree
+cp crunch-1.0.0.tar.xz{,.asc} ~/rpmbuild/SOURCES
+cp crunch.spec ~/rpmbuild/SPECS
+
+rpmbuild -ba --sign ~/rpmbuild/SPECS/crunch.spec
+
+cp ~/rpmbuild/RPMS/x86_64/crunch-*.rpm /data/crunch/package
+cp ~/rpmbuild/SRPMS/crunch-*.src.rpm /data/crunch/package
