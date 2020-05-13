@@ -307,7 +307,7 @@ namespace crunch
 		return true;
 	}
 
-	int32_t main(const int32_t argc, const char *const *const argv)
+	int32_t main(const int32_t argc, const char *const *const argv) try
 	{
 		registerArgs(args.data());
 		parsedArgs = parseArguments(argc, argv);
@@ -329,6 +329,11 @@ namespace crunch
 		codeCoverage = bool(findArg(parsedArgs, "--coverage"_sv, nullptr));
 		debugBuild = bool(findArg(parsedArgs, "--debug"_sv, nullptr));
 		return compileTests();
+	}
+	catch (const std::out_of_range &error)
+	{
+		testPrintf("Error during string splicing operations: %s\n", error.what());
+		return 2;
 	}
 } // namespace crunch
 

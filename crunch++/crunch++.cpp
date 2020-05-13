@@ -220,7 +220,7 @@ namespace crunch
 		return true;
 	}
 
-	int32_t main(const int32_t argc, const char *const *const argv)
+	int32_t main(const int32_t argc, const char *const *const argv) try
 	{
 #if _WINDOWS
 		_set_invalid_parameter_handler(invalidHandler);
@@ -252,6 +252,11 @@ namespace crunch
 		catch (threadExit_t &val)
 			{ return val; }
 		return failures ? 1 : 0;
+	}
+	catch (const std::out_of_range &error)
+	{
+		testPrintf("Error during string splicing operations: %s\n", error.what());
+		return 2;
 	}
 } // namespace crunch
 
