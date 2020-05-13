@@ -269,8 +269,9 @@ section
 				text-align: right;
 			}
 		}
-
 	}
+
+	li ol { margin: 0; }
 }
 
 @media print, screen and (max-width: 720px)
