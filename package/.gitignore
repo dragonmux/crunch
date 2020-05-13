@@ -2,3 +2,5 @@
 *.asc
 *.sig
 *.sha256sum
+*.deb
+*.rpm
