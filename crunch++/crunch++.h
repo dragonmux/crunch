@@ -15,6 +15,7 @@
 #include <functional>
 #include <memory>
 #include <exception>
+#include <stdexcept>
 #include <string>
 #if __cplusplus >= 201703L
 #include <string_view>
