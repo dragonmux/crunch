@@ -138,7 +138,7 @@ NOTE: `assertConstNull` vs `assertNull` is rather historical and `assertConstNul
 `assertMemEqual` validates that the memory pointed to by two pointers has the same contents as each other.
 
 `assertMemEqual` allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
-When the two memory blocks do not have different contents, the assertion fails and prints a diagnostic, aborting the test case.
+When the two memory blocks have different contents, the assertion fails and prints a diagnostic, aborting the test case.
 
 ### Negative Equality Assertions
 
@@ -172,8 +172,10 @@ NOTE: `assertConstNotNull` vs `assertNotNull` is rather historical and `assertCo
 
 #### Memory Inequality
 
-`assertMemEqual` allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
-When the two memory blocks have the same contents, the assertion fails and prints a diagnostic, aborting the test case.
+`assertMemNotEqual` validates that the memory pointed to by two pointers has different contents to each other.
+
+`assertMemNotEqual` allows for safe comparison of two blocks of memory, so allowing arbitrary object comparisons.
+When the two memory blocks do not have different contents, the assertion fails and prints a diagnostic, aborting the test case.
 
 ### Boolean Equality Assertions
 
