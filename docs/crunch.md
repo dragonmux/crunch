@@ -8,7 +8,7 @@ Table of Contents
 2. [`crunch` Assertions Reference](#crunch-assertions-reference)
 3. [Getting the Most Out of `crunchMake` for `crunch` Suites](#getting-the-most-out-of-crunchmake-for-crunch-suites)
 
-## Basic `crunch++` usage
+## Basic `crunch` usage
 
 ### Writing a Simple Test Suite
 
@@ -62,7 +62,7 @@ void testCase()
 }
 ```
 
-We also need to register the new test case using the registerTests function on the suite:
+We also need to register the new test case using the BEGIN_REGISTER_TESTS() block of the suite:
 
 ``` C
 BEGIN_REGISTER_TESTS()
