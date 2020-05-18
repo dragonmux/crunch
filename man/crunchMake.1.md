@@ -2,7 +2,7 @@
 
 # NAME
 
-**crunchMake** - `crunch` and `crunch++` test builder
+**crunchMake** - crunch and crunch++ test builder
 
 # SYNOPSIS
 
@@ -12,7 +12,7 @@
 
 # DESCRIPTION
 
-`crunchMake` is a utility to build `crunch` and `crunch++` unit tests.
+crunchMake is a utility to build crunch and crunch++ unit tests.
 
 # OPTIONS
 
@@ -104,6 +104,90 @@
 
 | The files given on the crunchMake command line are gathered together and passed as inputs to the compiler.
 | This allows you to specify multiple TUs and additional object files to be compiled and linked to the suite to produce a complete library
+
+# FURTHER INFORMATION
+
+**crunchMake** is a tool that aims to ensure a working build of your tests without having to worry about exactly where **`crunch`(1)** or **`crunch++`(1)** is installed or how it was built.
+
+It provides transparency for many compiler options, and platform- and compiler-specific translations for the rest.
+
+The important translated options when building test suites are:
+
+\--coverage
+
+:   This option enables the compiler-specific code coverage options for the build for when you
+    do a code-coverage enabled build of your project
+
+\--debug
+
+:   This option enables debugging information on the test suite to allow setting breakpoints in
+    the tests and inspecting state.
+
+    Example usage of such a build: **`gdb --args crunch++ testSuite`**
+
+When compiling C++ test suites, **crunchMake** will automatically feed the compiler with the
+visibility options **`-fvisbility-inlines-hidden`** and **`-fvisibility=hidden`** on GCC-like compilers.
+
+## A simple crunch++ test suite
+
+The following example can be used as a template for a minimum viable useful test suite written using crunch++:
+
+``` C++
+#include <crunch++.h>
+
+class testSuite final : public testsuite
+{
+private:
+	void testCase() { }
+
+public:
+	void registerTests() final
+    {
+        CRUNCHpp_TEST(testCase)
+    }
+};
+
+CRUNCHpp_TESTS(testSuite)
+```
+
+Assuming this has been written out as test.cxx, compilation and excecution of this example looks like:
+
+``` shell
+$ crunchMake test.cxx
+c++ -fPIC -DPIC -fvisibility=hidden -fvisibility-inlines-hidden -std=c++11  test.cxx -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch++ -O2 -pthread -o test.so
+
+$ crunch++ test
+Running test suite test...
+Running tests in class 9testSuite...
+testCase...                                                                          [  OK  ]
+Total tests: 1,  Failures: 0,  Pass rate: 100.00%
+```
+
+## A simple crunch test suite
+
+The following example can be used as a template for a minimum viable useful test suite written using crunch:
+
+``` C
+#include <crunch.h>
+
+void testCase() { }
+
+BEGIN_REGISTER_TESTS()
+	TEST(testCase)
+END_REGISTER_TESTS()
+```
+
+Assuming this has been written out as test.c, compilation and excecution of this example looks like:
+
+``` shell
+$ crunchMake test.c
+cc -fPIC -DPIC  test.c -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch -O2 -pthread -o test.so
+
+$ crunch test
+Running test suit test...
+testCase...                                                                          [  OK  ]
+Total tests: 1,  Failures: 0,  Pass rate: 100.00%
+```
 
 # BUGS
 
