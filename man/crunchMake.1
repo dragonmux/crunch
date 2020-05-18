@@ -4,8 +4,7 @@
 .hy
 .SH NAME
 .PP
-\f[B]crunchMake\f[R] - \f[C]crunch\f[R] and \f[C]crunch++\f[R] test
-builder
+\f[B]crunchMake\f[R] - crunch and crunch++ test builder
 .SH SYNOPSIS
 .PP
 \f[B]crunchMake\f[R] [\f[B]-h\f[R]|\f[B]--help\f[R]]
@@ -19,8 +18,7 @@ builder
 \f[B]crunchMake\f[R] [\f[I]options\f[R]] \f[I]FILES\f[R]
 .SH DESCRIPTION
 .PP
-\f[C]crunchMake\f[R] is a utility to build \f[C]crunch\f[R] and
-\f[C]crunch++\f[R] unit tests.
+crunchMake is a utility to build crunch and crunch++ unit tests.
 .SH OPTIONS
 .TP
 -v, --version
@@ -101,6 +99,106 @@ passed as inputs to the compiler.
 .PD
 This allows you to specify multiple TUs and additional object files to
 be compiled and linked to the suite to produce a complete library
+.SH FURTHER INFORMATION
+.PP
+\f[B]crunchMake\f[R] is a tool that aims to ensure a working build of
+your tests without having to worry about exactly where
+\f[B]\f[CB]crunch\f[B](1)\f[R] or \f[B]\f[CB]crunch++\f[B](1)\f[R] is
+installed or how it was built.
+.PP
+It provides transparency for many compiler options, and platform- and
+compiler-specific translations for the rest.
+.PP
+The important translated options when building test suites are:
+.TP
+--coverage
+This option enables the compiler-specific code coverage options for the
+build for when you do a code-coverage enabled build of your project
+.TP
+--debug
+This option enables debugging information on the test suite to allow
+setting breakpoints in the tests and inspecting state.
+.RS
+.PP
+Example usage of such a build:
+\f[B]\f[CB]gdb --args crunch++ testSuite\f[B]\f[R]
+.RE
+.PP
+When compiling C++ test suites, \f[B]crunchMake\f[R] will automatically
+feed the compiler with the visibility options
+\f[B]\f[CB]-fvisbility-inlines-hidden\f[B]\f[R] and
+\f[B]\f[CB]-fvisibility=hidden\f[B]\f[R] on GCC-like compilers.
+.SS A simple crunch++ test suite
+.PP
+The following example can be used as a template for a minimum viable
+useful test suite written using crunch++:
+.IP
+.nf
+\f[C]
+#include <crunch++.h>
+
+class testSuite final : public testsuite
+{
+private:
+    void testCase() { }
+
+public:
+    void registerTests() final
+    {
+        CRUNCHpp_TEST(testCase)
+    }
+};
+
+CRUNCHpp_TESTS(testSuite)
+\f[R]
+.fi
+.PP
+Assuming this has been written out as test.cxx, compilation and
+excecution of this example looks like:
+.IP
+.nf
+\f[C]
+$ crunchMake test.cxx
+c++ -fPIC -DPIC -fvisibility=hidden -fvisibility-inlines-hidden -std=c++11  test.cxx -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch++ -O2 -pthread -o test.so
+
+$ crunch++ test
+Running test suite test...
+Running tests in class 9testSuite...
+testCase...                                                                          [  OK  ]
+Total tests: 1,  Failures: 0,  Pass rate: 100.00%
+\f[R]
+.fi
+.SS A simple crunch test suite
+.PP
+The following example can be used as a template for a minimum viable
+useful test suite written using crunch:
+.IP
+.nf
+\f[C]
+#include <crunch.h>
+
+void testCase() { }
+
+BEGIN_REGISTER_TESTS()
+    TEST(testCase)
+END_REGISTER_TESTS()
+\f[R]
+.fi
+.PP
+Assuming this has been written out as test.c, compilation and excecution
+of this example looks like:
+.IP
+.nf
+\f[C]
+$ crunchMake test.c
+cc -fPIC -DPIC  test.c -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch -O2 -pthread -o test.so
+
+$ crunch test
+Running test suit test...
+testCase...                                                                          [  OK  ]
+Total tests: 1,  Failures: 0,  Pass rate: 100.00%
+\f[R]
+.fi
 .SH BUGS
 .PP
 Report bugs using <https://github.com/DX-MON/crunch/issues>
