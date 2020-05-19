@@ -224,7 +224,7 @@ int runTests()
 #else
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 #endif
-		testPrintf("Running test suit %s...", namedTests[i]->value);
+		testPrintf("Running test suite %s...", namedTests[i]->value);
 		newline();
 		test *currTest = tests;
 		while (currTest->testFunc)

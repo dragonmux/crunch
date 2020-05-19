@@ -184,7 +184,7 @@ $ crunchMake test.c
 cc -fPIC -DPIC  test.c -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch -O2 -pthread -o test.so
 
 $ crunch test
-Running test suit test...
+Running test suite test...
 testCase...                                                                          [  OK  ]
 Total tests: 1,  Failures: 0,  Pass rate: 100.00%
 ```
