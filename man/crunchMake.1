@@ -67,8 +67,9 @@ available depend on your compiler\[cq]s specific linker.
 Enables linking against code that has been code-coverage enabled
 .TP
 --debug
-Specifies that you wish the test to be built in debug mode crunchMake
-defaults to building tests with level 2 (or equivilent) optimisations.
+Specifies that you wish the test to be built in debug mode.
+crunchMake defaults to building tests with level 2 (or equivilent)
+optimisations.
 .TP
 -fsanitize=\f[B]sanitizers\f[R]
 Enable the comma separated list of sanitizers \f[B]sanitizers\f[R] on
@@ -88,8 +89,8 @@ Reduces output from crunchMake to kernel Makefile like output such as
 .RS
 .PP
 By default, the utility will verbosely dump the full compiler
-invocations it is running same as typical \f[C]make\f[R] style
-utilities.
+invocations it is running, sticking to conventions used by other
+\f[C]make\f[R]-like utilities.
 .RE
 .PP
 The files given on the crunchMake command line are gathered together and
@@ -113,7 +114,7 @@ The important translated options when building test suites are:
 .TP
 --coverage
 This option enables the compiler-specific code coverage options for the
-build for when you do a code-coverage enabled build of your project
+build for when doing a code-coverage enabled build of your project
 .TP
 --debug
 This option enables debugging information on the test suite to allow
@@ -194,7 +195,7 @@ $ crunchMake test.c
 cc -fPIC -DPIC  test.c -shared -I/usr/include -L/usr/lib -Wl,-rpath,/usr/lib -lcrunch -O2 -pthread -o test.so
 
 $ crunch test
-Running test suit test...
+Running test suite test...
 testCase...                                                                          [  OK  ]
 Total tests: 1,  Failures: 0,  Pass rate: 100.00%
 \f[R]
