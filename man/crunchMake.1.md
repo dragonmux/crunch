@@ -74,7 +74,7 @@ crunchMake is a utility to build crunch and crunch++ unit tests.
 
 \--debug
 
-:   Specifies that you wish the test to be built in debug mode
+:   Specifies that you wish the test to be built in debug mode.
     crunchMake defaults to building tests with level 2
     (or equivilent) optimisations.
 
@@ -100,7 +100,7 @@ crunchMake is a utility to build crunch and crunch++ unit tests.
     such as ' CCLD  test.cxx => test.so'
 
 	By default, the utility will verbosely dump the full compiler invocations
-    it is running same as typical `make` style utilities.
+    it is running, sticking to conventions used by other `make`-like utilities.
 
 | The files given on the crunchMake command line are gathered together and passed as inputs to the compiler.
 | This allows you to specify multiple TUs and additional object files to be compiled and linked to the suite to produce a complete library
@@ -115,8 +115,8 @@ The important translated options when building test suites are:
 
 \--coverage
 
-:   This option enables the compiler-specific code coverage options for the build for when you
-    do a code-coverage enabled build of your project
+:   This option enables the compiler-specific code coverage options for the build for when doing
+    a code-coverage enabled build of your project
 
 \--debug
 
