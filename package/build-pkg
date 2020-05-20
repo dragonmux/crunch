@@ -1,4 +1,11 @@
 #!/bin/bash -e
 
 gpg -u 5E30DFF73626CA96F83DDF5E0137BA904EBDB4CD -ab $1
+
+mkdir /tmp/crunch-build
+cp crunch-*.tar.xz{,.asc} PKGBUILD /tmp/crunch-build
+pushd /tmp/crunch-build
 makepkg --sign --key 5E30DFF73626CA96F83DDF5E0137BA904EBDB4CD -c
+popd
+cp /tmp/crunch-build/crunch-*-x86_64.pkg.tar.xz{,.sig} .
+rm -rf /tmp/crunch-build
