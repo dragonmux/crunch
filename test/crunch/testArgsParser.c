@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include <crunch.h>
-#include "ArgsParser.h"
+#define _DEFAULT_SOURCE
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
+#include <crunch.h>
+#include "ArgsParser.h"
 #include "StringFuncs.h"
 
 #define nullptr (void *)0
