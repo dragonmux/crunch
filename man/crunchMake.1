@@ -46,7 +46,7 @@ Use \f[B]file\f[R] for the output test library
 -pthread
 Specify that you wish to build and link against pthreads
 .TP
--Wl\f[B]option\f[R]
+-Wl,\f[B]option\f[R]
 Adds \f[B]option\f[R] to the compiler-handled linker options
 .TP
 -std=\f[B]standard\f[R]
@@ -74,6 +74,14 @@ optimisations.
 -fsanitize=\f[B]sanitizers\f[R]
 Enable the comma separated list of sanitizers \f[B]sanitizers\f[R] on
 the test being built
+.TP
+-flto
+Enables Link Time Optimisation on the test\[cq]s build
+.RS
+.PP
+If you have LTO enabled on your build and are passing in LTO-compiled
+objects, you MUST provide this flag.
+.RE
 .SS Utility output options
 .TP
 --log
