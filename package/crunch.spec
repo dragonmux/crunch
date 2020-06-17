@@ -52,9 +52,9 @@ rm -r build
 %{_libdir}/pkgconfig/crunch++.pc
 %{_includedir}/crunch.h
 %{_includedir}/crunch++.h
-%{_mandir}/man/man1/crunch.1.gz
-%{_mandir}/man/man1/crunch++.1.gz
-%{_mandir}/man/man1/crunchMake.1.gz
+%{_mandir}/man1/crunch.1.gz
+%{_mandir}/man1/crunch++.1.gz
+%{_mandir}/man1/crunchMake.1.gz
 
 %changelog
 * Wed May 13 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.0.0-1
