@@ -59,7 +59,7 @@ namespace crunch
 		{"--quiet"_sv, 0, 0, 0},
 		{"-q"_sv, 0, 0, 0},
 		{"-pthread"_sv, 0, 0, 0},
-		{"-Wl"_sv, 0, 0, ARG_INCOMPLETE},
+		{"-Wl,"_sv, 0, 0, ARG_INCOMPLETE},
 		{"-std="_sv, 0, 0, ARG_INCOMPLETE},
 		{"-z"_sv, 1, 1, ARG_REPEATABLE},
 		{"--coverage"_sv, 0, 0, 0},
@@ -138,7 +138,8 @@ namespace crunch
 	{
 		for (const auto &parsedArg : parsedArgs)
 		{
-			if (parsedArg.matches("-z"_sv) || parsedArg.matches("-flto"_sv))
+			if (parsedArg.matches("-z"_sv) || parsedArg.matches("-Wl,"_sv) ||
+				parsedArg.matches("-flto"_sv))
 				linkArgs.emplace_back(argToString(parsedArg));
 		}
 	}
