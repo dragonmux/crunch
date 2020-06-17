@@ -53,6 +53,9 @@ Options:
 	-fsanitize=sanitizers
 	               Enable the comma separated list of sanitizers `sanitizers`
 	                   on the test being built
+	-flto          Enables Link Time Optimisation on the test's build
+	                   If you have LTO enabled on your build and are passing
+					   in LTO-compiled objects, you MUST provide this flag.
 
   Utility output options
 	--log          Tells the engine to log all test output to the file named
