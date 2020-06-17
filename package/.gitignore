@@ -4,3 +4,6 @@
 *.sha256sum
 *.deb
 *.rpm
+*.dsc
+*.buildinfo
+*.changes
