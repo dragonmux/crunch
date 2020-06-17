@@ -38,7 +38,7 @@ Options:
 	-Ldir          Adds `dir` to the compiler library search path
 	-o file        Use `file` for the output test library
 	-pthread       Specify that you wish to build and link against pthreads
-	-Wloption      Adds `option` to the compiler-handled linker options
+	-Wl,option     Adds `option` to the compiler-handled linker options
 	-std=standard  Sets the C or C++ standard to `standard`.
 	                   In C++ mode, the minimimum supported standard is C++11.
 	                   In C mode, the minimum supported standard is C89.
