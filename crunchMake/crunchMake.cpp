@@ -65,6 +65,7 @@ namespace crunch
 		{"--coverage"_sv, 0, 0, 0},
 		{"--debug"_sv, 0, 0, 0},
 		{"-fsanitize="_sv, 0, 0, ARG_INCOMPLETE},
+		{"-flto"_sv, 0, 0, 0},
 		{{}, 0, 0, 0}
 	})};
 
@@ -137,7 +138,7 @@ namespace crunch
 	{
 		for (const auto &parsedArg : parsedArgs)
 		{
-			if (parsedArg.matches("-z"_sv))
+			if (parsedArg.matches("-z"_sv) || parsedArg.matches("-flto"_sv))
 				linkArgs.emplace_back(argToString(parsedArg));
 		}
 	}
