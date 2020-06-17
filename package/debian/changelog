@@ -3,7 +3,7 @@ crunch (1.0.1-1) unstable; urgency=medium
   * Given crunchMake support for -flto
   * Fixed a number of clang-tidy warnings
 
- -- dx-mon <dx-mon@users.sourceforge.net>  Wed, 17 June 2020 14:25:02 +0000
+ -- dx-mon <dx-mon@users.sourceforge.net>  Wed, 17 Jun 2020 14:25:02 +0000
 
 crunch (1.0.0-1) unstable; urgency=medium
 
