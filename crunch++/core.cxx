@@ -36,7 +36,7 @@ namespace crunch
 		auto what = formatString("did not expect %s", params);
 		assertionFailure(what.get(), result, result);
 	}
-}
+} // namespace crunch
 
 using crunch::assertionFailure;
 using crunch::assertionError;

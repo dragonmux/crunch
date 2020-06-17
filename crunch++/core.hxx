@@ -10,8 +10,8 @@ namespace crunch
 	struct cxxTestClass final
 	{
 	private:
-		std::unique_ptr<testsuite> suite_;
-		const char *name_;
+		std::unique_ptr<testsuite> suite_{};
+		const char *name_{nullptr};
 
 	public:
 		cxxTestClass() noexcept = default;
@@ -37,6 +37,6 @@ namespace crunch
 	CRUNCHpp_API uint32_t passes, failures;
 	CRUNCHpp_API bool loggingTests;
 	CRUNCHpp_API std::vector<cxxTestClass> cxxTests;
-}
+} // namespace crunch
 
 #endif /*CORE__HXX*/

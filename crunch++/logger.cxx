@@ -211,7 +211,7 @@ namespace crunch
 				echoAborted();
 		}
 	}
-}
+} // namespace crunch
 
 using crunch::logger;
 

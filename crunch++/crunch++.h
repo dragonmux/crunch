@@ -326,7 +326,7 @@ namespace crunch
 
 		public:
 			// clang 5 has a bad time with this if we don't define it this way.
-			cxxTest() noexcept { } // NOLINT(modernize-use-equals-default)
+			cxxTest() noexcept { } // NOLINT(modernize-use-equals-default, hicpp-use-equals-default)
 			CRUNCH_VIS cxxTest(std::function<void ()> &&func, const char *const name) noexcept;
 			cxxTest(const cxxTest &) = default;
 			cxxTest(cxxTest &&) = default;
@@ -346,7 +346,7 @@ namespace crunch
 		};
 
 		CRUNCHpp_API void registerTestClass(std::unique_ptr<testsuite> &&suite, const char *name);
-	}
+	} // namespace internal
 
 	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
 	template<typename T> using remove_extent_t = typename std::remove_extent<T>::type;

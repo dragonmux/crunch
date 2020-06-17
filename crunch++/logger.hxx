@@ -39,7 +39,7 @@ namespace crunch
 	CRUNCHpp_API void echoAborted();
 	CRUNCHpp_API void logResult(resultType type, const char *message, ...);
 	CRUNCHpp_API void newline();
-}
+} // namespace crunch
 
 #define COLOUR(Code) "\x1B[" Code "m"
 #define NORMAL COLOUR("0;39")
