@@ -50,7 +50,7 @@ crunchMake is a utility to build crunch and crunch++ unit tests.
 
 :   Specify that you wish to build and link against pthreads
 
--Wl**option**
+-Wl,**option**
 
 :   Adds **option** to the compiler-handled linker options
 
@@ -82,6 +82,13 @@ crunchMake is a utility to build crunch and crunch++ unit tests.
 
 :   Enable the comma separated list of sanitizers **sanitizers**
     on the test being built
+
+-flto
+
+:   Enables Link Time Optimisation on the test's build
+
+    If you have LTO enabled on your build and are passing
+    in LTO-compiled objects, you MUST provide this flag.
 
 ## Utility output options
 
