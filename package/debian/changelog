@@ -1,4 +1,11 @@
-crunch (1.0.0-1) UNRELEASED; urgency=medium
+crunch (1.0.1-1) unstable; urgency=medium
+
+  * Given crunchMake support for -flto
+  * Fixed a number of clang-tidy warnings
+
+ -- dx-mon <dx-mon@users.sourceforge.net>  Wednesday, 17 June 2020 14:25:02 +0000
+
+crunch (1.0.0-1) unstable; urgency=medium
 
   * Initial release.
 
