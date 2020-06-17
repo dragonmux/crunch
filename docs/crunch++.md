@@ -26,11 +26,10 @@ A valid, albeit empty, suite takes the following basic form:
 class testSuite final : public testsuite
 {
 public:
-	void registerTests() final override { }
+	void registerTests() final { }
 };
 
-CRUNCHpp_TEST void registerCXXTests();
-void registerCXXTests() { registerTestClasses<testSuite>(); }
+CRUNCHpp_TESTS(testSuite)
 ```
 
 With this, your suite should build and link, and `crunch++` should detect the presense of a valid suite in the resulting library and be able to run it.
@@ -74,7 +73,7 @@ We also need to register the new test case using the registerTests function on t
 ``` C++
 	void registerTests() final
 	{
-		CXX_TEST(testCase)
+		CRUNCHpp_TEST(testCase)
 	}
 ```
 
@@ -109,8 +108,8 @@ Register the test:
 ``` C++
 	[...]
 	{
-		CXX_TEST(testCase)
-		CXX_TEST(testSkip)
+		CRUNCHpp_TEST(testCase)
+		CRUNCHpp_TEST(testSkip)
 	}
 ```
 
@@ -130,10 +129,7 @@ public:
 With this, the suite registration can be modified to register this suite too as follows:
 
 ``` C++
-void registerCXXTests()
-{
-	registerTestClasses<testSuite, testSkipSuite>();
-}
+CRUNCHpp_TESTS(testSuite, testSkipSuite)
 ```
 
 Building and re-running the suite should result in this:
