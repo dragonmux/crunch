@@ -1,7 +1,12 @@
 #!/bin/bash -e
 
+if [ $# -ne 1 ]; then
+	echo "Must provide the name of the dist archive to package"
+	exit 1
+fi
+
 rpmdev-setuptree
-cp crunch-1.0.0.tar.xz{,.asc} ~/rpmbuild/SOURCES
+cp ${1}{,.asc} ~/rpmbuild/SOURCES
 cp crunch.spec ~/rpmbuild/SPECS
 
 rpmbuild -ba --sign ~/rpmbuild/SPECS/crunch.spec

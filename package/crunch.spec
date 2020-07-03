@@ -11,7 +11,6 @@ Source1: https://github.com/DX-MON/crunch/releases/v%{version}/%{name}-%{version
 %description
 crunch your code. Crunch is a unit testing framework written for C and C++.
 
-BuildRequires: python3
 BuildRequires: meson
 BuildRequires: ninja-build >= 1.8.2
 BuildRequires: gnupg2
@@ -57,5 +56,9 @@ rm -r build
 %{_mandir}/man1/crunchMake.1.gz
 
 %changelog
+* Wed Jun 17 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.0.1-1
+- Given crunchMake support for -flto
+- Fixed a number of clang-tidy warnings
+
 * Wed May 13 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.0.0-1
 - Initial RPM packaging and release of crunch
