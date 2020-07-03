@@ -8,7 +8,7 @@ arch=('x86_64' 'i386' 'aarch64')
 license=('LGPL3')
 url="https://github.com/DX-MON/crunch"
 depends=()
-makedepends=('python' 'ninja' 'meson')
+makedepends=('ninja' 'meson')
 provides=('crunch++')
 source=("https://github.com/DX-MON/crunch/releases/v${pkgver}/${pkgname}-${pkgver}.tar.xz"{,.asc})
 sha256sums=('92a2cb726bd0667021894c9f11402c2787dcb4a0fa27a9f492df13fb8a60ccae' 'SKIP')
@@ -21,6 +21,12 @@ build()
 	cd ${pkgname}-${pkgver}
 	meson build --prefix=/usr
 	ninja -C build
+}
+
+check()
+{
+	cd ${pkgname}-${pkgver}
+	ninja -C build test
 }
 
 package()

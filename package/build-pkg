@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+if [ $# -ne 1 ]; then
+	echo "Must provide the name of the dist archive to package"
+	exit 1
+fi
+
 gpg -u 5E30DFF73626CA96F83DDF5E0137BA904EBDB4CD -ab $1
 
 mkdir /tmp/crunch-build
