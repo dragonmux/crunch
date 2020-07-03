@@ -2,7 +2,7 @@
 
 pkgname=crunch
 pkgver=1.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="crunch your code. Crunch is a unit testing framework written for C and C++."
 arch=('x86_64' 'i386' 'aarch64')
 license=('LGPL3')
