@@ -1,12 +1,23 @@
 #!/bin/bash -e
 
-cp crunch-1.0.1.tar.xz crunch_1.0.1.orig.tar.xz
-tar xJf crunch_1.0.1.orig.tar.xz
+if [ $# -ne 1 ]; then
+	echo "Must provide the name of the dist archive to package"
+	exit 1
+fi
 
-cp -a debian crunch-1.0.1
-cd crunch-1.0.1
+pkgFile=$1
+debFile=${pkgFile/.tar/.orig.tar}
+debFile=${debFile/-/_}
+pkgName=${pkgFile%.tar.*}
+debBase=${debFile%.orig.tar.*}
+
+cp $pkgFile $debFile
+tar xJf $debFile
+
+cp -a debian ${pkgName}
+cd ${pkgName}
 debuild -d
 
 cd ..
-rm -rf crunch-1.0.1
-rm -f crunch_1.0.1.orig.tar.xz crunch_1.0.1-1_amd64.build crunch_1.0.1_amd64.build
+rm -rf ${pkgName}
+rm -f ${debFile} ${debBase}-1_amd64.build ${debBase}_amd64.build
