@@ -27,7 +27,7 @@ rm ./gpg-keyring.gpg
 %setup -q
 
 %build
-meson build --prefix=%{_prefix} --libdir=%{_libdir}
+meson build --prefix=%{_prefix} --libdir=%{_libdir} --debug -Dstrip=false
 ninja -C build
 
 %check
