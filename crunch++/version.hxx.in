@@ -6,14 +6,17 @@
 
 #include <string>
 #include <stringFuncs.hxx>
+#include <crunch++.h>
 
 namespace crunchpp
 {
-	static const auto version{"@VERSION@"_s};
-	static const auto compiler{"@COMPILER@"_s};
-	static const auto compilerVersion{"@COMPILER_VERSION@"_s};
-	static const auto system{"@TARGET_SYS@"_s};
-	static const auto arch{"@TARGET_ARCH@"_s};
+	using crunch::operator ""_sv;
+
+	static const auto version{"@VERSION@"_sv};
+	static const auto compiler{"@COMPILER@"_sv};
+	static const auto compilerVersion{"@COMPILER_VERSION@"_sv};
+	static const auto system{"@TARGET_SYS@"_sv};
+	static const auto arch{"@TARGET_ARCH@"_sv};
 
 	static const auto help{
 		R"(crunch++ test running engine
@@ -30,7 +33,7 @@ Options:
 	--log          Tells the engine to log all test output to the file named
 
 This program is licensed under the LGPLv3+
-Report bugs using https://github.com/DX-MON/crunch/issues)"_s
+Report bugs using https://github.com/DX-MON/crunch/issues)"_sv
 	};
 } // namespace crunchpp
 
