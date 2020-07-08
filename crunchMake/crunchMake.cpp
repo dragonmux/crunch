@@ -195,7 +195,7 @@ namespace crunch
 	}
 
 #ifdef _MSC_VER
-	string convertLibDirs()
+	inline std::string convertLibDirs()
 	{
 		std::string ret{};
 		for (const auto &value : libDirs)
@@ -232,7 +232,6 @@ namespace crunch
 		const auto *const standard{findArg(parsedArgs, "-std="_sv, nullptr)};
 		cxxCompiler += standardVersion(standard).toString() + ' ';
 	}
-#endif
 
 	void handleSanitizers()
 	{
@@ -253,6 +252,7 @@ namespace crunch
 			offset += length + 1;
 		}
 	}
+#endif
 
 	int compileTests()
 	{
@@ -274,7 +274,9 @@ namespace crunch
 		if (!quiet)
 			quiet = bool(findArg(parsedArgs, "-q"_sv, nullptr));
 
+#ifndef _MSC_VER
 		handleSanitizers();
+#endif
 
 		for (const auto &test : tests)
 		{

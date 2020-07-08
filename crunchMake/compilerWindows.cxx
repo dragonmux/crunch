@@ -14,7 +14,7 @@ namespace crunch
 	static const auto compileOptsExtra{"/Ox /Ob2 /Oi /Oy /GL "s}; // NOLINT(cert-err58-cpp)
 	static const auto linkOptsExtra{"/LD /link "s}; // NOLINT(cert-err58-cpp)
 #endif
-	static const auto compileOpts{"/Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s}; // NOLINT(cert-err58-cpp)
+	static const auto compileOpts{"/permissive- /Zc:__cplusplus /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s}; // NOLINT(cert-err58-cpp)
 	const std::string libExt{".tlib"s}; // NOLINT(cert-err58-cpp)
 
 	inline std::string crunchLib(const bool isCXX)
