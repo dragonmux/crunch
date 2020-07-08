@@ -4,7 +4,7 @@
 
 namespace crunch
 {
-	using std::literals::string_literals::operator ""s;
+	using namespace std::literals::string_literals;
 
 #ifdef crunch_PREFIX
 	static const auto includeOptsExtra{"-I"s + crunch_PREFIX "/include "s}; // NOLINT(cert-err58-cpp)

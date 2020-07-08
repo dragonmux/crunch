@@ -4,7 +4,7 @@
 
 namespace crunch
 {
-	using std::literals::string_literals::operator ""s;
+	using namespace std::literals::string_literals;
 
 #ifdef _DEBUG
 	static const auto compileOptsExtra{"/Oi /D_DEBUG "s}; // NOLINT(cert-err58-cpp)
