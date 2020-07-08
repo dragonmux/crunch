@@ -9,6 +9,8 @@ foreach test : libCrunchppTests
 	testExtra = []
 	if test == 'testCrunch++' and cxx.has_argument('-std=c++17')
 		testExtra = ['-std=c++17']
+	elif test == 'testCrunch++' and cxx.has_argument('-std:c++17')
+		testExtra = ['-std:c++17']
 	elif test == 'testArgsParser'
 		testExtra = ['-I' + substrateDir]
 	endif
