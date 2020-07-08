@@ -25,6 +25,9 @@ namespace crunch
 	}
 }
 
+#ifdef _MSC_VER
+using crunch::console;
+#endif
 using crunch::loggingTests;
 using crunch::isTTY;
 using crunch::testPrintf;

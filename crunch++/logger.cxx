@@ -232,7 +232,9 @@ crunch::testLog *startLogging(const char *fileName)
 #endif
 	if (logger_->fd == -1)
 	{
+#ifndef _MSC_VER
 		stdout = logger_->realStdout;
+#endif
 		return nullptr;
 	}
 	logger = logger_.release();
