@@ -14,7 +14,7 @@ namespace crunch
 		const char *name_{nullptr};
 
 	public:
-		cxxTestClass() noexcept = default;
+		cxxTestClass() noexcept : suite_{}, name_{nullptr} { }
 		cxxTestClass(std::unique_ptr<testsuite> &&suite, const char *const name) :
 			suite_{std::move(suite)}, name_{name} { }
 		cxxTestClass(const cxxTestClass &) = delete;
