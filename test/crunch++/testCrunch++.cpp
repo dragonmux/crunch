@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <crunch++.h>
 #include <cstdint>
+#include <climits>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef _MSC_VER
@@ -286,26 +287,48 @@ private:
 
 	void testAssertGreaterThan()
 	{
-		uintptr_t value{};
+#if LONG_MAX == INT32_MAX
+		uint32_t value{};
 		do
-			value = ptrRng(rngGen);
+			value = uint32_t(uintRng(rngGen));
 		while (!value);
-		value &= ~(1U << (sizeof(intptr_t) - 1U));
+		value &= ~(UINT32_C(1) << 31U);
 		assertGreaterThan(value, 0);
 		tryShouldFail([=]() { assertGreaterThan(value, value); });
 		tryShouldFail([=]() { assertGreaterThan(0, value); });
+#else
+		uint64_t value{};
+		do
+			value = uintRng(rngGen);
+		while (!value);
+		value &= ~(UINT64_C(1) << 63U);
+		assertGreaterThan(value, 0);
+		tryShouldFail([=]() { assertGreaterThan(value, value); });
+		tryShouldFail([=]() { assertGreaterThan(0, value); });
+#endif
 	}
 
 	void testAssertLessThan()
 	{
-		uintptr_t value{};
+#if LONG_MAX == INT32_MAX
+		uint32_t value{};
 		do
-			value = ptrRng(rngGen);
+			value = uint32_t(uintRng(rngGen));
 		while (!value);
-		value &= ~(1U << (sizeof(intptr_t) - 1U));
+		value &= ~(UINT32_C(1) << 31U);
 		assertLessThan(0, value);
 		tryShouldFail([=]() { assertLessThan(value, value); });
 		tryShouldFail([=]() { assertLessThan(value, 0); });
+#else
+		uint64_t value{};
+		do
+			value = uintRng(rngGen);
+		while (!value);
+		value &= ~(UINT64_C(1) << 63U);
+		assertLessThan(0, value);
+		tryShouldFail([=]() { assertLessThan(value, value); });
+		tryShouldFail([=]() { assertLessThan(value, 0); });
+#endif
 	}
 
 	void testLogging()
