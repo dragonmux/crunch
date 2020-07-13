@@ -32,6 +32,8 @@ void testErrorMapping()
 	assertIntEqual(thrd_get_error(), thrd_timedout);
 	SetLastError(ERROR_BUSY);
 	assertIntEqual(thrd_get_error(), thrd_busy);
+	SetLastError(ERROR_INVALID_HANDLE);
+	assertIntEqual(thrd_get_error(), thrd_error);
 	SetLastError(ERROR_SUCCESS);
 	assertIntEqual(thrd_get_error(), thrd_success);
 }
