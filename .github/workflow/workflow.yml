@@ -30,7 +30,7 @@ jobs:
           curl -L10 https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
           python -m pip install --upgrade pip setuptools wheel
           pip3 install meson
-          unzip ninja-win.zip -d /c/ProgramData/Chocolatey/bin
+          unzip ninja-win.zip -d /c/windows/system32
           rm ninja-win.zip
         working-directory: ${{ runner.temp }}
       - name: Version tools
@@ -40,3 +40,12 @@ jobs:
           $LD || true
           meson --version
           ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Db_coverage=${{ matrix.coverage }} $BUILD_OPTS
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Codecov
+        if: success() && matrix.coverage
+        run: bash <(curl -s https://codecov.io/bash) -x "$GCOV";
