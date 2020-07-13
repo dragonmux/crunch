@@ -34,7 +34,7 @@ jobs:
       - name: Setup Meson + Ninja
         shell: bash
         run: |
-          curl -L10 https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
+          curl -L1O https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
           python -m pip install --upgrade pip setuptools wheel
           pip3 install meson
           unzip ninja-win.zip -d /c/windows/system32
