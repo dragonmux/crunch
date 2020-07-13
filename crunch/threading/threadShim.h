@@ -32,7 +32,11 @@ CRUNCH_API int thrd_create(thrd_t *thr, thrd_start_t func, void *arg);
 CRUNCH_API int thrd_join(thrd_t thr, int *res);
 NORETURN(void thrd_exit(int res));
 
+#ifdef _WINDOWS
+extern int thrd_get_error();
+#else
 extern int thrd_err_map(const int result);
+#endif
 #else
 #include <threads.h>
 #endif
