@@ -48,10 +48,13 @@ jobs:
           meson --version
           ninja --version
       - name: Configure
+        shell: bash
         run: meson build --prefix=$HOME/.local -Db_coverage=${{ matrix.coverage }} $BUILD_OPTS
       - name: Build
+        shell: bash
         run: ninja -C build
       - name: Test
+        shell: bash
         run: ninja -C build test
       - name: Codecov
         if: success() && matrix.coverage
