@@ -19,6 +19,12 @@ jobs:
       CXX: cl.exe
       LD: link.exe
     steps:
+      - name: Runtime Environment
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %ARCH%
+          bash .github/exportEnv.sh
+        env:
+          ARCH: ${{ matrix.arch }}
       - name: Chekcout crunch
         uses: actions/checkout@v2
         with:
