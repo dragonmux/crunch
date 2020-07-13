@@ -1,0 +1,42 @@
+name: GitHub Actions
+
+on:
+  push:
+    branches-ignore:
+      - 'coverityScan'
+
+jobs:
+  build-windows:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [windows-2019]
+        arch: ['amd64', 'x86']
+        coverage: [false]
+      fast-fail: false
+    env:
+      CC: cl.exe
+      CXX: cl.exe
+      LD: link.exe
+    steps:
+      - name: Chekcout crunch
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          curl -L10 https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
+          python -m pip install --upgrade pip setuptools wheel
+          pip3 install meson
+          unzip ninja-win.zip -d /c/ProgramData/Chocolatey/bin
+          rm ninja-win.zip
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          $CC || true
+          $LD || true
+          meson --version
+          ninja --version
