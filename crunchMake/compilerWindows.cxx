@@ -7,11 +7,11 @@ namespace crunch
 	using namespace std::literals::string_literals;
 
 #ifdef _DEBUG
-	static const auto compileOptsExtra{"/Oi /D_DEBUG "s}; // NOLINT(cert-err58-cpp)
+	static const auto compileOptsExtra{"/Oi /D_DEBUG /MDd "s}; // NOLINT(cert-err58-cpp)
 	//" /Zi /FS"
 	static const auto linkOptsExtra{"/LDd /link /DEBUG "s}; // NOLINT(cert-err58-cpp)
 #else
-	static const auto compileOptsExtra{"/Ox /Ob2 /Oi /Oy /GL "s}; // NOLINT(cert-err58-cpp)
+	static const auto compileOptsExtra{"/Ox /Ob2 /Oi /Oy /GL /MD "s}; // NOLINT(cert-err58-cpp)
 	static const auto linkOptsExtra{"/LD /link "s}; // NOLINT(cert-err58-cpp)
 #endif
 	static const auto compileOpts{"/permissive- /Zc:__cplusplus /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s}; // NOLINT(cert-err58-cpp)
