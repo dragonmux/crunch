@@ -13,7 +13,7 @@ jobs:
         os: [windows-2019]
         arch: ['amd64', 'x86']
         coverage: [false]
-      fast-fail: false
+      fail-fast: false
     env:
       CC: cl.exe
       CXX: cl.exe
