@@ -237,6 +237,8 @@ void testAssertGreaterThan()
 		num32 = genRanlux32(ranlux32);
 	while (num64 <= 0)
 		num64 = genRanlux64(ranlux64);
+	num32 &= ~(UINT32_C(1) << 31U);
+	num64 &= ~(UINT64_C(1) << 63U);
 	assertGreaterThan(num32, 0);
 	assertGreaterThan64(num64, 0);
 	tryShouldFail(testAssertGreaterThan1);
@@ -256,6 +258,8 @@ void testAssertLessThan()
 		num32 = genRanlux32(ranlux32);
 	while (num64 <= 0)
 		num64 = genRanlux64(ranlux64);
+	num32 &= ~(UINT32_C(1) << 31U);
+	num64 &= ~(UINT64_C(1) << 63U);
 	assertLessThan(0, num32);
 	assertLessThan64(0, num64);
 	tryShouldFail(testAssertLessThan1);
