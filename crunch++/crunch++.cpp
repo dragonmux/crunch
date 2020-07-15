@@ -123,7 +123,7 @@ namespace crunch
 			dlclose(testSuite);
 		return registerTests;
 	}
-	catch (std::bad_alloc &e)
+	catch (const std::bad_alloc &)
 	{
 		cxxTests.clear();
 		red();
