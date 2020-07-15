@@ -48,7 +48,6 @@ jobs:
           $LD || true
           meson --version
           ninja --version
-          export
       - name: Configure
         shell: bash
         run: meson build --prefix=$HOME/.local -Db_coverage=${{ matrix.coverage }} $BUILD_OPTS
@@ -61,7 +60,3 @@ jobs:
       - name: Codecov
         if: success() && matrix.coverage
         run: bash <(curl -s https://codecov.io/bash) -x "$GCOV";
-      - name: Build Debug
-        if: failure()
-        shell: bash
-        run: cat build/meson-logs/meson-log.txt
