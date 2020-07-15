@@ -29,8 +29,6 @@ jobs:
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %ARCH%
           call ${{ github.workspace }}/.github/exportEnv.bat
-          for /f "delims=;" %p in ('which link.exe') do set LD=%p
-          echo ::set-env name=LD::%LD%
         env:
           ARCH: ${{ matrix.arch }}
       - name: Setup Meson + Ninja
@@ -45,6 +43,7 @@ jobs:
       - name: Version tools
         shell: bash
         run: |
+          rm /usr/bin/link.exe
           $CC || true
           $LD || true
           meson --version
