@@ -29,7 +29,8 @@ jobs:
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %ARCH%
           call ${{ github.workspace }}/.github/exportEnv.bat
-          bash -c 'echo ::set-env name=LD::`which %LD%`'
+          for /f "delims=;" %p in ('which link.exe') do set LD=%p
+          echo ::set-env name=LD::%LD%
         env:
           ARCH: ${{ matrix.arch }}
       - name: Setup Meson + Ninja
