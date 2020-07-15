@@ -60,3 +60,7 @@ jobs:
       - name: Codecov
         if: success() && matrix.coverage
         run: bash <(curl -s https://codecov.io/bash) -x "$GCOV";
+      - name: Build Debug
+        if: failure()
+        shell: bash
+        run: cat build/meson-logs/meson-log.txt
