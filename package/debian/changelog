@@ -1,3 +1,12 @@
+crunch (1.1.0-1) unstable; urgency=medium
+
+  * Successfully fixed the windows build
+  * Improved the unit tests correctness
+  * Improved threadShim
+  * Fixed the Clang 5 build which 1.0.1 broke
+
+ -- dx-mon <dx-mon@users.sourceforge.net>  Wed, 17 Jun 2020 14:25:02 +0000
+
 crunch (1.0.1-1) unstable; urgency=medium
 
   * Given crunchMake support for -flto

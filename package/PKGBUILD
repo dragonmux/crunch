@@ -1,8 +1,8 @@
 # Maintainer: Rachel Mant <dx-mon@users.sourceforge.net>
 
 pkgname=crunch
-pkgver=1.0.1
-pkgrel=2
+pkgver=1.1.0
+pkgrel=1
 pkgdesc="crunch your code. Crunch is a unit testing framework written for C and C++."
 arch=('x86_64' 'i386' 'aarch64')
 license=('LGPL3')

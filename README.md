@@ -6,7 +6,7 @@
 [![Coverity Status](https://scan.coverity.com/projects/20294/badge.svg)](https://scan.coverity.com/projects/dx-mon-crunch)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
-This is crunch v1.0
+This is crunch v1.1
 
 ## crunch documentation
 
