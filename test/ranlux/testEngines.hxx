@@ -65,7 +65,7 @@ public:
 	UIntType operator()()
 	{
 		// Derive short lag index from current index.
-		int64_t ps = p - shortLag;
+		std::ptrdiff_t ps = p - shortLag;
 		if (ps < 0)
 			ps += longLag;
 
