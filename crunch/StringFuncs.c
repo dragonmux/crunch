@@ -20,6 +20,8 @@ char *formatString(const char *format, ...)
 	va_start(args, format);
 	const int len = vsnprintf(NULL, 0, format, args);
 	va_end(args);
+	if (len <= 0)
+		return NULL;
 	char *const ret = (char *)malloc(len + 1);
 	if (!ret)
 		return NULL;
