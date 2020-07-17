@@ -23,7 +23,7 @@ public:
 			{seed ? seed : defaultSeed};
 
 		for (auto &stateWord : x)
-			stateWord = (lcg() & 0xFFFFFFFFU) + ((lcg() & 0xFFFFFFFFU) << 32U);
+			stateWord = (lcg() & UINT64_C(0xFFFFFFFF)) + ((lcg() & UINT64_C(0xFFFFFFFF)) << 32U);
 		carry = !x.back();
 	}
 

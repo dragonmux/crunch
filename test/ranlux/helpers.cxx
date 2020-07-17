@@ -12,7 +12,7 @@ uint32_t randomSeed32()
 uint64_t randomSeed64()
 {
 	std::random_device randDev{};
-	if (sizeof(std::random_device::result_type) >= 64)
+	if (sizeof(std::random_device::result_type) >= 8)
 		return randDev();
 	else
 		return (uint64_t{randDev()} << 32U) | randDev();
