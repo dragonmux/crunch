@@ -18,7 +18,7 @@ else
 	if [ ! -e $HOME/.local/bin/meson ]; then
 		wget https://bootstrap.pypa.io/get-pip.py
 		python3.7 get-pip.py --user
-		pip3 install --user meson<= 0.54.3,>=0.55.1
+		pip3 install --user 'meson<= 0.54.3,>=0.55.1'
 		rm get-pip.py
 	fi
 
