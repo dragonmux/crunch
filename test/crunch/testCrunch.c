@@ -320,7 +320,7 @@ void testAbort()
 
 void testFormatString()
 {
-	const char *result = NULL;
+	char *result = NULL;
 	result = formatString("Test");
 	assertNotNull(result);
 	assertStringEqual(result, "Test");
