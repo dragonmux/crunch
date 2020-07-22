@@ -11,9 +11,7 @@ after_success:
       bash <(curl -s https://codecov.io/bash) -x "$GCOV";
     fi
 after_failure:
-  - if [ "$ENGINE" == "meson" ]; then
-      cat build/meson-logs/testlog.txt || true;
-    fi
+  - cat build/meson-logs/testlog.txt || true;
 
 cache:
   pip: true
