@@ -337,7 +337,7 @@ void testFormatString()
 void testAllocs()
 {
 	allocCount = 0;
-	assertNull(formatString(""));
+	assertNull(formatString("a"));
 	assertIntEqual(allocCount, -1);
 	allocCount = 0;
 	assertNull(startLogging(""));
