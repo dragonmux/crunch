@@ -318,6 +318,21 @@ void testAbort()
 	tryShouldFail(testAbort1);
 }
 
+void testFormatString()
+{
+	const char *result = NULL;
+	result = formatString("Test");
+	assertNotNull(result);
+	assertStringEqual(result, "Test");
+	free(result);
+	result = formatString("%d.%u\n", -5, 6U);
+	assertNotNull(result);
+	assertStringEqual(result, "-5.6\n");
+	free(result);
+	result = formatString("%");
+	assertNull(result);
+}
+
 #if !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 void testAllocs()
 {
@@ -351,6 +366,7 @@ BEGIN_REGISTER_TESTS()
 	TEST(testLogging)
 	TEST(testFail)
 	TEST(testAbort)
+	TEST(testFormatString)
 #if !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 	TEST(testAllocs)
 #endif
