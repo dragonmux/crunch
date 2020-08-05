@@ -16,7 +16,6 @@ constexpr static const auto R_OK{0x04};
 #include <substrate/utility>
 #include <core.hxx>
 #include <logger.hxx>
-#include <argsParser.hxx>
 #include <stringFuncs.hxx>
 #include "crunchCompiler.hxx"
 #include <crunchMake.h>

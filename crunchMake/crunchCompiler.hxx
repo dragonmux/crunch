@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <string>
 #include <crunch++.h>
+#include <argsParser.hxx>
 
 namespace crunch
 {
@@ -22,6 +23,7 @@ namespace crunch
 	extern std::string computeObjName(const std::string &file);
 	extern std::string computeSOName(const std::string &file);
 
+	extern std::string standardVersion(constParsedArg_t version);
 	extern int32_t compileTest(const std::string &test);
 }
 

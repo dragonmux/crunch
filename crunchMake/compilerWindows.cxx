@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "crunchCompiler.hxx"
 #include <crunchMake.h>
+#include <logger.hxx>
 
 namespace crunch
 {
@@ -31,6 +32,21 @@ namespace crunch
 			return "libcrunch++.lib "s;
 		else
 			return "libcrunch.lib "s;
+	}
+
+	std::string standardVersion(constParsedArg_t version)
+	{
+		if (!version)
+			return "-std:c++11"_sv.toString();
+		const auto *const str = version->value.data() + 5;
+		if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
+		{
+			testPrintf("Warning, standard version must be at least C++11\n");
+			return "-std:c++11"_sv.toString();
+		}
+		std::string standardStr{version->value.toString()};
+		standardStr[4] = ':';
+		return standardStr;
 	}
 
 	int32_t compileTest(const std::string &test)
