@@ -1,6 +1,7 @@
 # crunch
 
 [![Build Status](https://travis-ci.org/DX-MON/crunch.svg?branch=main)](https://travis-ci.org/DX-MON/crunch)
+[![GitHub Actions](https://github.com/DX-MON/crunch/workflows/GitHub%20Actions/badge.svg)](https://github.com/DX-MON/crunch/actions)
 [![codecov](https://codecov.io/gh/DX-MON/crunch/branch/main/graph/badge.svg)](https://codecov.io/gh/DX-MON/crunch)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/DX-MON/crunch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DX-MON/crunch/alerts/)
 [![Coverity Status](https://scan.coverity.com/projects/20294/badge.svg)](https://scan.coverity.com/projects/dx-mon-crunch)
