@@ -40,12 +40,13 @@ namespace crunch
 	std::string standardVersion(constParsedArg_t version)
 	{
 		if (!version)
-			return "-std:c++11"_sv.toString();
+			return "-std:c++14"_sv.toString();
 		const auto *const str = version->value.data() + 5;
-		if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
+		if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9' ||
+			(str[3] == '1' && str[4] == '1'))
 		{
-			testPrintf("Warning, standard version must be at least C++11\n");
-			return "-std:c++11"_sv.toString();
+			testPrintf("Warning, standard version must be at least C++14\n");
+			return "-std:c++14"_sv.toString();
 		}
 		std::string standardStr{version->value.toString()};
 		standardStr[4] = ':';
