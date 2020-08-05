@@ -60,6 +60,7 @@ namespace crunch
 		{"-pthread"_sv, 0, 0, 0},
 		{"-Wl,"_sv, 0, 0, ARG_INCOMPLETE},
 		{"-std="_sv, 0, 0, ARG_INCOMPLETE},
+		{"-std:"_sv, 0, 0, ARG_INCOMPLETE},
 		{"-z"_sv, 1, 1, ARG_REPEATABLE},
 		{"--coverage"_sv, 0, 0, 0},
 		{"--debug"_sv, 0, 0, 0},
@@ -212,26 +213,22 @@ namespace crunch
 	void objsToString() { objs = argsToString(linkObjs); }
 	void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
 
-#ifndef _MSC_VER
-	internal::stringView standardVersion(constParsedArg_t version)
+	const parsedArg_t *fetchStandard()
 	{
-		if (!version)
-			return "-std=c++11"_sv;
-		const auto *const str = version->value.data() + 5;
-		if (strlen(str) != 5 || strncmp(str, "c++", 3) != 0 || str[3] == '8' || str[3] == '9')
-		{
-			testPrintf("Warning, standard version must be at least C++11");
-			return "-std=c++11"_sv;
-		}
-		return version->value;
+		const auto *const standardEquals{findArg(parsedArgs, "-std="_sv, nullptr)};
+		const auto *const standardColon{findArg(parsedArgs, "-std:"_sv, nullptr)};
+		if (standardEquals && standardColon)
+			testPrintf("Warning, both forms of -std specified, using -std= form\n");
+		return standardEquals ? standardEquals : standardColon;
 	}
 
 	void buildCXXString()
 	{
-		const auto *const standard{findArg(parsedArgs, "-std="_sv, nullptr)};
-		cxxCompiler += standardVersion(standard).toString() + ' ';
+		const auto *const standard{fetchStandard()};
+		cxxCompiler += standardVersion(standard) + ' ';
 	}
 
+#ifndef _MSC_VER
 	void handleSanitizers()
 	{
 		const auto *const sanitizer{findArg(parsedArgs, "-fsanitize="_sv, nullptr)};
