@@ -51,9 +51,9 @@ namespace crunch
 	int32_t compileTest(const std::string &test)
 	{
 		const bool mode{isCXX(test)};
-		const std::string &compiler = mode ? cxxCompiler : cCompiler;
+		const auto &compiler{mode ? cxxCompiler : cCompiler};
 		const auto objFile{computeObjName(test)};
-		const auto compileString{compiler + " "s + test + " -c "s + includeOptsExtra +
+		const auto compileString{compiler + test + " -c "s + includeOptsExtra +
 			inclDirFlags + debugFlags() + threadingFlags() + "-o "s + objFile};
 		if (!silent)
 		{
@@ -70,7 +70,7 @@ namespace crunch
 			return result;
 
 		const auto soFile{computeSOName(test)};
-		const auto linkString{compiler + " "s + objFile + " -shared "s + linkOptsExtra +
+		const auto linkString{compiler + objFile + " -shared "s + linkOptsExtra +
 			libDirFlags + objs + libs + coverageFlags() + crunchLib(mode) + debugFlags() +
 			threadingFlags() + "-o " + soFile};
 		if (!silent)
@@ -91,9 +91,9 @@ namespace crunch
 	int32_t compileTest(const std::string &test)
 	{
 		const bool mode{isCXX(test)};
-		const std::string &compiler = mode ? cxxCompiler : cCompiler;
+		const auto &compiler{mode ? cxxCompiler : cCompiler};
 		const auto soFile{computeSOName(test)};
-		const auto compileString{compiler + " "s + test + " -shared "s + includeOptsExtra +
+		const auto compileString{compiler + test + " -shared "s + includeOptsExtra +
 			linkOptsExtra + inclDirFlags + libDirFlags + objs + libs + coverageFlags() +
 			crunchLib(mode) + debugFlags() + threadingFlags() + "-o "s + soFile};
 		if (!silent)
