@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
 #ifndef THREAD_SHIM__H
 #define THREAD_SHIM__H
 
