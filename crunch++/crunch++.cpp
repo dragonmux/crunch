@@ -52,9 +52,15 @@ namespace crunch
 	})};
 
 #ifdef _MSC_VER
-	const static auto libExt{"tlib"_s}; // NOLINT(cert-err58-cpp)
+	static const auto libExt{substrate::make_array<internal::stringView>(
+	{
+		"dll"_sv, "so"_sv, "tlib"_sv
+	})};
+	static const std::size_t libExtMaxLength{4U};
+	const auto R_OK{0x04};
 #else
-	const static auto libExt{"so"_s}; // NOLINT(cert-err58-cpp)
+	static const auto libExt{substrate::make_array<internal::stringView>({"so"_sv})};
+	static const std::size_t libExtMaxLength{2U};
 #endif
 
 	struct freeDelete_t final
@@ -132,6 +138,26 @@ namespace crunch
 		return false;
 	}
 
+	std::unique_ptr<char[]> extForLibrary(const internal::stringView &test)
+	{
+		const auto lengthWorkingDir{std::char_traits<char>::length(workingDir.get())};
+		// + 3 on the end to account for one '/', '.' and NUL termination
+		auto library{substrate::make_unique_nothrow<char[]>(lengthWorkingDir + test.length() + libExtMaxLength + 3)};
+		memcpy(library.get(), workingDir.get(), lengthWorkingDir);
+		auto offset{lengthWorkingDir};
+		library[offset++] = '/';
+		memcpy(library.get() + offset, test.data(), test.length());
+		offset += test.length();
+		library[offset++] = '.';
+		for (const auto ext : libExt)
+		{
+			memcpy(library.get() + offset, ext.data(), ext.length() + 1);
+			if (!access(library.get(), R_OK))
+				return library;
+		}
+		return {};
+	}
+
 	void runTests()
 	{
 		testLog *logFile{};
@@ -142,9 +168,16 @@ namespace crunch
 			loggingTests = true;
 		}
 
-		for (size_t i = 0; i < numTests; i++)
+		for (size_t i{0}; i < numTests; i++)
 		{
-			auto testLib = formatString("%s/%s.%s", workingDir.get(), namedTests[i]->value.data(), libExt.data());
+			auto testLib{extForLibrary(namedTests[i]->value)};
+			if (!testLib)
+			{
+				red();
+				testPrintf("Test library %s does not exist, skipping", namedTests[i]->value.data());
+				newline();
+				continue;
+			}
 			auto *testSuite{dlopen(testLib.get(), RTLD_LAZY)};
 			if (!testSuite || !tryRegistration(testSuite))
 			{
