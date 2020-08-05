@@ -22,7 +22,7 @@ std::unique_ptr<char []> vaFormatString(const char *format, va_list args) noexce
 	va_end(lenArgs);
 	if (len <= 0)
 		return {};
-	auto ret{substrate::make_unique_nothrow<char []>(len)}; // NOLINT
+	auto ret{substrate::make_unique_nothrow<char []>(len + 1)}; // NOLINT
 	if (!ret)
 		return nullptr;
 	vsprintf(ret.get(), format, args);
