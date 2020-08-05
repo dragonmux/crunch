@@ -1,7 +1,7 @@
 if not isWindows
 	testExt = '.so'
 else
-	testExt = '.tlib'
+	testExt = '.dll'
 endif
 
 commandExtra = []
