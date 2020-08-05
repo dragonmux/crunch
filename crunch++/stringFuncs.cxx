@@ -18,8 +18,10 @@ std::unique_ptr<char []> vaFormatString(const char *format, va_list args) noexce
 {
 	va_list lenArgs;
 	va_copy(lenArgs, args);
-	const size_t len = vsnprintf(nullptr, 0, format, lenArgs) + 1;
+	const auto len{vsnprintf(nullptr, 0, format, lenArgs)};
 	va_end(lenArgs);
+	if (len <= 0)
+		return {};
 	auto ret{substrate::make_unique_nothrow<char []>(len)}; // NOLINT
 	if (!ret)
 		return nullptr;
