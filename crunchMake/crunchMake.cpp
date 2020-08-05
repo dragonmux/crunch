@@ -257,9 +257,7 @@ namespace crunch
 		libDirFlagsToString();
 		objsToString();
 		libsToString();
-#ifndef _MSC_VER
 		buildCXXString();
-#endif
 		testLog *logFile = nullptr;
 		const auto *const logParam{findArg(parsedArgs, "--log"_sv, nullptr)};
 		const auto logging = bool(logParam);
