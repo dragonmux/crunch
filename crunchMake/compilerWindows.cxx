@@ -24,6 +24,9 @@ namespace crunch
 	static const auto linkOpts{"/LD /link "s}; // NOLINT(cert-err58-cpp)
 #endif
 	static const auto compileOpts{"/permissive- /Zc:__cplusplus /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s}; // NOLINT(cert-err58-cpp)
+
+	std::string cCompiler{"cl "s};
+	std::string cxxCompiler{"cl "s};
 	const std::string libExt{".dll"s}; // NOLINT(cert-err58-cpp)
 
 	inline std::string crunchLib(const bool isCXX)
@@ -52,9 +55,10 @@ namespace crunch
 	int32_t compileTest(const std::string &test)
 	{
 		const bool mode{isCXX(test)};
+		const auto &compiler{mode ? cxxCompiler : cCompiler};
 		const auto soFile{computeSOName(test)};
 		const auto objFile{computeObjName(test)};
-		const auto compileString{"cl "s + test + " "s + compileOptsExtra + compileOpts +
+		const auto compileString{compiler + test + " "s + compileOpts + compileOptsExtra +
 			inclDirFlags + includeOptsExtra + objs + "/Fe"s + soFile + " /Fo"s + objFile +
 			" "s + linkOpts + linkOptsExtra + libDirFlags + crunchLib(mode) + libs};
 		if (!silent)
