@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <direct.h>
 #include <io.h>
+constexpr static const auto R_OK{0x04};
 #define RTLD_LAZY 0
 #define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
 #define dlsym(handle, symbol) GetProcAddress(HMODULE(handle), symbol)
@@ -57,7 +58,6 @@ namespace crunch
 		"dll"_sv, "so"_sv, "tlib"_sv
 	})};
 	static const std::size_t libExtMaxLength{4U};
-	const auto R_OK{0x04};
 #else
 	static const auto libExt{substrate::make_array<internal::stringView>({"so"_sv})};
 	static const std::size_t libExtMaxLength{2U};

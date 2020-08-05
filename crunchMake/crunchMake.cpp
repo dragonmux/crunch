@@ -5,7 +5,7 @@
 #include <unistd.h>
 #else
 #include <io.h>
-#define R_OK 6
+constexpr static const auto R_OK{0x04};
 #endif
 #include <array>
 #include <vector>
