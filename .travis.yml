@@ -26,7 +26,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-5.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -40,7 +40,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-6.0 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -54,7 +54,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -68,7 +68,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -82,7 +82,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -96,7 +96,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -110,7 +110,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -124,7 +124,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -138,7 +138,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
@@ -152,7 +152,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-10 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main'
               key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
             - deadsnakes
           packages:
