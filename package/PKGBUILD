@@ -11,7 +11,7 @@ depends=()
 makedepends=('ninja' 'meson')
 provides=('crunch++')
 source=("https://github.com/DX-MON/crunch/releases/v${pkgver}/${pkgname}-${pkgver}.tar.xz"{,.asc})
-sha256sums=('92a2cb726bd0667021894c9f11402c2787dcb4a0fa27a9f492df13fb8a60ccae' 'SKIP')
+sha256sums=('530bd4623f26ddb0226e33c612bee5803d616bbb9b36f89fbac84674ed5b0d53' 'SKIP')
 validpgpkeys=(
 	'5E30DFF73626CA96F83DDF5E0137BA904EBDB4CD' # "Rachel Mant <dx-mon@users.sourceforge.net>"
 )
