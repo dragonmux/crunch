@@ -4,8 +4,10 @@ crunch (1.1.0-1) unstable; urgency=medium
   * Improved the unit tests correctness
   * Improved threadShim
   * Fixed the Clang 5 build which 1.0.1 broke
+  * Fixed a security bug in the `formatString()` function in both crunch and crunch++
+  * Improved handling of -std in crunchMake so it works with both the MSVC and GCC forms of the argument
 
- -- dx-mon <dx-mon@users.sourceforge.net>  Wed, 17 Jun 2020 14:25:02 +0000
+ -- dx-mon <dx-mon@users.sourceforge.net>  Mon, 10 Aug 2020 11:09:08 +0000
 
 crunch (1.0.1-1) unstable; urgency=medium
 
