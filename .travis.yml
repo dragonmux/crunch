@@ -248,6 +248,28 @@ matrix:
             - g++-9
             - python3.7
       if: branch != coverityScan
+    - compiler: gcc-10
+      env: CC=gcc-10 CXX=g++-10 GCOV=gcov-10
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - deadsnakes
+          packages:
+            - g++-10
+            - python3.7
+      if: branch != coverityScan
+    - compiler: gcc-10
+      env: CC=gcc-10 CXX=g++-10 COVERAGE=0
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - deadsnakes
+          packages:
+            - g++-10
+            - python3.7
+      if: branch != coverityScan
 #    - env: ARCH=amd64 COVERAGE=0 PATH=/c/tools/ninja-build:/c/Python37/Scripts:/c/Python37:$PATH
 #      os: windows
 #      if: branch != coverityScan
