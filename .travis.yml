@@ -253,7 +253,7 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r-test/ppa'
+            - sourceline: 'ppa:ubuntu-toolchain-r/ppa'
             - deadsnakes
           packages:
             - g++-10
@@ -264,7 +264,7 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r-test/ppa'
+            - sourceline: 'ppa:ubuntu-toolchain-r/ppa'
             - deadsnakes
           packages:
             - g++-10
