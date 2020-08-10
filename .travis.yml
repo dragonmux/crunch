@@ -1,6 +1,6 @@
 language: cpp
 os: linux
-dist: xenial
+dist: bionic
 
 install: .travis-ci/install.sh
 before_script: .travis-ci/beforeScript.sh
@@ -253,7 +253,7 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r/ppa'
+            - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
             - g++-10
@@ -264,7 +264,7 @@ matrix:
       addons:
         apt:
           sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r/ppa'
+            - ubuntu-toolchain-r-test
             - deadsnakes
           packages:
             - g++-10
