@@ -56,11 +56,13 @@ rm -r build
 %{_mandir}/man1/crunchMake.1.gz
 
 %changelog
-* Fri Jul 17 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.0-1
+* Mon Aug 10 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.0-1
 - Successfully fixed the windows build
 - Improved the unit tests correctness
 - Improved threadShim
 - Fixed the Clang 5 build which 1.0.1 broke
+- Fixed a security bug in the `formatString()` function in both crunch and crunch++
+- Improved handling of -std in crunchMake so it works with both the MSVC and GCC forms of the argument
 
 * Wed Jun 17 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.0.1-1
 - Given crunchMake support for -flto
