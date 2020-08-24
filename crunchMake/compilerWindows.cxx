@@ -15,18 +15,11 @@ namespace crunch
 	static const auto linkOptsExtra{""s}; // NOLINT(cert-err58-cpp)
 #endif
 
-#ifdef _DEBUG
-	static const auto compileOptsExtra{"/Oi /D_DEBUG /MDd "s}; // NOLINT(cert-err58-cpp)
-	//" /Zi /FS"
-	static const auto linkOpts{"/LDd /link /DEBUG "s}; // NOLINT(cert-err58-cpp)
-#else
-	static const auto compileOptsExtra{"/Ox /Ob2 /Oi /Oy /GL /MD "s}; // NOLINT(cert-err58-cpp)
-	static const auto linkOpts{"/LD /link "s}; // NOLINT(cert-err58-cpp)
-#endif
-	static const auto compileOpts{"/permissive- /Zc:__cplusplus /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s}; // NOLINT(cert-err58-cpp)
+	// NOLINTNEXTLINE(cert-err58-cpp)
+	static const auto compileOpts{"/permissive- /Zc:__cplusplus /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s};
 
-	std::string cCompiler{"cl "s};
-	std::string cxxCompiler{"cl "s};
+	std::string cCompiler{"cl "s}; // NOLINT(cert-err58-cpp)
+	std::string cxxCompiler{"cl "s}; // NOLINT(cert-err58-cpp)
 	const std::string libExt{".dll"s}; // NOLINT(cert-err58-cpp)
 
 	inline std::string crunchLib(const bool isCXX)
@@ -35,6 +28,23 @@ namespace crunch
 			return "libcrunch++.lib "s;
 		else
 			return "libcrunch.lib "s;
+	}
+
+	inline std::string debugCompileFlags()
+	{
+		if (debugBuild)
+			return "/Oi /D_DEBUG /MDd "s;
+			//" /Zi /FS"
+		else
+			return "/Ox /Ob2 /Oi /Oy /GL /MD "s;
+	}
+
+	inline std::string debugLinkFlags()
+	{
+		if (debugBuild)
+			return "/LDd /link /DEBUG "s;
+		else
+			return "/LD /link "s;
 	}
 
 	std::string standardVersion(constParsedArg_t version)
@@ -59,9 +69,9 @@ namespace crunch
 		const auto &compiler{mode ? cxxCompiler : cCompiler};
 		const auto soFile{computeSOName(test)};
 		const auto objFile{computeObjName(test)};
-		const auto compileString{compiler + test + " "s + compileOpts + compileOptsExtra +
+		const auto compileString{compiler + test + " "s + compileOpts + debugCompileFlags() +
 			inclDirFlags + includeOptsExtra + objs + "/Fe"s + soFile + " /Fo"s + objFile +
-			" "s + linkOpts + linkOptsExtra + libDirFlags + crunchLib(mode) + libs};
+			" "s + debugLinkFlags() + linkOptsExtra + libDirFlags + crunchLib(mode) + libs};
 		if (!silent)
 		{
 			if (quiet)
