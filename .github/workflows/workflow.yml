@@ -59,4 +59,5 @@ jobs:
         run: ninja -C build test
       - name: Codecov
         if: success() && matrix.coverage
+        shell: bash
         run: bash <(curl -s https://codecov.io/bash) -x "$GCOV";
