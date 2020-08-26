@@ -165,8 +165,9 @@ void testAllocs()
 	};
 	const char *const argv[7] = {"test", "-o", "test", "me", "please", "-a", "file"};
 
-	puts("Testing overall alloc fail");
+	puts("Setup");
 	registerArgs(args);
+	puts("Testing overall alloc fail");
 	allocCount = 0;
 	assertNull(parseArguments(7, argv));
 	assertIntEqual(allocCount, -1);
@@ -174,10 +175,10 @@ void testAllocs()
 	allocCount = 1;
 	assertNull(parseArguments(7, argv));
 	assertIntEqual(allocCount, -1);
-	/*puts("Testing arg strdup alloc fail");
+	puts("Testing arg strdup alloc fail");
 	allocCount = 2;
-	assertNotNull(parseArguments(7, argv));
-	assertIntEqual(allocCount, -1);*/
+	assertNull(parseArguments(7, argv));
+	assertIntEqual(allocCount, -1);
 	puts("Testing params alloc fail");
 	allocCount = 3;
 	assertNull(parseArguments(7, argv));
