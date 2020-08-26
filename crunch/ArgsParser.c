@@ -102,6 +102,11 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 			if (found)
 			{
 				argRet->value = strdup(argv[i]);
+				if (!argRet->value)
+				{
+					freeParsedArg(argRet);
+					return freeParsedArgs_(ret);
+				}
 				skip = !(argument->flags & ARG_REPEATABLE) && checkAlreadyFound(ret, argRet);
 				if (skip)
 				{
