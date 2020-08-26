@@ -1,5 +1,5 @@
 Name: crunch
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 URL: https://github.com/DX-MON/crunch
 Summary: A unit testing framework written for C and C++
@@ -56,6 +56,9 @@ rm -r build
 %{_mandir}/man1/crunchMake.1.gz
 
 %changelog
+* Wed Aug 26 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.1-1
+- Solved the previous lack of support on windows for crunchMake's `--debug` flag
+
 * Mon Aug 10 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.0-1
 - Successfully fixed the windows build
 - Improved the unit tests correctness

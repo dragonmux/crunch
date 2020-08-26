@@ -1,3 +1,9 @@
+crunch (1.1.1-1) unstable; urgency=medium
+
+  * Solved the previous lack of support on windows for crunchMake's `--debug` flag
+
+ -- dx-mon <dx-mon@users.sourceforge.net> Wed, 26 Aug 2020 13:43:10 +0000
+
 crunch (1.1.0-1) unstable; urgency=medium
 
   * Successfully fixed the windows build
