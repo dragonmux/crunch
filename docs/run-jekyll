@@ -1,0 +1,2 @@
+#!/bin/bash
+PAGES_REPO_NWO=DX-MON/crunch bundle exec jekyll serve
