@@ -83,17 +83,23 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 
 	parsedArgs_t ret = malloc(sizeof(constParsedArg_t) * argc);
 	if (!ret)
+	{
+		puts(" => Initial alloc failed");
 		return NULL;
+	}
 	memset((void *)ret, 0, sizeof(constParsedArg_t) * argc);
 	uint32_t n = 0;
-	for (uint32_t i = 1; i < argc; i++)
+	for (uint32_t i = 1; i < argc; ++i)
 	{
 		bool found = false;
 		bool skip = false;
 		const arg_t *argument = args;
 		parsedArg_t *argRet = malloc(sizeof(parsedArg_t));
 		if (!argRet)
+		{
+			puts(" => Arg alloc failed");
 			return freeParsedArgs_(ret);
+		}
 		memset(argRet, 0, sizeof(parsedArg_t));
 		while (argument->value)
 		{
@@ -104,6 +110,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 				argRet->value = strdup(argv[i]);
 				if (!argRet->value)
 				{
+					puts(" => Arg strdup() failed");
 					freeParsedArg(argRet);
 					return freeParsedArgs_(ret);
 				}
@@ -127,6 +134,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 					argRet->params = malloc(sizeof(char *) * argRet->paramsFound);
 					if (!argRet->params)
 					{
+						puts(" => Params alloc failed");
 						freeParsedArg(argRet);
 						return freeParsedArgs_(ret);
 					}
@@ -136,6 +144,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 						argRet->params[j] = strdup(argv[i + j + 1]);
 						if (!argRet->params[j])
 						{
+							puts(" => Param strdup() failed");
 							freeParsedArg(argRet);
 							return freeParsedArgs_(ret);
 						}
@@ -161,6 +170,7 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 			argRet->value = strdup(argv[i]);
 			if (!argRet->value)
 			{
+				puts(" => Unknown arg strdup() failed");
 				freeParsedArg(argRet);
 				return freeParsedArgs_(ret);
 			}
@@ -172,7 +182,10 @@ constParsedArgs_t parseArguments(const uint32_t argc, const char *const *const a
 	/* Shrink as appropriate */
 	parsedArgs_t result = malloc(sizeof(constParsedArg_t) * (n + 1));
 	if (!result)
+	{
+		puts(" => Final alloc failed");
 		return freeParsedArgs_(ret);
+	}
 	memcpy((void *)result, ret, sizeof(constParsedArg_t) * n);
 	free((void *)ret);
 	result[n] = NULL;
