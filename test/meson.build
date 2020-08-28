@@ -17,6 +17,9 @@ endif
 
 if sanitizer != 'none'
 	commandExtra += ['-fsanitize=' + sanitizer]
+	if sanitizer.contains('address')
+		commandExtra += ['-DCRUNCH_ASAN']
+	endif
 endif
 
 subdir('ranlux')
