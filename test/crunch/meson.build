@@ -7,9 +7,6 @@ libCrunchPath = join_paths([meson.build_root(), libCrunch.outdir()])
 
 foreach test : libCrunchTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath]
-	if not debug
-		command += ['-DNO_ALLOC_TEST']
-	endif
 
 	inputs = [files(test + '.c')]
 	if test == 'testCrunch'

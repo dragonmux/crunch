@@ -21,6 +21,9 @@ if sanitizer != 'none'
 		commandExtra += ['-DCRUNCH_ASAN']
 	endif
 endif
+if not debug or optimization not in ['0', '1']
+	commandExtra += ['-DNO_ALLOC_TEST']
+endif
 
 subdir('ranlux')
 subdir('crunch')

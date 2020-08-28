@@ -24,6 +24,7 @@ sanitizer = get_option('b_sanitize')
 coverage = get_option('b_coverage')
 noUndefined = get_option('b_lundef')
 debug = get_option('debug')
+optimization = get_option('optimization')
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
 isWindows = target_machine.system() == 'windows'
