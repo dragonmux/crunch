@@ -56,8 +56,10 @@ rm -r build
 %{_mandir}/man1/crunchMake.1.gz
 
 %changelog
-* Wed Aug 26 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.1-1
+* Fri Aug 28 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.1-1
 - Solved the previous lack of support on windows for crunchMake's `--debug` flag
+- Fixed the crunch assertion messages as the expected value and result were backwards
+- Fixed bugs revealed by the args parser test suite alloc tests
 
 * Mon Aug 10 2020 Rachel Mant <dx-mon@users.sourceforge.net> - 1.1.0-1
 - Successfully fixed the windows build
