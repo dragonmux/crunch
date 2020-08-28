@@ -17,7 +17,7 @@ int32_t allocCount = -1;
 	logResult(RESULT_FAILURE, "Assertion failure: " what, __VA_ARGS__);
 
 #define ASSERTION_ERROR(params, result, expected) \
-	ASSERTION_FAILURE("expected " params ", got " params, result, expected);
+	ASSERTION_FAILURE("expected " params ", got " params, expected, result);
 
 #define ASSERTION_ERROR_NEGATIVE(params, result) \
 	ASSERTION_FAILURE("did not expect " params, result);
