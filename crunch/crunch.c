@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <string.h>
 #include "Core.h"
 #include "Logger.h"
 #include "ArgsParser.h"
@@ -16,6 +17,7 @@
 #include <windows.h>
 #include <direct.h>
 #include <io.h>
+#define R_OK 4
 #define RTLD_LAZY 0
 #define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
 #define dlsym(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
@@ -46,9 +48,13 @@ const arg_t crunchArgs[] =
 };
 
 #ifdef _MSC_VER
-#define LIBEXT "tlib"
+#define COUNT_LIB_EXTS 3U
+static const char *libExt[COUNT_LIB_EXTS] = {"dll", "so", "tlib"};
+static const size_t libExtMaxLength = 4U;
 #else
-#define LIBEXT "so"
+#define COUNT_LIB_EXTS 1U
+static const char *libExt[COUNT_LIB_EXTS] = {"so"};
+static const size_t libExtMaxLength = 2U;
 #endif
 
 constParsedArgs_t parsedArgs = NULL;
@@ -175,6 +181,32 @@ uint8_t tryRegistration(void *testSuite)
 	return TRUE;
 }
 
+char *extForLibrary(const char *test)
+{
+	const size_t lengthWorkingDir = strlen(workingDir);
+	const size_t lengthTest = strlen(test);
+	// + 3 on the end to account for one '/', '.' and NUL termination
+	char *library = (char *)malloc(lengthWorkingDir + lengthTest + libExtMaxLength + 3);
+	if (!library)
+		return NULL;
+	memcpy(library, workingDir, lengthWorkingDir);
+	size_t offset = lengthWorkingDir;
+	library[offset++] = '/';
+	memcpy(library + offset, test, lengthTest);
+	offset += lengthTest;
+	library[offset++] = '.';
+	for (size_t i = 0; i < COUNT_LIB_EXTS; ++i)
+	{
+		const char *ext = libExt[i];
+		const size_t lengthExt = strlen(ext);
+		memcpy(library + offset, ext, lengthExt + 1);
+		if (!access(library, R_OK))
+			return library;
+	}
+	free(library);
+	return NULL;
+}
+
 int runTests()
 {
 	testLog *logFile = NULL;
@@ -187,7 +219,7 @@ int runTests()
 
 	for (uint32_t i = 0; i < numTests; i++)
 	{
-		char *testLib = formatString("%s/%s." LIBEXT, workingDir, namedTests[i]->value);
+		char *testLib = extForLibrary(namedTests[i]->value);
 		if (!testLib)
 		{
 			noMemory();
