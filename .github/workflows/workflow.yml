@@ -31,6 +31,22 @@ jobs:
           call ${{ github.workspace }}/.github/exportEnv.bat
         env:
           ARCH: ${{ matrix.arch }}
+      - name: Coverage environment
+        shell: bash
+        env:
+          COVERAGE: ${{ matrix.coverage }}
+        run: |
+          echo "Coverage enabled for build? ${{ matrix.coverage }}"
+          echo ::set-env name=COVERAGE::$([ $COVERAGE == "true" ] && echo -n 1 || echo -n 0)
+          if [ $COVERAGE == "true" ]; then
+            echo ::set-env name=BUILD_OPTS::"--buildtype=debug"
+            curl -L1O https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe
+            ./OpenCppCoverageSetup-x64-0.9.9.0 -dir="C:\Program Files\OpenCppCoverage" -verysilent
+            rm OpenCppCoverageSetup-x64-0.9.9.0.exe
+          else
+            echo ::set-env name=BUILD_OPTS::""
+          fi
+        working-directory: ${{ runner.temp }}
       - name: Setup Meson + Ninja
         shell: bash
         run: |
@@ -50,7 +66,7 @@ jobs:
           ninja --version
       - name: Configure
         shell: bash
-        run: meson build --prefix=$HOME/.local -Db_coverage=${{ matrix.coverage }} $BUILD_OPTS
+        run: meson build --prefix=$HOME/.local $BUILD_OPTS
       - name: Build
         shell: bash
         run: ninja -C build
