@@ -44,7 +44,6 @@ jobs:
             MSYS2_ARG_CONV_EXCL=/dir=\;/verysilent ./OpenCppCoverageSetup-x64-0.9.9.0 \
               /dir="C:\Program Files\OpenCppCoverage" /verysilent
             rm OpenCppCoverageSetup-x64-0.9.9.0.exe
-            ls /c/Program\ Files/OpenCppCoverage
           else
             echo ::set-env name=BUILD_OPTS::""
           fi
