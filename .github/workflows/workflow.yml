@@ -41,8 +41,7 @@ jobs:
           if [ $COVERAGE == "true" ]; then
             echo ::set-env name=BUILD_OPTS::"--buildtype=debug"
             curl -L1O https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe
-            MSYS2_ARG_CONV_EXCL=/dir=;/verysilent ./OpenCppCoverageSetup-x64-0.9.9.0 \
-              /dir="C:\Program Files\OpenCppCoverage" /verysilent
+            MSYS2_ARG_CONV_EXCL=/dir=;/verysilent ./OpenCppCoverageSetup-x64-0.9.9.0 /dir="C:\Program Files\OpenCppCoverage" /verysilent
             rm OpenCppCoverageSetup-x64-0.9.9.0.exe
           else
             echo ::set-env name=BUILD_OPTS::""
