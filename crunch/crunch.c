@@ -132,6 +132,26 @@ void printStats()
 		testPrintf("%0.2f%%\n", ((double)passes) / ((double)total) * 100.0);
 }
 
+void red()
+{
+	if (isTTY)
+#ifndef _MSC_VER
+		testPrintf(FAILURE);
+#else
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
+}
+
+void magenta()
+{
+	if (isTTY)
+#ifndef _MSC_VER
+		testPrintf(COLOUR("1;35"));
+#else
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#endif
+}
+
 uint8_t getTests()
 {
 	uint32_t n = 0;
@@ -228,12 +248,7 @@ int runTests()
 		}
 		else if (testLib == NO_LIBRARIES_FOUND)
 		{
-			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(FAILURE);
-#else
-				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-#endif
+			red();
 			testPrintf("Test library %s does not exist, skipping", namedTests[i]->value);
 			newline();
 			continue;
@@ -244,31 +259,16 @@ int runTests()
 		{
 			if (!testSuite)
 			{
-				if (isTTY != 0)
-#ifndef _MSC_VER
-					testPrintf(FAILURE);
-#else
-					SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-#endif
+				red();
 				testPrintf("Could not open test library: %s", dlerror());
 				newline();
 			}
-			if (isTTY != 0)
-#ifndef _MSC_VER
-				testPrintf(FAILURE);
-#else
-				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
-#endif
+			red();
 			testPrintf("Test library %s was not a valid library, skipping", namedTests[i]->value);
 			newline();
 			continue;
 		}
-		if (isTTY != 0)
-#ifndef _MSC_VER
-			testPrintf(COLOUR("1;35"));
-#else
-			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-#endif
+		magenta();
 		testPrintf("Running test suite %s...", namedTests[i]->value);
 		newline();
 		test *currTest = tests;
