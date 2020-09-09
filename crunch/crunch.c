@@ -56,6 +56,7 @@ static const size_t libExtMaxLength = 4U;
 static const char *libExt[COUNT_LIB_EXTS] = {"so"};
 static const size_t libExtMaxLength = 2U;
 #endif
+#define NO_LIBRARIES_FOUND (void *)(-1)
 
 constParsedArgs_t parsedArgs = NULL;
 parsedArgs_t namedTests = NULL;
@@ -204,7 +205,7 @@ char *extForLibrary(const char *test)
 			return library;
 	}
 	free(library);
-	return NULL;
+	return NO_LIBRARIES_FOUND;
 }
 
 int runTests()
@@ -225,11 +226,23 @@ int runTests()
 			noMemory();
 			return THREAD_ABORT;
 		}
+		else if (testLib == NO_LIBRARIES_FOUND)
+		{
+			if (isTTY != 0)
+#ifndef _MSC_VER
+				testPrintf(FAILURE);
+#else
+				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#endif
+			testPrintf("Test library %s does not exist, skipping", namedTests[i]->value);
+			newline();
+			continue;
+		}
 		void *testSuite = dlopen(testLib, RTLD_LAZY);
 		free(testLib);
-		if (testSuite == NULL || tryRegistration(testSuite) == FALSE)
+		if (!testSuite || !tryRegistration(testSuite))
 		{
-			if (testSuite == NULL)
+			if (!testSuite)
 			{
 				if (isTTY != 0)
 #ifndef _MSC_VER
