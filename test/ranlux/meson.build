@@ -30,10 +30,21 @@ foreach test : ranluxTests
 		build_by_default: true
 	)
 
+	if not isWindows or not coverage
 	test(
 		map['name'],
 		crunchpp,
 		args: test,
 		workdir: meson.current_build_dir()
 	)
+	else
+	test(
+		map['name'],
+		coverageRunner,
+		args: coverageArgs + [
+			'cobertura:@0@-coverage.xml'.format(map['name']), '--', crunchpp, test
+		],
+		workdir: meson.current_build_dir()
+	)
+	endif
 endforeach

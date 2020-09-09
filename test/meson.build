@@ -30,9 +30,19 @@ subdir('crunch')
 subdir('crunch++')
 subdir('crunchMake')
 
+if not isWindows and not coverage
 test(
 	'crunchMake-none',
 	crunchMake,
 	workdir: meson.current_build_dir(),
 	should_fail: true
 )
+else
+test(
+	'crunchMake-none',
+	coverageRunner,
+	args: coverageArgs + ['cobertura:crunchMake-none-coverage.xml', '--', crunchMake],
+	workdir: meson.current_build_dir(),
+	should_fail: true
+)
+endif

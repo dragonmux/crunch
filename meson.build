@@ -61,6 +61,17 @@ if isWindows
 	if debug
 		add_project_arguments('-D_DEBUG', language: ['c', 'cpp'])
 	endif
+
+	coverageRunner = find_program('OpenCppCoverage', required: false)
+	coverage = coverageRunner.found() and debug
+	if coverage
+		coverageArgs = [
+			'--sources', '@0@\crunch*\*'.format(meson.current_source_dir()),
+			'--sources', '@0@\*'.format(meson.current_build_dir()),
+			'--modules', meson.current_build_dir(),
+			'--export_type'
+		]
+	endif
 endif
 
 if cxx.get_id() == 'msvc'

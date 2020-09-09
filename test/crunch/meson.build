@@ -26,6 +26,7 @@ foreach test : libCrunchTests
 	)
 endforeach
 
+if not isWindows or not coverage
 test(
 	'crunch',
 	crunch,
@@ -39,3 +40,21 @@ test(
 	workdir: meson.current_build_dir(),
 	should_fail: true
 )
+else
+test(
+	'crunch',
+	coverageRunner,
+	args: coverageArgs + [
+		'cobertura:crunch-coverage.xml', '--', crunch
+	] + libCrunchTests + ['testMustNotExist'],
+	workdir: meson.current_build_dir()
+)
+
+test(
+	'crunch-empty',
+	coverageRunner,
+	args: coverageArgs + ['cobertura:crunch-empty-coverage.xml', '--', crunch],
+	workdir: meson.current_build_dir(),
+	should_fail: true
+)
+endif
