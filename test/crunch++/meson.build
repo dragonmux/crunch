@@ -4,19 +4,21 @@ libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
 
 libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
 
-testSrcs = [
-	substrateDir / 'impl/pty.cxx'
-]
+if not isWindows
+	testSrcs = [
+		substrateDir / 'impl/pty.cxx'
+	]
 
-testHelpers = static_library(
-	'testHelpers',
-	testSrcs,
-	pic: true,
-	link_with: [libCrunchpp],
-	include_directories: [substrate],
-	install: false,
-	build_by_default: true
-)
+	testHelpers = static_library(
+		'testHelpers',
+		testSrcs,
+		pic: true,
+		link_with: [libCrunchpp],
+		include_directories: [substrate],
+		install: false,
+		build_by_default: true
+	)
+endif
 
 foreach test : libCrunchppTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
@@ -34,7 +36,7 @@ foreach test : libCrunchppTests
 		testExtra = ['-I' + substrateDir]
 	endif
 	objects = []
-	if test == 'testLogger'
+	if test == 'testLogger' and not isWindows
 		objects = [testHelpers.extract_objects(substrateDir / 'impl/pty.cxx')]
 	endif
 	custom_target(
