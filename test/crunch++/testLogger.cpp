@@ -6,9 +6,8 @@
 #include <substrate/fixed_vector>
 #ifndef _WINDOWS
 #include <substrate/pty>
-#else
-#include <io.h>
 #endif
+#include <substrate/fd>
 #include <substrate/pipe>
 #include <fcntl.h>
 #include <logger.hxx>
