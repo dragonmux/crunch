@@ -65,8 +65,6 @@ private:
 	pty_t pty{};
 #endif
 	pipe_t pipe{};
-	// NOLINTNEXTLINE(cppcoreguidelines-owning-memory,hicpp-signed-bitwise)
-	int nullFD{open(devNull.data(), O_RDONLY | O_CLOEXEC)};
 	int32_t stdoutFD{-1};
 	int32_t stderrFD{-1};
 	crunch::testLog ourLogger;
@@ -136,11 +134,11 @@ private:
 
 	void testColumns()
 	{
-		logger = &ourLogger;
-		assertEqual(dup2(nullFD, STDOUT_FILENO), STDOUT_FILENO);
+#ifndef _WINDOWS
+		swapToPTY();
 		assertEqual(getColumns(), 72);
-		assertEqual(dup2(stdoutFD, STDOUT_FILENO), STDOUT_FILENO);
-		logger = nullptr;
+		restoreStdio();
+#endif
 	}
 
 	void testSuccess() { testLogResult(RESULT_SUCCESS, []() { --passes; }, plainSuccess, colourSuccess); }
@@ -178,7 +176,6 @@ public:
 
 	~loggerTests() noexcept final
 	{
-		close(nullFD);
 		close(stdoutFD);
 		close(stderrFD);
 		if (ourLogger.stdout_)
@@ -187,16 +184,15 @@ public:
 
 	void registerTests() final
 	{
-#ifdef _WINDOWS
-		skip("This suite does not work on windows");
-#endif
-		if (nullFD == -1 || stdoutFD == -1 || stderrFD == -1)
-			skip("Unable to open null device for tests");
+		if (stdoutFD == -1 || stderrFD == -1)
+			skip("Unable to dup() stdio file descriptors for tests");
 		CRUNCHpp_TEST(testColumns)
 		CRUNCHpp_TEST(testSuccess)
 		CRUNCHpp_TEST(testFailure)
 		CRUNCHpp_TEST(testSkip)
+#ifndef _WINDOWS
 		CRUNCHpp_TEST(testAbort)
+#endif
 	}
 };
 
