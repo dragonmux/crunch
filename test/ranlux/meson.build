@@ -20,6 +20,11 @@ foreach test : ranluxTests
 	map = objectMap.get(test)
 	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx', 'ranlux64.cxx'])]
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.source_root(), '-L' + libCrunchppPath]
+	if isWindows and coverage
+		command = [coverageTarget, coverageRunner] + coverageArgs + [
+			'cobertura:crunchMake-@0@-coverage.xml'.format(test), '--'
+		] + command
+	endif
 
 	custom_target(
 		test,

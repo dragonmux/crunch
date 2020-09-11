@@ -6,6 +6,11 @@ libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
 
 foreach test : libCrunchppTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
+	if isWindows and coverage
+		command = [coverageTarget, coverageRunner] + coverageArgs + [
+			'cobertura:crunchMake-crunch++-@0@-coverage.xml'.format(test), '--'
+		] + command
+	endif
 	testExtra = []
 	if test == 'testCrunch++' and cxx.has_argument('-std=c++17')
 		testExtra = ['-std=c++17']

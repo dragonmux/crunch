@@ -71,6 +71,7 @@ if isWindows
 			'--modules', meson.current_build_dir(),
 			'--export_type'
 		]
+		coverageTarget = find_program('runCoverageTarget.py')
 	endif
 endif
 
