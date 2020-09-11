@@ -33,7 +33,7 @@ libm = cxx.find_library('m', required: not isWindows)
 c11Threading = cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
 projectInclude = include_directories('.')
 substrate = include_directories('substrate')
-substrateDir = meson.current_source_dir() + '/substrate'
+substrateDir = meson.current_source_dir() / 'substrate'
 
 if cxx.get_id() == 'clang' and sanitizer.contains('undefined')
 	assert(not noUndefined, 'Cannot combine b_lundef=true and b_sanitize=undefined')
