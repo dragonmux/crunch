@@ -46,8 +46,12 @@ std::chrono::microseconds operator ""_us(unsigned long long us) noexcept
 	{ return std::chrono::microseconds{us}; }
 
 constexpr static auto plainSuccess{" [  OK  ]\n"_sv};
+constexpr static auto plainFailure{" [ FAIL ]\n"_sv};
 constexpr static auto colourSuccess{
-	"" NORMAL CURS_UP "\x1B[72G" BRACKET "[" SUCCESS "  OK  " BRACKET "]" NORMAL "\r\n"_sv
+	NORMAL CURS_UP "\x1B[72G" BRACKET "[" SUCCESS "  OK  " BRACKET "]" NORMAL "\r\n"_sv
+};
+constexpr static auto colourFailure{
+	NORMAL " \x1B[72G" BRACKET "[" FAILURE " FAIL " BRACKET "]" NORMAL "\r\n"_sv
 };
 
 class loggerTests final : public testsuite
@@ -136,19 +140,7 @@ private:
 	}
 
 	void testSuccess() { testLogResult(RESULT_SUCCESS, []() { --passes; }, plainSuccess, colourSuccess); }
-
-	void testFailure()
-	{
-		//logger = &pipeLogger;
-		isTTY = false;
-		logResult(RESULT_FAILURE, "");
-		--failures;
-		isTTY = true;
-		logResult(RESULT_FAILURE, "");
-		--failures;
-		isTTY = isatty(STDOUT_FILENO);
-		//logger = nullptr;
-	}
+	void testFailure() { testLogResult(RESULT_FAILURE, []() { --failures; }, plainFailure, colourFailure); }
 
 	void testSkip()
 	{
