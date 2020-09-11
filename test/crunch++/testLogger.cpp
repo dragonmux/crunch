@@ -72,6 +72,16 @@ private:
 	using stringView = crunch::internal::stringView;
 	using cleanupFn_t = void (*)();
 
+#ifdef _WINDOWS
+	static int32_t dup2(int32_t fd1, int32_t fd2) noexcept
+	{
+		const auto result{::dup2(fd1, fd2)};
+		if (!result)
+			return fd2;
+		return result;
+	}
+#endif
+
 	void swapToPipe()
 	{
 		assertTrue(pipe.valid());
