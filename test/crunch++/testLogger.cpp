@@ -15,7 +15,6 @@
 #include <core.hxx>
 
 using crunch::literals::operator ""_sv;
-using crunch::logger;
 using crunch::getColumns;
 using crunch::isTTY;
 using crunch::logResult;
@@ -67,7 +66,6 @@ private:
 	pipe_t pipe{};
 	int32_t stdoutFD{-1};
 	int32_t stderrFD{-1};
-	crunch::testLog ourLogger;
 
 	using stringView = crunch::internal::stringView;
 	using cleanupFn_t = void (*)();
@@ -167,8 +165,7 @@ private:
 	}
 
 public:
-	loggerTests() noexcept : stdoutFD{dup(STDOUT_FILENO)}, stderrFD{dup(STDERR_FILENO)},
-		ourLogger{nullptr, stdoutFD != -1 ? fdopen(stdoutFD, "w") : nullptr, nullptr, 0} { }
+	loggerTests() noexcept : stdoutFD{dup(STDOUT_FILENO)}, stderrFD{dup(STDERR_FILENO)} { }
 	loggerTests(const loggerTests &) = delete;
 	loggerTests(loggerTests &&) = delete;
 	loggerTests &operator =(const loggerTests &) = delete;
@@ -178,8 +175,6 @@ public:
 	{
 		close(stdoutFD);
 		close(stderrFD);
-		if (ourLogger.stdout_)
-			fclose(ourLogger.stdout_); // NOLINT(cppcoreguidelines-owning-memory)
 	}
 
 	void registerTests() final
