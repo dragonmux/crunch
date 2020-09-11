@@ -33,6 +33,7 @@ constexpr static auto devNull{"/dev/null"_sv};
 #else
 constexpr static auto devNull{"NUL"_sv};
 #define STDOUT_FILENO fileno(stdout)
+#define STDERR_FILENO fileno(stderr)
 #define O_CLOEXEC O_BINARY
 #endif
 using substrate::fd_t;
@@ -63,8 +64,10 @@ private:
 	pty_t pty{};
 #endif
 	pipe_t pipe{};
-	int32_t stdoutFD{-1};
-	int32_t stderrFD{-1};
+	int32_t stdoutFileno{STDOUT_FILENO};
+	int32_t stderrFileno{STDERR_FILENO};
+	fd_t stdoutFD{dup(stdoutFileno)};
+	fd_t stderrFD{dup(stderrFileno)};
 
 	using stringView = crunch::internal::stringView;
 	using cleanupFn_t = void (*)();
@@ -72,8 +75,8 @@ private:
 	void swapToPipe()
 	{
 		assertTrue(pipe.valid());
-		assertEqual(dup2(pipe.writeFD(), STDERR_FILENO), STDERR_FILENO);
-		assertEqual(dup2(pipe.writeFD(), STDOUT_FILENO), STDOUT_FILENO);
+		assertEqual(dup2(pipe.writeFD(), stderrFileno), stderrFileno);
+		assertEqual(dup2(pipe.writeFD(), stdoutFileno), stdoutFileno);
 		isTTY = false;
 	}
 
@@ -81,17 +84,17 @@ private:
 	void swapToPTY()
 	{
 		assertTrue(pty.valid());
-		assertEqual(dup2(pty.pts(), STDERR_FILENO), STDERR_FILENO);
-		assertEqual(dup2(pty.pts(), STDOUT_FILENO), STDOUT_FILENO);
+		assertEqual(dup2(pty.pts(), stderrFileno), stderrFileno);
+		assertEqual(dup2(pty.pts(), stdoutFileno), stdoutFileno);
 		isTTY = true;
 	}
 #endif
 
 	void restoreStdio()
 	{
-		assertEqual(dup2(stdoutFD, STDOUT_FILENO), STDOUT_FILENO);
-		assertEqual(dup2(stderrFD, STDERR_FILENO), STDERR_FILENO);
-		isTTY = isatty(STDOUT_FILENO);
+		assertEqual(dup2(stdoutFD, stdoutFileno), stdoutFileno);
+		assertEqual(dup2(stderrFD, stderrFileno), stderrFileno);
+		isTTY = isatty(stdoutFileno);
 	}
 
 	void assertPipeRead(const readPipe_t &fd, const stringView &expected)
@@ -148,7 +151,7 @@ private:
 			{ logResult(RESULT_ABORT, ""); }
 		catch (threadExit_t &)
 			{ return; }
-		isTTY = isatty(STDOUT_FILENO);
+		isTTY = isatty(stdoutFileno);
 		fail("logResult() failed to throw exception");
 	}
 
@@ -159,26 +162,21 @@ private:
 		tryLogAbort();
 		isTTY = true;
 		tryLogAbort();
-		isTTY = isatty(STDOUT_FILENO);
+		isTTY = isatty(stdoutFileno);
 		//logger = nullptr;
 	}
 
 public:
-	loggerTests() noexcept : stdoutFD{dup(STDOUT_FILENO)}, stderrFD{dup(STDERR_FILENO)} { }
+	loggerTests() noexcept = default;
 	loggerTests(const loggerTests &) = delete;
 	loggerTests(loggerTests &&) = delete;
 	loggerTests &operator =(const loggerTests &) = delete;
 	loggerTests &operator =(loggerTests &&) = delete;
-
-	~loggerTests() noexcept final
-	{
-		close(stdoutFD);
-		close(stderrFD);
-	}
+	~loggerTests() noexcept final = default;
 
 	void registerTests() final
 	{
-		if (stdoutFD == -1 || stderrFD == -1)
+		if (!stdoutFD.valid() || !stderrFD.valid())
 			skip("Unable to dup() stdio file descriptors for tests");
 		CRUNCHpp_TEST(testColumns)
 		CRUNCHpp_TEST(testSuccess)
