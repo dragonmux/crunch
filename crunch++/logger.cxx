@@ -60,6 +60,7 @@ namespace crunch
 #ifndef _WINDOWS
 		testPrintf(NORMAL);
 #else
+		console = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 #endif
 	}
@@ -107,8 +108,8 @@ namespace crunch
 		{
 			CONSOLE_SCREEN_BUFFER_INFO cursor;
 			GetConsoleScreenBufferInfo(console, &cursor);
-			cursor.dwCursorPosition.Y--;
 			cursor.dwCursorPosition.X = getColumns();
+			--cursor.dwCursorPosition.Y;
 			SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("[");
@@ -116,12 +117,12 @@ namespace crunch
 			testPrintf("  OK  ");
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("]");
-			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			normal();
 			testPrintf("\n");
 		}
 		else
 			printOk();
-		passes++;
+		++passes;
 	}
 
 	void echoFailure()
@@ -131,6 +132,7 @@ namespace crunch
 			CONSOLE_SCREEN_BUFFER_INFO cursor;
 			GetConsoleScreenBufferInfo(console, &cursor);
 			cursor.dwCursorPosition.X = getColumns();
+			--cursor.dwCursorPosition.Y;
 			SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("[");
@@ -138,12 +140,12 @@ namespace crunch
 			testPrintf(" FAIL ");
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("]");
-			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			normal();
 			testPrintf("\n");
 		}
 		else
 			printFailure();
-		failures++;
+		++failures;
 	}
 
 	void echoSkip()
@@ -153,6 +155,7 @@ namespace crunch
 			CONSOLE_SCREEN_BUFFER_INFO cursor;
 			GetConsoleScreenBufferInfo(console, &cursor);
 			cursor.dwCursorPosition.X = getColumns();
+			--cursor.dwCursorPosition.Y;
 			SetConsoleCursorPosition(console, cursor.dwCursorPosition);
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("[");
@@ -160,11 +163,12 @@ namespace crunch
 			testPrintf(" SKIP ");
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("]");
-			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			normal();
 			testPrintf("\n");
 		}
 		else
 			printSkip();
+		++passes;
 	}
 
 	void echoAborted()
@@ -177,7 +181,7 @@ namespace crunch
 			testPrintf(" **** ABORTED **** ");
 			SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 			testPrintf("]");
-			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			normal();
 			testPrintf("\n");
 		}
 		else
