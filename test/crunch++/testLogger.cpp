@@ -91,7 +91,6 @@ private:
 		isTTY = false;
 	}
 
-#ifndef _WINDOWS
 	void swapToPTY()
 	{
 		assertTrue(pty.valid());
@@ -99,7 +98,6 @@ private:
 		assertEqual(dup2(pty.pts(), stdoutFileno), stdoutFileno);
 		isTTY = true;
 	}
-#endif
 
 	void restoreStdio()
 	{
