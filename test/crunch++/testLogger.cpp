@@ -172,12 +172,10 @@ private:
 		restoreStdio();
 		assertPipeRead(pipe.readFD(), plainAborted);
 
-#ifndef _WINDOWS
 		swapToPTY();
 		tryLogAbort();
 		restoreStdio();
 		assertConsoleRead(pty.ptmx(), colourAborted);
-#endif
 	}
 
 public:
