@@ -4,10 +4,8 @@
 #include <thread>
 #include <chrono>
 #include <substrate/fixed_vector>
-#ifndef _WINDOWS
-#include <substrate/pty>
-#endif
 #include <substrate/fd>
+#include <substrate/pty>
 #include <substrate/pipe>
 #include <fcntl.h>
 #include <logger.hxx>
@@ -25,21 +23,20 @@ using crunch::RESULT_ABORT;
 using crunch::passes;
 using crunch::failures;
 
-#ifndef _WINDOWS
+using substrate::fd_t;
+using substrate::pipe_t;
+using substrate::readPipe_t;
 using substrate::pty_t;
+using substrate::fixedVector_t;
 
+#ifndef _WINDOWS
 constexpr static auto defaultTTY{"/dev/ptmx"_sv};
 constexpr static auto devNull{"/dev/null"_sv};
 #else
-constexpr static auto devNull{"NUL"_sv};
 #define STDOUT_FILENO fileno(stdout)
 #define STDERR_FILENO fileno(stderr)
 #define O_CLOEXEC O_BINARY
 #endif
-using substrate::fd_t;
-using substrate::pipe_t;
-using substrate::readPipe_t;
-using substrate::fixedVector_t;
 
 std::chrono::microseconds operator ""_us(unsigned long long us) noexcept
 	{ return std::chrono::microseconds{us}; }
