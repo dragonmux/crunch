@@ -44,6 +44,7 @@ std::chrono::microseconds operator ""_us(unsigned long long us) noexcept
 constexpr static auto plainSuccess{" [  OK  ]\n"_sv};
 constexpr static auto plainFailure{" [ FAIL ]\n"_sv};
 constexpr static auto plainSkip{" [ SKIP ]\n"_sv};
+constexpr static auto plainAborted{"[ **** ABORTED **** ]\n"_sv};
 #ifndef _WINDOWS
 constexpr static auto colourSuccess{
 	NORMAL CURS_UP "\x1B[72G" BRACKET "[" SUCCESS "  OK  " BRACKET "]" NORMAL "\r\n"_sv
@@ -54,10 +55,14 @@ constexpr static auto colourFailure{
 constexpr static auto colourSkip{
 	NORMAL " \x1B[72G" BRACKET "[" WARNING " SKIP " BRACKET "]" NORMAL "\r\n"_sv
 };
+constexpr static auto colourAborted{
+	NORMAL "\r\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NORMAL "\r\n"_sv
+};
 #else
 constexpr static auto colourSuccess{"[  OK  ]\n"_sv};
 constexpr static auto colourFailure{"[ FAIL ]\n"_sv};
 constexpr static auto colourSkip{"[ SKIP ]\n"_sv};
+constexpr static auto colourAborted{"[ **** ABORTED **** ]\n"_sv};
 #endif
 
 class loggerTests final : public testsuite
@@ -156,19 +161,23 @@ private:
 			{ logResult(RESULT_ABORT, ""); }
 		catch (threadExit_t &)
 			{ return; }
-		isTTY = isatty(stdoutFileno);
+		restoreStdio();
 		fail("logResult() failed to throw exception");
 	}
 
 	void testAbort()
 	{
-		//logger = &pipeLogger;
-		isTTY = false;
+		swapToPipe();
 		tryLogAbort();
-		isTTY = true;
+		restoreStdio();
+		assertPipeRead(pipe.readFD(), plainAborted);
+
+#ifndef _WINDOWS
+		swapToPTY();
 		tryLogAbort();
-		isTTY = isatty(stdoutFileno);
-		//logger = nullptr;
+		restoreStdio();
+		assertConsoleRead(pty.ptmx(), colourAborted);
+#endif
 	}
 
 public:
@@ -187,9 +196,7 @@ public:
 		CRUNCHpp_TEST(testSuccess)
 		CRUNCHpp_TEST(testFailure)
 		CRUNCHpp_TEST(testSkip)
-#ifndef _WINDOWS
 		CRUNCHpp_TEST(testAbort)
-#endif
 	}
 };
 
