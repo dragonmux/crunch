@@ -44,6 +44,7 @@ std::chrono::microseconds operator ""_us(unsigned long long us) noexcept
 constexpr static auto plainSuccess{" [  OK  ]\n"_sv};
 constexpr static auto plainFailure{" [ FAIL ]\n"_sv};
 constexpr static auto plainSkip{" [ SKIP ]\n"_sv};
+#ifndef _WINDOWS
 constexpr static auto colourSuccess{
 	NORMAL CURS_UP "\x1B[72G" BRACKET "[" SUCCESS "  OK  " BRACKET "]" NORMAL "\r\n"_sv
 };
@@ -53,13 +54,16 @@ constexpr static auto colourFailure{
 constexpr static auto colourSkip{
 	NORMAL " \x1B[72G" BRACKET "[" WARNING " SKIP " BRACKET "]" NORMAL "\r\n"_sv
 };
+#else
+constexpr static auto colourSuccess{"[  OK  ]\n"_sv};
+constexpr static auto colourFailure{"[ FAIL ]\n"_sv};
+constexpr static auto colourSkip{"[ SKIP ]\n"_sv};
+#endif
 
 class loggerTests final : public testsuite
 {
 private:
-#ifndef _WINDOWS
 	pty_t pty{};
-#endif
 	pipe_t pipe{};
 	int32_t stdoutFileno{STDOUT_FILENO};
 	int32_t stderrFileno{STDERR_FILENO};
@@ -130,22 +134,18 @@ private:
 		restoreStdio();
 		assertPipeRead(pipe.readFD(), plainExpected);
 
-#ifndef _WINDOWS
 		swapToPTY();
 		logResult(type, "");
 		cleanupFn();
 		restoreStdio();
 		assertConsoleRead(pty.ptmx(), colourExpected);
-#endif
 	}
 
 	void testColumns()
 	{
-#ifndef _WINDOWS
 		swapToPTY();
 		assertEqual(getColumns(), 72);
 		restoreStdio();
-#endif
 	}
 
 	void testSuccess() { testLogResult(RESULT_SUCCESS, []() { --passes; }, plainSuccess, colourSuccess); }
