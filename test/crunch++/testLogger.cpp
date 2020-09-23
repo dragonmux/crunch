@@ -128,6 +128,50 @@ private:
 		assertEqual(result.data(), expected.data(), expected.length());
 	}
 
+#ifdef _WINDOWS
+	WORD colourFor(const stringView &expected) noexcept
+	{
+		if (expected == colourSuccess)
+			return FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+		else if (expected == colourFailure)
+			return FOREGROUND_RED | FOREGROUND_INTENSITY;
+		else if (expected == colourSkip)
+			return FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+		else
+			return FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+	}
+
+	void assertConsoleColouring(const HANDLE console, const WORD colour)
+	{
+		WORD attribute{};
+		DWORD attrCount{};
+		CONSOLE_SCREEN_BUFFER_INFO cursor{};
+
+		auto win32APICall = [this](const bool result)
+		{
+			if (!result)
+			{
+				const auto error{GetLastError()};
+				printf("ReadConsoleOutputAttribute() failed with result %08x (%d)\n", error, error);
+			}
+			assertTrue(result);
+		};
+
+		assertNotEqual(console, INVALID_HANDLE_VALUE);
+		win32APICall(GetConsoleScreenBufferInfo(console, &cursor));
+		assertEqual(cursor.dwCursorPosition.X, 0);
+		assertNotEqual(cursor.dwCursorPosition.Y, 0);
+
+		cursor.dwCursorPosition.X = getColumns();
+		--cursor.dwCursorPosition.Y;
+		win32APICall(ReadConsoleOutputAttribute(console, &attribute, 1, cursor.dwCursorPosition, &attrCount));
+		assertEqual(uint32_t{attrCount}, 1U);
+		assertEqual(attribute, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+
+		++cursor.dwCursorPosition.X;
+	}
+#endif
+
 	void testLogResult(const resultType type, const cleanupFn_t cleanupFn,
 		const stringView &plainExpected, const stringView &colourExpected)
 	{
