@@ -37,15 +37,16 @@ jobs:
           COVERAGE: ${{ matrix.coverage }}
         run: |
           echo "Coverage enabled for build? ${{ matrix.coverage }}"
-          echo ::set-env name=COVERAGE::$([ $COVERAGE == "true" ] && echo -n 1 || echo -n 0)
+          echo -n "COVERAGE=" >> $GITHUB_ENV
+          ([ $COVERAGE == "true" ] && echo -n 1 || echo -n 0) >> $GITHUB_ENV
           if [ $COVERAGE == "true" ]; then
-            echo ::set-env name=BUILD_OPTS::"--buildtype=debug"
+            echo "BUILD_OPTS=--buildtype=debug" >> $GITHUB_ENV
             curl -L1O https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe
             MSYS2_ARG_CONV_EXCL=/dir=\;/verysilent ./OpenCppCoverageSetup-x64-0.9.9.0 \
               /dir="C:\Program Files\OpenCppCoverage" /verysilent
             rm OpenCppCoverageSetup-x64-0.9.9.0.exe
           else
-            echo ::set-env name=BUILD_OPTS::""
+            echo "BUILD_OPTS=" >> $GITHUB_ENV
           fi
         working-directory: ${{ runner.temp }}
       - name: Setup Meson + Ninja
