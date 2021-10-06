@@ -31,7 +31,7 @@
 #	define CRUNCHpp_EXPORT extern "C" __declspec(dllexport)
 #	define CRUNCH_MAYBE_VIS
 #else
-#	if __GNUC__ >= 4
+#	if __GNUC__ >= 4 || defined(__APPLE__)
 #		define CRUNCH_VIS __attribute__ ((visibility("default")))
 #	else
 #		error "Your GCC is too old to use crunch++"
@@ -68,6 +68,12 @@
 #	define CRUNCH_NO_DISCARD(x) x __attribute__((warn_unused_result))
 #else
 #	define CRUNCH_NO_DISCARD(x) x
+#endif
+
+#ifndef __APPLE__
+#define CRUNCHpp_MAYBE_NOEXCEPT(x) x noexcept
+#else
+#define CRUNCHpp_MAYBE_NOEXCEPT(x) x
 #endif
 
 namespace crunch
@@ -235,6 +241,7 @@ public:
 	CRUNCH_VIS void assertEqual(const uint32_t result, const uint32_t expected);
 	CRUNCH_VIS void assertEqual(const int64_t result, const int64_t expected);
 	CRUNCH_VIS void assertEqual(const uint64_t result, const uint64_t expected);
+	CRUNCH_VIS void assertEqual(const std::size_t result, const std::size_t expected);
 	CRUNCH_VIS void assertEqual(void *result, void *expected);
 	CRUNCH_VIS void assertEqual(double result, double expected);
 	CRUNCH_VIS void assertEqual(const char *const result, const char *const expected);
@@ -258,6 +265,7 @@ public:
 	CRUNCH_VIS void assertNotEqual(const uint32_t result, const uint32_t expected);
 	CRUNCH_VIS void assertNotEqual(const int64_t result, const int64_t expected);
 	CRUNCH_VIS void assertNotEqual(const uint64_t result, const uint64_t expected);
+	CRUNCH_VIS void assertNotEqual(const std::size_t result, const std::size_t expected);
 	CRUNCH_VIS void assertNotEqual(void *result, void *expected);
 	CRUNCH_VIS void assertNotEqual(double result, double expected);
 	CRUNCH_VIS void assertNotEqual(const char *const result, const char *const expected);

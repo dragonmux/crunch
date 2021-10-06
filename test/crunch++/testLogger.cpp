@@ -223,7 +223,7 @@ private:
 	}
 
 public:
-	loggerTests() noexcept = default;
+	CRUNCHpp_MAYBE_NOEXCEPT(loggerTests()) = default;
 	loggerTests(const loggerTests &) = delete;
 	loggerTests(loggerTests &&) = delete;
 	loggerTests &operator =(const loggerTests &) = delete;
