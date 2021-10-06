@@ -5,11 +5,13 @@
 #include <errno.h>
 #include <stdint.h>
 
+#ifndef __APPLE__
 #ifdef PTHREAD_CREATE_JOINABLE
 #undef PTHREAD_CREATE_JOINABLE
 #endif
 #ifdef PTHREAD_SCOPE_PROCESS
 #undef PTHREAD_SCOPE_PROCESS
+#endif
 #endif
 
 typedef void *(*pthread_start_t)(void *);

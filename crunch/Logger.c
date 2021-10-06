@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifdef __GNUC__
+#if defined(__APPLE__)
+#define __USE_POSIX
+#define _DARWIN_C_SOURCE
+#elif defined(__GNUC__)
 #define __USE_POSIX
 #define _POSIX_SOURCE
 #endif

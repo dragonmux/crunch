@@ -16,7 +16,12 @@ namespace crunch
 #endif
 
 	std::string cCompiler{compilerCC " "s}; // NOLINT(cert-err58-cpp)
+// Workaround namespace'd extern variables being deduplicated incorrectly in macOS
+#ifndef __APPLE__
 	std::string cxxCompiler{compilerCXX + " -fvisibility=hidden -fvisibility-inlines-hidden "s}; // NOLINT(cert-err58-cpp)
+#else
+	std::string cxxCompiler{compilerCXX + " -fvisibility-inlines-hidden "s}; // NOLINT(cert-err58-cpp)
+#endif
 	const std::string libExt{".so"s}; // NOLINT(cert-err58-cpp)
 
 	inline std::string crunchLib(const bool isCXX)

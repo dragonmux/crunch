@@ -221,6 +221,24 @@ void testsuite::assertNotEqual(const uint64_t result, const uint64_t expected)
 	}
 }
 
+void testsuite::assertEqual(const std::size_t result, const std::size_t expected)
+{
+	if (result != expected)
+	{
+		assertionError("%" PRIu64, result, expected);
+		throw threadExit_t{1};
+	}
+}
+
+void testsuite::assertNotEqual(const std::size_t result, const std::size_t expected)
+{
+	if (result == expected)
+	{
+		assertionError("%" PRIu64, result);
+		throw threadExit_t{1};
+	}
+}
+
 void testsuite::assertEqual(void *result, void *expected)
 {
 	if (result != expected)

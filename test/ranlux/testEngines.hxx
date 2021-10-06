@@ -42,6 +42,9 @@ public:
 	subtract_with_borrow_engine() : subtract_with_borrow_engine{defaultSeed} {}
 	explicit subtract_with_borrow_engine(UIntType value) { seed(value); }
 
+	constexpr static result_type min() { return 0; }
+	constexpr static result_type max() { return result_type(~0); }
+
 	void seed(UIntType value = defaultSeed)
 	{
 		std::linear_congruential_engine<UIntType, 40014U, 0U, 2147483563U>
