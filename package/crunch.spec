@@ -8,6 +8,9 @@ License: LGPLv3+
 Source0: https://github.com/DX-MON/crunch/releases/v%{version}/crunch-%{version}.tar.xz
 Source1: https://github.com/DX-MON/crunch/releases/v%{version}/%{name}-%{version}.tar.xz.asc
 
+%define _debugsource_template %{nil}
+%define debug_package %{nil}
+
 %description
 crunch your code. Crunch is a unit testing framework written for C and C++.
 
