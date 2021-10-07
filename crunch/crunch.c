@@ -8,7 +8,7 @@
 #include "Logger.h"
 #include "ArgsParser.h"
 #include "StringFuncs.h"
-#ifndef _MSC_VER
+#ifndef _WIN32
 #define __USE_GNU
 #include <dlfcn.h>
 #include <unistd.h>
@@ -16,9 +16,13 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <direct.h>
+#ifdef _MSC_VER
 #include <io.h>
 #define R_OK 4
 #define RTLD_LAZY 0
+#else
+#include <unistd.h>
+#endif
 #define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
 #define dlsym(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
 #define dlclose(handle) FreeLibrary((HMODULE)handle)
@@ -47,7 +51,7 @@ const arg_t crunchArgs[] =
 	{NULL, 0, 0, 0}
 };
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #define COUNT_LIB_EXTS 3U
 static const char *libExt[COUNT_LIB_EXTS] = {"dll", "so", "tlib"};
 static const size_t libExtMaxLength = 4U;
@@ -64,7 +68,11 @@ uint32_t numTests = 0;
 const char *workingDir = NULL;
 uint8_t loggingTests = 0;
 
+#ifdef _WIN32
+typedef FARPROC registerFn;
+#else
 typedef void (__cdecl *registerFn)();
+#endif
 
 void noMemory()
 	{ puts("**** crunch Fatal ****\nCould not allocate enough memory!\n**** crunch Fatal ****"); }
@@ -87,7 +95,7 @@ void newline()
 {
 	if (isTTY != 0)
 	{
-#ifdef _MSC_VER
+#ifdef _WIN32
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 		testPrintf("\n");
 #else
@@ -102,7 +110,7 @@ int testRunner(void *testPtr)
 {
 	test *theTest = testPtr;
 	if (isTTY != 0)
-#ifndef _MSC_VER
+#ifndef _WIN32
 		testPrintf(INFO);
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -135,7 +143,7 @@ void printStats()
 void red()
 {
 	if (isTTY)
-#ifndef _MSC_VER
+#ifndef _WIN32
 		testPrintf(FAILURE);
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
@@ -145,7 +153,7 @@ void red()
 void magenta()
 {
 	if (isTTY)
-#ifndef _MSC_VER
+#ifndef _WIN32
 		testPrintf(COLOUR("1;35"));
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -344,7 +352,7 @@ int main(int argc, char **argv)
 		return 2;
 	}
 	workingDir = getcwd(NULL, 0);
-#ifndef _MSC_VER
+#ifndef _WIN32
 	isTTY = isatty(STDOUT_FILENO);
 #else
 	console = GetStdHandle(STD_OUTPUT_HANDLE);

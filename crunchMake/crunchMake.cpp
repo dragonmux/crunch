@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <cstring>
 #include <cstdlib>
-#ifndef _MSC_VER
+#if !defined(_WIN32) || defined(__MINGW32__) || defined(__MINGW64__)
 #include <unistd.h>
 #else
 #include <io.h>
@@ -148,7 +148,7 @@ namespace crunch
 	{
 		const auto dotPos{file.find_last_of('.')};
 		auto objFile{file.substr(0, dotPos)};
-#ifndef _MSC_VER
+#ifndef _WIN32
 		return objFile += ".o"s;
 #else
 		return objFile += ".obj"s;
@@ -228,7 +228,7 @@ namespace crunch
 		cxxCompiler += standardVersion(standard) + ' ';
 	}
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 	void handleSanitizers()
 	{
 		const auto *const sanitizer{findArg(parsedArgs, "-fsanitize="_sv, nullptr)};
@@ -268,7 +268,7 @@ namespace crunch
 		if (!quiet)
 			quiet = bool(findArg(parsedArgs, "-q"_sv, nullptr));
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 		handleSanitizers();
 #endif
 

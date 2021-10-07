@@ -4,7 +4,7 @@
 
 #include <stddef.h>
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 	#ifdef __crunch_lib__
 		#define CRUNCH_VIS	__declspec(dllexport)
 	#else
@@ -13,7 +13,7 @@
 	#ifdef __cplusplus
 		#define CRUNCH_API	extern "C" CRUNCH_VIS
 	#else
-		#define CRUNCH_API	CRUNCH_VIS
+		#define CRUNCH_API	extern CRUNCH_VIS
 	#endif
 	#define CRUNCH_EXPORT		__declspec(dllexport)
 #else
@@ -32,15 +32,15 @@
 
 #if defined(__GNUC__)
 #	define CRUNCH_DEPRECATE __attribute__ ((deprecated))
-#elif defined(_MSC_VER)
+#elif defined(_WIN32)
 #	define CRUNCH_DEPRECATE __declspec(deprecated)
 #endif
 
 /* Give systems that don't have other calling conventions a dud definition of __cdecl */
-#ifndef _WINDOWS
+#if !defined(_WIN32)
 #define __cdecl
 #else
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__MINGW64__) && !defined(__MINGW32__)
 #define __cdecl __attribute__((cdecl))
 #endif
 #endif

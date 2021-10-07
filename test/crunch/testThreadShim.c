@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#ifndef _WINDOWS
+#ifndef _WIN32
 #include <errno.h>
 #endif
 #include <threading/threadShim.h>
 #include <crunch.h>
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 void testErrorMapping()
 {
 	for (int i = 0; i < 255; ++i)

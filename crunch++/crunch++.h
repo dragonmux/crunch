@@ -21,7 +21,7 @@
 #include <string_view>
 #endif
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #	ifdef __crunch_lib__
 #		define CRUNCH_VIS	__declspec(dllexport)
 #	else
@@ -241,7 +241,9 @@ public:
 	CRUNCH_VIS void assertEqual(const uint32_t result, const uint32_t expected);
 	CRUNCH_VIS void assertEqual(const int64_t result, const int64_t expected);
 	CRUNCH_VIS void assertEqual(const uint64_t result, const uint64_t expected);
+#if defined(__APPLE__)
 	CRUNCH_VIS void assertEqual(const std::size_t result, const std::size_t expected);
+#endif
 	CRUNCH_VIS void assertEqual(void *result, void *expected);
 	CRUNCH_VIS void assertEqual(double result, double expected);
 	CRUNCH_VIS void assertEqual(const char *const result, const char *const expected);
@@ -265,7 +267,9 @@ public:
 	CRUNCH_VIS void assertNotEqual(const uint32_t result, const uint32_t expected);
 	CRUNCH_VIS void assertNotEqual(const int64_t result, const int64_t expected);
 	CRUNCH_VIS void assertNotEqual(const uint64_t result, const uint64_t expected);
+#if defined(__APPLE__)
 	CRUNCH_VIS void assertNotEqual(const std::size_t result, const std::size_t expected);
+#endif
 	CRUNCH_VIS void assertNotEqual(void *result, void *expected);
 	CRUNCH_VIS void assertNotEqual(double result, double expected);
 	CRUNCH_VIS void assertNotEqual(const char *const result, const char *const expected);
@@ -318,7 +322,7 @@ private:
 
 public:
 	threadExit_t(int exitValue) noexcept : std::exception{}, value{exitValue} { }
-	CRUNCH_VIS operator int() const noexcept { return value; }
+	operator int() const noexcept { return value; }
 	const char *what() const noexcept final { return "Test assertion failure, thread exiting"; }
 };
 

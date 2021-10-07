@@ -2,7 +2,7 @@
 #ifndef LOGGER__HXX
 #define LOGGER__HXX
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -28,7 +28,7 @@ namespace crunch
 	};
 
 	CRUNCHpp_API bool isTTY;
-#ifdef _MSC_VER
+#ifdef _WIN32
 	CRUNCHpp_API HANDLE console;
 #endif
 	CRUNCHpp_API testLog *logger;

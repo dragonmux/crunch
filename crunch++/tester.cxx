@@ -12,7 +12,7 @@ namespace crunch
 	void newline()
 	{
 		if (isTTY)
-#ifdef _MSC_VER
+#ifdef _WIN32
 		{
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 			testPrintf("\n");
@@ -25,7 +25,7 @@ namespace crunch
 	}
 }
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 using crunch::console;
 #endif
 using crunch::loggingTests;
@@ -42,7 +42,7 @@ using crunch::echoAborted;
 int32_t testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxTest &unitTest)
 {
 	if (isTTY)
-#ifndef _MSC_VER
+#ifndef _WIN32
 		testPrintf(INFO);
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -67,7 +67,7 @@ int32_t testsuite::testRunner(testsuite &unitClass, crunch::internal::cxxTest &u
 			// Yes, switch it back off again
 			stopLogging(logger);
 		logResult(RESULT_FAILURE, "Failure: Exception caught by crunch++");
-#ifndef _MSC_VER
+#ifndef _WIN32
 		testPrintf(CURS_UP);
 #endif
 		return 2;
