@@ -2,7 +2,7 @@
 #ifndef LOGGER__H
 #define LOGGER__H
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -17,7 +17,7 @@ typedef enum _resultType
 } resultType;
 
 CRUNCH_API uint8_t isTTY;
-#ifdef _MSC_VER
+#ifdef _WIN32
 CRUNCH_API HANDLE console;
 #endif
 CRUNCH_API testLog *logger;

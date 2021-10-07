@@ -29,10 +29,10 @@ using substrate::readPipe_t;
 using substrate::pty_t;
 using substrate::fixedVector_t;
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 constexpr static auto defaultTTY{"/dev/ptmx"_sv};
 constexpr static auto devNull{"/dev/null"_sv};
-#else
+#elif !defined(__MINGW32__) || !defined(__MINGW64__)
 #define STDOUT_FILENO fileno(stdout)
 #define STDERR_FILENO fileno(stderr)
 #define O_CLOEXEC O_BINARY
@@ -45,7 +45,7 @@ constexpr static auto plainSuccess{" [  OK  ]\n"_sv};
 constexpr static auto plainFailure{" [ FAIL ]\n"_sv};
 constexpr static auto plainSkip{" [ SKIP ]\n"_sv};
 constexpr static auto plainAborted{"[ **** ABORTED **** ]\n"_sv};
-#ifndef _WINDOWS
+#ifndef _WIN32
 constexpr static auto colourSuccess{
 	NORMAL CURS_UP "\x1B[72G" BRACKET "[" SUCCESS "  OK  " BRACKET "]" NORMAL "\r\n"_sv
 };
@@ -78,7 +78,7 @@ private:
 	using stringView = crunch::internal::stringView;
 	using cleanupFn_t = void (*)();
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	static int32_t dup2(int32_t fd1, int32_t fd2) noexcept
 	{
 		const auto result{::dup2(fd1, fd2)};
@@ -128,7 +128,7 @@ private:
 		assertEqual(result.data(), expected.data(), expected.length());
 	}
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	WORD colourFor(const stringView &expected) noexcept
 	{
 		if (expected == colourSuccess)

@@ -50,7 +50,7 @@ endif
 libArgs = []
 if isWindows
 	libArgs += '-D__crunch_lib__'
-	add_project_arguments('-DWIN32', '-D_WINDOWS', language: ['c', 'cpp'])
+	add_project_arguments('-DWIN32', '-D_WIN32', '-D_WINDOWS', language: ['c', 'cpp'])
 	add_project_arguments(
 		'-D_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1',
 		'-D_CRT_NONSTDC_NO_WARNINGS=1',
@@ -60,6 +60,16 @@ if isWindows
 	endif
 	if debug
 		add_project_arguments('-D_DEBUG', language: ['c', 'cpp'])
+	endif
+
+	if target_machine.cpu_family() == 'x86_64' or target_machine.cpu_family() == 'aarch64'
+		add_project_arguments('-D_WIN64', language: ['c', 'cpp'])
+	endif
+
+	# MinGW defines the SDK minimum target to Server 2003
+	# Console APIs require Windows 10 17763 (Redstone 5)
+	if cxx.get_id() == 'gcc' or cxx.get_id() == 'clang'
+		add_project_arguments('-DWINVER=NTDDI_WIN10_RS5', '-D_WIN32_WINNT=NTDDI_WIN10_RS5', '-DNTDDI_VERSION=NTDDI_WIN10_RS5', language: ['c', 'cpp'])
 	endif
 
 	coverageRunner = find_program('OpenCppCoverage', required: false)

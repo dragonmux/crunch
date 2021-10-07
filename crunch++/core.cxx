@@ -220,12 +220,12 @@ void testsuite::assertNotEqual(const uint64_t result, const uint64_t expected)
 		throw threadExit_t{1};
 	}
 }
-
+#if defined(__APPLE__)
 void testsuite::assertEqual(const std::size_t result, const std::size_t expected)
 {
 	if (result != expected)
 	{
-		assertionError("%" PRIu64, result, expected);
+		assertionError("%zu", result, expected);
 		throw threadExit_t{1};
 	}
 }
@@ -234,10 +234,11 @@ void testsuite::assertNotEqual(const std::size_t result, const std::size_t expec
 {
 	if (result == expected)
 	{
-		assertionError("%" PRIu64, result);
+		assertionError("%zu", result);
 		throw threadExit_t{1};
 	}
 }
+#endif
 
 void testsuite::assertEqual(void *result, void *expected)
 {

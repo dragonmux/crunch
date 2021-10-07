@@ -8,7 +8,7 @@
 #endif
 #include "Core.h"
 #include "Logger.h"
-#ifndef _MSC_VER
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/file.h>
@@ -18,13 +18,13 @@
 #endif
 #include <stdio.h>
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 #define COL(val) ((val) - 8)
 #else
 #define COL(val) (uint16_t)((val) - 9)
 #endif
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 	#define TTY	"CON"
 HANDLE console;
 #else
@@ -42,7 +42,7 @@ struct testLog
 testLog *logger = NULL;
 uint8_t isTTY = 1;
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 int getColumns()
 {
 	struct winsize win;
@@ -85,7 +85,7 @@ void printAborted()
 	testPrintf("[ **** ABORTED **** ]\n");
 }
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 void echoOk()
 {
 	if (isTTY != 0)
@@ -182,7 +182,7 @@ void logResult(resultType type, const char *message, ...)
 	va_list args;
 
 	if (isTTY != 0)
-#ifndef _MSC_VER
+#ifndef _WIN32
 		testPrintf(NORMAL);
 #else
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
@@ -217,7 +217,7 @@ testLog *startLogging(const char *fileName)
 		return NULL;
 	}
 	logger_->realStdout = stdout;
-#ifndef _MSC_VER
+#ifndef _WIN32
 	logger_->fd = dup(STDOUT_FILENO);
 	stdout = logger_->file;
 #else
@@ -225,7 +225,7 @@ testLog *startLogging(const char *fileName)
 #endif
 	if (logger_->fd == -1)
 	{
-#ifndef _MSC_VER
+#ifndef _WIN32
 		stdout = logger_->realStdout;
 #endif
 		free(logger_);
@@ -234,7 +234,7 @@ testLog *startLogging(const char *fileName)
 	logger = logger_;
 	logger_->stdout_ = fdopen(logger_->fd, "w");
 	const int fileFD = fileno(logger_->file);
-#ifndef _MSC_VER
+#ifndef _WIN32
 	flock(fileFD, LOCK_EX);
 	dup2(fileFD, STDOUT_FILENO);
 #else
@@ -248,7 +248,7 @@ void stopLogging(testLog *logger_)
 {
 	if (!logger_ || logger_ != logger)
 		return;
-#ifndef _MSC_VER
+#ifndef _WIN32
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);
 	stdout = logger_->realStdout;

@@ -228,7 +228,7 @@ crunch::testLog *startLogging(const char *fileName)
 	if (!logger_->file)
 		return nullptr;
 	logger_->realStdout = stdout;
-#ifndef _MSC_VER
+#ifndef _WIN32
 	logger_->fd = dup(STDOUT_FILENO);
 	stdout = logger_->file;
 #else
@@ -236,7 +236,7 @@ crunch::testLog *startLogging(const char *fileName)
 #endif
 	if (logger_->fd == -1)
 	{
-#ifndef _MSC_VER
+#ifndef _WIN32
 		stdout = logger_->realStdout;
 #endif
 		return nullptr;
@@ -244,7 +244,7 @@ crunch::testLog *startLogging(const char *fileName)
 	logger = logger_.release();
 	logger->stdout_ = fdopen(logger->fd, "w");
 	const int fileFD = fileno(logger->file);
-#ifndef _MSC_VER
+#ifndef _WIN32
 	flock(fileFD, LOCK_EX);
 	dup2(fileFD, STDOUT_FILENO);
 #else
@@ -259,7 +259,7 @@ void stopLogging(crunch::testLog *loggerPtr)
 	if (!loggerPtr || loggerPtr != logger)
 		return;
 	std::unique_ptr<crunch::testLog> logger_{loggerPtr};
-#ifndef _MSC_VER
+#ifndef _WIN32
 	dup2(logger_->fd, STDOUT_FILENO);
 	flock(fileno(logger_->file), LOCK_UN);
 	stdout = logger_->realStdout;

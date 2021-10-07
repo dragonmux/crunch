@@ -1,15 +1,19 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <cstring>
 #include <cinttypes>
-#ifndef _MSC_VER
+#ifndef _WIN32
 #include <dlfcn.h>
 #include <unistd.h>
 #else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <direct.h>
+#if defined(__MINGW32__) || defined(__MINGW64__)
+#include <unistd.h>
+#else
 #include <io.h>
 constexpr static const auto R_OK{0x04};
+#endif
 #define RTLD_LAZY 0
 #define dlopen(fileName, flag) (void *)LoadLibrary(fileName)
 #define dlsym(handle, symbol) GetProcAddress(HMODULE(handle), symbol)
@@ -52,7 +56,7 @@ namespace crunch
 		{{}, 0, 0, 0}
 	})};
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 	static const auto libExt{substrate::make_array<internal::stringView>(
 	{
 		"dll"_sv, "so"_sv, "tlib"_sv
@@ -79,7 +83,7 @@ namespace crunch
 	void red()
 	{
 		if (isTTY)
-#ifndef _MSC_VER
+#ifndef _WIN32
 			testPrintf(FAILURE);
 #else
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
@@ -89,7 +93,7 @@ namespace crunch
 	void magenta()
 	{
 		if (isTTY)
-#ifndef _MSC_VER
+#ifndef _WIN32
 			testPrintf(COLOUR("1;35"));
 #else
 			SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -270,7 +274,7 @@ namespace crunch
 			return 2;
 		}
 		workingDir.reset(getcwd(nullptr, 0));
-#ifndef _MSC_VER
+#ifndef _WIN32
 		isTTY = isatty(STDOUT_FILENO);
 #else
 		console = GetStdHandle(STD_OUTPUT_HANDLE);

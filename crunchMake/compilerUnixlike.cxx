@@ -22,7 +22,11 @@ namespace crunch
 #else
 	std::string cxxCompiler{compilerCXX + " -fvisibility-inlines-hidden "s}; // NOLINT(cert-err58-cpp)
 #endif
+#ifndef _WIN32
 	const std::string libExt{".so"s}; // NOLINT(cert-err58-cpp)
+#else
+	const std::string libExt{".dll"s}; //NOLINT(cert-err58-cpp)
+#endif
 
 	inline std::string crunchLib(const bool isCXX)
 	{

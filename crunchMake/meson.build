@@ -1,8 +1,8 @@
 crunchMakeSrc = ['crunchMake.cpp']
-if target_machine.system() != 'windows'
-	crunchMakeSrc += ['compilerUnixlike.cxx']
-else
+if target_machine.system() == 'windows' and cxx.get_id() == 'msvc'
 	crunchMakeSrc += ['compilerWindows.cxx']
+else
+	crunchMakeSrc += ['compilerUnixlike.cxx']
 endif
 
 crunchConfig = configuration_data()
