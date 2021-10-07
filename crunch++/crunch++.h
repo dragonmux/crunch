@@ -150,6 +150,8 @@ namespace crunch
 			CRUNCH_NO_DISCARD(constexpr std::size_t length() const noexcept) { return length_; }
 			CRUNCH_NO_DISCARD(constexpr bool empty() const noexcept) { return size() == 0; }
 			CRUNCH_NO_DISCARD(std::string toString() const noexcept) { return {data_, length_}; }
+			CRUNCH_NO_DISCARD(constexpr const char *begin() const noexcept) { return data_; }
+			CRUNCH_NO_DISCARD(constexpr const char *end() const noexcept) { return data_ + length_; }
 
 			CRUNCH_NO_DISCARD(stringView substr(const std::size_t pos = 0, const std::size_t n = npos) const)
 				{ return stringView{data_ + check_(pos), clamp_(pos, n)}; }
