@@ -333,7 +333,7 @@ void testFormatString()
 	assertNull(result);
 }
 
-#if !defined(_WINDOWS) && !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
+#if !defined(_WIN32) && !defined(__APPLE__) && !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 void testAllocs()
 {
 	allocCount = 0;
@@ -367,7 +367,7 @@ BEGIN_REGISTER_TESTS()
 	TEST(testFail)
 	TEST(testAbort)
 	TEST(testFormatString)
-#if !defined(_WINDOWS) && !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
+#if !defined(_WIN32) && !defined(__APPLE__) && !defined(NO_ALLOC_TEST) && !defined(CRUNCH_ASAN)
 	TEST(testAllocs)
 #endif
 	TEST(teardown)
