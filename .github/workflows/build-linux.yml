@@ -1,0 +1,104 @@
+name: Build Linux
+
+on:
+  push:
+    branches-ignore:
+      - 'coverityScan'
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        compiler:
+          - 'clang-9'
+          - 'clang-10'
+          - 'clang-11'
+          - 'clang-12'
+          - 'gcc-7'
+          - 'gcc-8'
+          - 'gcc-9'
+          - 'gcc-10'
+          - 'gcc-11'
+        coverage: [false, true]
+      fail-fast: false
+    steps:
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Coverage environment
+        env:
+          COVERAGE: ${{ matrix.coverage }}
+        run: |
+          echo "Coverage enabled for build? ${{ matrix.coverage }}"
+          echo -n "COVERAGE=" >> $GITHUB_ENV
+          ([ $COVERAGE == "true" ] && echo 1 || echo 0) >> $GITHUB_ENV
+          echo -n "BUILD_OPTS=" >> $GITHUB_ENV
+          ([ $COVERAGE == "true" ] && echo "--buildtype=debug" || echo "") >> $GITHUB_ENV
+      - name: Setup GCC
+        if: startsWith(matrix.compiler, 'gcc')
+        shell: bash
+        run: |
+          CXX=${CC/#gcc/g++}
+          sudo apt-add-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install $CC $CXX
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          [ $COVERAGE -ne 0 ] && echo "GCOV=${CC/#gcc/gcov}" >> $GITHUB_ENV || true
+        env:
+          CC: ${{ matrix.compiler }}
+      - name: Setup Clang
+        if: startsWith(matrix.compiler, 'clang')
+        shell: bash
+        run: |
+          wget https://apt.llvm.org/llvm-snapshot.gpg.key
+          sudo apt-key add llvm-snapshot.gpg.key
+          rm llvm-snapshot.gpg.key
+          sudo apt-add-repository "deb https://apt.llvm.org/focal/ llvm-toolchain-focal${CC/#clang/} main"
+          sudo apt-get update
+          CXX=${CC/#clang/clang++}
+          sudo apt-get install $CC $CXX
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          [ $COVERAGE -ne 0 ] && echo "GCOV=/usr/lib/${CC/#clang/llvm}/bin/llvm-cov gcov" >> $GITHUB_ENV || true
+        env:
+          CC: ${{ matrix.compiler }}
+        working-directory: ${{ runner.temp }}
+      - name: Chekcout crunch
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
+          sudo pip3 install --upgrade pip setuptools wheel
+          pip3 install --user meson
+          unzip ninja-linux.zip -d ~/.local/bin
+          rm ninja-linux.zip
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          $CC --version
+          $CXX --version
+          [ $COVERAGE -ne 0 ] && $GCOV --version || true
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Db_coverage=${{ matrix.coverage }} $BUILD_OPTS
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build install
+      - name: Codecov
+        if: success() && matrix.coverage
+        run: bash <(curl -s https://codecov.io/bash) -x "$GCOV";
