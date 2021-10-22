@@ -9,7 +9,11 @@ namespace crunch
 
 #ifdef crunch_PREFIX
 	static const auto includeOptsExtra{"-I"s + crunch_PREFIX "/include "s}; // NOLINT(cert-err58-cpp)
+#if defined(__MINGW32__) && defined(__clang__)
+	static const auto linkOptsExtra{"-L"s + crunch_LIBDIR + " "s}; // NOLINT(cert-err58-cpp)
+#else
 	static const auto linkOptsExtra{"-L"s + crunch_LIBDIR " -Wl,-rpath,"s + crunch_LIBDIR " "s}; // NOLINT(cert-err58-cpp)
+#endif
 #else
 	static const auto includeOptsExtra{""s}; // NOLINT(cert-err58-cpp)
 	static const auto linkOptsExtra{""s}; // NOLINT(cert-err58-cpp)

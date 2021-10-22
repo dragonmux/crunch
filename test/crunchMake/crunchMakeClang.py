@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: LGPL-3.0-or-later
 from argparse import ArgumentParser
+from os import name as osName
 from subprocess import run, PIPE
 from sys import exit
-from os import unlink
 
 parser = ArgumentParser(
 	description = 'Light-weight wrapper around crunchMake to assert the output matches expectation',
@@ -20,7 +20,10 @@ parser.add_argument('params', type = str, nargs = '*', help = 'crunchMake parame
 args = parser.parse_args()
 
 if args.q:
-	intermediateFile = '.'.join((args.o.rsplit('.', maxsplit = 1)[0], 'o'))
+	if osName == 'nt':
+		intermediateFile = '.'.join((args.o.rsplit('.', maxsplit = 1)[0], 'obj'))
+	else:
+		intermediateFile = '.'.join((args.o.rsplit('.', maxsplit = 1)[0], 'o'))
 	expectedOutput = [
 		' CC    ' + args.i + ' => ' + intermediateFile,
 		' CCLD  ' + intermediateFile + ' => ' + args.o
