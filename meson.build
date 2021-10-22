@@ -54,7 +54,8 @@ if isWindows
 	add_project_arguments(
 		'-D_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1',
 		'-D_CRT_NONSTDC_NO_WARNINGS=1',
-		language: 'cpp')
+		language: 'cpp'
+	)
 	if cxx.get_id() == 'clang'
 		add_project_arguments('-D_NO_CRT_STDIO_INLINE', language: 'cpp')
 	endif
@@ -69,7 +70,12 @@ if isWindows
 	# MinGW defines the SDK minimum target to Server 2003
 	# Console APIs require Windows 10 17763 (Redstone 5)
 	if cxx.get_id() == 'gcc' or cxx.get_id() == 'clang'
-		add_project_arguments('-DWINVER=NTDDI_WIN10_RS5', '-D_WIN32_WINNT=NTDDI_WIN10_RS5', '-DNTDDI_VERSION=NTDDI_WIN10_RS5', language: ['c', 'cpp'])
+		add_project_arguments(
+			'-DWINVER=NTDDI_WIN10_RS5',
+			'-D_WIN32_WINNT=NTDDI_WIN10_RS5',
+			'-DNTDDI_VERSION=NTDDI_WIN10_RS5',
+			language: ['c', 'cpp']
+		)
 	endif
 
 	coverageRunner = find_program('OpenCppCoverage', required: false)
