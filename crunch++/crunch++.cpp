@@ -390,7 +390,7 @@ REGISTERS:
 		std::array<void *, 256> calls{};
 		backtrace(calls.data(), calls.size());
 		auto **symbols = backtrace_symbols(calls.data(), calls.size());
-		for (size_t i{}; i < calls.size(); ++i)
+		for (size_t i{}; i < calls.size() && calls[i]; ++i)
 			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 			fprintf(stderr, "\t[%#018" PRIxPTR "]\t%s\n", reinterpret_cast<uintptr_t>(calls[i]), symbols[i]);
 		// NOLINTNEXTLINE(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory)
