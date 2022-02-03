@@ -371,6 +371,7 @@ REGISTERS:
 	RDX: %016llX	 R8: %016llX	 R9: %016llX
 	R10: %016llX	R11: %016llX	R12: %016llX
 	R13: %016llX	R14: %016llX	R15: %016llX
+
 )",
 			// NOLINTNEXTLINE(concurrency-mt-unsafe)
 			info->si_signo, info->si_code, strsignal(info->si_signo),
@@ -386,7 +387,7 @@ REGISTERS:
 			mctx.gregs[REG_R13], mctx.gregs[REG_R14], mctx.gregs[REG_R15]
 		);
 
-		fputs("---- BEGIN STACK TRACE ----", stderr);
+		fprintf(stderr, "---- BEGIN STACK TRACE ----\n");
 		std::array<void *, 256> calls{};
 		backtrace(calls.data(), calls.size());
 		auto **symbols = backtrace_symbols(calls.data(), calls.size());
@@ -395,7 +396,7 @@ REGISTERS:
 			fprintf(stderr, "\t[%#018" PRIxPTR "]\t%s\n", reinterpret_cast<uintptr_t>(calls[i]), symbols[i]);
 		// NOLINTNEXTLINE(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory)
 		free(symbols);
-		fputs("----- END STACK TRACE -----", stderr);
+		fprintf(stderr, "----- END STACK TRACE -----\n");
 
 		if (info->si_signo != SIGABRT)
 		{
