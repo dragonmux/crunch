@@ -392,8 +392,11 @@ REGISTERS:
 		backtrace(calls.data(), calls.size());
 		auto **symbols = backtrace_symbols(calls.data(), calls.size());
 		for (size_t i{}; i < calls.size() && calls[i]; ++i)
+		{
+			const auto demangledSymbol{substrate::decode_typename(symbols[i])};
 			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-			fprintf(stderr, "\t[%#018" PRIxPTR "]\t%s\n", reinterpret_cast<uintptr_t>(calls[i]), symbols[i]);
+			fprintf(stderr, "\t[%#018" PRIxPTR "]\t%s\n", reinterpret_cast<uintptr_t>(calls[i]), demangledSymbol.c_str());
+		}
 		// NOLINTNEXTLINE(cppcoreguidelines-no-malloc,cppcoreguidelines-owning-memory)
 		free(symbols);
 		fprintf(stderr, "----- END STACK TRACE -----\n");
