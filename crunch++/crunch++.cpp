@@ -239,7 +239,7 @@ namespace crunch
 
 #ifdef _WINDOWS
 	void invalidHandler(const wchar_t *, const wchar_t *, const wchar_t *, const uint32_t, const uintptr_t) { }
-#else
+#elif defined(__x86_64__)
 	// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 	const char *strsicode(const int32_t sig, const int32_t code) noexcept
 	{
@@ -320,6 +320,26 @@ namespace crunch
 				// }
 				// break;
 				return "Unknown SIGTRAP Code";
+			case SIGABRT:
+				return "Program aborted";
+			case SIGBUS:
+				/* SIGBUS codes */
+				switch (code)
+				{
+					case BUS_ADRALN:
+						return "Invalid address alignment";
+					case BUS_ADRERR:
+						return "Non-existant physical address";
+					case BUS_OBJERR:
+						return "Object specific hardware error";
+					case BUS_MCEERR_AR:
+						return "Hardware memory error: action required";
+					case BUS_MCEERR_AO:
+						return "Hardware memory error: action optional";
+					default:
+						return "Unknown SIGBUS Code";
+				}
+				break;
 			default:
 				return "Unknown Signal";
 		}
@@ -364,6 +384,11 @@ REGISTERS:
 			mctx.gregs[REG_R10], mctx.gregs[REG_R11], mctx.gregs[REG_R12],
 			mctx.gregs[REG_R13], mctx.gregs[REG_R14], mctx.gregs[REG_R15]
 		);
+		if (info->si_signo != SIGABRT)
+		{
+			signal(SIGABRT, SIG_DFL);
+			std::abort();
+		}
 	}
 
 	static struct sigaction trapSignal
@@ -411,7 +436,13 @@ REGISTERS:
 		workingDir.reset(getcwd(nullptr, 0));
 #ifndef _WIN32
 		isTTY = isatty(STDOUT_FILENO);
+#if defined(__x86_64__)
 		sigaction(SIGABRT, &trapSignal, nullptr);
+		sigaction(SIGSEGV, &trapSignal, nullptr);
+		sigaction(SIGILL, &trapSignal, nullptr);
+		sigaction(SIGFPE, &trapSignal, nullptr);
+		sigaction(SIGBUS, &trapSignal, nullptr);
+#endif
 #else
 		console = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (!console)
