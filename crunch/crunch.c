@@ -9,7 +9,6 @@
 #include "ArgsParser.h"
 #include "StringFuncs.h"
 #ifndef _WIN32
-#define __USE_GNU
 #include <dlfcn.h>
 #include <unistd.h>
 #else

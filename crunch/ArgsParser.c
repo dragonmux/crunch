@@ -1,8 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <stdlib.h>
-#ifdef __GNUC__
-#define __USE_XOPEN_EXTENDED
-#endif
 #include <string.h>
 #include "crunch.h"
 #include "ArgsParser.h"

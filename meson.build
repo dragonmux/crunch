@@ -12,7 +12,7 @@ project(
 		'strip=true'
 	],
 	version: '1.1.1',
-	meson_version: '>=0.52'
+	meson_version: '>=0.53'
 )
 
 cc = meson.get_compiler('c')
@@ -89,6 +89,12 @@ if isWindows
 		]
 		coverageTarget = find_program('runCoverageTarget.py')
 	endif
+else
+	add_project_arguments(
+		'-D_GNU_SOURCE',
+		'-D__USE_XOPEN_EXTENDED',
+		language: ['c', 'cpp']
+	)
 endif
 
 if cxx.get_id() == 'msvc'

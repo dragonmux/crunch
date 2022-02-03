@@ -4,6 +4,7 @@
 #ifndef _WIN32
 #include <dlfcn.h>
 #include <unistd.h>
+#include <csignal>
 #else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -238,6 +239,140 @@ namespace crunch
 
 #ifdef _WINDOWS
 	void invalidHandler(const wchar_t *, const wchar_t *, const wchar_t *, const uint32_t, const uintptr_t) { }
+#else
+	// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+	const char *strsicode(const int32_t sig, const int32_t code) noexcept
+	{
+		switch(sig)
+		{
+			case SIGILL:
+				/* SIGILL codes */
+				switch (code)
+				{
+					case ILL_ILLOPC:
+						return "Illegal opcode.";
+					case ILL_ILLOPN:
+						return "Illegal operand.";
+					case ILL_ILLADR:
+						return "Illegal addressing mode.";
+					case ILL_ILLTRP:
+						return "Illegal trap.";
+					case ILL_PRVOPC:
+						return "Privileged opcode.";
+					case ILL_PRVREG:
+						return "Privileged register.";
+					case ILL_COPROC:
+						return "Coprocessor error.";
+					case ILL_BADSTK:
+						return "Internal stack error.";
+					default:
+						return "Unknown SIGILL Code";
+				}
+				break;
+			case SIGFPE:
+				/* SIGSFPE codes */
+				switch (code)
+				{
+					case FPE_INTDIV:
+						return "Integer divide by zero.";
+					case FPE_INTOVF:
+						return "Integer overflow.";
+					case FPE_FLTDIV:
+						return "Floating-point divide by zero.";
+					case FPE_FLTOVF:
+						return "Floating-point overflow.";
+					case FPE_FLTUND:
+						return "Floating-point underflow.";
+					case FPE_FLTRES:
+						return "Floating-point inexact result.";
+					case FPE_FLTINV:
+						return "Floating-point invalid operation.";
+					case FPE_FLTSUB:
+						return "Subscript out of range.";
+					default:
+						return "Unknown SIGFPE Code";
+				}
+				break;
+			case SIGSEGV:
+				/* SIGSEGV codes */
+				switch (code)
+				{
+					case SEGV_MAPERR:
+						return "Address not mapped to object.";
+					case SEGV_ACCERR:
+						return "Invalid permissions for mapped object.";
+					case SEGV_BNDERR:
+						return "Failed address bound checks.";
+					case SEGV_PKUERR:
+						return "Access was denied by memory protection keys.";
+					default:
+						return "Unknown SIGSEGV Code";
+				}
+				break;
+			case SIGTRAP:
+				// /* SIGTRAP codes */
+				// switch(code) {
+				//      case TRAP_BRKPT: return "Process breakpoint.";
+				//      case TRAP_TRACE: return "Process trace trap.";
+				//      case TRAP_BRANCH: return "Process taken branch trap.";
+				//      case TRAP_HWBKPT: return "Hardware breakpoint/watchpoint."
+				//      default: return "Unknown SIGTRAP Code";
+				// }
+				// break;
+				return "Unknown SIGTRAP Code";
+			default:
+				return "Unknown Signal";
+		}
+	}
+
+	void trapHandler(const int, siginfo_t *const info, void *const context)
+	{
+		const auto *const ctx{static_cast<ucontext_t *>(context)};
+		const auto &mctx{ctx->uc_mcontext};
+
+		fprintf(stderr, R"(
+****TRAP HANDLER****
+	SIG #: %d
+	SCODE: %d
+	 NAME: %s
+	VADDR: %p
+	VASRT: %p
+	VAEND: %p
+
+REASON FOR SIGNAL:
+	%s
+
+REGISTERS:
+	RIP: %016llX	RSP: %016llX	RBP: %016llX
+	RSI: %016llX	RDI: %016llX	EFL: %016llX
+	SEG: %016llX	ERR: %016llX	CR2: %016llX
+	RAX: %016llX	RBX: %016llX	RCX: %016llX
+	RDX: %016llX	 R8: %016llX	 R9: %016llX
+	R10: %016llX	R11: %016llX	R12: %016llX
+	R13: %016llX	R14: %016llX	R15: %016llX
+)",
+			// NOLINTNEXTLINE(concurrency-mt-unsafe)
+			info->si_signo, info->si_code, strsignal(info->si_signo),
+			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access)
+			info->si_addr, info->si_lower, info->si_upper,
+			strsicode(info->si_signo, info->si_code),
+			mctx.gregs[REG_RIP], mctx.gregs[REG_RSP], mctx.gregs[REG_RBP],
+			mctx.gregs[REG_RSI], mctx.gregs[REG_RDI], mctx.gregs[REG_EFL],
+			mctx.gregs[REG_CSGSFS], mctx.gregs[REG_ERR], mctx.gregs[REG_CR2],
+			mctx.gregs[REG_RAX], mctx.gregs[REG_RBX], mctx.gregs[REG_RCX],
+			mctx.gregs[REG_RDX], mctx.gregs[REG_R8], mctx.gregs[REG_R9],
+			mctx.gregs[REG_R10], mctx.gregs[REG_R11], mctx.gregs[REG_R12],
+			mctx.gregs[REG_R13], mctx.gregs[REG_R14], mctx.gregs[REG_R15]
+		);
+	}
+
+	static struct sigaction trapSignal
+	{
+		(void (*)(int))trapHandler,
+		{},
+		SA_SIGINFO | SA_NODEFER,
+		nullptr
+	};
 #endif
 
 	bool handleVersionOrHelp()
@@ -276,6 +411,7 @@ namespace crunch
 		workingDir.reset(getcwd(nullptr, 0));
 #ifndef _WIN32
 		isTTY = isatty(STDOUT_FILENO);
+		sigaction(SIGABRT, &trapSignal, nullptr);
 #else
 		console = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (!console)
