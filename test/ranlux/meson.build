@@ -8,7 +8,7 @@ ranlux = static_library(
 )
 
 ranluxTests = ['testRanlux32', 'testRanlux64']
-libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
+libCrunchppPath = join_paths([meson.project_build_root(), libCrunchpp.outdir()])
 ranluxSrcDir = meson.current_source_dir()
 
 objectMap = {
@@ -19,7 +19,7 @@ objectMap = {
 foreach test : ranluxTests
 	map = objectMap.get(test)
 	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx', 'ranlux64.cxx'])]
-	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.source_root(), '-L' + libCrunchppPath]
+	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.project_source_root(), '-L' + libCrunchppPath]
 	if isWindows and coverage
 		command = [coverageTarget, coverageRunner] + coverageArgs + [
 			'cobertura:crunchMake-@0@-coverage.xml'.format(test), '--'

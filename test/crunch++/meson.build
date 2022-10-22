@@ -2,7 +2,7 @@ libCrunchppTestsNorm = ['testArgsParser', 'testCrunch++', 'testBad', 'testRegist
 libCrunchppTestsExcept = ['testTester']
 libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
 
-libCrunchppPath = join_paths([meson.build_root(), libCrunchpp.outdir()])
+libCrunchppPath = join_paths([meson.project_build_root(), libCrunchpp.outdir()])
 
 if not isWindows
 	testSrcs = [
