@@ -452,9 +452,12 @@ REGISTERS:
 		}
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
 	static const struct sigaction trapSignal
 	{
-		{(void (*)(int))trapHandler},
+		// NOLINTNEXTLINE(cppcoreguidelnies-pro-type-reinterpret-cast)
+		{reinterpret_cast<sighandler_t>(trapHandler)},
 		{},
 		SA_SIGINFO | SA_NODEFER,
 #if !defined(__APPLE__)
@@ -462,6 +465,7 @@ REGISTERS:
 #endif
 	};
 #endif
+#pragma GCC diagnostic pop
 
 	bool handleVersionOrHelp()
 	{
