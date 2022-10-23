@@ -1,6 +1,16 @@
-libCrunchppTestsNorm = ['testArgsParser', 'testCrunch++', 'testBad', 'testRegistration', 'testLogger']
+libCrunchppTestsNorm = ['testCrunch++', 'testBad', 'testRegistration', 'testLogger']
 libCrunchppTestsExcept = ['testTester']
 libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
+
+if cxx.get_id() == 'msvc' or cxx.version().version_compare('< 19.30.30704')
+	# MSVC 2019 crashes on testArgsParser
+	# https://developercommunity.visualstudio.com/t/Crash-on-constexpr-creation-of-a-std::ar/1547919
+	warning('Skipping testArgsParser test as it crashes MSVC')
+else
+	libCrunchppTestsNorm += ['testArgsParser']
+endif
+
+message('MSVC version: @0@'.format(cxx.version()))
 
 libCrunchppPath = join_paths([meson.project_build_root(), libCrunchpp.outdir()])
 
