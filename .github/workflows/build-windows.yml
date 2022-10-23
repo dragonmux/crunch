@@ -4,75 +4,307 @@ on:
   push:
     branches-ignore:
       - 'coverityScan'
+  pull_request:
+    branches:
+      - 'main'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.job }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-windows:
-    runs-on: ${{matrix.os}}
+    name: 'build-windows (${{ matrix.os }}, msvc, ${{ matrix.cpp_std }})'
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019]
-        arch: ['amd64', 'x86']
-        coverage: [false, true]
+        # MSVC 2019 crashes on testArgsParser
+        # https://developercommunity.visualstudio.com/t/Crash-on-constexpr-creation-of-a-std::ar/1547919
+        os:
+          - windows-2022
+        arch: 
+          - x86
+          - amd64
+        cpp_std:
+          - 'c++14'
+          - 'c++17'
       fail-fast: false
     env:
       CC: cl.exe
       CXX: cl.exe
       LD: link.exe
     steps:
-      - name: Chekcout crunch
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-          submodules: true
-      - name: Runtime Environment
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Setup compiler
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: ${{ matrix.arch }}
-      - name: Coverage environment
-        shell: bash
-        env:
-          COVERAGE: ${{ matrix.coverage }}
-        run: |
-          echo "Coverage enabled for build? ${{ matrix.coverage }}"
-          echo -n "COVERAGE=" >> $GITHUB_ENV
-          ([ $COVERAGE == "true" ] && echo -n 1 || echo -n 0) >> $GITHUB_ENV
-          if [ $COVERAGE == "true" ]; then
-            echo "BUILD_OPTS=--buildtype=debug" >> $GITHUB_ENV
-            curl -L1O https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe
-            MSYS2_ARG_CONV_EXCL=/dir=\;/verysilent ./OpenCppCoverageSetup-x64-0.9.9.0 \
-              /dir="C:\Program Files\OpenCppCoverage" /verysilent
-            rm OpenCppCoverageSetup-x64-0.9.9.0.exe
-          else
-            echo "BUILD_OPTS=" >> $GITHUB_ENV
-          fi
-        working-directory: ${{ runner.temp }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
       - name: Setup Meson + Ninja
         shell: bash
         run: |
-          curl -L1O https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
-          python -m pip install --upgrade pip setuptools wheel
-          pip3 install meson
-          unzip ninja-win.zip -d /c/windows/system32
-          rm ninja-win.zip
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install meson ninja
         working-directory: ${{ runner.temp }}
       - name: Version tools
         shell: bash
         run: |
-          rm /usr/bin/link.exe
-          $CC || true
-          $LD || true
+          $CC  || true
+          $LD  || true
           meson --version
           ninja --version
       - name: Configure
-        shell: bash
-        run: meson build --prefix=$HOME/.local $BUILD_OPTS
+        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} --buildtype=debug
       - name: Build
-        shell: bash
         run: ninja -C build
       - name: Test
-        shell: bash
         run: ninja -C build test
-      - name: Codecov
-        if: success() && matrix.coverage
+      - name: Install
+        run: ninja -C build install
+
+  build-windows-mingw:
+    name: 'build-mingw (${{ matrix.os }}, ${{ matrix.sys.abi }}, ${{ matrix.cpp_std }})'
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      matrix:
+        os:
+          - windows-2019
+        sys:
+          - { abi: mingw64, env: x86_64,       compiler: gcc }
+          - { abi: ucrt64,  env: ucrt-x86_64,  compiler: gcc }
+          - { abi: clang64, env: clang-x86_64, compiler: clang }
+        cpp_std:
+          - 'c++11'
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    steps:
+      - name: Use MinGW from MSYS
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.sys.abi}}
+          update: true
+          path-type: inherit
+          install: >-
+            mingw-w64-${{matrix.sys.env}}-toolchain
+      - name: Runtime environment
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Setup compiler
+        if: startsWith(matrix.sys.abi, 'mingw64') || startsWith(matrix.sys.abi, 'ucrt64')
+        run: |
+          CXX=${CC/#gcc/g++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+        env:
+          CC: ${{ matrix.sys.compiler }}
+      - name: Setup compiler
+        if: startsWith(matrix.sys.abi, 'clang64')
+        run: |
+          CXX=${CC/#clang/clang++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+        env:
+          CC: ${{ matrix.sys.compiler }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
         shell: bash
-        run: bash <(curl -s https://codecov.io/bash) -x "$GCOV";
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        run: |
+          $CC --version
+          $CXX --version
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} --buildtype=debug
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build install
+
+  build-coverage-windows:
+    if: github.repository == 'dragonmux/crunch'
+    name: 'build-coverage-windows (${{ matrix.os }}, msvc, ${{ matrix.cpp_std }})'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # MSVC 2019 crashes on testArgsParser
+        # https://developercommunity.visualstudio.com/t/Crash-on-constexpr-creation-of-a-std::ar/1547919
+        os:
+          - windows-2022
+        arch: 
+          - x86
+          - amd64
+        cpp_std:
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    env:
+      CC: cl.exe
+      CXX: cl.exe
+      LD: link.exe
+    steps:
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Setup compiler
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}
+      - name: Setup OpenCppCoverage
+        shell: bash
+        run: |
+          curl -L1O https://github.com/OpenCppCoverage/OpenCppCoverage/releases/download/release-0.9.9.0/OpenCppCoverageSetup-x64-0.9.9.0.exe
+          MSYS2_ARG_CONV_EXCL=/dir=\;/verysilent ./OpenCppCoverageSetup-x64-0.9.9.0 \
+            /dir="C:\Program Files\OpenCppCoverage" /verysilent
+          rm OpenCppCoverageSetup-x64-0.9.9.0.exe
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          $CC  || true
+          $LD  || true
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build -Db_coverage=true -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build  install
+      - name: Codecov
+        if: success()
+        uses: codecov/codecov-action@v2
+
+  build-coverage-windows-mingw:
+    if: github.repository == 'dragonmux/crunch'
+    name: 'build-coverage-mingw (${{ matrix.os }}, ${{ matrix.sys.abi }}, ${{ matrix.cpp_std }})'
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      matrix:
+        os:
+          - windows-2019
+        sys:
+          - { abi: mingw64, env: x86_64,       compiler: gcc }
+          - { abi: ucrt64,  env: ucrt-x86_64,  compiler: gcc }
+          - { abi: clang64, env: clang-x86_64, compiler: clang }
+        cpp_std:
+          - 'c++11'
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    steps:
+      - name: Use MinGW from MSYS
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.sys.abi}}
+          update: true
+          path-type: inherit
+          install: >-
+            mingw-w64-${{matrix.sys.env}}-toolchain
+      - name: Runtime environment
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Coverage environment
+        run: |
+          echo "BUILD_OPTS=--buildtype=debug" >> $GITHUB_ENV
+      - name: Setup compiler
+        if: startsWith(matrix.sys.abi, 'mingw64') || startsWith(matrix.sys.abi, 'ucrt64')
+        run: |
+          CXX=${CC/#gcc/g++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          echo "GCOV=gcov" >> $GITHUB_ENV
+        env:
+          CC: ${{ matrix.sys.compiler }}
+      - name: Setup compiler
+        if: startsWith(matrix.sys.abi, 'clang64')
+        run: |
+          CXX=${CC/#clang/clang++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          echo "GCOV=llvm-cov gcov" >> $GITHUB_ENV
+        env:
+          CC: ${{ matrix.sys.compiler }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        run: |
+          $CC --version
+          $CXX --version
+          $GCOV --version
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Db_coverage=true -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      # Codecov no longer parses gcov files automatically
+      - name: Prepare coverage files
+        run: |
+          cd build
+          find . -type f -name '*.gcda' -exec $GCOV -p {} + > /dev/null
+      - name: Install
+        run: ninja -C build  install
+      - name: Codecov
+        if: success()
+        uses: codecov/codecov-action@v2
