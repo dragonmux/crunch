@@ -1,0 +1,268 @@
+name: Build macOS
+
+on:
+  push:
+    branches-ignore:
+      - 'coverityScan'
+  pull_request:
+    branches:
+      - 'main'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.job }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - macos-12
+          - macos-11
+        cpp_std:
+          - 'c++11'
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    steps:
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          brew install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          cc --version  || true
+          ld --version || true
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} --buildtype=debug
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build install
+
+  build-macos-homebrew:
+    # Apple LLD is unable to link GCC < 11 generated object files.
+    # https://stackoverflow.com/questions/73714336/xcode-update-to-version-2395-ld-compile-problem-occurs-computedatomcount-m
+    # rdar://FB11369327
+    runs-on: macos-11
+    strategy:
+      matrix:
+        compiler:
+          ## GCC5 cannot compile anything on macOS
+          # - gcc@5
+          ## GCC6 cannot handle constexpr-ness of mmap_t
+          ## See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66297
+          # - gcc@6
+          ## GCC < 10 is known to crash on exception unwind
+          ## https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98805
+          # - gcc@7
+          # - gcc@8
+          # - gcc@9
+          - gcc@10
+          - gcc@11
+          - gcc
+        cpp_std:
+          - 'c++11'
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    steps:
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Setup compiler
+        shell: bash
+        run: |
+          brew install ${{ matrix.compiler }}
+          CC=${COMPILER/@/-}
+          CXX=${CC/#gcc/g++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+        env:
+          COMPILER: ${{ matrix.compiler }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          brew install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          $CC --version
+          $CXX --version
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} --buildtype=debug
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build install
+
+  build-coverage-macos:
+    if: github.repository == 'dragonmux/crunch'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - macos-12
+          - macos-11
+        cpp_std:
+          - 'c++11'
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    steps:
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Coverage environment
+        run: |
+          echo "BUILD_OPTS=--buildtype=debug" >> $GITHUB_ENV
+      - name: Setup tools
+        shell: bash
+        run: |
+          brew install gcovr
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          brew install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          cc --version  || true
+          ld --version || true
+          gcov --version || true
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Db_coverage=true -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build install
+      - name: Coverage prep
+        if: success()
+        run: gcovr -r .. -x coverage.xml -e ../deps -e ../test
+        working-directory: build
+      - name: Codecov
+        if: success()
+        uses: codecov/codecov-action@v2
+
+  build-coverage-macos-homebrew:
+    if: github.repository == 'dragonmux/crunch'
+    runs-on: macos-11
+    strategy:
+      matrix:
+        compiler:
+          ## GCC5 cannot compile anything on macOS
+          # - gcc@5
+          ## GCC6 cannot handle constexpr-ness of mmap_t
+          ## See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66297
+          # - gcc@6
+          ## GCC < 10 is known to crash on exception unwind
+          ## https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98805
+          # - gcc@7
+          # - gcc@8
+          # - gcc@9
+          - gcc@10
+          - gcc@11
+          - gcc
+        cpp_std:
+          - 'c++11'
+          - 'c++14'
+          - 'c++17'
+      fail-fast: false
+    steps:
+      - name: Runtime environment
+        shell: bash
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
+      - name: Coverage environment
+        run: |
+          echo "BUILD_OPTS=--buildtype=debug" >> $GITHUB_ENV
+      - name: Setup compiler
+        shell: bash
+        run: |
+          brew install ${{ matrix.compiler }} gcovr
+          CC=${COMPILER/@/-}
+          CXX=${CC/#gcc/g++}
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
+          echo "GCOV=${CC/#gcc/gcov}" >> $GITHUB_ENV
+        env:
+          COMPILER: ${{ matrix.compiler }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Setup Meson + Ninja
+        shell: bash
+        run: |
+          brew install meson ninja
+        working-directory: ${{ runner.temp }}
+      - name: Version tools
+        shell: bash
+        run: |
+          $CC --version
+          $CXX --version
+          $GCOV --version
+          meson --version
+          ninja --version
+      - name: Configure
+        run: meson build --prefix=$HOME/.local -Db_coverage=true -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
+      - name: Build
+        run: ninja -C build
+      - name: Test
+        run: ninja -C build test
+      - name: Install
+        run: ninja -C build install
+      - name: Coverage prep
+        if: success()
+        run: gcovr -r .. -x coverage.xml --gcov-executable "$GCOV" -e ../deps -e ../test
+        working-directory: build
+      - name: Codecov
+        if: success()
+        uses: codecov/codecov-action@v2
