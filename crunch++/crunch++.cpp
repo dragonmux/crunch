@@ -456,7 +456,7 @@ REGISTERS:
 #pragma GCC diagnostic ignored "-Wcast-function-type"
 	static const struct sigaction trapSignal
 	{
-		// NOLINTNEXTLINE(cppcoreguidelnies-pro-type-reinterpret-cast)
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 		{reinterpret_cast<sighandler_t>(trapHandler)},
 		{},
 		SA_SIGINFO | SA_NODEFER,
