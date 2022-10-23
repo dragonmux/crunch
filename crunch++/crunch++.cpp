@@ -44,6 +44,15 @@ char *dlerror()
 #include "crunch++.h"
 #include <version.hxx>
 
+#if defined(__APPLE__)
+// Fake, in fact it's void(*__sa_sigaction)(int, struct __siginfo *, void *)
+// But designated initializers are C++20
+using sighandler_t = void (*)(int);
+#endif
+
+#define CRUNCHpp_CAST_SIGNAL_HANDLER(x) \
+	reinterpret_cast<sighandler_t>(reinterpret_cast<void*>(x))
+
 using namespace std;
 
 namespace crunch
@@ -452,12 +461,10 @@ REGISTERS:
 		}
 	}
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 	static const struct sigaction trapSignal
 	{
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-		{reinterpret_cast<sighandler_t>(trapHandler)},
+		{CRUNCHpp_CAST_SIGNAL_HANDLER(trapHandler)},
 		{},
 		SA_SIGINFO | SA_NODEFER,
 #if !defined(__APPLE__)
@@ -465,7 +472,6 @@ REGISTERS:
 #endif
 	};
 #endif
-#pragma GCC diagnostic pop
 
 	bool handleVersionOrHelp()
 	{
