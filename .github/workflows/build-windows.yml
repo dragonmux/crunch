@@ -215,7 +215,7 @@ jobs:
         run: ninja -C build install
       - name: Codecov
         if: success()
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
 
   build-coverage-windows-mingw:
     if: github.repository == 'dragonmux/crunch'
@@ -306,4 +306,4 @@ jobs:
         run: ninja -C build install
       - name: Codecov
         if: success()
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
