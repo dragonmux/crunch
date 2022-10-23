@@ -27,6 +27,7 @@ optimization = get_option('optimization')
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
 isWindows = target_machine.system() == 'windows'
+isMSVC = cxx.get_id() == 'msvc'
 dl = cxx.find_library('dl', required: not isWindows)
 libm = cxx.find_library('m', required: not isWindows)
 c11Threading = cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
@@ -38,10 +39,11 @@ if cxx.get_id() == 'clang' and sanitizer.contains('undefined')
 	assert(not noUndefined, 'Cannot combine b_lundef=true and b_sanitize=undefined')
 endif
 
+# Enable code coverage of the runner binaries and shared libraries - see
+# https://docs.jade.fyi/gnu/gcc/gcc.html#index-coverage for more details
 if ['gcc', 'clang'].contains(cc.get_id()) and coverage and debug
 	add_project_arguments('--coverage', language: 'c')
 endif
-
 if ['gcc', 'clang'].contains(cxx.get_id()) and coverage and debug
 	add_project_arguments('--coverage', language: 'cpp')
 endif
@@ -77,8 +79,11 @@ if isWindows
 		)
 	endif
 
-	coverageRunner = find_program('OpenCppCoverage', required: false)
-	coverage = coverageRunner.found() and debug
+	if cxx.get_id() == 'msvc'
+		coverageRunner = find_program('OpenCppCoverage', required: false)
+		coverage = coverageRunner.found() and debug
+	endif
+
 	if coverage
 		coverageArgs = [
 			'--sources', '@0@\crunch*\*'.format(meson.current_source_dir()),

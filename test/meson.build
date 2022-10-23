@@ -40,7 +40,7 @@ subdir('crunch')
 subdir('crunch++')
 subdir('crunchMake')
 
-if not isWindows or not coverage
+if not isMSVC or not coverage
 test(
 	'crunchMake-none',
 	crunchMake,
