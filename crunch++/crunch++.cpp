@@ -302,10 +302,14 @@ namespace crunch
 						return "Address not mapped to object.";
 					case SEGV_ACCERR:
 						return "Invalid permissions for mapped object.";
+#if defined(SEGV_BNDERR)
 					case SEGV_BNDERR:
 						return "Failed address bound checks.";
+#endif
+#if defined(SEGV_PKUERR)
 					case SEGV_PKUERR:
 						return "Access was denied by memory protection keys.";
+#endif
 					default:
 						return "Unknown SIGSEGV Code";
 				}
@@ -333,10 +337,14 @@ namespace crunch
 						return "Non-existant physical address";
 					case BUS_OBJERR:
 						return "Object specific hardware error";
+#if defined(BUS_MCEERR_AR)
 					case BUS_MCEERR_AR:
 						return "Hardware memory error: action required";
+#endif
+#if defined(BUS_MCEERR_AO)
 					case BUS_MCEERR_AO:
 						return "Hardware memory error: action optional";
+#endif
 					default:
 						return "Unknown SIGBUS Code";
 				}
@@ -351,7 +359,42 @@ namespace crunch
 		const auto *const ctx{static_cast<ucontext_t *>(context)};
 		const auto &mctx{ctx->uc_mcontext};
 
-		fprintf(stderr, R"(
+#if defined(__APPLE__)
+                fprintf(
+                    stderr, R"(
+****TRAP HANDLER****
+	SIG #: %d
+	SCODE: %d
+	 NAME: %s
+	VADDR: %p
+
+REASON FOR SIGNAL:
+	%s
+
+REGISTERS:
+	RIP: %016llX	RSP: %016llX	RBP: %016llX
+	RSI: %016llX	RDI: %016llX	 CS: %016llX
+	 GS: %016llX	 FS: %016llX
+	RAX: %016llX	RBX: %016llX	RCX: %016llX
+	RDX: %016llX	 R8: %016llX	 R9: %016llX
+	R10: %016llX	R11: %016llX	R12: %016llX
+	R13: %016llX	R14: %016llX	R15: %016llX
+
+)",
+			// NOLINTNEXTLINE(concurrency-mt-unsafe)
+			info->si_signo, info->si_code, strsignal(info->si_signo),
+			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access)
+			info->si_addr, strsicode(info->si_signo, info->si_code),
+			mctx->__ss.__rip, mctx->__ss.__rsp, mctx->__ss.__rbp,
+			mctx->__ss.__rsi, mctx->__ss.__rdi, mctx->__ss.__cs,
+			mctx->__ss.__gs, mctx->__ss.__fs,
+			mctx->__ss.__rax, mctx->__ss.__rbx,
+			mctx->__ss.__rcx, mctx->__ss.__rdx, mctx->__ss.__r8,
+			mctx->__ss.__r9, mctx->__ss.__r10, mctx->__ss.__r11,
+			mctx->__ss.__r12, mctx->__ss.__r13, mctx->__ss.__r14,
+			mctx->__ss.__r15);
+#else
+			fprintf(stderr, R"(
 ****TRAP HANDLER****
 	SIG #: %d
 	SCODE: %d
@@ -386,6 +429,7 @@ REGISTERS:
 			mctx.gregs[REG_R10], mctx.gregs[REG_R11], mctx.gregs[REG_R12],
 			mctx.gregs[REG_R13], mctx.gregs[REG_R14], mctx.gregs[REG_R15]
 		);
+#endif
 
 		fprintf(stderr, "---- BEGIN STACK TRACE ----\n");
 		std::array<void *, 256> calls{};
@@ -413,7 +457,9 @@ REGISTERS:
 		{(void (*)(int))trapHandler},
 		{},
 		SA_SIGINFO | SA_NODEFER,
+#if !defined(__APPLE__)
 		nullptr
+#endif
 	};
 #endif
 
