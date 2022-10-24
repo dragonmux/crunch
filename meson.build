@@ -27,6 +27,7 @@ optimization = get_option('optimization')
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
 isWindows = target_machine.system() == 'windows'
+isMSVC = cxx.get_id() == 'msvc'
 dl = cxx.find_library('dl', required: not isWindows)
 libm = cxx.find_library('m', required: not isWindows)
 c11Threading = cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
@@ -96,7 +97,7 @@ else
 	)
 endif
 
-if cxx.get_id() == 'msvc'
+if isMSVC
 	add_project_arguments(
 		'-wd4996',
 		'-wd4800',

@@ -1,5 +1,5 @@
 crunchMakeSrc = ['crunchMake.cpp']
-if target_machine.system() == 'windows' and cxx.get_id() == 'msvc'
+if isWindows and isMSVC
 	crunchMakeSrc += ['compilerWindows.cxx']
 else
 	crunchMakeSrc += ['compilerUnixlike.cxx']

@@ -2,7 +2,7 @@ if cxx.get_id() == 'gcc'
 	crunchMakeWrapper = find_program('crunchMakeGCC.py')
 elif cxx.get_id() == 'clang'
 	crunchMakeWrapper = find_program('crunchMakeClang.py')
-elif cxx.get_id() == 'msvc'
+elif isMSVC
 	crunchMakeWrapper = find_program('crunchMakeMSVC.py')
 else
 	crunchMakeWrapper = disabler()
