@@ -7,7 +7,7 @@ libCrunchPath = join_paths([meson.project_build_root(), libCrunch.outdir()])
 
 foreach test : libCrunchTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath]
-	if isWindows and coverage
+	if isMSVC and coverage
 		command = [coverageTarget, coverageRunner] + coverageArgs + [
 			'cobertura:crunchMake-crunch-@0@-coverage.xml'.format(test), '--'
 		] + command
@@ -31,7 +31,7 @@ foreach test : libCrunchTests
 	)
 endforeach
 
-if not isWindows or not coverage
+if not isMSVC or not coverage
 test(
 	'crunch',
 	crunch,

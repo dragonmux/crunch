@@ -30,7 +30,7 @@ endif
 
 foreach test : libCrunchppTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
-	if isWindows and coverage
+	if isMSVC and coverage
 		command = [coverageTarget, coverageRunner] + coverageArgs + [
 			'cobertura:crunchMake-crunch++-@0@-coverage.xml'.format(test), '--'
 		] + command
@@ -57,7 +57,7 @@ foreach test : libCrunchppTests
 	)
 endforeach
 
-if not isWindows or not coverage
+if not isMSVC or not coverage
 test(
 	'crunch++',
 	crunchpp,

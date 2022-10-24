@@ -20,7 +20,7 @@ foreach test : ranluxTests
 	map = objectMap.get(test)
 	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx', 'ranlux64.cxx'])]
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.project_source_root(), '-L' + libCrunchppPath]
-	if isWindows and coverage
+	if isMSVC and coverage
 		command = [coverageTarget, coverageRunner] + coverageArgs + [
 			'cobertura:crunchMake-@0@-coverage.xml'.format(test), '--'
 		] + command
@@ -35,7 +35,7 @@ foreach test : ranluxTests
 		build_by_default: true
 	)
 
-	if not isWindows or not coverage
+	if not isMSVC or not coverage
 	test(
 		map['name'],
 		crunchpp,
