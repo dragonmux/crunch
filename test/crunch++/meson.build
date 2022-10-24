@@ -2,7 +2,7 @@ libCrunchppTestsNorm = ['testCrunch++', 'testBad', 'testRegistration', 'testLogg
 libCrunchppTestsExcept = ['testTester']
 libCrunchppTests = libCrunchppTestsNorm + libCrunchppTestsExcept
 
-if isMSVC or cxx.version().version_compare('< 19.30.30704')
+if isMSVC and cxx.version().version_compare('< 19.30.30704')
 	# MSVC 2019 crashes on testArgsParser
 	# https://developercommunity.visualstudio.com/t/Crash-on-constexpr-creation-of-a-std::ar/1547919
 	warning('Skipping testArgsParser test as it crashes MSVC')
