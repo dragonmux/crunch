@@ -24,6 +24,9 @@ using crunch::logResult;
 using crunch::RESULT_ABORT;
 using crunch::failures;
 
+enum class testEnum_t
+	{ a, b, c, d };
+
 class crunchTests final : public testsuite
 {
 private:
@@ -185,6 +188,28 @@ private:
 		tryShouldFail([=]() { assertNotEqual(num16, num16); });
 		tryShouldFail([=]() { assertNotEqual(num32, num32); });
 		tryShouldFail([=]() { assertNotEqual(num64, num64); });
+	}
+
+	void testAssertEnumEqual()
+	{
+		assertEqual(testEnum_t::a, testEnum_t::a);
+		assertEqual(testEnum_t::d, testEnum_t::d);
+
+		tryShouldFail([this]() { assertEqual(testEnum_t::a, testEnum_t::b); });
+		tryShouldFail([this]() { assertEqual(testEnum_t::a, testEnum_t::d); });
+		tryShouldFail([this]() { assertEqual(testEnum_t::c, testEnum_t::b); });
+		tryShouldFail([this]() { assertEqual(testEnum_t::d, testEnum_t::a); });
+	}
+
+	void testAssertEnumNotEqual()
+	{
+		assertNotEqual(testEnum_t::a, testEnum_t::b);
+		assertNotEqual(testEnum_t::a, testEnum_t::d);
+		assertNotEqual(testEnum_t::c, testEnum_t::b);
+		assertNotEqual(testEnum_t::d, testEnum_t::a);
+
+		tryShouldFail([this]() { assertNotEqual(testEnum_t::a, testEnum_t::a); });
+		tryShouldFail([this]() { assertNotEqual(testEnum_t::d, testEnum_t::d); });
 	}
 
 	void testAssertDoubleEqual()
@@ -396,6 +421,8 @@ public:
 		CRUNCHpp_TEST(testAssertIntNotEqual)
 		CRUNCHpp_TEST(testAssertUintEqual)
 		CRUNCHpp_TEST(testAssertUintNotEqual)
+		CRUNCHpp_TEST(testAssertEnumEqual)
+		CRUNCHpp_TEST(testAssertEnumNotEqual)
 		CRUNCHpp_TEST(testAssertDoubleEqual)
 		CRUNCHpp_TEST(testAssertDoubleNotEqual)
 		CRUNCHpp_TEST(testAssertPtrEqual)
