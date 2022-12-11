@@ -254,6 +254,13 @@ public:
 	template<typename T, typename U, typename = enableIf<areDifferentIntegers<T, U>::value>>
 		void assertEqual(const T a, const U b) { assertEqual(a, T(b)); }
 
+	template<typename T, typename = enableIf<std::is_enum<T>::value>>
+		void assertEqual(const T a, const T b)
+	{
+		using U = typename std::underlying_type<T>::type;
+		assertEqual(U(a), U(b));
+	}
+
 	void assertEqual(const std::string &result, const std::string &expected)
 		{ assertEqual(stringView{result.c_str(), result.length()}, stringView{expected.c_str(), expected.length()}); }
 #if __cplusplus >= 201703L
@@ -279,6 +286,13 @@ public:
 
 	template<typename T, typename U, typename = enableIf<areDifferentIntegers<T, U>::value>>
 		void assertNotEqual(const T a, const U b) { assertNotEqual(a, T(b)); }
+
+	template<typename T, typename = enableIf<std::is_enum<T>::value>>
+		void assertNotEqual(const T a, const T b)
+	{
+		using U = typename std::underlying_type<T>::type;
+		assertNotEqual(U(a), U(b));
+	}
 
 	void assertNotEqual(const std::string &result, const std::string &expected)
 		{ assertNotEqual(stringView{result.c_str(), result.length()}, stringView{expected.c_str(), expected.length()}); }
