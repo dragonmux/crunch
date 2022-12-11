@@ -12,22 +12,6 @@ endif
 
 libCrunchppPath = join_paths([meson.project_build_root(), libCrunchpp.outdir()])
 
-if not isWindows
-	testSrcs = [
-		substrateDir / 'impl/pty.cxx'
-	]
-
-	testHelpers = static_library(
-		'testHelpers',
-		testSrcs,
-		pic: true,
-		link_with: [libCrunchpp],
-		include_directories: [substrate],
-		install: false,
-		build_by_default: true
-	)
-endif
-
 foreach test : libCrunchppTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
 	if isMSVC and coverage
@@ -41,11 +25,13 @@ foreach test : libCrunchppTests
 	elif test == 'testCrunch++' and cxx.has_argument('-std:c++17')
 		testExtra = ['-std:c++17']
 	elif test == 'testArgsParser' or test == 'testLogger'
-		testExtra = ['-I' + substrateDir]
+		testExtra = [substrate.get_variable('compile_args')]
 	endif
 	objects = []
 	if test == 'testLogger' and not isWindows
-		objects = [testHelpers.extract_objects(substrateDir / 'impl/pty.cxx')]
+		substrateSO = substrate.get_variable('link_args')
+		assert(substrateSO.endswith('/libsubstrate.so'))
+		testExtra += [substrateSO, '-Wl,-rpath,@0@'.format(substrateSO.substring(0, -16))]
 	endif
 	custom_target(
 		'crunch++-' + test,

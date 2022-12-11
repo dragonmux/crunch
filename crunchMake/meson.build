@@ -44,9 +44,9 @@ versionHeader = vcs_tag(
 crunchMake = executable(
 	'crunchMake',
 	crunchMakeSrc + [versionHeader],
-	include_directories: [crunchppInc, substrate],
+	include_directories: [crunchppInc],
 	link_with: [libCrunchpp],
-	dependencies: [threading],
+	dependencies: [threading, substrate],
 	cpp_args: [
 		'-Dcrunch_PREFIX="' + prefix + '"',
 		'-Dcrunch_LIBDIR="' + libdir + '"'

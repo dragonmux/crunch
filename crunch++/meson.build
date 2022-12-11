@@ -31,8 +31,7 @@ libCrunchpp = shared_library(
 	libCrunchppSrc,
 	name_prefix: '',
 	cpp_args: libArgs,
-	dependencies: [threading],
-	include_directories: substrate,
+	dependencies: [threading, substrate],
 	version: meson.project_version(),
 	install: true
 )
@@ -41,8 +40,7 @@ crunchpp = executable(
 	'crunch++',
 	crunchppSrc + [versionHeader],
 	link_with: [libCrunchpp],
-	dependencies: [threading, dl],
-	include_directories: substrate,
+	dependencies: [threading, dl, substrate],
 	install: true,
 	install_rpath: libdir
 )

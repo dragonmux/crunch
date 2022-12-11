@@ -11,7 +11,8 @@ project(
 		'b_ndebug=if-release'
 	],
 	version: '1.1.1',
-	meson_version: '>=0.56'
+	meson_version: '>=0.58',
+	subproject_dir: 'deps'
 )
 
 cc = meson.get_compiler('c')
@@ -32,8 +33,15 @@ dl = cxx.find_library('dl', required: not isWindows)
 libm = cxx.find_library('m', required: not isWindows)
 c11Threading = cc.get_define('__STD_NO_THREADS__') == '' and cc.check_header('threads.h')
 projectInclude = include_directories('.')
-substrate = include_directories('substrate')
-substrateDir = meson.current_source_dir() / 'substrate'
+
+substrate = subproject(
+	'substrate',
+	default_options: [
+		'build_tests=false',
+	],
+).get_variable(
+	'substrate_dep'
+)
 
 if cxx.get_id() == 'clang' and sanitizer.contains('undefined')
 	assert(not noUndefined, 'Cannot combine b_lundef=true and b_sanitize=undefined')
