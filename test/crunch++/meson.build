@@ -37,7 +37,7 @@ foreach test : libCrunchppTests
 		else
 			assert('Unexpected value for substrate link_args, got \'@0@\''.format(libSubstrate))
 		endif
-		testExtra += [substrateSO, '-Wl,-rpath,@0@'.format(substrateDir)]
+		testExtra += [libSubstrate, '-Wl,-rpath,@0@'.format(substrateDir)]
 	endif
 	custom_target(
 		'crunch++-' + test,
