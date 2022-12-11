@@ -36,7 +36,7 @@ namespace crunch
 		".c"_sv, ".cpp"_sv, ".cc"_sv, ".cxx"_sv, ".i"_sv, ".s"_sv, ".S"_sv, ".sx"_sv, ".asm"_sv
 	})};
 	constexpr static auto cxxExts{substrate::make_array<stringView>({".cpp"_sv, ".cc"_sv, ".cxx"_sv})};
-	constexpr static auto objExts{substrate::make_array<stringView>({".o"_sv, ".obj"_sv, ".a"_sv})};
+	constexpr static auto objExts{substrate::make_array<stringView>({".o"_sv, ".obj"_sv, ".a"_sv, ".so"_sv})};
 
 	std::string inclDirFlags{}, libDirFlags{}, objs{}, libs{};
 	bool silent, quiet, pthread, codeCoverage, debugBuild;
