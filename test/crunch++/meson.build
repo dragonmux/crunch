@@ -29,9 +29,15 @@ foreach test : libCrunchppTests
 	endif
 	objects = []
 	if test == 'testLogger' and not isWindows
-		substrateSO = substrate.get_variable('link_args')
-		assert(substrateSO.endswith('/libsubstrate.so'))
-		testExtra += [substrateSO, '-Wl,-rpath,@0@'.format(substrateSO.substring(0, -16))]
+		libSubstrate = substrate.get_variable('link_args')
+		if libSubstrate.endswith('/libsubstrate.so')
+			substrateDir = libSubstrate.substring(0, -16)
+		elif libSubstrate.endswith('/libsubstrate.a')
+			substrateDir = libSubstrate.substring(0, -15)
+		else
+			assert('Unexpected value for substrate link_args, got \'@0@\''.format(libSubstrate))
+		endif
+		testExtra += [substrateSO, '-Wl,-rpath,@0@'.format(substrateDir)]
 	endif
 	custom_target(
 		'crunch++-' + test,
