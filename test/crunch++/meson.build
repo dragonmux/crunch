@@ -34,6 +34,8 @@ foreach test : libCrunchppTests
 			substrateDir = libSubstrate.substring(0, -16)
 		elif libSubstrate.endswith('/libsubstrate.a')
 			substrateDir = libSubstrate.substring(0, -15)
+		elif libSubstrate.endswith('/libsubstrate.dylib')
+			substrateDir = libSubstrate.substring(0, -19)
 		else
 			error('Unexpected value for substrate link_args, got \'@0@\''.format(libSubstrate))
 		endif
