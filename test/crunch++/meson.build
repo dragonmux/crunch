@@ -10,7 +10,7 @@ else
 	libCrunchppTestsNorm += ['testArgsParser']
 endif
 
-libCrunchppPath = join_paths([meson.project_build_root(), libCrunchpp.outdir()])
+libCrunchppPath = meson.global_build_root() / libCrunchpp.outdir()
 
 foreach test : libCrunchppTests
 	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
