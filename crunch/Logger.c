@@ -43,14 +43,14 @@ testLog *logger = NULL;
 uint8_t isTTY = 1;
 
 #ifndef _WIN32
-int getColumns()
+int getColumns(void)
 {
 	struct winsize win;
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &win);
 	return (win.ws_col == 0 ? 80 : win.ws_col);
 }
 #else
-uint16_t getColumns()
+uint16_t getColumns(void)
 {
 	CONSOLE_SCREEN_BUFFER_INFO window;
 	GetConsoleScreenBufferInfo(console, &window);
@@ -70,23 +70,23 @@ size_t testPrintf(const char *format, ...)
 	return ret;
 }
 
-void printOk()
+void printOk(void)
 {
 	testPrintf("[  OK  ]\n");
 }
 
-void printFailure()
+void printFailure(void)
 {
 	testPrintf("[ FAIL ]\n");
 }
 
-void printAborted()
+void printAborted(void)
 {
 	testPrintf("[ **** ABORTED **** ]\n");
 }
 
 #ifndef _WIN32
-void echoOk()
+void echoOk(void)
 {
 	if (isTTY != 0)
 		testPrintf(CURS_UP SET_COL BRACKET "[" SUCCESS "  OK  " BRACKET "]" NEWLINE, COL(getColumns()));
@@ -95,7 +95,7 @@ void echoOk()
 	passes++;
 }
 
-void echoFailure()
+void echoFailure(void)
 {
 	if (isTTY != 0)
 		testPrintf(" " SET_COL BRACKET "[" FAILURE " FAIL " BRACKET "]" NEWLINE, COL(getColumns()));
@@ -104,7 +104,7 @@ void echoFailure()
 	failures++;
 }
 
-void echoAborted()
+void echoAborted(void)
 {
 	if (isTTY != 0)
 		testPrintf("\n" BRACKET "[" FAILURE " **** ABORTED **** " BRACKET "]" NEWLINE);
@@ -113,7 +113,7 @@ void echoAborted()
 	thrd_exit(THREAD_ABORT);
 }
 #else
-void echoOk()
+void echoOk(void)
 {
 	if (isTTY != 0)
 	{
@@ -136,7 +136,7 @@ void echoOk()
 	passes++;
 }
 
-void echoFailure()
+void echoFailure(void)
 {
 	if (isTTY != 0)
 	{
@@ -158,7 +158,7 @@ void echoFailure()
 	failures++;
 }
 
-void echoAborted()
+void echoAborted(void)
 {
 	if (isTTY != 0)
 	{
