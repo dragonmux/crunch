@@ -26,7 +26,7 @@
 #define dlsym(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
 #define dlclose(handle) FreeLibrary((HMODULE)handle)
 
-char *dlerror()
+char *dlerror(void)
 {
 	const DWORD error = GetLastError();
 	char *message;
@@ -70,10 +70,10 @@ uint8_t loggingTests = 0;
 #ifdef _WIN32
 typedef FARPROC registerFn;
 #else
-typedef void (__cdecl *registerFn)();
+typedef void (__cdecl *registerFn)(void);
 #endif
 
-void noMemory()
+void noMemory(void)
 	{ puts("**** crunch Fatal ****\nCould not allocate enough memory!\n**** crunch Fatal ****"); }
 
 #if !defined(_WINDOWS) && !defined(CRUNCH_ASAN)
@@ -90,7 +90,7 @@ void *malloc(size_t size)
 }
 #endif
 
-void newline()
+void newline(void)
 {
 	if (isTTY != 0)
 	{
@@ -129,7 +129,7 @@ int testRunner(void *testPtr)
 	return THREAD_SUCCESS;
 }
 
-void printStats()
+void printStats(void)
 {
 	uint64_t total = passes + failures;
 	testPrintf("Total tests: %" PRIu64 ",  Failures: %" PRIu32 ",  Pass rate: ", total, failures);
@@ -139,7 +139,7 @@ void printStats()
 		testPrintf("%0.2f%%\n", ((double)passes) / ((double)total) * 100.0);
 }
 
-void red()
+void red(void)
 {
 	if (isTTY)
 #ifndef _WIN32
@@ -149,7 +149,7 @@ void red()
 #endif
 }
 
-void magenta()
+void magenta(void)
 {
 	if (isTTY)
 #ifndef _WIN32
@@ -159,7 +159,7 @@ void magenta()
 #endif
 }
 
-uint8_t getTests()
+uint8_t getTests(void)
 {
 	uint32_t n = 0;
 	for (; parsedArgs[n] != NULL; n++);
@@ -217,10 +217,10 @@ char *extForLibrary(const char *test)
 	char *library = (char *)malloc(lengthWorkingDir + lengthTest + libExtMaxLength + 3);
 	if (!library)
 		return NULL;
-	memcpy(library, workingDir, lengthWorkingDir);
+	memcpy(library, workingDir, lengthWorkingDir + 1U);
 	size_t offset = lengthWorkingDir;
 	library[offset++] = '/';
-	memcpy(library + offset, test, lengthTest);
+	memcpy(library + offset, test, lengthTest + 1U);
 	offset += lengthTest;
 	library[offset++] = '.';
 	for (size_t i = 0; i < COUNT_LIB_EXTS; ++i)
@@ -235,7 +235,7 @@ char *extForLibrary(const char *test)
 	return NO_LIBRARIES_FOUND;
 }
 
-int runTests()
+int runTests(void)
 {
 	testLog *logFile = NULL;
 	constParsedArg_t logging = findArg(parsedArgs, "--log", NULL);
@@ -311,7 +311,7 @@ void invalidHandler(const wchar_t *expr, const wchar_t *func, const wchar_t *fil
 }
 #endif
 
-uint8_t handleVersionOrHelp()
+uint8_t handleVersionOrHelp(void)
 {
 	constParsedArg_t version = findArg(parsedArgs, "--version", NULL);
 	constParsedArg_t versionShort = findArg(parsedArgs, "-v", NULL);
@@ -328,7 +328,7 @@ uint8_t handleVersionOrHelp()
 	return TRUE;
 }
 
-void callFreeParsedArgs() { parsedArgs = freeParsedArgs(parsedArgs); }
+void callFreeParsedArgs(void) { parsedArgs = freeParsedArgs(parsedArgs); }
 
 int main(int argc, char **argv)
 {

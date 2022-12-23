@@ -54,7 +54,7 @@
 
 typedef struct _test
 {
-	void (__cdecl *testFunc)();
+	void (__cdecl *testFunc)(void);
 	const char *testName;
 } test;
 
