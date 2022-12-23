@@ -9,7 +9,7 @@ ranlux = static_library(
 )
 
 ranluxTests = ['testRanlux32', 'testRanlux64']
-libCrunchppPath = join_paths([meson.project_build_root(), libCrunchpp.outdir()])
+libCrunchppPath = meson.global_build_root() / libCrunchpp.outdir()
 ranluxSrcDir = meson.current_source_dir()
 
 objectMap = {
