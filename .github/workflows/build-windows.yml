@@ -126,8 +126,9 @@ jobs:
           msystem: ${{matrix.sys.abi}}
           update: true
           path-type: inherit
-          install: >-
-            mingw-w64-${{matrix.sys.env}}-toolchain
+          pacboy: >-
+            toolchain:p
+            lcov:p
       - name: Runtime environment
         env:
           WORKSPACE: ${{ github.workspace }}
@@ -135,100 +136,14 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "GITHUB_WORKSPACE=${{ env.WORKSPACE }}" >> $GITHUB_ENV
       - name: Setup compiler
-        if: startsWith(matrix.sys.abi, 'mingw64') || startsWith(matrix.sys.abi, 'ucrt64')
+        if: startsWith(matrix.sys.abi, 'mingw') || startsWith(matrix.sys.abi, 'ucrt64')
         run: |
-          CXX=${CC/#gcc/g++}
-          echo "CC=$CC" >> $GITHUB_ENV
-          echo "CXX=$CXX" >> $GITHUB_ENV
-        env:
-          CC: ${{ matrix.sys.compiler }}
-      - name: Setup compiler
-        if: startsWith(matrix.sys.abi, 'clang64')
-        run: |
-          CXX=${CC/#clang/clang++}
-          echo "CC=$CC" >> $GITHUB_ENV
-          echo "CXX=$CXX" >> $GITHUB_ENV
-        env:
-          CC: ${{ matrix.sys.compiler }}
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          lfs: true
-          submodules: true
-      - name: Setup Meson + Ninja
-        shell: bash
-        run: |
-          python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install meson ninja
-        working-directory: ${{ runner.temp }}
-      - name: Version tools
-        run: |
-          $CC --version
-          $CXX --version
-          meson --version
-          ninja --version
-      - name: Configure
-        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }}
-      - name: Build
-        run: ninja -C build
-      - name: Test
-        run: ninja -C build test
-      - name: Install
-        run: ninja -C build install
-
-  build-coverage-windows-mingw:
-    if: github.repository == 'dragonmux/crunch'
-    name: 'coverage ${{ matrix.os }} (${{ matrix.sys.abi }}, ${{ matrix.cpp_std }})'
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: msys2 {0}
-    strategy:
-      matrix:
-        os:
-          - windows-2019
-        sys:
-          - { abi: mingw64, env: x86_64, compiler: gcc }
-          - { abi: ucrt64, env: ucrt-x86_64, compiler: gcc }
-          - { abi: clang64, env: clang-x86_64, compiler: clang }
-        cpp_std:
-          - 'c++11'
-          - 'c++14'
-          - 'c++17'
-      fail-fast: false
-    steps:
-      - name: Use MinGW from MSYS
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: ${{matrix.sys.abi}}
-          update: true
-          path-type: inherit
-          install: >-
-            mingw-w64-${{matrix.sys.env}}-toolchain
-      - name: Runtime environment
-        env:
-          WORKSPACE: ${{ github.workspace }}
-        run: |
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          echo "GITHUB_WORKSPACE=${{ env.WORKSPACE }}" >> $GITHUB_ENV
-      - name: Coverage environment
-        run: |
-          echo "BUILD_OPTS=-Db_coverage=true --buildtype=debug" >> $GITHUB_ENV
-      - name: Setup compiler
-        if: startsWith(matrix.sys.abi, 'mingw64') || startsWith(matrix.sys.abi, 'ucrt64')
-        run: |
-          CXX=${CC/#gcc/g++}
-          echo "CC=$CC" >> $GITHUB_ENV
-          echo "CXX=$CXX" >> $GITHUB_ENV
           echo "GCOV=gcov" >> $GITHUB_ENV
         env:
           CC: ${{ matrix.sys.compiler }}
       - name: Setup compiler
-        if: startsWith(matrix.sys.abi, 'clang64')
+        if: startsWith(matrix.sys.abi, 'clang')
         run: |
-          CXX=${CC/#clang/clang++}
-          echo "CC=$CC" >> $GITHUB_ENV
-          echo "CXX=$CXX" >> $GITHUB_ENV
           echo "GCOV=llvm-cov gcov" >> $GITHUB_ENV
         env:
           CC: ${{ matrix.sys.compiler }}
@@ -237,32 +152,48 @@ jobs:
         with:
           lfs: true
           submodules: true
-      - name: Setup Meson + Ninja
+      - name: Setup Meson + Ninja + gcovr
         shell: bash
         run: |
           python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install meson ninja
+          python3 -m pip install meson ninja gcovr
         working-directory: ${{ runner.temp }}
       - name: Version tools
         run: |
-          $CC --version
-          $CXX --version
+          cc --version
+          c++ --version
           $GCOV --version
           meson --version
           ninja --version
       - name: Configure
-        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
+        run: meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
       - name: Build
-        run: ninja -C build
+        run: meson compile -C build
       - name: Test
-        run: ninja -C build test
-      # Codecov no longer parses gcov files automatically
-      - name: Prepare coverage files
+        run: meson test -C build
+      - name: Install
+        run: meson install -C build
+      - name: Run coverage build
+        if: github.repository == 'dragonmux/crunch'
+        # Codecov no longer parses gcov files automatically
         run: |
+          rm -rf build
+          meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
+          meson compile -C build
+          meson test -C build
           cd build
           find . -type f -name '*.gcda' -exec $GCOV -p {} + > /dev/null
-      - name: Install
-        run: ninja -C build install
+          gcovr -r .. -x coverage.xml --gcov-executable "$GCOV" -e ../deps -e ../test
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs-${{ matrix.os }}-${{ matrix.sys }}-${{ matrix.cpp_std }}
+          path: ${{ github.workspace }}/build/meson-logs/*
+          retention-days: 5
       - name: Codecov
-        if: success()
+        if: success() && github.repository == 'dragonmux/crunch'
         uses: codecov/codecov-action@v3
+        with:
+          directory: ./build
+          files: coverage.xml
