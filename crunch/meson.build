@@ -52,11 +52,11 @@ libCrunchDep = declare_dependency(
 	link_with: libCrunch,
 	include_directories: crunchInc,
 	variables: {
-		'includedir': ','.join([
-			meson.current_build_dir(),
-			meson.current_source_dir(),
+		'compile_args': ' '.join([
+			'-I@0@'.format(meson.current_build_dir()),
+			'-I@0@'.format(meson.current_source_dir()),
 		]),
-		'libdir': meson.current_build_dir(),
+		'link_args': libCrunch.full_path(),
 	}
 )
 

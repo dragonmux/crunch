@@ -40,11 +40,11 @@ libCrunchppDep = declare_dependency(
 	link_with: libCrunchpp,
 	include_directories: crunchppInc,
 	variables: {
-		'includedir': ','.join([
-			meson.current_build_dir(),
-			meson.current_source_dir(),
+		'compile_args': ' '.join([
+			'-I@0@'.format(meson.current_build_dir()),
+			'-I@0@'.format(meson.current_source_dir()),
 		]),
-		'libdir': meson.current_build_dir(),
+		'link_args': libCrunchpp.full_path(),
 	}
 )
 
