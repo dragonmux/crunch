@@ -38,6 +38,7 @@ substrate = subproject(
 	'substrate',
 	default_options: [
 		'build_tests=false',
+		'cpp_std=@0@'.format(get_option('cpp_std')),
 	],
 ).get_variable(
 	'substrate_dep'
