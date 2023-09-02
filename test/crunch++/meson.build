@@ -13,41 +13,11 @@ endif
 libCrunchppPath = meson.global_build_root() / libCrunchpp.outdir()
 
 foreach test : libCrunchppTests
-	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchppSrcDir, '-L' + libCrunchppPath]
-	if isMSVC and coverage
-		command = [coverageTarget, coverageRunner] + coverageArgs + [
-			'cobertura:crunchMake-crunch++-@0@-coverage.xml'.format(test), '--'
-		] + command
-	endif
-	testExtra = []
-	if test == 'testCrunch++' and cxx.has_argument('-std=c++17')
-		testExtra = ['-std=c++17']
-	elif test == 'testCrunch++' and cxx.has_argument('-std:c++17')
-		testExtra = ['-std:c++17']
-	elif test == 'testArgsParser' or test == 'testLogger'
-		testExtra = [substrate.get_variable('compile_args')]
-	endif
-	objects = []
-	if test == 'testLogger' and not isWindows
-		libSubstrate = substrate.get_variable('link_args')
-		if libSubstrate.endswith('/libsubstrate.so')
-			substrateDir = libSubstrate.substring(0, -16)
-		elif libSubstrate.endswith('/libsubstrate.a')
-			substrateDir = libSubstrate.substring(0, -15)
-		elif libSubstrate.endswith('/libsubstrate.dylib')
-			substrateDir = libSubstrate.substring(0, -19)
-		else
-			error('Unexpected value for substrate link_args, got \'@0@\''.format(libSubstrate))
-		endif
-		testExtra += [libSubstrate, '-Wl,-rpath,@0@'.format(substrateDir)]
-	endif
-	custom_target(
-		'crunch++-' + test,
-		command: command + commandExtra + testExtra,
-		input: [test + '.cpp', objects],
-		output: test + testExt,
-		depends: libCrunchpp,
-		build_by_default: true
+	shared_library(
+		test,
+		files(test + '.cpp'),
+		name_prefix: '',
+		dependencies: [libCrunchppDep, substrate],
 	)
 endforeach
 
