@@ -36,11 +36,22 @@ libCrunchpp = shared_library(
 	install: true
 )
 
+libCrunchppDep = declare_dependency(
+	link_with: libCrunchpp,
+	include_directories: crunchppInc,
+	variables: {
+		'compile_args': ' '.join([
+			'-I@0@'.format(meson.current_build_dir()),
+			'-I@0@'.format(meson.current_source_dir()),
+		]),
+		'link_args': libCrunchpp.full_path(),
+	}
+)
+
 crunchpp = executable(
 	'crunch++',
 	crunchppSrc + [versionHeader],
-	link_with: [libCrunchpp],
-	dependencies: [threading, dl, substrate],
+	dependencies: [threading, dl, substrate, libCrunchppDep],
 	install: true,
 	install_rpath: libdir
 )
@@ -54,3 +65,6 @@ pkgconfig.generate(
 )
 
 install_headers('crunch++.h')
+
+meson.override_find_program('crunch++', crunchpp)
+meson.override_dependency('crunch++', libCrunchppDep)
