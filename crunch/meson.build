@@ -48,12 +48,23 @@ libCrunch = shared_library(
 	install: true
 )
 
+libCrunchDep = declare_dependency(
+	link_with: libCrunch,
+	include_directories: crunchInc,
+	variables: {
+		'includedir': ','.join([
+			meson.current_build_dir(),
+			meson.current_source_dir(),
+		]),
+		'libdir': meson.current_build_dir(),
+	}
+)
+
 crunch = executable(
 	'crunch',
 	crunchSrc + [versionHeader],
 	c_args: crunchSanitizer,
-	link_with: [libCrunch],
-	dependencies: [threading, dl],
+	dependencies: [threading, dl, libCrunchDep],
 	install: true,
 	install_rpath: libdir
 )
@@ -67,3 +78,6 @@ pkgconfig.generate(
 )
 
 install_headers('crunch.h')
+
+meson.override_find_program('crunch', crunch)
+meson.override_dependency('crunch', libCrunchDep)

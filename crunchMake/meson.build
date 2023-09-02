@@ -44,9 +44,7 @@ versionHeader = vcs_tag(
 crunchMake = executable(
 	'crunchMake',
 	crunchMakeSrc + [versionHeader],
-	include_directories: [crunchppInc],
-	link_with: [libCrunchpp],
-	dependencies: [threading, substrate],
+	dependencies: [threading, substrate, libCrunchppDep],
 	cpp_args: [
 		'-Dcrunch_PREFIX="' + prefix + '"',
 		'-Dcrunch_LIBDIR="' + libdir + '"'
@@ -57,3 +55,5 @@ crunchMake = executable(
 	install: true,
 	install_rpath: libdir
 )
+
+meson.override_find_program('crunchMake', crunchMake)
