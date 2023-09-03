@@ -92,9 +92,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: logs-${{ matrix.os }}-${{ matrix.cpp_std }}
-          path: |
-            ${{ github.workspace }}/build/meson-logs
-            ${{ github.workspace }}/build/test
+          path: ${{ github.workspace }}/build
           retention-days: 5
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
@@ -185,7 +183,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: logs-${{ matrix.os }}-${{ matrix.sys }}-${{ matrix.cpp_std }}
-          path: ${{ github.workspace }}/build/meson-logs/*
+          path: ${{ github.workspace }}/build
           retention-days: 5
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'

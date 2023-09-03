@@ -140,7 +140,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: logs-${{ matrix.os.id }}-${{ matrix.cpp_std }}
-          path: ${{ github.workspace }}/build/meson-logs/*
+          path: ${{ github.workspace }}/build
           retention-days: 5
       - name: Codecov
         if: success()
