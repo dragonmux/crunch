@@ -63,29 +63,31 @@ jobs:
         run: ninja -C build
       - name: Test
         run: ninja -C build test
-      - name: Install
-        run: ninja -C build install
       - name: Run coverage build
         if: github.repository == 'dragonmux/crunch'
         # Codecov no longer parses gcov files automatically
         run: |
-          rm -rf build
-          meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
-          meson compile -C build
-          meson test -C build
-          ninja -C build coverage-xml
+          meson setup buildcov --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
+          meson compile -C buildcov
+          meson test -C buildcov
+          ninja -C buildcov coverage-xml
       - name: Upload failure logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: logs-${{ matrix.os }}-appleclang-${{ matrix.cpp_std }}
-          path: ${{ github.workspace }}/build
+          path: |
+            ${{ github.workspace }}/build
+            ${{ github.workspace }}/buildcov
           retention-days: 5
+      - name: Install
+        if: success()
+        run: ninja -C build install
       - name: Codecov
         if: success()
         uses: codecov/codecov-action@v3
         with:
-          directory: ./build/meson-logs/
+          directory: ./buildcov/meson-logs/
           files: coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -162,28 +164,30 @@ jobs:
         run: ninja -C build
       - name: Test
         run: ninja -C build test
-      - name: Install
-        run: ninja -C build install
       - name: Run coverage build
         if: github.repository == 'dragonmux/crunch'
         # Codecov no longer parses gcov files automatically
         run: |
-          rm -rf build
-          meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
-          meson compile -C build
+          meson setup buildcov --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
+          meson compile -C buildcov
           meson test -C build
-          ninja -C build coverage-xml
+          ninja -C buildcov coverage-xml
       - name: Upload failure logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: logs-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.cpp_std }}
-          path: ${{ github.workspace }}/build
+          path: |
+            ${{ github.workspace }}/build
+            ${{ github.workspace }}/buildcov
           retention-days: 5
+      - name: Install
+        if: success()
+        run: ninja -C build install
       - name: Codecov
         if: success()
         uses: codecov/codecov-action@v3
         with:
-          directory: ./build/meson-logs/
+          directory: ./buildcov/meson-logs/
           files: coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
