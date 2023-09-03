@@ -172,7 +172,6 @@ jobs:
           meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
           meson compile -C build
           meson test -C build
-          cd build
           ninja -C build coverage-xml
       - name: Upload failure logs
         if: failure()
