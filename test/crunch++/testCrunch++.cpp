@@ -27,12 +27,12 @@ using crunch::failures;
 enum class testEnum_t
 	{ a, b, c, d };
 
+constexpr static auto testStr1{"abcdefghijklmnopqrstuvwxyz"_sv};
+constexpr static auto testStr2{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"_sv};
+
 class crunchTests final : public testsuite
 {
 private:
-	constexpr static auto testStr1{"abcdefghijklmnopqrstuvwxyz"_sv};
-	constexpr static auto testStr2{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"_sv};
-
 #if __cplusplus >= 201703L
 	constexpr static std::string_view testStdStringView1{testStr1.data(), testStr1.length()};
 	constexpr static std::string_view testStdStringView2{testStr2.data(), testStr2.length()};
