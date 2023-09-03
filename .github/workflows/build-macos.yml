@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-macos:
-    name: '${{ matrix.os }} (${{ matrix.cpp_std }})'
+    name: '${{ matrix.os }} (Apple Clang, ${{ matrix.cpp_std }})'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -44,26 +44,48 @@ jobs:
         with:
           lfs: true
           submodules: true
-      - name: Setup Meson + Ninja
+      - name: Setup Meson + Ninja + gcovr
         shell: bash
         run: |
-          brew install meson ninja
+          brew install meson ninja gcovr
         working-directory: ${{ runner.temp }}
       - name: Version tools
         shell: bash
         run: |
           cc --version  || true
           ld --version || true
+          gcov --version || true
           meson --version
           ninja --version
       - name: Configure
-        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} ${{ matrix.build_opts }}
+        run: meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} ${{ matrix.build_opts }}
       - name: Build
         run: ninja -C build
       - name: Test
         run: ninja -C build test
       - name: Install
         run: ninja -C build install
+      - name: Run coverage build
+        if: github.repository == 'dragonmux/crunch'
+        # Codecov no longer parses gcov files automatically
+        run: |
+          rm -rf build
+          meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
+          meson compile -C build
+          meson test -C build
+          cd build
+          find . -type f -name '*.gcda' -exec $GCOV -p {} + > /dev/null
+          gcovr -r .. -x coverage.xml -e ../deps -e ../test
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs-${{ matrix.os }}-appleclang-${{ matrix.cpp_std }}
+          path: ${{ github.workspace }}/build/meson-logs/*
+          retention-days: 5
+      - name: Codecov
+        if: success()
+        uses: codecov/codecov-action@v3
 
   build-macos-homebrew:
     name: '${{ matrix.os }} (${{ matrix.compiler }}, ${{ matrix.cpp_std }})'
@@ -137,68 +159,6 @@ jobs:
         run: ninja -C build test
       - name: Install
         run: ninja -C build install
-
-  build-coverage-macos:
-    if: github.repository == 'dragonmux/crunch'
-    name: 'coverage ${{ matrix.os }} (${{ matrix.cpp_std }})'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - macos-12
-          - macos-11
-        cpp_std:
-          - 'c++11'
-          - 'c++14'
-          - 'c++17'
-      fail-fast: false
-    steps:
-      - name: Runtime environment
-        shell: bash
-        env:
-          WORKSPACE: ${{ github.workspace }}
-        run: |
-          echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
-      - name: Coverage environment
-        run: |
-          echo "BUILD_OPTS=-Db_coverage=true --buildtype=debug" >> $GITHUB_ENV
-      - name: Setup tools
-        shell: bash
-        run: |
-          brew install gcovr
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          lfs: true
-          submodules: true
-      - name: Setup Meson + Ninja
-        shell: bash
-        run: |
-          brew install meson ninja
-        working-directory: ${{ runner.temp }}
-      - name: Version tools
-        shell: bash
-        run: |
-          cc --version  || true
-          ld --version || true
-          gcov --version || true
-          meson --version
-          ninja --version
-      - name: Configure
-        run: meson build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} $BUILD_OPTS
-      - name: Build
-        run: ninja -C build
-      - name: Test
-        run: ninja -C build test
-      - name: Install
-        run: ninja -C build install
-      - name: Coverage prep
-        if: success()
-        run: gcovr -r .. -x coverage.xml -e ../deps -e ../test
-        working-directory: build
-      - name: Codecov
-        if: success()
-        uses: codecov/codecov-action@v3
 
   build-coverage-macos-homebrew:
     if: github.repository == 'dragonmux/crunch'
