@@ -101,7 +101,7 @@ jobs:
         uses: codecov/codecov-action@v3
 
   build-windows-mingw:
-    name: '${{ matrix.os }} (${{ matrix.sys.abi }}, ${{ matrix.cpp_std }})'
+    name: '${{ matrix.os }} (${{ matrix.sys }}, ${{ matrix.cpp_std }})'
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -111,9 +111,9 @@ jobs:
         os:
           - windows-2019
         sys:
-          - { abi: mingw64, env: x86_64, compiler: gcc }
-          - { abi: ucrt64, env: ucrt-x86_64, compiler: gcc }
-          - { abi: clang64, env: clang-x86_64, compiler: clang }
+          - mingw64
+          - ucrt64
+          - clang64
         cpp_std:
           - 'c++11'
           - 'c++14'
@@ -123,7 +123,7 @@ jobs:
       - name: Use MinGW from MSYS
         uses: msys2/setup-msys2@v2
         with:
-          msystem: ${{matrix.sys.abi}}
+          msystem: ${{ matrix.sys }}
           update: true
           path-type: inherit
           pacboy: >-
@@ -135,18 +135,14 @@ jobs:
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "GITHUB_WORKSPACE=${{ env.WORKSPACE }}" >> $GITHUB_ENV
-      - name: Setup compiler
-        if: startsWith(matrix.sys.abi, 'mingw') || startsWith(matrix.sys.abi, 'ucrt64')
+      - name: Setup GCC
+        if: startsWith(matrix.sys, 'mingw') || startsWith(matrix.sys, 'ucrt64')
         run: |
           echo "GCOV=gcov" >> $GITHUB_ENV
-        env:
-          CC: ${{ matrix.sys.compiler }}
-      - name: Setup compiler
-        if: startsWith(matrix.sys.abi, 'clang')
+      - name: Setup Clang
+        if: startsWith(matrix.sys, 'clang')
         run: |
           echo "GCOV=llvm-cov gcov" >> $GITHUB_ENV
-        env:
-          CC: ${{ matrix.sys.compiler }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
