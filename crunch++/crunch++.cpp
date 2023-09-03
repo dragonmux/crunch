@@ -73,6 +73,9 @@ namespace crunch
 		"dll"_sv, "so"_sv, "tlib"_sv
 	})};
 	static const std::size_t libExtMaxLength{4U};
+#elif defined(__APPLE__)
+	static const auto libExt{substrate::make_array<internal::stringView>({"so"_sv, "dylib"_sv})};
+	static const std::size_t libExtMaxLength{5U};
 #else
 	static const auto libExt{substrate::make_array<internal::stringView>({"so"_sv})};
 	static const std::size_t libExtMaxLength{2U};

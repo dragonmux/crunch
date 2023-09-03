@@ -54,6 +54,10 @@ const arg_t crunchArgs[] =
 #define COUNT_LIB_EXTS 3U
 static const char *libExt[COUNT_LIB_EXTS] = {"dll", "so", "tlib"};
 static const size_t libExtMaxLength = 4U;
+#elif defined(__APPLE__)
+#define COUNT_LIB_EXTS 2U
+static const char *libExt[COUNT_LIB_EXTS] = {"so", "dylib"};
+static const size_t libExtMaxLength = 5U;
 #else
 #define COUNT_LIB_EXTS 1U
 static const char *libExt[COUNT_LIB_EXTS] = {"so"};
