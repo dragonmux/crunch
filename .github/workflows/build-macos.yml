@@ -73,9 +73,7 @@ jobs:
           meson setup build --prefix=$HOME/.local -Dcpp_std=${{ matrix.cpp_std }} -Db_coverage=true --buildtype=debug
           meson compile -C build
           meson test -C build
-          cd build
-          find . -type f -name '*.gcda' -exec $GCOV -p {} + > /dev/null
-          gcovr -r .. -x coverage.xml -e ../deps -e ../test
+          ninja -C build coverage-xml
       - name: Upload failure logs
         if: failure()
         uses: actions/upload-artifact@v3
@@ -86,6 +84,10 @@ jobs:
       - name: Codecov
         if: success()
         uses: codecov/codecov-action@v3
+        with:
+          directory: ./build/meson-logs/
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build-macos-homebrew:
     name: '${{ matrix.os }} (${{ matrix.compiler }}, ${{ matrix.cpp_std }})'
@@ -111,7 +113,8 @@ jobs:
           # - gcc@9
           - gcc@10
           - gcc@11
-          - gcc
+          - gcc@12
+          - gcc@13 # needs hardcoding for the GCOV replacement
         cpp_std:
           - 'c++11'
           - 'c++14'
@@ -170,8 +173,7 @@ jobs:
           meson compile -C build
           meson test -C build
           cd build
-          find . -type f -name '*.gcda' -exec $GCOV -p {} + > /dev/null
-          gcovr -r .. -x coverage.xml --gcov-executable "$GCOV" -e ../deps -e ../test
+          ninja -C build coverage-xml
       - name: Upload failure logs
         if: failure()
         uses: actions/upload-artifact@v3
@@ -182,3 +184,7 @@ jobs:
       - name: Codecov
         if: success()
         uses: codecov/codecov-action@v3
+        with:
+          directory: ./build/meson-logs/
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
