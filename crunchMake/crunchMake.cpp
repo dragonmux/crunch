@@ -85,7 +85,7 @@ namespace crunch
 	bool isCXX(const internal::stringView &file)
 		{ return checkExt(file, cxxExts); }
 
-	constexpr bool isObj(const internal::stringView &file)
+	bool isObj(const internal::stringView &file)
 	{
 		// Try the normal extension check first
 		if (checkExt(file, objExts))
