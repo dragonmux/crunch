@@ -84,8 +84,43 @@ namespace crunch
 		{ return checkExt(file, exts); }
 	bool isCXX(const internal::stringView &file)
 		{ return checkExt(file, cxxExts); }
+
 	constexpr bool isObj(const internal::stringView &file)
-		{ return checkExt(file, objExts); }
+	{
+		// Try the normal extension check first
+		if (checkExt(file, objExts))
+			return true;
+		// Now also check for .so files that have a version after the `.so`
+		const auto forwardSlash{file.rfind('/')};
+		const auto backwardSlash{file.rfind('\\')};
+		// Figure out wehre to substring the file name and search forward for dots after that
+		const auto begin
+		{
+			[&]() -> size_t
+			{
+				// If we found a '/', use its position + 1 as the starting position for the next operation
+				if (forwardSlash != internal::stringView::npos)
+					return forwardSlash + 1U;
+				// Similarly for '\\' to accomodate Windows
+				if (backwardSlash != internal::stringView::npos)
+					return backwardSlash + 1U;
+				// Otherwise use the start of the file name as it contains no path delimeters
+				return 0U;
+			}()
+		};
+		for (size_t offset = begin; offset != internal::stringView::npos; )
+		{
+			// Find the next '.'
+			const auto dot{file.find('.', offset)};
+			// Compare if we've found `.so.`
+			if (dot != internal::stringView::npos && file.compare(dot, 4U, ".so."_sv) == 0)
+				return true;
+			// If we did not, then update the offset to just after the new dot position
+			offset = dot == internal::stringView::npos ? dot : dot + 1U;
+		}
+		// If we did not find an instance of `.so.`, or anything from objExts: it's not an object file
+		return false;
+	}
 
 	bool getTests()
 	{

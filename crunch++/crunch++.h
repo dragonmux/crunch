@@ -174,8 +174,7 @@ namespace crunch
 			{
 				if (length_)
 				{
-					auto idx{length_ > pos ? pos + 1 : length_};
-					while (idx-- > 0)
+					for (auto idx{length_ > pos ? pos + 1 : length_}; idx-- > 0; )
 					{
 						if (data_[idx] == c)
 							return idx;
