@@ -11,6 +11,7 @@ foreach test : libCrunchTests
 		'-s',
 		'@INPUT@',
 		'-o', '@OUTPUT@',
+		f'-L@libCrunchPath@',
 		libCrunchDep.get_variable('compile_args'),
 		libCrunchDep.get_variable('link_args'),
 	]

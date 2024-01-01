@@ -25,6 +25,7 @@ foreach test : ranluxTests
 		'-s',
 		'@INPUT@',
 		'-o', '@OUTPUT@',
+		f'-L@libCrunchppPath@',
 		libCrunchppDep.get_variable('compile_args'),
 		libCrunchppDep.get_variable('link_args'),
 	]
