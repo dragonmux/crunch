@@ -13,8 +13,14 @@ if crunchMakeWrapper.found()
 	custom_target(
 		'crunchMake-quiet',
 		command: [
-			crunchMakeWrapper, '-c', crunchMake, '-q', '-i', '@INPUT@', '-o', '@OUTPUT@',
-			'--', '-I' + crunchppSrcDir, '-L' + libCrunchppPath
+			crunchMakeWrapper,
+			'-c', crunchMake,
+			'-q',
+			'-i', '@INPUT@',
+			'-o', '@OUTPUT@',
+			'--',
+			libCrunchppDep.get_variable('compile_args'),
+			libCrunchppDep.get_variable('link_args'),
 		] + commandExtra,
 		input: 'dummyTest.cxx',
 		output: 'dummyTest-quiet' + testExt,
@@ -25,8 +31,13 @@ if crunchMakeWrapper.found()
 	custom_target(
 		'crunchMake-noisy',
 		command: [
-			crunchMakeWrapper, '-c', crunchMake, '-i', '@INPUT@', '-o', '@OUTPUT@',
-			'--', '-I' + crunchppSrcDir, '-L' + libCrunchppPath
+			crunchMakeWrapper,
+			'-c', crunchMake,
+			'-i', '@INPUT@',
+			'-o', '@OUTPUT@',
+			'--',
+			libCrunchppDep.get_variable('compile_args'),
+			libCrunchppDep.get_variable('link_args'),
 		] + commandExtra,
 		input: 'dummyTest.cxx',
 		output: 'dummyTest-noisy' + testExt,
