@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <random>
-#include <crunch++/crunch++.h>
+#include <crunch++.h>
 #include "ranlux.h"
 
 using ranlux32Base_t = std::subtract_with_carry_engine<uint32_t, 32, 3, 17>;

@@ -20,7 +20,14 @@ objectMap = {
 foreach test : ranluxTests
 	map = objectMap.get(test)
 	testObjs = [ranlux.extract_objects(map['test'] + ['helpers.cxx', 'ranlux64.cxx'])]
-	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + meson.project_source_root(), '-L' + libCrunchppPath]
+	command = [
+		crunchMake,
+		'-s',
+		'@INPUT@',
+		'-o', '@OUTPUT@',
+		libCrunchppDep.get_variable('compile_args'),
+		libCrunchppDep.get_variable('link_args'),
+	]
 	if isMSVC and coverage
 		command = [coverageTarget, coverageRunner] + coverageArgs + [
 			'cobertura:crunchMake-@0@-coverage.xml'.format(test), '--'

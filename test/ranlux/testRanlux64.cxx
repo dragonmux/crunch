@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include <random>
-#include <crunch++/crunch++.h>
+#include <crunch++.h>
 #include "ranlux.h"
 #include "testEngines.hxx"
 
