@@ -6,7 +6,15 @@ endif
 libCrunchPath = meson.global_build_root() / libCrunch.outdir()
 
 foreach test : libCrunchTests
-	command = [crunchMake, '-s', '@INPUT@', '-o', '@OUTPUT@', '-I' + crunchSrcDir, '-L' + libCrunchPath]
+	command = [
+		crunchMake,
+		'-s',
+		'@INPUT@',
+		'-o', '@OUTPUT@',
+		libCrunchDep.get_variable('compile_args'),
+		libCrunchDep.get_variable('link_args'),
+	]
+
 	if isMSVC and coverage
 		command = [coverageTarget, coverageRunner] + coverageArgs + [
 			'cobertura:crunchMake-crunch-@0@-coverage.xml'.format(test), '--'
