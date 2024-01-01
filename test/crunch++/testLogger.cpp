@@ -152,7 +152,7 @@ private:
 			if (!result)
 			{
 				const auto error{GetLastError()};
-				printf("ReadConsoleOutputAttribute() failed with result %08x (%d)\n", error, error);
+				printf("ReadConsoleOutputAttribute() failed with result %08lx (%ld)\n", error, error);
 			}
 			assertTrue(result);
 		};
