@@ -159,7 +159,18 @@ namespace crunch
 		{
 			const auto &value = parsedArg.value;
 			if (!findArgInArgs(value) && isObj(value))
+			{
+#ifdef _MSC_VER
+				// If we're on a compiler targeting `link.exe` (or the Clang-cl equiv),
+				// we have to filter out any .dll files that wound up on the command line
+				// as link cannot consume them and will error.
+				const auto dot{value.rfind('.')};
+				if (dot != internal::stringView::npos &&
+					file.compare(dot, internal::stringView::npos, ".dll"_sv) == 0)
+					continue;
+#endif
 				linkObjs.emplace_back(value);
+			}
 		}
 	}
 
