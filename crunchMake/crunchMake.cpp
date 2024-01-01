@@ -165,7 +165,7 @@ namespace crunch
 				// as link cannot consume them and will error.
 				const auto dot{value.rfind('.')};
 				if (dot != internal::stringView::npos &&
-					file.compare(dot, internal::stringView::npos, ".dll"_sv) == 0)
+					value.compare(dot, internal::stringView::npos, ".dll"_sv) == 0)
 					continue;
 #endif
 				linkObjs.emplace_back(value);
