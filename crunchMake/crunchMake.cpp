@@ -14,17 +14,15 @@ constexpr static const auto R_OK{0x04};
 #include <algorithm>
 #include <numeric>
 #include <substrate/utility>
-#include <core.hxx>
-#include <logger.hxx>
-#include <stringFuncs.hxx>
+#include "core.hxx"
+#include "logger.hxx"
+#include "stringFuncs.hxx"
 #include "crunchCompiler.hxx"
-#include <crunchMake.h>
-#include <version.hxx>
+#include "crunchMake.h"
+#include "version.hxx"
 
 namespace crunch
 {
-	using internal::stringView;
-
 	parsedArgs_t parsedArgs;
 	std::vector<internal::stringView> inclDirs, libDirs;
 	std::vector<internal::stringView> linkLibs, linkObjs;
@@ -32,11 +30,11 @@ namespace crunch
 	std::vector<internal::stringView> tests;
 	uint32_t numLinkArgs = 0;
 
-	constexpr static auto exts{substrate::make_array<stringView>({
+	constexpr static auto exts{substrate::make_array<internal::stringView>({
 		".c"_sv, ".cpp"_sv, ".cc"_sv, ".cxx"_sv, ".i"_sv, ".s"_sv, ".S"_sv, ".sx"_sv, ".asm"_sv
 	})};
-	constexpr static auto cxxExts{substrate::make_array<stringView>({".cpp"_sv, ".cc"_sv, ".cxx"_sv})};
-	constexpr static auto objExts{substrate::make_array<stringView>({
+	constexpr static auto cxxExts{substrate::make_array<internal::stringView>({".cpp"_sv, ".cc"_sv, ".cxx"_sv})};
+	constexpr static auto objExts{substrate::make_array<internal::stringView>({
 		".o"_sv, ".obj"_sv, ".a"_sv, ".so"_sv, ".dll"_sv, ".dylib"_sv
 	})};
 
@@ -71,14 +69,15 @@ namespace crunch
 		{{}, 0, 0, 0}
 	})};
 
-	template<size_t N> constexpr bool checkExt(const internal::stringView &file, const std::array<stringView, N> &exts) noexcept
+	template<size_t N> constexpr bool checkExt(const internal::stringView &file,
+		const std::array<internal::stringView, N> &exts) noexcept
 	{
 		constexpr auto npos{internal::stringView::npos};
 		const auto dot{file.rfind('.')};
 		if (dot == npos)
 			return false;
 		return std::find_if(exts.begin(), exts.end(),
-			[=](const stringView ext) { return file.compare(dot, npos, ext) == 0; }
+			[=](const internal::stringView ext) { return file.compare(dot, npos, ext) == 0; }
 		) != exts.end();
 	}
 
@@ -282,13 +281,13 @@ namespace crunch
 		const auto *const sanitizer{findArg(parsedArgs, "-fsanitize="_sv, nullptr)};
 		if (!sanitizer)
 			return;
-		const stringView sanitizers{sanitizer->value.data() + 11, sanitizer->value.length() - 11};
+		const internal::stringView sanitizers{sanitizer->value.data() + 11, sanitizer->value.length() - 11};
 		for (size_t offset{}; offset < sanitizers.length();)
 		{
-			const auto length{[](const stringView &value, const size_t offset) noexcept
+			const auto length{[](const internal::stringView &value, const size_t offset) noexcept
 			{
 				const auto result{value.find(',', offset)};
-				return (result == stringView::npos ? value.length() : result) - offset;
+				return (result == internal::stringView::npos ? value.length() : result) - offset;
 			}(sanitizers, offset)};
 			const auto option{"-fsanitize="_s + sanitizers.substr(offset, length).toString() + ' '};
 			cCompiler += option;
