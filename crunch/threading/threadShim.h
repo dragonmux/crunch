@@ -34,7 +34,7 @@ CRUNCH_API int thrd_join(thrd_t thr, int *res);
 NORETURN(void thrd_exit(int res));
 
 #ifdef _WIN32
-extern int thrd_get_error();
+extern int thrd_get_error(void);
 #else
 extern int thrd_err_map(const int result);
 #endif
