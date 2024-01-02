@@ -65,7 +65,7 @@ typedef struct
 	void *arg;
 } thrd_params_t;
 
-int thrd_get_error()
+int thrd_get_error(void)
 {
 	const DWORD lastError = GetLastError();
 	switch (lastError)
