@@ -14,6 +14,7 @@ constexpr static const auto R_OK{0x04};
 #include <algorithm>
 #include <numeric>
 #include <substrate/utility>
+#include "crunch++.h"
 #include "core.hxx"
 #include "logger.hxx"
 #include "stringFuncs.hxx"
@@ -249,6 +250,18 @@ namespace crunch
 			ret += "-libpath:" + value.substr(2).toString() + ' ';
 		return ret;
 	}
+
+	inline std::string convertLinkLibs()
+	{
+		std::string ret{};
+		for (const auto &value : linkLibs)
+		{
+			if (value == "-lstdc++"_sv)
+				continue;
+			ret += "lib" + value.substr(2).toString() + ".lib ";
+		}
+		return ret;
+	}
 #endif
 
 	void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs); }
@@ -258,7 +271,11 @@ namespace crunch
 	void libDirFlagsToString() { libDirFlags = convertLibDirs(); }
 #endif
 	void objsToString() { objs = argsToString(linkObjs); }
+#ifndef _MSC_VER
 	void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
+#else
+	void libsToString() { libs = convertLinkLibs() + argsToString(linkArgs); }
+#endif
 
 	const parsedArg_t *fetchStandard()
 	{
