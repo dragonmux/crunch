@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
+#include <cstdint>
+#include <string>
 #include "crunchCompiler.hxx"
-#include <crunchMake.h>
-#include <logger.hxx>
+#include "crunchMake.h"
+#include "crunch++.h"
+#include "logger.hxx"
 
 namespace crunch
 {

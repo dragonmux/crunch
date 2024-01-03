@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
+#include <cstdint>
+#include <string>
 #include "crunchCompiler.hxx"
-#include <crunchMake.h>
-#include <logger.hxx>
+#include "crunchMake.h"
+#include "crunch++.h"
+#include "logger.hxx"
 
 namespace crunch
 {
@@ -18,8 +21,10 @@ namespace crunch
 	// NOLINTNEXTLINE(cert-err58-cpp)
 	static const auto compileOpts{"/permissive- /Zc:__cplusplus /Gd /GF /GS /Gy /EHsc /GT /D_WINDOWS /nologo "s};
 
-	std::string cCompiler{"cl "s}; // NOLINT(cert-err58-cpp)
-	std::string cxxCompiler{"cl "s}; // NOLINT(cert-err58-cpp)
+	// NOLINTNEXTLINE(cert-err58-cpp,cppcoreguidelines-avoid-non-const-global-variables)
+	std::string cCompiler{"cl "s};
+	// NOLINTNEXTLINE(cert-err58-cpp,cppcoreguidelines-avoid-non-const-global-variables)
+	std::string cxxCompiler{"cl "s};
 	const std::string libExt{".dll"s}; // NOLINT(cert-err58-cpp)
 
 	inline std::string crunchLib(const bool isCXX)

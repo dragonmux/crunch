@@ -17,12 +17,12 @@ namespace crunch
 
 	extern const std::string libExt;
 
-	extern bool isCXX(const internal::stringView &file);
-	extern std::string computeObjName(const std::string &file);
-	extern std::string computeSOName(const std::string &file);
+	bool isCXX(const internal::stringView &file);
+	std::string computeObjName(const std::string &file);
+	std::string computeSOName(const std::string &file);
 
-	extern std::string standardVersion(constParsedArg_t version);
-	extern int32_t compileTest(const std::string &test);
+	std::string standardVersion(constParsedArg_t version);
+	int32_t compileTest(const std::string &test);
 }
 
 #endif /*CRUNCH_COMPILER__HXX*/
