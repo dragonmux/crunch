@@ -61,6 +61,11 @@ namespace crunch
 		return standardStr;
 	}
 
+	void libDirFlagsToString(const std::vector<internal::stringView> &libDirs)
+		{ libDirFlags = argsToString(libDirs); }
+	std::string linkLibsToString(const std::vector<internal::stringView> &linkLibs)
+		{ return argsToString(linkLibs); }
+
 #if compilerIsClang
 	inline std::string coverageFlags() { return codeCoverage ? "--coverage "s : ""s; }
 
@@ -103,11 +108,6 @@ namespace crunch
 	}
 #else
 	inline std::string coverageFlags() { return codeCoverage ? "-lgcov "s : ""s; }
-
-	void libDirFlagsToString(const std::vector<internal::stringView> &libDirs)
-		{ libDirFlags = argsToString(libDirs); }
-	std::string linkLibsToString(const std::vector<internal::stringView> &linkLibs)
-		{ return argsToString(linkLibs); }
 
 	int32_t compileTest(const std::string &test)
 	{
