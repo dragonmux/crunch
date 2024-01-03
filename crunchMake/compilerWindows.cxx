@@ -68,6 +68,25 @@ namespace crunch
 		return standardStr;
 	}
 
+	void libDirFlagsToString(const std::vector<internal::stringView> &libDirs)
+	{
+		libDirFlags = {};
+		for (const auto &value : libDirs)
+			libDirFlags += "-libpath:" + value.substr(2).toString() + ' ';
+	}
+
+	std::string linkLibsToString(const std::vector<internal::stringView> &linkLibs)
+	{
+		std::string ret{};
+		for (const auto &value : linkLibs)
+		{
+			if (value == "-lstdc++"_sv)
+				continue;
+			ret += "lib" + value.substr(2).toString() + ".lib ";
+		}
+		return ret;
+	}
+
 	int32_t compileTest(const std::string &test)
 	{
 		const bool mode{isCXX(test)};

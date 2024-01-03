@@ -226,7 +226,7 @@ namespace crunch
 		return toSO(file);
 	}
 
-	inline std::string argsToString(const std::vector<internal::stringView> &var)
+	std::string argsToString(const std::vector<internal::stringView> &var)
 	{
 		return std::accumulate(var.begin(), var.end(), std::string{},
 			[](const std::string &result, const internal::stringView &value)
@@ -242,40 +242,9 @@ namespace crunch
 		);
 	}
 
-#ifdef _MSC_VER
-	inline std::string convertLibDirs()
-	{
-		std::string ret{};
-		for (const auto &value : libDirs)
-			ret += "-libpath:" + value.substr(2).toString() + ' ';
-		return ret;
-	}
-
-	inline std::string convertLinkLibs()
-	{
-		std::string ret{};
-		for (const auto &value : linkLibs)
-		{
-			if (value == "-lstdc++"_sv)
-				continue;
-			ret += "lib" + value.substr(2).toString() + ".lib ";
-		}
-		return ret;
-	}
-#endif
-
 	void inclDirFlagsToString() { inclDirFlags = argsToString(inclDirs); }
-#ifndef _MSC_VER
-	void libDirFlagsToString() { libDirFlags = argsToString(libDirs); }
-#else
-	void libDirFlagsToString() { libDirFlags = convertLibDirs(); }
-#endif
 	void objsToString() { objs = argsToString(linkObjs); }
-#ifndef _MSC_VER
-	void libsToString() { libs = argsToString(linkLibs) + argsToString(linkArgs); }
-#else
-	void libsToString() { libs = convertLinkLibs() + argsToString(linkArgs); }
-#endif
+	void libsToString() { libs = linkLibsToString(linkLibs) + argsToString(linkArgs); }
 
 	const parsedArg_t *fetchStandard()
 	{
@@ -318,7 +287,7 @@ namespace crunch
 	{
 		int32_t ret = 0;
 		inclDirFlagsToString();
-		libDirFlagsToString();
+		libDirFlagsToString(libDirs);
 		objsToString();
 		libsToString();
 		buildCXXString();

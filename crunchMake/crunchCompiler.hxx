@@ -23,6 +23,11 @@ namespace crunch
 
 	std::string standardVersion(constParsedArg_t version);
 	int32_t compileTest(const std::string &test);
+
+	std::string argsToString(const std::vector<internal::stringView> &var);
+
+	void libDirFlagsToString(const std::vector<internal::stringView> &libDirs);
+	std::string linkLibsToString(const std::vector<internal::stringView> &linkLibs);
 }
 
 #endif /*CRUNCH_COMPILER__HXX*/
