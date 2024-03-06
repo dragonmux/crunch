@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 crunchMakeSrc = ['crunchMake.cpp']
 if isWindows and isMSVC
 	crunchMakeSrc += ['compilerWindows.cxx']

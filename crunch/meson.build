@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 libCrunchSrc = [
 	'ArgsParser.c', 'StringFuncs.c', 'Logger.c', 'Core.c'
 ]
@@ -74,7 +76,11 @@ pkgconfig.generate(
 	name: 'crunch',
 	filebase: 'crunch',
 	version: meson.project_version(),
-	description: 'crunch is a unit testing framework for C'
+	description: 'crunch is a unit testing framework for C',
+	variables: {
+		'compile_args': '-I${includedir}',
+		'link_args': '-L${libdir} -lcrunch',
+	},
 )
 
 install_headers('crunch.h')

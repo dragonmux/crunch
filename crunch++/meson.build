@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 libCrunchppSrc = [
 	'argsParser.cxx', 'stringFuncs.cxx', 'logger.cxx', 'tester.cxx', 'core.cxx'
 ]
@@ -61,7 +63,11 @@ pkgconfig.generate(
 	name: 'crunch++',
 	filebase: 'crunch++',
 	version: meson.project_version(),
-	description: 'crunch++ is a unit testing framework for C++'
+	description: 'crunch++ is a unit testing framework for C++',
+	variables: {
+		'compile_args': '-I${includedir}',
+		'link_args': '-L${libdir} -lcrunch++',
+	},
 )
 
 install_headers('crunch++.h')
