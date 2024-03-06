@@ -77,7 +77,7 @@ pkgconfig.generate(
 	filebase: 'crunch',
 	version: meson.project_version(),
 	description: 'crunch is a unit testing framework for C',
-	variables: {
+	unescaped_variables: {
 		'compile_args': '-I${includedir}',
 		'link_args': '-L${libdir} -lcrunch',
 	},

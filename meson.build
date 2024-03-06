@@ -13,7 +13,7 @@ project(
 		'b_ndebug=if-release'
 	],
 	version: '1.1.1',
-	meson_version: '>=0.58',
+	meson_version: '>=0.59',
 	subproject_dir: 'deps'
 )
 
