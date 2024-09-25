@@ -97,6 +97,7 @@ jobs:
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
         uses: codecov/codecov-action@v4
+        with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   build-windows-mingw:
