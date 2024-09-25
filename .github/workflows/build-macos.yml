@@ -16,11 +16,14 @@ jobs:
   build-macos:
     name: '${{ matrix.os }} (Apple Clang, ${{ matrix.cpp_std }})'
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         os:
+          - macos-13
           - macos-12
-          - macos-11
         cpp_std:
           - 'c++11'
           - 'c++14'
@@ -34,23 +37,20 @@ jobs:
       fail-fast: false
     steps:
       - name: Runtime environment
-        shell: bash
         env:
           WORKSPACE: ${{ github.workspace }}
         run: |
           echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
           submodules: true
       - name: Setup Meson + Ninja + gcovr
-        shell: bash
         run: |
           brew install meson ninja gcovr
         working-directory: ${{ runner.temp }}
       - name: Version tools
-        shell: bash
         run: |
           cc --version  || true
           ld --version || true
@@ -85,7 +85,7 @@ jobs:
         run: ninja -C build install
       - name: Codecov
         if: success()
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./buildcov/meson-logs/
           files: coverage.xml
@@ -94,6 +94,9 @@ jobs:
   build-macos-homebrew:
     name: '${{ matrix.os }} (${{ matrix.compiler }}, ${{ matrix.cpp_std }})'
     runs-on: ${{ matrix.os}}
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         os:
@@ -124,13 +127,11 @@ jobs:
       fail-fast: false
     steps:
       - name: Runtime environment
-        shell: bash
         env:
           WORKSPACE: ${{ github.workspace }}
         run: |
           echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
       - name: Setup compiler
-        shell: bash
         run: |
           brew install ${{ matrix.compiler }}
           CC=${COMPILER/@/-}
@@ -146,7 +147,6 @@ jobs:
           lfs: true
           submodules: true
       - name: Setup Meson + Ninja + gcovr
-        shell: bash
         run: |
           brew install meson ninja gcovr
         working-directory: ${{ runner.temp }}
