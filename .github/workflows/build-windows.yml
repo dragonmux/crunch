@@ -48,7 +48,7 @@ jobs:
           arch: ${{ matrix.arch }}
       - name: Install OpenCppCoverage
         if: github.repository == 'dragonmux/crunch'
-        uses: crazy-max/ghaction-chocolatey@v2.1.0
+        uses: crazy-max/ghaction-chocolatey@v2
         with:
           args: install OpenCppCoverage
       - name: Setup OpenCppCoverage
@@ -56,7 +56,7 @@ jobs:
         run: |
           echo "C:/Program Files/OpenCppCoverage" >> $env:GITHUB_PATH
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
           submodules: true
@@ -96,7 +96,7 @@ jobs:
           retention-days: 5
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
 
   build-windows-mingw:
     name: '${{ matrix.os }} (${{ matrix.sys }}, ${{ matrix.cpp_std }})'
