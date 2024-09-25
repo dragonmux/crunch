@@ -48,7 +48,7 @@ jobs:
           arch: ${{ matrix.arch }}
       - name: Install OpenCppCoverage
         if: github.repository == 'dragonmux/crunch'
-        uses: crazy-max/ghaction-chocolatey@v2
+        uses: crazy-max/ghaction-chocolatey@v3
         with:
           args: install OpenCppCoverage
       - name: Setup OpenCppCoverage
