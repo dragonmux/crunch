@@ -22,7 +22,6 @@ jobs:
           - { id: ubuntu-20.04, name: focal }
           - { id: ubuntu-22.04, name: jammy }
         compiler:
-          - 'clang-11'
           - 'clang-12'
           - 'clang-13'
           - 'clang-14'
@@ -46,7 +45,6 @@ jobs:
           - { os: { id: ubuntu-20.04 }, compiler: gcc-12 }
           - { os: { id: ubuntu-22.04 }, compiler: gcc-7 }
           - { os: { id: ubuntu-22.04 }, compiler: gcc-8 }
-          - { os: { id: ubuntu-22.04 }, compiler: clang-11 }
           - { os: { id: ubuntu-22.04 }, compiler: clang-12 }
       fail-fast: false
     steps:
