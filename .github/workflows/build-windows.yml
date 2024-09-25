@@ -97,6 +97,7 @@ jobs:
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
         uses: codecov/codecov-action@v4
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build-windows-mingw:
     name: '${{ matrix.os }} (${{ matrix.sys }}, ${{ matrix.cpp_std }})'
@@ -142,7 +143,7 @@ jobs:
         run: |
           echo "GCOV=llvm-cov gcov" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
           submodules: true
@@ -187,7 +188,8 @@ jobs:
           retention-days: 5
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./build
           files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}

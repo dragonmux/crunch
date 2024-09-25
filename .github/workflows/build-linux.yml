@@ -145,3 +145,4 @@ jobs:
       - name: Codecov
         if: success()
         uses: codecov/codecov-action@v4
+          token: ${{ secrets.CODECOV_TOKEN }}
