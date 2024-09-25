@@ -1,8 +1,8 @@
 # crunch
 
-[![GitHub Actions](https://github.com/dragonmux/crunch/workflows/GitHub%20Actions/badge.svg)](https://github.com/DX-MON/crunch/actions)
-[![codecov](https://codecov.io/gh/dragonmux/crunch/branch/main/graph/badge.svg)](https://codecov.io/gh/DX-MON/crunch)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/DX-MON/crunch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DX-MON/crunch/alerts/)
+[![GitHub Actions](https://github.com/dragonmux/crunch/workflows/GitHub%20Actions/badge.svg)](https://github.com/dragonmux/crunch/actions)
+[![codecov](https://codecov.io/gh/dragonmux/crunch/branch/main/graph/badge.svg)](https://codecov.io/gh/dragonmux/crunch)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/dragonmux/crunch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dragonmux/crunch/alerts/)
 [![Coverity Status](https://scan.coverity.com/projects/20294/badge.svg)](https://scan.coverity.com/projects/dx-mon-crunch)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
