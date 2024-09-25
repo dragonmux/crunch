@@ -1,6 +1,8 @@
 # crunch
 
-[![GitHub Actions](https://github.com/dragonmux/crunch/workflows/GitHub%20Actions/badge.svg)](https://github.com/dragonmux/crunch/actions)
+[![Build Linux](https://github.com/dragonmux/crunch/workflows/build-linux.yml/badge.svg)](https://github.com/dragonmux/crunch/actions/workflows/build-linux.yml)
+[![Build macOS](https://github.com/dragonmux/crunch/workflows/build-macos.yml/badge.svg)](https://github.com/dragonmux/crunch/actions/workflows/build-macos.yml)
+[![Build Windows](https://github.com/dragonmux/crunch/workflows/build-windows.yml/badge.svg)](https://github.com/dragonmux/crunch/actions/workflows/build-windows.yml)
 [![codecov](https://codecov.io/gh/dragonmux/crunch/branch/main/graph/badge.svg)](https://codecov.io/gh/dragonmux/crunch)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/dragonmux/crunch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dragonmux/crunch/alerts/)
 [![Coverity Status](https://scan.coverity.com/projects/20294/badge.svg)](https://scan.coverity.com/projects/dx-mon-crunch)
