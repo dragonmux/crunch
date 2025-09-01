@@ -22,8 +22,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - windows-2019
           - windows-2022
+          - windows-2025
         arch:
           - x86
           - amd64
@@ -89,7 +89,7 @@ jobs:
           meson test -C build
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os }}-${{ matrix.cpp_std }}
           path: ${{ github.workspace }}/build
@@ -109,7 +109,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - windows-2019
+          - windows-2025
         sys:
           - mingw64
           - ucrt64
@@ -182,7 +182,7 @@ jobs:
           gcovr -r .. -x coverage.xml --gcov-executable "$GCOV" -e ../deps -e ../test
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os }}-${{ matrix.sys }}-${{ matrix.cpp_std }}
           path: ${{ github.workspace }}/build
