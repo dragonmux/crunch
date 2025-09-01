@@ -338,8 +338,10 @@ int main(int argc, char **argv)
 {
 #ifdef _WINDOWS
 	_set_invalid_parameter_handler(invalidHandler);
+#ifdef _DEBUG
 	_CrtSetReportMode(_CRT_ASSERT, 0);
 	_CrtSetReportMode(_CRT_ERROR, 0);
+#endif
 #endif
 	registerArgs(crunchArgs);
 	parsedArgs = parseArguments(argc, (const char **)argv);
