@@ -23,7 +23,7 @@ jobs:
       matrix:
         os:
           - macos-13
-          - macos-12
+          - macos-14
         cpp_std:
           - 'c++11'
           - 'c++14'
@@ -73,7 +73,7 @@ jobs:
           ninja -C buildcov coverage-xml
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os }}-appleclang-${{ matrix.cpp_std }}
           path: |
@@ -104,13 +104,14 @@ jobs:
           ## https://stackoverflow.com/questions/73714336/xcode-update-to-version-2395-ld-compile-problem-occurs-computedatomcount-m
           ## rdar://FB11369327
           - macos-13
-          - macos-12
+          - macos-14
         compiler:
           # - gcc@10
           - gcc@11
           - gcc@12
           - gcc@13
           - gcc@14
+          - gcc@15
         cpp_std:
           - 'c++11'
           - 'c++14'
@@ -165,7 +166,7 @@ jobs:
           ninja -C buildcov coverage-xml
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.cpp_std }}
           path: |
