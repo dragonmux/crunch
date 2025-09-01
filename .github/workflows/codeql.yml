@@ -45,7 +45,6 @@ jobs:
         shell: bash
         run: |
           wget https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-linux.zip
-          sudo pip3 install --upgrade pip setuptools wheel
           pip3 install --user meson
           unzip ninja-linux.zip -d ~/.local/bin
           rm ninja-linux.zip
