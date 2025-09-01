@@ -44,8 +44,8 @@ jobs:
           - 'c++17'
         exclude:
           # These versions are not supported by the toolchain PPA
-          #- { os: { id: ubuntu-24.04 }, compiler: gcc-7 }
-          #- { os: { id: ubuntu-24.04 }, compiler: gcc-8 }
+          - { os: { id: ubuntu-22.04 }, compiler: gcc-14 }
+          - { os: { id: ubuntu-22.04 }, compiler: gcc-15 }
           - { os: { id: ubuntu-24.04 }, compiler: clang-13 }
           - { os: { id: ubuntu-24.04 }, compiler: clang-14 }
           - { os: { id: ubuntu-24.04 }, compiler: clang-15 }
@@ -104,7 +104,9 @@ jobs:
       - name: Setup Meson + Ninja + gcovr
         shell: bash
         run: |
-          sudo python3 -m pip install --upgrade pip setuptools wheel
+          if [ `lsb_release -sc` == "jammy" ]; then
+            sudo python3 -m pip install --upgrade pip setuptools wheel;
+          fi
           sudo python3 -m pip install meson ninja gcovr
         working-directory: ${{ runner.temp }}
       - name: Version tools
