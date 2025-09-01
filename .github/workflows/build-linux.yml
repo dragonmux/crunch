@@ -22,13 +22,15 @@ jobs:
           - { id: ubuntu-22.04, name: jammy }
           - { id: ubuntu-24.04, name: noble }
         compiler:
-          - 'clang-12'
           - 'clang-13'
           - 'clang-14'
           - 'clang-15'
           - 'clang-16'
           - 'clang-17'
           - 'clang-18'
+          - 'clang-19'
+          - 'clang-20'
+          - 'clang-21'
           - 'gcc-7'
           - 'gcc-8'
           - 'gcc-9'
@@ -44,7 +46,10 @@ jobs:
           # These versions are not supported by the toolchain PPA
           - { os: { id: ubuntu-22.04 }, compiler: gcc-7 }
           - { os: { id: ubuntu-22.04 }, compiler: gcc-8 }
-          - { os: { id: ubuntu-22.04 }, compiler: clang-12 }
+          - { os: { id: ubuntu-24.04 }, compiler: clang-13 }
+          - { os: { id: ubuntu-24.04 }, compiler: clang-14 }
+          - { os: { id: ubuntu-24.04 }, compiler: clang-15 }
+          - { os: { id: ubuntu-24.04 }, compiler: clang-16 }
       fail-fast: false
     steps:
       - name: Runtime environment
