@@ -32,7 +32,7 @@ jobs:
           echo "CC=$CC" >> $GITHUB_ENV
           echo "CXX=$CXX" >> $GITHUB_ENV
       - name: Checkout crunch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           lfs: true
           submodules: true
@@ -50,7 +50,7 @@ jobs:
           rm ninja-linux.zip
         working-directory: ${{ runner.temp }}
       - name: Setup CodeQL
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v3
         with:
           languages: cpp
       - name: Version tools
@@ -66,4 +66,4 @@ jobs:
           meson build
           ninja -C build
       - name: CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v3

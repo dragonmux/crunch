@@ -56,7 +56,7 @@ jobs:
         run: |
           echo "C:/Program Files/OpenCppCoverage" >> $env:GITHUB_PATH
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
           submodules: true
@@ -96,7 +96,7 @@ jobs:
           retention-days: 5
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -144,7 +144,7 @@ jobs:
         run: |
           echo "GCOV=llvm-cov gcov" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
           submodules: true
@@ -189,7 +189,7 @@ jobs:
           retention-days: 5
       - name: Codecov
         if: success() && github.repository == 'dragonmux/crunch'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           directory: ./build
           files: coverage.xml

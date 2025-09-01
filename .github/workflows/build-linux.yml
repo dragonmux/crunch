@@ -92,7 +92,7 @@ jobs:
           sudo dpkg --install --force-breaks $PACKAGE
         working-directory: ${{ runner.temp }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
           submodules: true
@@ -138,6 +138,6 @@ jobs:
           retention-days: 5
       - name: Codecov
         if: success()
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

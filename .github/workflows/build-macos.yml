@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "GITHUB_WORKSPACE=`pwd`" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
           submodules: true
@@ -85,7 +85,7 @@ jobs:
         run: ninja -C build install
       - name: Codecov
         if: success()
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           directory: ./buildcov/meson-logs/
           files: coverage.xml
@@ -134,7 +134,7 @@ jobs:
         env:
           COMPILER: ${{ matrix.compiler }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
           submodules: true
@@ -178,7 +178,7 @@ jobs:
         run: ninja -C build install
       - name: Codecov
         if: success()
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           directory: ./buildcov/meson-logs/
           files: coverage.xml
