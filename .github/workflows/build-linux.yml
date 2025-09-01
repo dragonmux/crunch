@@ -19,8 +19,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - { id: ubuntu-20.04, name: focal }
           - { id: ubuntu-22.04, name: jammy }
+          - { id: ubuntu-24.04, name: noble }
         compiler:
           - 'clang-12'
           - 'clang-13'
@@ -42,7 +42,6 @@ jobs:
           - 'c++17'
         exclude:
           # These versions are not supported by the toolchain PPA
-          - { os: { id: ubuntu-20.04 }, compiler: gcc-12 }
           - { os: { id: ubuntu-22.04 }, compiler: gcc-7 }
           - { os: { id: ubuntu-22.04 }, compiler: gcc-8 }
           - { os: { id: ubuntu-22.04 }, compiler: clang-12 }
@@ -132,7 +131,7 @@ jobs:
           gcovr -r .. -x coverage.xml --gcov-executable "$GCOV" -e ../deps -e ../test
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.os.id }}-${{ matrix.cpp_std }}
           path: ${{ github.workspace }}/build
