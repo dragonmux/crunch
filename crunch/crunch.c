@@ -287,7 +287,16 @@ int runTests(void)
 		{
 			int retVal = THREAD_ABORT;
 			thrd_t testThread; // NOLINT
-			thrd_create(&testThread, testRunner, currTest);
+			const int result = thrd_create(&testThread, testRunner, currTest);
+			// Check if creating the thread for the test worked or not
+			if (result != thrd_success)
+			{
+				// It did not.. great.. display that and abort
+				red();
+				testPrintf("Test %s failed to start, error code %d. Aborting.", currTest->testName, result);
+				newline();
+				return THREAD_ABORT;
+			}
 			thrd_join(testThread, &retVal);
 			allocCount = -1;
 			if (retVal == THREAD_ABORT)
