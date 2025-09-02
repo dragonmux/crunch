@@ -497,8 +497,13 @@ REGISTERS:
 	{
 #if _WINDOWS
 		_set_invalid_parameter_handler(invalidHandler);
+	// Only try to use CrtSetReportMode() on MSVC and clang-cl - everything else will faceplant
+	// as of a recent VS2022 update that strictly enforced the function only being available on
+	// debug builds of the CRT. MSYS2 never links to the debug CRT.
+#if defined(_DEBUG) && defined(_MSC_VER)
 		_CrtSetReportMode(_CRT_ASSERT, 0);
 		_CrtSetReportMode(_CRT_ERROR, 0);
+#endif
 #endif
 		registerArgs(args.data());
 		parsedArgs = parseArguments(argc, argv);
